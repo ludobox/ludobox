@@ -1,0 +1,21 @@
+{% include "header.html" %}
+
+
+<div class="row">
+    <div class="twelve columns">
+        <h1>Liste des jeux</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="one column"></div>
+    <div class="ten columns">
+        <ul id="navigation">
+        {% for game in games %}
+            <li><a href="{{ game.slug }}">{{ game.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+{% include  "footer.html" %}
