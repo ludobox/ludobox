@@ -1,11 +1,28 @@
 {% include "header.html" %}
 
 <div class="row">
-    <h1>{{name}}</h1>
-    <div class="one column"></div>
-        <div class="ten columns">
-            <a class="button button-primary"  href="download">Download</a>
-        </div>
+    <h1>{{title}}</h1>
+    <div class="four column"></div>
+        <ul>
+        <li>timestamp : {{timestamp}}</li>
+        <li>title : {{title}}</li>
+        <li>description : {{description}}</li>
+        <li>fab_time : {{fab_time}}</li>
+        <li>requirements : {{requirements}}</li>
+        <li>players : {{players}}</li>
+        <li>duration : {{duration}}</li>
+        <li>audience : {{audience}}</li>
+        <li>authours : {{authours}}</li>
+        <li>illustrators : {{illustrators}}</li>
+        <li>source : {{source}}</li>
+        <li>license : {{license}}</li>
+        <li>languages : {{languages}}</li>
+        <li>themes : {{themes}}</li>
+        <li>type : {{type}}</li>
+    </ul>
+    </div>
+    <div class="height columns">
+        <a class="button button-primary"  href="download">Download</a>
     </div>
 </div>
 

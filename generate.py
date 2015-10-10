@@ -12,7 +12,6 @@ accepted_types=["jpg","png","gif", "stl", "pdf"]
 data_dir = os.path.join(os.getcwd(), "data")
 games_dir = os.path.join(os.getcwd(), "games")
 
-
 # Read templates from files
 env = Environment(loader=FileSystemLoader('templates'))
 main_template = env.get_template('main.html')
@@ -23,6 +22,7 @@ index_template = env.get_template('index.html')
 if not os.path.exists(games_dir):
     os.makedirs(games_dir)
 
+# store all json game
 games = []
 
 # list all folders in "games"
@@ -40,7 +40,7 @@ for path in os.listdir(data_dir):
         games.append(game_data)
 
         # add permalink
-        game_data["slug"] = slugify(game_data["name"])
+        game_data["slug"] = slugify(game_data["title"])
 
         # create game dir 
         game_path =  os.path.join(games_dir, game_data["slug"])
