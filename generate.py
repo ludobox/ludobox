@@ -9,12 +9,11 @@ from slugify import slugify
 
 accepted_types=["jpg","png","gif", "stl", "pdf"]
 
-data_dir = os.path.join(os.getcwd(), "data")
-games_dir = os.path.join(os.getcwd(), "games")
+data_dir = os.path.join(os.getcwd(), "data") # input
+games_dir = os.path.join(os.getcwd(), "games") # output
 
 # Read templates from files
 env = Environment(loader=FileSystemLoader('templates'))
-# main_template = env.get_template('main.html')  #
 single_template = env.get_template('single.html') # display a single game
 index_template = env.get_template('index.html') # list all games 
 add_template = env.get_template('add.html') # create new game

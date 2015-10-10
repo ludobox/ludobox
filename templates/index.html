@@ -5,39 +5,56 @@
     </div>
 </div>
 <div class="row" id="games">
-    <div class="row" id="search-utils">
-        <div class="three columns">
-            <a class="button button-primary" href="/games/add">Add a new game</a>
+    <div class="twelve columns">
+        <div class="row" id="search-utils">
+            <div class="three columns">
+                <a class="button button-primary" href="/games/add">Add a new game</a>
+            </div>
+            <div class="three columns">
+                <form>
+                    <input class="search" type="search" id="searchGames" placeholder="Search" />
+                </form>
+            </div>
+            <div class="three columns">
+                <button class="sort" data-sort="title">Sort by name</button>
+                <button class="sort" data-sort="type">Sort by type</button>
+                <select name="filterByType" id="filterByType">
+                    <option value="all">All</option>
+                    <option value="video-game">Video Game</option>
+                    <option value="board-game">Board Game</option>
+                </select>
+            </div>
         </div>
-        <div class="three columns">
-            <form>
-                <input class="search" type="search" id="searchGames" placeholder="Search" />
-            </form>
-        </div>
-        <div class="three columns">
-            <button class="sort" data-sort="title">Sort by name</button>
-            <button class="sort" data-sort="type">Sort by type</button>
-            <select name="filterByType" id="filterByType">
-                <option value="all">All</option>
-                <option value="video-game">Video Game</option>
-                <option value="board-game">Board Game</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="ten columns">
-            <table>
-                <tbody class="list">
-                    {% for game in games %}
-                    <tr>
-                        <td class="title">{{ game.title }}</td>
-                        <td class="link"><a href="{{ game.slug }}">{{ game.title }}</a></td>
-                        <td class="type">{{ game.type }}</td>
-                        <td class="themes">{{ game.themes }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="twelve columns">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Title</td>
+                            <td>Link</td>
+                            <td>Type</td>
+                            <td>Themes</td>
+                            <td>fab_time</td>
+                            <td>players</td>
+                            <td>languages</td>
+                        </tr>
+                    </thead>
+                    <tbody class="list">
+                        {% for game in games %}
+                        <tr>
+                            <td class="title">{{ game.title }}</td>
+                            <td class="link"><a href="{{ game.slug }}">{{ game.title }}</a></td>
+                            <td class="type">{{ game.type }}</td>
+                            <td class="themes">{{ game.themes }}</td>
+
+                            <td class="fab_time"> {{game.fab_time}} </td>
+                            <td class="players"> {{game.players}} </td>
+                            <td class="languages"> {{game.languages}} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -49,22 +66,21 @@ var options = {
 
 var gamesList = new List('games', options);
 
-document.getElementById('filterByType').onchange=function(e){
+document.getElementById('filterByType').onchange = function(e) {
     console.log(e.target.value);
-    if (e.target.value =="all") {
-       gamesList.filter(function(item) { return true }); 
+    if (e.target.value == "all") {
+        gamesList.filter(function(item) {
+            return true
+        });
     } else {
         gamesList.filter(function(item) {
-           if (item.values().type == e.target.value) {
-               return true;
-           } else {
-               return false;
-           }
+            if (item.values().type == e.target.value) {
+                return true;
+            } else {
+                return false;
+            }
         });
     }
 }
-
-
-
 </script>
 {% include "partials/footer.html" %}

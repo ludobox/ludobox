@@ -12,10 +12,6 @@ A python script will generate the following files : a list of all games + a fold
 
 CSS with [Skeleton](http://getskeleton.com/). Please edit CSS in ```css/style.css``` 
 
-
-
-
-
 Each game is structured as follow
 
 * ```/games/game/game-info.json```
