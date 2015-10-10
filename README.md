@@ -46,3 +46,6 @@ Model of a game (JSON)
 ## Install dependencies
 
     pip install -r requirements.txt
+
+
+CSS with [Skeleton](http://getskeleton.com/), 

@@ -14,9 +14,10 @@ games_dir = os.path.join(os.getcwd(), "games")
 
 # Read templates from files
 env = Environment(loader=FileSystemLoader('templates'))
-main_template = env.get_template('main.html')
-single_template = env.get_template('single.html')
-index_template = env.get_template('index.html')
+# main_template = env.get_template('main.html')  #
+single_template = env.get_template('single.html') # display a single game
+index_template = env.get_template('index.html') # list all games 
+add_template = env.get_template('add.html') # create new game
 
 # create games dir 
 if not os.path.exists(games_dir):
@@ -61,3 +62,16 @@ main_index_path = os.path.join(games_dir, "index.html")
 
 with open(main_index_path , "wb") as main_index :
     main_index.write(index.encode('utf-8'))
+
+# write add page
+add = add_template.render() # pass games as a dict to jinja2
+add_path = os.path.join(games_dir, "add")
+
+# create /new path
+if not os.path.exists(add_path):
+    os.makedirs(add_path)
+
+# create add game form
+with open(os.path.join(add_path, "index.html") , "wb") as add_file :
+    add_file.write(add.encode('utf-8'))
+

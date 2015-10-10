@@ -1,6 +1,6 @@
 {
     "timestamp": "10/10/2015 14:52:35",
-    "title": "Borgia, le jeu malsain",
+    "title": "Coucou, le jeu sympa",
     "description": "Ouais",
     "fab_time": "2+ h",
     "requirements": "IMPRIMANTE",
@@ -13,5 +13,5 @@
     "license": "CC 1.0",
     "languages": "Français",
     "themes": "Médiéval, Salopard",
-    "type": "structure"
+    "type": "board-game"
   }
