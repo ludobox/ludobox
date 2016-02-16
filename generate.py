@@ -4,6 +4,10 @@
 A python script will generate the following files : a list of all games and a
 folder containing info of each game.
 """
+# TODO make the code testable by providing a way to pass the input and output
+#   folders has parameter to a function
+
+# TODO make the code python3 compatible: print function and some few other
 
 import os
 
@@ -35,7 +39,9 @@ DATA_DIR = os.path.join(os.getcwd(), "data")
 GAMES_DIR = os.path.join(os.getcwd(), "games") # output
 
 
+# TODO split this function in many diffrent small func
 def main():
+    # TODO move this piece of code closer to where it is needed
     # First we eead templates from files
     env = Environment(loader=FileSystemLoader('templates'))
     single_template = env.get_template('single.html') # display a single game
