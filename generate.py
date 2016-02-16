@@ -1,31 +1,39 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+A python script will generate the following files : a list of all games and a
+folder containing info of each game.
+"""
 
 import os
+
 # json is used to read game descriptions as they are stored as JSON files for
 # easy "low tech" compliant sharing.
 import json
+
 # Jinja2 is used as a template engine to generate the list of games as an HTML5
 # compliant table.
 # To get it: sudo pip install Jinja2
 from jinja2 import Environment, FileSystemLoader
+
 # slugify is used to generate clean HTML/URL compliant strings from any unicode
 # string while keeping readability. We use it here to generate clean file name
 # for all generated files.
 # To get it: sudo pip install python-slugify
 from slugify import slugify
 
-accepted_types=["jpg","png","gif", "stl", "pdf"]
+ACCEPTED_TYPES=["jpg","png","gif", "stl", "pdf"]
 
 # Input directory where we should find JSON files each describing one game
-data_dir = os.path.join(os.getcwd(), "data")
+DATA_DIR = os.path.join(os.getcwd(), "data")
 
 # Output dirrectory where we generate the pages:
 #   *   one directory for each game filled with all the revelent data: HTML
 #       description of the game, attached files, docmentation...
 #   *   the wellcome page that gives access to everything
 #   *   the add page that allow us to add a new game
-games_dir = os.path.join(os.getcwd(), "games") # output
+GAMES_DIR = os.path.join(os.getcwd(), "games") # output
+
 
 def main():
     # First we eead templates from files
@@ -35,18 +43,18 @@ def main():
     add_template = env.get_template('add.html') # create new game
 
     # Then we create the games directory
-    if not os.path.exists(games_dir):
-        os.makedirs(games_dir)
+    if not os.path.exists(GAMES_DIR):
+        os.makedirs(GAMES_DIR)
 
     # This stores all JSON from the different games
     games = []
 
     # We list all folders in "games"
-    for path in os.listdir(data_dir):
-        if os.path.isdir(os.path.join(data_dir, path)): # check all dir
+    for path in os.listdir(DATA_DIR):
+        if os.path.isdir(os.path.join(DATA_DIR, path)): # check all dir
 
             # parse game dir
-            data_path = os.path.join(data_dir, path)
+            data_path = os.path.join(DATA_DIR, path)
             print data_path
 
             # load json
@@ -59,7 +67,7 @@ def main():
             game_data["slug"] = slugify(game_data["title"])
 
             # create game dir
-            game_path =  os.path.join(games_dir, game_data["slug"])
+            game_path =  os.path.join(GAMES_DIR, game_data["slug"])
             if not os.path.exists(game_path):
                 os.makedirs(game_path)
 
@@ -73,14 +81,14 @@ def main():
 
     # We now write the root index.html
     index = index_template.render({"games" : games}) # pass games as a dict to jinja2
-    main_index_path = os.path.join(games_dir, "index.html")
+    main_index_path = os.path.join(GAMES_DIR, "index.html")
 
     with open(main_index_path , "wb") as main_index :
         main_index.write(index.encode('utf-8'))
 
     # We then write the add page
     add = add_template.render() # pass games as a dict to jinja2
-    add_path = os.path.join(games_dir, "add")
+    add_path = os.path.join(GAMES_DIR, "add")
 
     # create add path
     if not os.path.exists(add_path):
@@ -89,6 +97,7 @@ def main():
     # create add game form
     with open(os.path.join(add_path, "index.html") , "wb") as add_file :
         add_file.write(add.encode('utf-8'))
+
 
 if __name__ == "__main__":
     main()
