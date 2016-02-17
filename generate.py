@@ -38,11 +38,48 @@ DATA_DIR = os.path.join(os.getcwd(), "data")
 #   *   the add page that allow us to add a new game
 GAMES_DIR = os.path.join(os.getcwd(), "games") # output
 
+# TODO test this function with different scenari: inexistant dir, info.json
+#   present/absent, with/without attached file
+def read_game_info(path):
+    """
+    Read all the info available about the game stored at the provided path.
+
+    Arguments:
+    path -- directory where the game info and data are stored
+
+    Returns (ok, data) where ok is a boolean indicating if the data retrieval
+    when well and data is a dictionary containing the game data. If ok is false
+    data is empty. You should always test it first:
+
+    >>> ok, data = read_game_info("stupid_path")
+    >>> if not ok:
+    ...     print "something went wrong"
+    something went wrong
+
+    The game data can come from:
+    *   the info.json file
+    *   the attached files found in the dir
+    *   somme are also computed from other data like a cleaned name suitable for
+        url generation (slugified name)
+    """
+    # Load JSON from the description file of the game
+    json_path = os.path.join(path, "info.json")
+    try:
+        with open(json_path, "r") as json_file:
+            data = json.load( json_file )
+    except IOError, e:
+        return False, {}
+
+    # Add permalink
+    data["slug"] = slugify(data["title"])
+
+    return True, data
+
 
 # TODO split this function in many diffrent small func
 def main():
     # TODO move this piece of code closer to where it is needed
-    # First we eead templates from files
+    # First we need templates from files
     env = Environment(loader=FileSystemLoader('templates'))
     single_template = env.get_template('single.html') # display a single game
     index_template = env.get_template('index.html') # list all games
@@ -59,29 +96,26 @@ def main():
     for path in os.listdir(DATA_DIR):
         if os.path.isdir(os.path.join(DATA_DIR, path)): # check all dir
 
-            # parse game dir
+            # Parse game dir
             data_path = os.path.join(DATA_DIR, path)
-            print data_path
-
-            # load json
-            json_path = os.path.join(data_path, "info.json")
-            with open(json_path, "r") as json_file:
-                game_data = json.load( json_file )
+            print "Read game info:", data_path,
+            ok, game_data = read_game_info(data_path)
+            if not ok:
+                print "FAIL"
+                continue
+            print "SUCCESS"
             games.append(game_data)
 
-            # add permalink
-            game_data["slug"] = slugify(game_data["title"])
-
-            # create game dir
+            # Create game dir
             game_path =  os.path.join(GAMES_DIR, game_data["slug"])
             if not os.path.exists(game_path):
                 os.makedirs(game_path)
 
-            # render template
+            # Render template
             single = single_template.render(game_data)
             single_index_path = os.path.join(game_path, "index.html")
 
-            # write game index.html
+            # Write game index.html
             with open(single_index_path , "wb") as single_index:
                 single_index.write(single.encode('utf-8'))
 
@@ -105,5 +139,8 @@ def main():
         add_file.write(add.encode('utf-8'))
 
 
+# TODO add a generate action to specificaly launch a generation
+# TODO add a clean action to specificaly launch a cleanup of all generated files
+# TODO add a default action/help action that describe the usage and actions
 if __name__ == "__main__":
     main()
