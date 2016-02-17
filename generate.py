@@ -76,6 +76,7 @@ def read_game_info(path):
     return True, data
 
 
+# TODO add a very simple doctest
 # TODO add some test for this function with different scenario: empty/incoherent
 #   data, directory already exists...
 def generate_game_desc(data, games_dir, template):
@@ -102,20 +103,32 @@ def generate_game_desc(data, games_dir, template):
     """
     # Create game dir
     game_path =  os.path.join(games_dir, data["slug"])
-    # TODO reverse the test to detect faulty case
-    if not os.path.exists(game_path):
+    try:
         os.makedirs(game_path)
+    except os.error:
+        # TODO give more feedback to the user
+        return False
 
     # Render template
-    # TODO test for errors
-    html = template.render(data)
+    try:
+        html = template.render(data)
+    except jinja2.TemplateSyntaxError:
+        # TODO give more feedback to the user
+        shutil.rmtree(game_path, ignore_errors=True)
+        return False
+
     html_index_path = os.path.join(game_path, "index.html")
 
     # Write game index.html
-    # TODO test for errors
-    with open(html_index_path , "wb") as html_index:
-        html_index.write(html.encode('utf-8'))
+    try:
+        with open(html_index_path , "wb") as html_index:
+            html_index.write(html.encode('utf-8'))
+    except IOError, e:
+        # TODO give more feedback to the user
+        shutil.rmtree(game_path, ignore_errors=True)
+        return False
 
+    # Everything went fine we can safely return True
     return True
 
 
@@ -124,9 +137,14 @@ def main():
     # TODO move this piece of code closer to where it is needed
     # First we need templates from files
     env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
-    single_template = env.get_template('single.html') # display a single game
-    index_template = env.get_template('index.html') # list all games
-    add_template = env.get_template('add.html') # create new game
+    try:
+        single_template = env.get_template('single.html') # display a single game
+        index_template = env.get_template('index.html') # list all games
+        add_template = env.get_template('add.html') # create new game
+    except jinja2.TemplateNotFound, e:
+        print "Template file", e.name, "does not exist"
+        # TODO return a standard error code
+        return
 
     # Then we create the games directory
     if not os.path.exists(GAMES_DIR):
@@ -145,6 +163,7 @@ def main():
             # Parse a game directory
             print "\tRead game informations:",
 
+            # TODO replace this by a more pythonic exception handling
             ok, game_data = read_game_info(data_path)
 
             if not ok:
@@ -155,6 +174,7 @@ def main():
             # Generate game description
             print "\tGenerate game description:",
 
+            # TODO replace this by a more pythonic exception handling
             if not generate_game_desc(game_data, GAMES_DIR, single_template):
                 print "FAIL"
                 continue
