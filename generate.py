@@ -18,7 +18,7 @@ import json
 # Jinja2 is used as a template engine to generate the list of games as an HTML5
 # compliant table.
 # To get it: sudo pip install Jinja2
-from jinja2 import Environment, FileSystemLoader
+import jinja2
 
 # slugify is used to generate clean HTML/URL compliant strings from any unicode
 # string while keeping readability. We use it here to generate clean file name
@@ -48,8 +48,8 @@ def read_game_info(path):
     path -- directory where the game info and data are stored
 
     Returns (ok, data) where ok is a boolean indicating if the data retrieval
-    when well and data is a dictionary containing the game data. If ok is false
-    data is empty. You should always test it first:
+    when well and data is a dictionary containing the game data. If ok is
+    ``False`` data is empty. You should always test it first:
 
     >>> ok, data = read_game_info("stupid_path")
     >>> if not ok:
@@ -76,11 +76,54 @@ def read_game_info(path):
     return True, data
 
 
+# TODO add some test for this function with different scenario: empty/incoherent
+#   data, directory already exists...
+def generate_game_desc(data, games_dir, template):
+    """
+    Generate a whole game description in the games directory provided from data
+    dictionary.
+
+    The game description generated is composed of:
+    *   a game directory named after the game itself. It is created in the games
+        directory.
+    *   an HTML page describing the whole game generated from a template.
+
+    Arguments:
+    data -- a dictionnary with all the informations about the game. Typically it
+            has been generated with :func:`read_game_info()`.
+    games_dir -- directory where the game directory should be created. It must
+                 not contain a directory with the same name as the slugified
+                 game name.
+    template -- a :mod:`jinja2` template object used to generate the HTML
+                description file of the game.
+
+    Returns ``True`` if everything when fine and ``False`` in any other case (no
+    directory is created in case of failure).
+    """
+    # Create game dir
+    game_path =  os.path.join(games_dir, data["slug"])
+    # TODO reverse the test to detect faulty case
+    if not os.path.exists(game_path):
+        os.makedirs(game_path)
+
+    # Render template
+    # TODO test for errors
+    html = template.render(data)
+    html_index_path = os.path.join(game_path, "index.html")
+
+    # Write game index.html
+    # TODO test for errors
+    with open(html_index_path , "wb") as html_index:
+        html_index.write(html.encode('utf-8'))
+
+    return True
+
+
 # TODO split this function in many diffrent small func
 def main():
     # TODO move this piece of code closer to where it is needed
     # First we need templates from files
-    env = Environment(loader=FileSystemLoader('templates'))
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
     single_template = env.get_template('single.html') # display a single game
     index_template = env.get_template('index.html') # list all games
     add_template = env.get_template('add.html') # create new game
@@ -94,30 +137,31 @@ def main():
 
     # We list all folders in "games"
     for path in os.listdir(DATA_DIR):
-        if os.path.isdir(os.path.join(DATA_DIR, path)): # check all dir
+        data_path = os.path.join(DATA_DIR, path)
 
-            # Parse game dir
-            data_path = os.path.join(DATA_DIR, path)
-            print "Read game info:", data_path,
+        # TODO reverse this test to decrease cyclomatic complexity
+        if os.path.isdir(data_path): # check only dir
+            print data_path
+            # Parse a game directory
+            print "\tRead game informations:",
+
             ok, game_data = read_game_info(data_path)
+
             if not ok:
                 print "FAIL"
                 continue
             print "SUCCESS"
+
+            # Generate game description
+            print "\tGenerate game description:",
+
+            if not generate_game_desc(game_data, GAMES_DIR, single_template):
+                print "FAIL"
+                continue
+            print "SUCCESS"
+
+            # If everything when fine add the game info to the others
             games.append(game_data)
-
-            # Create game dir
-            game_path =  os.path.join(GAMES_DIR, game_data["slug"])
-            if not os.path.exists(game_path):
-                os.makedirs(game_path)
-
-            # Render template
-            single = single_template.render(game_data)
-            single_index_path = os.path.join(game_path, "index.html")
-
-            # Write game index.html
-            with open(single_index_path , "wb") as single_index:
-                single_index.write(single.encode('utf-8'))
 
     # We now write the root index.html
     index = index_template.render({"games" : games}) # pass games as a dict to jinja2
