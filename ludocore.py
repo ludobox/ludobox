@@ -7,7 +7,10 @@ folder containing info of each game.
 # TODO make the code testable by providing a way to pass the input and output
 #   folders has parameter to a function
 
-# TODO make the code python3 compatible: print function and some few other
+# Python 3 compatibility
+from __future__ import unicode_literals
+from __future__ import division
+from __future__ import print_function
 
 # os and shutil are used for file or directory manipulation
 import os
@@ -70,7 +73,7 @@ def read_game_info(path):
     >>> try:
     ...     data = read_game_info("stupid_path/no_game")
     ... except LudoboxError as e:
-    ...     print e.message
+    ...     print(e.message)
     <No such file or directory> occured while reading game 'no_game' info file 'stupid_path/no_game/info.json'
 
     The game data can come from:
@@ -184,7 +187,7 @@ def main():
         index_template = env.get_template('index.html') # list all games
         add_template = env.get_template('add.html') # create new game
     except jinja2.TemplateNotFound, e:
-        print "Template file", e.name, "does not exist"
+        print("Template file", e.name, "does not exist")
         # TODO return a standard error code
         return
 
@@ -201,25 +204,25 @@ def main():
 
         # TODO reverse this test to decrease cyclomatic complexity
         if os.path.isdir(data_path): # check only dir
-            print os.path.basename(data_path)
+            print(os.path.basename(data_path))
 
             # Parse a game directory
-            print "\tRead game informations:",
+            print("\tRead game informations:", end='')
             try:
                 game_data = read_game_info(data_path)
             except LudoboxError as e:
-                print "FAIL >>", e
+                print("FAIL >>", e)
                 continue
-            print "SUCCESS"
+            print("SUCCESS")
 
             # Generate game description
-            print "\tGenerate game description:",
+            print("\tGenerate game description:", end='')
             try:
                 generate_game_desc(game_data, GAMES_DIR, single_template)
             except LudoboxError as e:
-                print "FAIL >>", e
+                print("FAIL >>", e)
                 continue
-            print "SUCCESS"
+            print("SUCCESS")
 
             # If everything when fine add the game info to the others
             games.append(game_data)
