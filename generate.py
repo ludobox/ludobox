@@ -184,12 +184,12 @@ def main():
     games = []
 
     # We list all folders in "games" sorted alphabetically
-    for path in os.listdir(DATA_DIR):
+    for path in sorted(os.listdir(DATA_DIR)):
         data_path = os.path.join(DATA_DIR, path)
 
         # TODO reverse this test to decrease cyclomatic complexity
         if os.path.isdir(data_path): # check only dir
-            print data_path
+            print os.path.basename(data_path)
             # Parse a game directory
             print "\tRead game informations:",
 
