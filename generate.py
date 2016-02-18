@@ -9,7 +9,9 @@ folder containing info of each game.
 
 # TODO make the code python3 compatible: print function and some few other
 
+# os and shutil are used for file or directory manipulation
 import os
+import shutil
 
 # json is used to read game descriptions as they are stored as JSON files for
 # easy "low tech" compliant sharing.
@@ -37,6 +39,18 @@ DATA_DIR = os.path.join(os.getcwd(), "data")
 #   *   the wellcome page that gives access to everything
 #   *   the add page that allow us to add a new game
 GAMES_DIR = os.path.join(os.getcwd(), "games") # output
+
+
+# TODO improve this exception by always providing an advice to solve the problem
+class LudoboxError(Exception):
+    """Base class for all the custom exceptions of the module."""
+    def __init__(self, message):
+        # without this you may get DeprecationWarning
+        self.message = message
+
+        # Call the base class constructor with the parameters it needs
+        super(LudoboxError, self).__init__(message)
+
 
 # TODO test this function with different scenari: inexistant dir, info.json
 #   present/absent, with/without attached file
@@ -98,24 +112,36 @@ def generate_game_desc(data, games_dir, template):
     template -- a :mod:`jinja2` template object used to generate the HTML
                 description file of the game.
 
-    Returns ``True`` if everything when fine and ``False`` in any other case (no
-    directory is created in case of failure).
+    Raise a `LudoboxError` with a convenient message if anything went wrong. In
+    such case no directory is created.
     """
+    # TODO append ERROR to the end of the directory name instead of deleting it
     # Create game dir
-    game_path =  os.path.join(games_dir, data["slug"])
+    game_slug_name = data["slug"]  # Name of the game cleaned
+    game_path =  os.path.join(games_dir, game_slug_name)
     try:
         os.makedirs(game_path)
-    except os.error:
-        # TODO give more feedback to the user
-        return False
+    except os.error as e:
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while creating directory '{path}'".format(
+            error=e.strerror,
+            path=e.filename)
+        raise LudoboxError(message)
 
     # Render template
     try:
         html = template.render(data)
-    except jinja2.TemplateSyntaxError:
-        # TODO give more feedback to the user
+    except jinja2.TemplateSyntaxError as e:
+        # Cleanup anything previously created
         shutil.rmtree(game_path, ignore_errors=True)
-        return False
+        # Create a very explicit message to explain the problem
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        message = "Error while parsing template file {0.filename} "\
+                  "at line {0.line} because {0.message}".format(e)
+        raise LudoboxError(message)
 
     html_index_path = os.path.join(game_path, "index.html")
 
@@ -123,13 +149,17 @@ def generate_game_desc(data, games_dir, template):
     try:
         with open(html_index_path , "wb") as html_index:
             html_index.write(html.encode('utf-8'))
-    except IOError, e:
-        # TODO give more feedback to the user
+    except IOError as e:
+        # Cleanup anything previously created
         shutil.rmtree(game_path, ignore_errors=True)
-        return False
-
-    # Everything went fine we can safely return True
-    return True
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while creating game '{game}' index file '{path}'".format(
+            error=e.strerror,
+            game=game_slug_name,
+            path=e.filename)
+        raise LudoboxError(e.message)
 
 
 # TODO split this function in many diffrent small func
@@ -153,7 +183,7 @@ def main():
     # This stores all JSON from the different games
     games = []
 
-    # We list all folders in "games"
+    # We list all folders in "games" sorted alphabetically
     for path in os.listdir(DATA_DIR):
         data_path = os.path.join(DATA_DIR, path)
 
@@ -175,8 +205,10 @@ def main():
             print "\tGenerate game description:",
 
             # TODO replace this by a more pythonic exception handling
-            if not generate_game_desc(game_data, GAMES_DIR, single_template):
-                print "FAIL"
+            try:
+                generate_game_desc(game_data, GAMES_DIR, single_template)
+            except LudoboxError as e:
+                print "FAIL >>", e
                 continue
             print "SUCCESS"
 
