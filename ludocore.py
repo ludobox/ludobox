@@ -4,7 +4,6 @@
 A python script will generate the following files : a list of all games and a
 folder containing info of each game.
 """
-# TODO change the name of the script to ludocore.py
 # TODO make the code testable by providing a way to pass the input and output
 #   folders has parameter to a function
 

@@ -6,7 +6,7 @@ User Interface for Ludobox
 
 A python script will generate the following files : a list of all games + a folder containing info of each game.
 
-    python generate.py # generate folders tree
+    python pythoncore.py # generate folders tree
 
 ### Templating
 
