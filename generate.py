@@ -4,6 +4,7 @@
 A python script will generate the following files : a list of all games and a
 folder containing info of each game.
 """
+# TODO change the name of the script to ludocore.py
 # TODO make the code testable by providing a way to pass the input and output
 #   folders has parameter to a function
 
@@ -61,14 +62,17 @@ def read_game_info(path):
     Arguments:
     path -- directory where the game info and data are stored
 
-    Returns (ok, data) where ok is a boolean indicating if the data retrieval
-    when well and data is a dictionary containing the game data. If ok is
-    ``False`` data is empty. You should always test it first:
+    Returns a dictionary containing the game data. If ok is
+    ``False`` data is empty.
 
-    >>> ok, data = read_game_info("stupid_path")
-    >>> if not ok:
-    ...     print "something went wrong"
-    something went wrong
+    If anythin goes wrong raise a LudoboxError containing description of the
+    error and advice for fixing it.
+
+    >>> try:
+    ...     data = read_game_info("stupid_path/no_game")
+    ... except LudoboxError as e:
+    ...     print e.message
+    <No such file or directory> occured while reading game 'no_game' info file 'stupid_path/no_game/info.json'
 
     The game data can come from:
     *   the info.json file
@@ -80,14 +84,23 @@ def read_game_info(path):
     json_path = os.path.join(path, "info.json")
     try:
         with open(json_path, "r") as json_file:
-            data = json.load( json_file )
-    except IOError, e:
-        return False, {}
+            data = json.load(json_file)
+    except IOError as e:
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while reading game '{game}' info file '{json}'".format(
+            error=e.strerror,
+            game=os.path.basename(path),
+            json=e.filename)
+        raise LudoboxError(message)
+
+    # TODO Add some attachment info
 
     # Add permalink
     data["slug"] = slugify(data["title"])
 
-    return True, data
+    return data
 
 
 # TODO add a very simple doctest
@@ -159,7 +172,7 @@ def generate_game_desc(data, games_dir, template):
             error=e.strerror,
             game=game_slug_name,
             path=e.filename)
-        raise LudoboxError(e.message)
+        raise LudoboxError(message)
 
 
 # TODO split this function in many diffrent small func
@@ -190,21 +203,18 @@ def main():
         # TODO reverse this test to decrease cyclomatic complexity
         if os.path.isdir(data_path): # check only dir
             print os.path.basename(data_path)
+
             # Parse a game directory
             print "\tRead game informations:",
-
-            # TODO replace this by a more pythonic exception handling
-            ok, game_data = read_game_info(data_path)
-
-            if not ok:
-                print "FAIL"
+            try:
+                game_data = read_game_info(data_path)
+            except LudoboxError as e:
+                print "FAIL >>", e
                 continue
             print "SUCCESS"
 
             # Generate game description
             print "\tGenerate game description:",
-
-            # TODO replace this by a more pythonic exception handling
             try:
                 generate_game_desc(game_data, GAMES_DIR, single_template)
             except LudoboxError as e:
@@ -238,5 +248,6 @@ def main():
 # TODO add a generate action to specificaly launch a generation
 # TODO add a clean action to specificaly launch a cleanup of all generated files
 # TODO add a default action/help action that describe the usage and actions
+# TODO add a autotest action that launch all the tests (doctest and nose test)
 if __name__ == "__main__":
     main()
