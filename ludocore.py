@@ -16,6 +16,10 @@ from __future__ import print_function
 import os
 import shutil
 
+# Used to handle all the command line mechanics: actions, long params, short 
+# params...
+import argparse
+
 # json is used to read game descriptions as they are stored as JSON files for
 # easy "low tech" compliant sharing.
 import json
@@ -333,7 +337,17 @@ def render_add(games_dir, tpl_name):
         raise LudoboxError(message)
 
 
-def main():
+def generate_all(args):
+    """
+    Generate all the pages corresponding to the data of the :const:`DATADIR`. It
+    also generates a global index giving access to all the game pages and a page
+    to add a new game.
+
+    Arguments:
+    args -- arguments from the call to
+            :func:`argparse.ArgumentParser.parse_args()` since this function is
+            automatically called like that.
+    """
     # This stores all JSON from the different games
     games = []
 
@@ -386,9 +400,24 @@ def main():
         # don't depend on the result of this one
 
 
-# TODO add a generate action to specificaly launch a generation
 # TODO add a clean action to specificaly launch a cleanup of all generated files
 # TODO add a default action/help action that describe the usage and actions
 # TODO add a autotest action that launch all the tests (doctest and nose test)
+def main():
+    # Initialise the parsers
+    parser = argparse.ArgumentParser(description="Process some integers.")
+
+    # Add all the actions (subcommands)
+    subparsers = parser.add_subparsers(title='possible actions')
+
+    parser_generate = subparsers.add_parser('generate',
+                                            help="Generate all the pages "\
+                                                 "corresponding to the data")
+    parser_generate.set_defaults(func=generate_all)
+
+    # parse the args and call whatever function was selected
+    args = parser.parse_args()
+    args.func(args)
+
 if __name__ == "__main__":
     main()
