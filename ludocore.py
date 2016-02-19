@@ -334,11 +334,6 @@ def render_add(games_dir, tpl_name):
 
 
 def main():
-    # TODO reverse this test
-    # Then we create the games directory
-    if not os.path.exists(GAMES_DIR):
-        os.makedirs(GAMES_DIR)
-
     # This stores all JSON from the different games
     games = []
 
