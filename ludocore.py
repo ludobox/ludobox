@@ -45,6 +45,7 @@ GAMES_DIR = os.path.join(os.getcwd(), "games") # output
 
 
 # TODO improve this exception by always providing an advice to solve the problem
+# TODO improve this excetion by always providing a context ???
 class LudoboxError(Exception):
     """Base class for all the custom exceptions of the module."""
     def __init__(self, message):
@@ -127,8 +128,8 @@ def generate_game_desc(data, games_dir, template):
     template -- a :mod:`jinja2` template object used to generate the HTML
                 description file of the game.
 
-    Raise a `LudoboxError` with a convenient message if anything went wrong. In
-    such case no directory is created.
+    Raise a :exc:`LudoboxError` with a convenient message if anything went
+    wrong. In such case no directory is created.
     """
     # TODO append ERROR to the end of the directory name instead of deleting it
     # Create game dir
@@ -177,6 +178,54 @@ def generate_game_desc(data, games_dir, template):
         raise LudoboxError(message)
 
 
+# TODO add a very simple doctest
+# TODO add some test for this function with different scenario: index already
+#   exists/or not/is read-only, games dir exist/or not...
+def render_index(games, games_dir, template):
+    """
+    Render the index file containing the listing of all the games.
+
+    This file is created in the specified `games_dir` and is always named
+    `index.html`.
+
+    Arguments:
+    games -- a list which each element is the description of a game. Typically
+             those elements have been produced by :func:`generate_game_desc`.
+    games_dir -- directory where the index file will be created. It must
+                 not contain an `index.html` file.
+    template -- a :mod:`jinja2` template object used to generate the HTML
+                index file.
+
+    Raise a :exc:`LudoboxError` with a convenient message if anything went
+    wrong. In such case no index file is created.
+    """
+    # We need to pass games as a dict to jinja2
+    content = template.render({"games" : games})
+
+    path = os.path.join(games_dir, "index.html")
+
+    # Check if there is already an existing index file
+    if os.path.exists(path):
+        message = "Can not create global index file '{path}'' since a file of "\
+                  "same name already exists.".format(path=path)
+        raise LudoboxError(message)
+
+    # We write the content to the file
+    try:
+        with open(path , "wb") as f :
+            f.write(content.encode('utf-8'))
+    except IOError as e:
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while creating global index "\
+                  "file '{path}'".format(
+            error=e.strerror,
+            path=e.filename)
+        raise LudoboxError(message)
+
+
+
 # TODO split this function in many diffrent small func
 def main():
     # TODO move this piece of code closer to where it is needed
@@ -207,7 +256,7 @@ def main():
             print(os.path.basename(data_path))
 
             # Parse a game directory
-            print("\tRead game informations:", end='')
+            print("\tRead game informations: ", end='')
             try:
                 game_data = read_game_info(data_path)
             except LudoboxError as e:
@@ -216,7 +265,7 @@ def main():
             print("SUCCESS")
 
             # Generate game description
-            print("\tGenerate game description:", end='')
+            print("\tGenerate game description: ", end='')
             try:
                 generate_game_desc(game_data, GAMES_DIR, single_template)
             except LudoboxError as e:
@@ -228,12 +277,16 @@ def main():
             games.append(game_data)
 
     # We now write the root index.html
-    index = index_template.render({"games" : games}) # pass games as a dict to jinja2
-    main_index_path = os.path.join(GAMES_DIR, "index.html")
+    print("Generate global index: ", end='')
+    try:
+        render_index(games, GAMES_DIR, index_template)
+    except LudoboxError as e:
+        print("FAIL >>", e)
+        # No need to stop the execution we continue since following action
+        # don't depend on the result of this one
+    print("SUCCESS")
 
-    with open(main_index_path , "wb") as main_index :
-        main_index.write(index.encode('utf-8'))
-
+    # TODO remove this and make a static page instead
     # We then write the add page
     add = add_template.render() # pass games as a dict to jinja2
     add_path = os.path.join(GAMES_DIR, "add")
@@ -242,6 +295,7 @@ def main():
     if not os.path.exists(add_path):
         os.makedirs(add_path)
 
+    # TODO remove this and make a static page instead
     # create add game form
     with open(os.path.join(add_path, "index.html") , "wb") as add_file :
         add_file.write(add.encode('utf-8'))
