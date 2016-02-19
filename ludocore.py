@@ -34,15 +34,20 @@ from slugify import slugify
 ACCEPTED_TYPES=["jpg","png","gif", "stl", "pdf"]
 
 # Input directory where we should find JSON files each describing one game
-DATA_DIR = os.path.join(os.getcwd(), "data")
+DATA_DIR = os.path.abspath("data")
 
-# Output dirrectory where we generate the pages:
+# Output directory where we generate the pages:
 #   *   one directory for each game filled with all the revelent data: HTML
 #       description of the game, attached files, docmentation...
 #   *   the wellcome page that gives access to everything
 #   *   the add page that allow us to add a new game
-GAMES_DIR = os.path.join(os.getcwd(), "games") # output
+GAMES_DIR = os.path.abspath("games") # output
 
+# Directory where all the template files are stored
+TEMPLATE_DIR = os.path.abspath("templates")
+SINGLE_TEMPLATE = "single.html"  # template for page to display a single game
+INDEX_TEMPLATE = "index.html"  # template for page to list all games
+ADD_TEMPLATE = "add.html"  # template for page to create new game
 
 # TODO improve this exception by always providing an advice to solve the problem
 # TODO improve this excetion by always providing a context ???
@@ -54,6 +59,55 @@ class LudoboxError(Exception):
 
         # Call the base class constructor with the parameters it needs
         super(LudoboxError, self).__init__(message)
+
+
+def _render_template(tpl_name, data={}):
+    """
+    Encapsulate the rendering of a Jinja2 template.
+
+    This function create a Jinja2 environnement and use it to render the
+    specified template. The fact to use a new environment fr each template while
+    they are all stored in the same directory helps us to provide more testable
+    functions (by a reducing coupling).
+
+    Arguments:
+    tpl_name -- name of the template to render. It must be the name of a file in
+                the template directory `TEMPLATE_DIR`.
+    data -- a dictionary with all the keys needed to render the template.
+            Defaults to empty dictionary.
+
+    Returns a string containing the ready-to-use HTML code rendered by Jinja2.
+
+    Raise a :exc:`LudoboxError` with a convenient message if anything went
+    wrong.
+    """
+    try:
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR))
+    except Exception as e:  # I've no idea what kind of exception can be raised
+        message = "Error while creating environnemnt for templates from "\
+                  "directory '{dir}'".format(dir=TEMPLATE_DIR)
+        raise LudoboxError(message)
+
+    try:
+        template = env.get_template(tpl_name)
+    except jinja2.TemplateNotFound, e:
+        message = "Template file '{tpl}' does not exist".format(tpl=e.name)
+        raise LudoboxError(message)
+
+    try:
+        html = template.render(data)
+    except jinja2.TemplateSyntaxError as e:
+        # Cleanup anything previously created
+        shutil.rmtree(game_path, ignore_errors=True)
+        # Create a very explicit message to explain the problem
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        message = "Error while parsing template file {0.filename} "\
+                  "at line {0.line} because {0.message}".format(e)
+        raise LudoboxError(message)
+
+    # If everything was ok then we return the html
+    return html
 
 
 # TODO test this function with different scenari: existant/inexistant/not
@@ -93,7 +147,8 @@ def read_game_info(path):
         # TODO Handle more precisely the error and provide an advice for solving
         #   the problem
         # Create a very explicit message to explain the problem
-        message = "<{error}> occured while reading game '{game}' info file '{json}'".format(
+        message = "<{error}> occured while "\
+                  "reading game '{game}' info file '{json}'".format(
             error=e.strerror,
             game=os.path.basename(path),
             json=e.filename)
@@ -107,10 +162,11 @@ def read_game_info(path):
     return data
 
 
+# TODO append ERROR to the end of the directory name instead of deleting it
 # TODO add a very simple doctest
 # TODO add some test for this function with different scenario: empty/incoherent
 #   data/are nor readable, directory already exists/is read only...
-def generate_game_desc(data, games_dir, template):
+def generate_game_desc(data, games_dir, tpl_name):
     """
     Generate a whole game description in the games directory provided from data
     dictionary.
@@ -126,15 +182,17 @@ def generate_game_desc(data, games_dir, template):
     games_dir -- directory where the game directory should be created. It must
                  not contain a directory with the same name as the slugified
                  game name.
-    template -- a :mod:`jinja2` template object used to generate the HTML
-                description file of the game.
+    tpl_name -- a :mod:`jinja2` template file used to generate the HTML
+                description file. It must be located in the `TEMPLATE_DIR`
+                directory.
 
     Raise a :exc:`LudoboxError` with a convenient message if anything went
     wrong. In such case no directory is created.
     """
-    # TODO append ERROR to the end of the directory name instead of deleting it
+    # Name of the game cleaned
+    game_slug_name = data["slug"]
+
     # Create game dir
-    game_slug_name = data["slug"]  # Name of the game cleaned
     game_path =  os.path.join(games_dir, game_slug_name)
     try:
         os.makedirs(game_path)
@@ -147,32 +205,25 @@ def generate_game_desc(data, games_dir, template):
             path=e.filename)
         raise LudoboxError(message)
 
+    # TODO enclose in a try/except block to catch the exception and add some
+    #   context/better advice
     # Render template
-    try:
-        html = template.render(data)
-    except jinja2.TemplateSyntaxError as e:
-        # Cleanup anything previously created
-        shutil.rmtree(game_path, ignore_errors=True)
-        # Create a very explicit message to explain the problem
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
-        message = "Error while parsing template file {0.filename} "\
-                  "at line {0.line} because {0.message}".format(e)
-        raise LudoboxError(message)
+    content = _render_template(tpl_name, data)
 
-    html_index_path = os.path.join(game_path, "index.html")
+    path = os.path.join(game_path, "index.html")
 
     # Write game index.html
     try:
-        with open(html_index_path , "wb") as html_index:
-            html_index.write(html.encode('utf-8'))
+        with open(path , "wb") as f:
+            f.write(content.encode('utf-8'))
     except IOError as e:
         # Cleanup anything previously created
         shutil.rmtree(game_path, ignore_errors=True)
         # TODO Handle more precisely the error and provide an advice for solving
         #   the problem
         # Create a very explicit message to explain the problem
-        message = "<{error}> occured while creating game '{game}' index file '{path}'".format(
+        message = "<{error}> occured while "\
+                  "creating game '{game}' index file '{path}'".format(
             error=e.strerror,
             game=game_slug_name,
             path=e.filename)
@@ -182,7 +233,7 @@ def generate_game_desc(data, games_dir, template):
 # TODO add a very simple doctest
 # TODO add some test for this function with different scenario: index already
 #   exists/or not/is read-only, games dir exist/or not/is read only...
-def render_index(games, games_dir, template):
+def render_index(games, games_dir, tpl_name):
     """
     Render the index file containing the listing of all the games.
 
@@ -194,22 +245,16 @@ def render_index(games, games_dir, template):
              those elements have been produced by :func:`generate_game_desc`.
     games_dir -- directory where the index file will be created. It must
                  not contain an `index.html` file.
-    template -- a :mod:`jinja2` template object used to generate the HTML
-                index file.
+    tpl_name -- a :mod:`jinja2` template file used to generate the HTML
+                index file. It must be located in the `TEMPLATE_DIR` directory.
 
     Raise a :exc:`LudoboxError` with a convenient message if anything went
     wrong. In such case no index file is created.
     """
-    # We need to pass games as a dict to jinja2
-    try:
-        content = template.render({"games" : games})
-    except jinja2.TemplateSyntaxError as e:
-        # Create a very explicit message to explain the problem
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
-        message = "Error while parsing template file {0.filename} "\
-                  "at line {0.line} because {0.message}".format(e)
-        raise LudoboxError(message)
+    # TODO enclose in a try/except block to catch the exception and add some
+    #   context/better advice
+    # Render template
+    content = _render_template(tpl_name)
 
     path = os.path.join(games_dir, "index.html")
 
@@ -237,7 +282,7 @@ def render_index(games, games_dir, template):
 # TODO add a very simple doctest
 # TODO add some test for this function with different scenario: index already
 #   exists/or not/is read-only, add dir exist/or not/is read only...
-def render_add(games_dir, template):
+def render_add(games_dir, tpl_name):
     """
     Render the add page used to add a new game to the base via a form.
 
@@ -248,22 +293,16 @@ def render_add(games_dir, template):
     games_dir -- directory where the add page file will be created. It must
                  contain neither an `add` directory nor an `add/index.html`
                  file.
-    template -- a :mod:`jinja2` template object used to generate the HTML
-                index file.
+    tpl_name -- a :mod:`jinja2` template file used to generate the HTML add
+                file. It must be located in the `TEMPLATE_DIR` directory.
 
     Raise a :exc:`LudoboxError` with a convenient message if anything went
     wrong. In such case no directory or file is created.
     """
-    # We then write the add page
-    try:
-        content = template.render()
-    except jinja2.TemplateSyntaxError as e:
-        # Create a very explicit message to explain the problem
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
-        message = "Error while parsing template file {0.filename} "\
-                  "at line {0.line} because {0.message}".format(e)
-        raise LudoboxError(message)
+    # TODO enclose in a try/except block to catch the exception and add some
+    #   context/better advice
+    # Render template
+    content = _render_template(tpl_name)
 
     path = os.path.join(games_dir, "add")
 
@@ -294,20 +333,8 @@ def render_add(games_dir, template):
         raise LudoboxError(message)
 
 
-# TODO split this function in many diffrent small func
 def main():
-    # TODO move this piece of code closer to where it is needed
-    # First we need templates from files
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
-    try:
-        single_template = env.get_template('single.html') # display a single game
-        index_template = env.get_template('index.html') # list all games
-        add_template = env.get_template('add.html') # create new game
-    except jinja2.TemplateNotFound, e:
-        print("Template file", e.name, "does not exist")
-        # TODO return a standard error code
-        return
-
+    # TODO reverse this test
     # Then we create the games directory
     if not os.path.exists(GAMES_DIR):
         os.makedirs(GAMES_DIR)
@@ -334,7 +361,7 @@ def main():
         # Generate game description
         print("\tGenerate game description: ", end='')
         try:
-            generate_game_desc(game_data, GAMES_DIR, single_template)
+            generate_game_desc(game_data, GAMES_DIR, SINGLE_TEMPLATE)
         except LudoboxError as e:
             print("FAIL >>", e)
             continue
@@ -346,7 +373,7 @@ def main():
     # We now write the root index.html
     print("Generate global index: ", end='')
     try:
-        render_index(games, GAMES_DIR, index_template)
+        render_index(games, GAMES_DIR, INDEX_TEMPLATE)
         print("SUCCESS")
     except LudoboxError as e:
         print("FAIL >>", e)
@@ -356,7 +383,7 @@ def main():
     # We then write the add page
     print("Generate add page: ", end='')
     try:
-        render_add(GAMES_DIR, add_template)
+        render_add(GAMES_DIR, ADD_TEMPLATE)
         print("SUCCESS")
     except LudoboxError as e:
         print("FAIL >>", e)
