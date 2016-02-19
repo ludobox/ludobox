@@ -56,8 +56,9 @@ class LudoboxError(Exception):
         super(LudoboxError, self).__init__(message)
 
 
-# TODO test this function with different scenari: inexistant dir, info.json
-#   present/absent, with/without attached file
+# TODO test this function with different scenari: existant/inexistant/not
+#   readable dir, info.json present/absent/not readable, with/without attached
+#   file
 def read_game_info(path):
     """
     Read all the info available about the game stored at the provided path.
@@ -108,15 +109,15 @@ def read_game_info(path):
 
 # TODO add a very simple doctest
 # TODO add some test for this function with different scenario: empty/incoherent
-#   data, directory already exists...
+#   data/are nor readable, directory already exists/is read only...
 def generate_game_desc(data, games_dir, template):
     """
     Generate a whole game description in the games directory provided from data
     dictionary.
 
     The game description generated is composed of:
-    *   a game directory named after the game itself. It is created in the games
-        directory.
+    *   a game directory named after the game itself. It is created in the
+        `games_dir` directory.
     *   an HTML page describing the whole game generated from a template.
 
     Arguments:
@@ -180,7 +181,7 @@ def generate_game_desc(data, games_dir, template):
 
 # TODO add a very simple doctest
 # TODO add some test for this function with different scenario: index already
-#   exists/or not/is read-only, games dir exist/or not...
+#   exists/or not/is read-only, games dir exist/or not/is read only...
 def render_index(games, games_dir, template):
     """
     Render the index file containing the listing of all the games.
@@ -214,7 +215,7 @@ def render_index(games, games_dir, template):
 
     # Check if there is already an existing index file
     if os.path.exists(path):
-        message = "Can not create global index file '{path}'' since a file of "\
+        message = "Can not create global index file '{path}' since a file of "\
                   "same name already exists.".format(path=path)
         raise LudoboxError(message)
 
@@ -227,6 +228,66 @@ def render_index(games, games_dir, template):
         #   the problem
         # Create a very explicit message to explain the problem
         message = "<{error}> occured while creating global index "\
+                  "file '{path}'".format(
+            error=e.strerror,
+            path=e.filename)
+        raise LudoboxError(message)
+
+
+# TODO add a very simple doctest
+# TODO add some test for this function with different scenario: index already
+#   exists/or not/is read-only, add dir exist/or not/is read only...
+def render_add(games_dir, template):
+    """
+    Render the add page used to add a new game to the base via a form.
+
+    This file is created in a subdirectory `add` created in the specified
+    `games_dir` and is always named `add/index.html`.
+
+    Arguments:
+    games_dir -- directory where the add page file will be created. It must
+                 contain neither an `add` directory nor an `add/index.html`
+                 file.
+    template -- a :mod:`jinja2` template object used to generate the HTML
+                index file.
+
+    Raise a :exc:`LudoboxError` with a convenient message if anything went
+    wrong. In such case no directory or file is created.
+    """
+    # We then write the add page
+    try:
+        content = template.render()
+    except jinja2.TemplateSyntaxError as e:
+        # Create a very explicit message to explain the problem
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        message = "Error while parsing template file {0.filename} "\
+                  "at line {0.line} because {0.message}".format(e)
+        raise LudoboxError(message)
+
+    path = os.path.join(games_dir, "add")
+
+    # create add path
+    try:
+        os.makedirs(path)
+    except os.error as e:
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while creating directory '{path}'".format(
+            error=e.strerror,
+            path=e.filename)
+        raise LudoboxError(message)
+
+    # create add game form
+    try:
+        with open(os.path.join(path, "index.html") , "wb") as f :
+            f.write(content.encode('utf-8'))
+    except IOError as e:
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while creating add page index "\
                   "file '{path}'".format(
             error=e.strerror,
             path=e.filename)
@@ -286,25 +347,21 @@ def main():
     print("Generate global index: ", end='')
     try:
         render_index(games, GAMES_DIR, index_template)
+        print("SUCCESS")
     except LudoboxError as e:
         print("FAIL >>", e)
         # No need to stop the execution we continue since following action
         # don't depend on the result of this one
-    print("SUCCESS")
 
-    # TODO remove this and make a static page instead
     # We then write the add page
-    add = add_template.render() # pass games as a dict to jinja2
-    add_path = os.path.join(GAMES_DIR, "add")
-
-    # create add path
-    if not os.path.exists(add_path):
-        os.makedirs(add_path)
-
-    # TODO remove this and make a static page instead
-    # create add game form
-    with open(os.path.join(add_path, "index.html") , "wb") as add_file :
-        add_file.write(add.encode('utf-8'))
+    print("Generate add page: ", end='')
+    try:
+        render_add(GAMES_DIR, add_template)
+        print("SUCCESS")
+    except LudoboxError as e:
+        print("FAIL >>", e)
+        # No need to stop the execution we continue since following action
+        # don't depend on the result of this one
 
 
 # TODO add a generate action to specificaly launch a generation
