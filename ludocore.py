@@ -200,7 +200,15 @@ def render_index(games, games_dir, template):
     wrong. In such case no index file is created.
     """
     # We need to pass games as a dict to jinja2
-    content = template.render({"games" : games})
+    try:
+        content = template.render({"games" : games})
+    except jinja2.TemplateSyntaxError as e:
+        # Create a very explicit message to explain the problem
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        message = "Error while parsing template file {0.filename} "\
+                  "at line {0.line} because {0.message}".format(e)
+        raise LudoboxError(message)
 
     path = os.path.join(games_dir, "index.html")
 
@@ -223,7 +231,6 @@ def render_index(games, games_dir, template):
             error=e.strerror,
             path=e.filename)
         raise LudoboxError(message)
-
 
 
 # TODO split this function in many diffrent small func
@@ -251,30 +258,29 @@ def main():
     for path in sorted(os.listdir(DATA_DIR)):
         data_path = os.path.join(DATA_DIR, path)
 
-        # TODO reverse this test to decrease cyclomatic complexity
-        if os.path.isdir(data_path): # check only dir
-            print(os.path.basename(data_path))
+        # Print the name of the game we are taking care of...
+        print(os.path.basename(data_path))
 
-            # Parse a game directory
-            print("\tRead game informations: ", end='')
-            try:
-                game_data = read_game_info(data_path)
-            except LudoboxError as e:
-                print("FAIL >>", e)
-                continue
-            print("SUCCESS")
+        # Parse a game directory
+        print("\tRead game informations: ", end='')
+        try:
+            game_data = read_game_info(data_path)
+        except LudoboxError as e:
+            print("FAIL >>", e)
+            continue
+        print("SUCCESS")
 
-            # Generate game description
-            print("\tGenerate game description: ", end='')
-            try:
-                generate_game_desc(game_data, GAMES_DIR, single_template)
-            except LudoboxError as e:
-                print("FAIL >>", e)
-                continue
-            print("SUCCESS")
+        # Generate game description
+        print("\tGenerate game description: ", end='')
+        try:
+            generate_game_desc(game_data, GAMES_DIR, single_template)
+        except LudoboxError as e:
+            print("FAIL >>", e)
+            continue
+        print("SUCCESS")
 
-            # If everything when fine add the game info to the others
-            games.append(game_data)
+        # If everything when fine add the game info to the others
+        games.append(game_data)
 
     # We now write the root index.html
     print("Generate global index: ", end='')
