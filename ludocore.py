@@ -408,11 +408,15 @@ def main():
     parser = argparse.ArgumentParser(description="Process some integers.")
 
     # Add all the actions (subcommands)
-    subparsers = parser.add_subparsers(title='possible actions')
+    subparsers = parser.add_subparsers(
+        title="actions",
+        description="the program needs to know what action you want it to do.",
+        help="those are all the possible actions")
 
-    parser_generate = subparsers.add_parser('generate',
-                                            help="Generate all the pages "\
-                                                 "corresponding to the data")
+    # Generate command
+    parser_generate = subparsers.add_parser(
+        "generate",
+        help="Generate all the HTML pages by reading the game data")
     parser_generate.set_defaults(func=generate_all)
 
     # parse the args and call whatever function was selected
