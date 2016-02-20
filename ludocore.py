@@ -12,6 +12,9 @@ from __future__ import unicode_literals
 from __future__ import division
 from __future__ import print_function
 
+# Used to launch autotests of the program
+import doctest
+
 # Used for file or directory manipulation
 import os
 import shutil
@@ -431,6 +434,46 @@ def clean(args):
         os.remove(f)
     print("SUCCESS")
 
+
+def autotest(args):
+    """
+    Execute all the test to check if the program works correctly.
+
+    The tests are:
+    *   test from the documentation of the code itself (via :mod:`doctest`
+        module). They basically check if the usage of the function has not
+        changed. This is the equivalent of doing :command:`python -m doctest -v
+        ludocore.py`.
+    *   unittest from the `test` directory. Those test are here to chack that
+        every function works as expected and taht all functionnalities are ok
+        even in corner cases. They use :mod:`nose` module.
+    *   functionnal tests that try to replicate actuel usecases. They are
+        located in `test/functionnal`. They use :mod:`nose` module.
+
+    Arguments:
+    args -- arguments from the call to
+            :func:`argparse.ArgumentParser.parse_args()` since this function is
+            automatically called like that.
+    """
+    print("DOCTESTS, tests examples from the documentation: ", end='')
+    nb_fails, nb_tests = doctest.testmod(verbose=False)
+    nb_oks = nb_tests - nb_fails
+    print(nb_oks, "/", nb_tests, "tests are OK. >>", end='')
+    if nb_fails > 0:
+        print("FAIL")
+        print("\t To have more details about the errors you should try the "\
+              "command: python -m doctest -v ludocore.py")
+    print("SUCCESS")
+
+    print("UNIT TEST, tests every functionnality in deep: ", end='')
+    # TODO add unittests
+    print("NOT IMPLEMENTED")
+
+    print("FUNCTIONAL TESTS, tests actual real life usage and data: ", end='')
+    # TODO add functionnal test
+    print("NOT IMPLEMENTED")
+
+
 # TODO add a autotest action that launch all the tests (doctest and nose test)
 # TODO add an info action that list the default dirs, all actual games installed
 #   and all pages generated
@@ -456,6 +499,12 @@ def main():
         help="Removes all the generated files/directory created by the "\
              "'generate' action")
     parser_generate.set_defaults(func=clean)
+
+    # Autotest command
+    parser_generate = subparsers.add_parser(
+        "autotest",
+        help="Execute all the test to check if the program works correctly.")
+    parser_generate.set_defaults(func=autotest)
 
     # parse the args and call whatever function was selected
     args = parser.parse_args()
