@@ -10,7 +10,7 @@ A python script will generate the following files : a list of all games + a fold
 
 ### Templating
 
-CSS with [Skeleton](http://getskeleton.com/). Please edit CSS in ```css/style.css``` 
+CSS with [Skeleton](http://getskeleton.com/). Please edit CSS in ```css/style.css```
 
 Each game is structured as follow
 
@@ -37,7 +37,7 @@ Model of a game (JSON)
         "players": 4,
         "duration": "60+",
         "audience": "Adultes",
-        "authours": "Michel",
+        "authors": "Michel",
         "illustrators": "Jean-Claude",
         "source": "Le vin",
         "license": "CC 1.0",
@@ -50,5 +50,3 @@ Model of a game (JSON)
 ## Install dependencies
 
     pip install -r requirements.txt
-
-
