@@ -5,3 +5,6 @@ games
 __pycache__/
 *.py[cod]
 *$py.class
+
+# py.test cache
+.cache/

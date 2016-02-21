@@ -14,6 +14,15 @@ from __future__ import print_function
 
 # Used to launch autotests of the program
 import doctest
+import pytest
+# unexported constasts used as pytest.main return codes
+# c.f. https://github.com/pytest-dev/pytest/blob/master/_pytest/main.py
+PYTEST_EXIT_OK = 0
+PYTEST_EXIT_TESTSFAILED = 1
+PYTEST_EXIT_INTERRUPTED = 2
+PYTEST_EXIT_INTERNALERROR = 3
+PYTEST_EXIT_USAGEERROR = 4
+PYTEST_EXIT_NOTESTSCOLLECTED = 5
 
 # Used for file or directory manipulation
 import os
@@ -444,34 +453,53 @@ def autotest(args):
         module). They basically check if the usage of the function has not
         changed. This is the equivalent of doing :command:`python -m doctest -v
         ludocore.py`.
-    *   unittest from the `test` directory. Those test are here to chack that
-        every function works as expected and taht all functionnalities are ok
-        even in corner cases. They use :mod:`nose` module.
+    *   unittest from the `tests` directory. Those test are here to check that
+        every function works as expected and that all functionnalities are ok
+        even in corner cases. They use :mod:`pytest` module.
     *   functionnal tests that try to replicate actuel usecases. They are
-        located in `test/functionnal`. They use :mod:`nose` module.
+        located in `tests/functional`. They use :mod:`pytest` module. This is
+        the equivalent of doing :command:`py.test --quiet --tb=line
+        tests/functional_tests.py`
 
     Arguments:
     args -- arguments from the call to
             :func:`argparse.ArgumentParser.parse_args()` since this function is
             automatically called like that.
     """
-    print("DOCTESTS, tests examples from the documentation: ", end='')
+    # Doctests
+    print("DOCTESTS".center(80, '#'))
+    print("Tests examples from the documentation".center(80, '.'))
     nb_fails, nb_tests = doctest.testmod(verbose=False)
     nb_oks = nb_tests - nb_fails
-    print(nb_oks, "/", nb_tests, "tests are OK. >>", end='')
+    print(nb_oks, "/", nb_tests, "tests are OK.")
     if nb_fails > 0:
         print("FAIL")
         print("\t To have more details about the errors you should try the "\
               "command: python -m doctest -v ludocore.py")
-    print("SUCCESS")
+    else:
+        print("SUCCESS")
 
-    print("UNIT TEST, tests every functionnality in deep: ", end='')
+    # Unit tests
+    print("UNIT TESTS".center(80, '#'))
+    print("Tests every functionnality in deep".center(80, '.'))
     # TODO add unittests
     print("NOT IMPLEMENTED")
 
-    print("FUNCTIONAL TESTS, tests actual real life usage and data: ", end='')
-    # TODO add functionnal test
-    print("NOT IMPLEMENTED")
+    # Functional tests
+    print("FUNCTIONAL TESTS".center(80, '#'))
+    print("Tests actual real life usage and data".center(80, '.'))
+    func_result = pytest.main([
+        "--quiet",
+        "--color=no",
+        "--tb=line",
+        "tests/functional_tests.py"])
+    # pytest returns 0 only if there was no error
+    if func_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
+        print("FAIL")
+        print("\t To have more details about the errors you should try the "\
+              "command: py.test tests/functional_test.py")
+    else:
+        print("SUCCESS")
 
 
 # TODO add a autotest action that launch all the tests (doctest and nose test)
