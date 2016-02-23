@@ -277,7 +277,7 @@ def render_index(games, games_dir, tpl_name):
              each of those elements have been produced by
              :func:`generate_game_desc`.
     games_dir -- directory where the index file will be created. It must
-                 not contain an `index.html` file.
+                 not contain an `index.html` file. It must exist.
     tpl_name -- a :mod:`jinja2` template file used to generate the HTML
                 index file. It must be located in the `TEMPLATE_DIR` directory.
 
@@ -384,7 +384,6 @@ def render_add(games_dir, tpl_name):
         raise LudoboxError(message)
 
 
-# FIXME this does not work if the GAMES_DIR is empty : Generate global index: FAIL >> <No such file or directory> occured while creating global index file '/home/pym/Documents/DCALK/LudoBox/ludobox-ui/games/index.html'
 def generate_all(data_dir, games_dir, **kwargs):
     """
     Generate all the pages corresponding to the data of the :const:`DATADIR`. It
@@ -393,7 +392,7 @@ def generate_all(data_dir, games_dir, **kwargs):
 
     Keyword arguments:
     data_dir -- directory where the game info and data are stored. It will only
-                be read.
+                be read. And it must exist.
     games_dir -- directory where the game directories, global index and add page
                  will be created. It must not contain directories with the same
                  name as any of the slugified game names. It must not contain an
@@ -431,6 +430,17 @@ def generate_all(data_dir, games_dir, **kwargs):
     result = True
     # This stores all JSON from the different games
     games = []
+
+    try:
+        os.makedirs(games_dir)
+    except os.error as e:
+        # TODO Handle more precisely the error and provide an advice for solving
+        #   the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while creating directory '{path}'".format(
+            error=e.strerror,
+            path=e.filename)
+        raise LudoboxError(message)
 
     # We list all folders in "games" sorted alphabetically
     for path in sorted(os.listdir(data_dir)):
