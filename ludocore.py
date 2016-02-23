@@ -188,7 +188,6 @@ def read_game_info(path):
 
 
 # TODO append ERROR to the end of the directory name instead of deleting it
-# TODO add a very simple doctest
 # TODO add some test for this function with different scenario: empty/incoherent
 #   data/are nor readable, directory already exists/is read only...
 def generate_game_desc(data, games_dir, tpl_name):
@@ -213,6 +212,14 @@ def generate_game_desc(data, games_dir, tpl_name):
 
     Raise a :exc:`LudoboxError` with a convenient message if anything went
     wrong. In such case no directory is created.
+
+    Typical usage:
+
+    >>> data = read_game_info("tests/functional/data/borgia")
+    >>> import tempfile
+    >>> import os.path
+    >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
+    >>> generate_game_desc(data, games_dir, "single.html")
     """
     # Name of the game cleaned
     game_slug_name = data["slug"]
