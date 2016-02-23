@@ -14,9 +14,16 @@ for actual production cases.
 from __future__ import unicode_literals
 from __future__ import division
 from __future__ import print_function
+from __future__ import absolute_import
 
-def test_dummy1():
-    assert True
+# ludocore
+from ludocore import generate_all
+from ludocore import clean
 
-def test_dummy2():
-    assert 0 == 1
+# TODO work in a temp dir for convenience
+# TODO do more in depth testing : output, dir and file created
+def test_generate_all_on_hackathon_data():
+    # First we clean the rep
+    assert clean(None)
+    # Then we generate everything
+    assert generate_all(None)
