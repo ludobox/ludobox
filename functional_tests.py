@@ -19,10 +19,25 @@ from __future__ import absolute_import
 # ludocore
 import ludocore
 
-# TODO work in a temp dir for convenience
 # TODO do more in depth testing : output, dir and file created
-def test_generate_all_on_hackathon_data():
-    # First we clean the rep
-    assert ludocore.main("clean")
+def test_generate_all_on_hackathon_data_in_empty_games_directory(tmpdir):
+    tmp_games_dir = tmpdir.join("games")
+
     # Then we generate everything
-    assert ludocore.main("generate")
+    assert ludocore.main(
+        "generate --data_dir tests/functional/data --games_dir {tmp}".format(
+            tmp=tmp_games_dir))
+
+
+# TODO do more in depth testing : output, dir and file created
+def test_generate_all_then_clean_on_hackathon_data(tmpdir):
+    tmp_games_dir = tmpdir.join("games")
+
+    # Then we generate everything
+    assert ludocore.main(
+        "generate --data_dir tests/functional/data --games_dir {tmp}".format(
+            tmp=tmp_games_dir))
+
+    # First we clean the rep
+    assert ludocore.main(
+        "clean --games_dir {tmp}".format(tmp=tmp_games_dir))

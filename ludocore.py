@@ -353,7 +353,7 @@ def render_add(games_dir, tpl_name):
 
 
 # FIXME this does not work if the GAMES_DIR is empty : Generate global index: FAIL >> <No such file or directory> occured while creating global index file '/home/pym/Documents/DCALK/LudoBox/ludobox-ui/games/index.html'
-def generate_all(data_dir=DATA_DIR, games_dir=GAMES_DIR, **kwargs):
+def generate_all(data_dir, games_dir, **kwargs):
     """
     Generate all the pages corresponding to the data of the :const:`DATADIR`. It
     also generates a global index giving access to all the game pages and a page
@@ -449,8 +449,8 @@ def clean(games_dir=GAMES_DIR, **kwargs):
 
     Keyword arguments:
     games_dir -- The games directory to clean. It's the place where the games
-                 html representation have been generated. Warning: this dir will
-                 be totally wipped!
+                 html representation have been generated. Warning: This
+                 directory will be totally removed!
 
     kwargs is used here since this function is called by :func:`main` via
     :mod:`argparse`. And all the params are provided automagically by
@@ -545,6 +545,7 @@ def autotest(**kwargs):
         print("SUCCESS")
 
 
+# TODO add an info action that list the default dirs, all actual games installed
 def _config_parser():
     """
     Configure the argument parser and returns it.
@@ -563,6 +564,18 @@ def _config_parser():
         "generate",
         help="Generate all the HTML pages by reading the game data")
     parser_generate.set_defaults(func=generate_all)
+    parser_generate.add_argument(
+        "--data_dir",
+        default=DATA_DIR,
+        help="data directory where the game info and data are stored. Default "\
+             "to {data_dir}".format(
+                data_dir=DATA_DIR))
+    parser_generate.add_argument(
+        "--games_dir",
+        default=GAMES_DIR,
+        help="directory where the game directories, global index and add page "\
+             "will be created. Default to {games_dir}".format(
+                games_dir=DATA_DIR))
 
     # Clean command ############################################################
     parser_clean = subparsers.add_parser(
@@ -570,6 +583,13 @@ def _config_parser():
         help="Removes all the generated files/directory created by the "\
              "'generate' action")
     parser_clean.set_defaults(func=clean)
+    parser_clean.add_argument(
+        "--games_dir",
+        default=GAMES_DIR,
+        help="Directory where the games html representation have been "\
+             "generated. It will be totally removed. Default "\
+             "to {games_dir}".format(
+                games_dir=GAMES_DIR))
 
     # Autotest command #########################################################
     parser_autotest = subparsers.add_parser(
@@ -581,8 +601,6 @@ def _config_parser():
     return parser
 
 
-# TODO add a autotest action that launch all the tests (doctest and nose test)
-# TODO add an info action that list the default dirs, all actual games installed
 #   and all pages generated
 def main(commands=None):
     # Configure the parser
@@ -598,6 +616,7 @@ def main(commands=None):
 
     # Call whatever function was selected
     return args.func(**vars(args))  # We use `vars` to convert args to a dict
+
 
 if __name__ == "__main__":
     main()
