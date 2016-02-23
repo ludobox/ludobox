@@ -263,7 +263,6 @@ def generate_game_desc(data, games_dir, tpl_name):
         raise LudoboxError(message)
 
 
-# TODO add a very simple doctest
 # TODO add some test for this function with different scenario: index already
 #   exists/or not/is read-only, games dir exist/or not/is read only...
 def render_index(games, games_dir, tpl_name):
@@ -275,7 +274,8 @@ def render_index(games, games_dir, tpl_name):
 
     Arguments:
     games -- a list which each element is the description of a game. Typically
-             those elements have been produced by :func:`generate_game_desc`.
+             each of those elements have been produced by
+             :func:`generate_game_desc`.
     games_dir -- directory where the index file will be created. It must
                  not contain an `index.html` file.
     tpl_name -- a :mod:`jinja2` template file used to generate the HTML
@@ -283,6 +283,16 @@ def render_index(games, games_dir, tpl_name):
 
     Raise a :exc:`LudoboxError` with a convenient message if anything went
     wrong. In such case no index file is created.
+
+    Typical usage:
+
+    >>> games = [read_game_info("tests/functional/data/borgia")]
+    >>> import tempfile
+    >>> import os.path
+    >>> import os
+    >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
+    >>> os.makedirs(games_dir)  # The games directory must exist
+    >>> render_index(games, games_dir, "index.html")
     """
     # TODO enclose in a try/except block to catch the exception and add some
     #   context/better advice
@@ -312,7 +322,6 @@ def render_index(games, games_dir, tpl_name):
         raise LudoboxError(message)
 
 
-# TODO add a very simple doctest
 # TODO add some test for this function with different scenario: index already
 #   exists/or not/is read-only, add dir exist/or not/is read only...
 def render_add(games_dir, tpl_name):
@@ -331,6 +340,15 @@ def render_add(games_dir, tpl_name):
 
     Raise a :exc:`LudoboxError` with a convenient message if anything went
     wrong. In such case no directory or file is created.
+
+    Typical usage:
+
+    >>> import tempfile
+    >>> import os.path
+    >>> import os
+    >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
+    >>> os.makedirs(games_dir)  # The games directory must exist
+    >>> render_add(games_dir, "add.html")
     """
     # TODO enclose in a try/except block to catch the exception and add some
     #   context/better advice
