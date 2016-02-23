@@ -138,8 +138,15 @@ def read_game_info(path):
     Arguments:
     path -- directory where the game info and data are stored
 
-    Returns a dictionary containing the game data. If ok is
-    ``False`` data is empty.
+    Returns a dictionary containing the game data.
+
+    >>> data = read_game_info("tests/functional/data/borgia")
+    >>> print(data['audience'])
+    Adultes
+    >>> print(data['authors'])
+    René
+    >>> print(data['themes'])
+    Médiéval, Salopard
 
     If anythin goes wrong raise a LudoboxError containing description of the
     error and advice for fixing it.
