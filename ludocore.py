@@ -407,6 +407,26 @@ def generate_all(data_dir, games_dir, **kwargs):
 
     Returns ``True`` if all generations are a success ``False`` otherwise. This
     result is useful for testing pupose.
+
+    Typical usage:
+
+    >>> import tempfile
+    >>> import os.path
+    >>> import os
+    >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
+    >>> generate_all("tests/functional/data", games_dir)
+    borgia
+        Read game informations: SUCCESS
+        Generate game description: SUCCESS
+    coucou
+        Read game informations: SUCCESS
+        Generate game description: SUCCESS
+    papa
+        Read game informations: SUCCESS
+        Generate game description: SUCCESS
+    Generate global index: SUCCESS
+    Generate add page: SUCCESS
+    True
     """
     # Return value, will be switched to False in case of failure
     result = True
@@ -421,7 +441,7 @@ def generate_all(data_dir, games_dir, **kwargs):
             print(os.path.basename(data_path))
 
             # Parse a game directory
-            print("\tRead game informations: ", end='')
+            print("    Read game informations: ", end='')
             try:
                 game_data = read_game_info(data_path)
             except LudoboxError as e:
@@ -431,7 +451,7 @@ def generate_all(data_dir, games_dir, **kwargs):
             print("SUCCESS")
 
             # Generate game description
-            print("\tGenerate game description: ", end='')
+            print("    Generate game description: ", end='')
             try:
                 generate_game_desc(game_data, games_dir, SINGLE_TEMPLATE)
             except LudoboxError as e:
@@ -549,7 +569,7 @@ def autotest(**kwargs):
     print(nb_oks, "/", nb_tests, "tests are OK.")
     if nb_fails > 0:
         print("FAIL")
-        print("\t To have more details about the errors you should try the "\
+        print("     To have more details about the errors you should try the "\
               "command: python -m doctest -v ludocore.py")
     else:
         print("SUCCESS")
@@ -571,7 +591,7 @@ def autotest(**kwargs):
     # pytest returns 0 only if there was no error
     if func_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
         print("FAIL")
-        print("\t To have more details about the errors you should try the "\
+        print("     To have more details about the errors you should try the "\
               "command: py.test functional_tests.py")
     else:
         print("SUCCESS")
