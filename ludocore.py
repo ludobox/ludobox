@@ -562,9 +562,9 @@ def autotest(**kwargs):
         every function works as expected and that all functionnalities are ok
         even in corner cases. They use :mod:`pytest` module.
     *   functionnal tests that try to replicate actuel usecases. They are
-        located in `functional_tests.py`. They use :mod:`pytest` module. This is
+        located in `functional_test.py`. They use :mod:`pytest` module. This is
         the equivalent of doing :command:`py.test --quiet --tb=line
-        functional_tests.py`
+        functional_test.py`
 
     kwargs is used here since this function is called by :func:`main` via
     :mod:`argparse`. And all the params are provided automagically by
@@ -574,7 +574,7 @@ def autotest(**kwargs):
     """
     # Doctests
     print("DOCTESTS".center(80, '#'))
-    print("Tests examples from the documentation".center(80, '.'))
+    print("Tests examples from the documentation".center(80, '-'))
     nb_fails, nb_tests = doctest.testmod(verbose=False)
     nb_oks = nb_tests - nb_fails
     print(nb_oks, "/", nb_tests, "tests are OK.")
@@ -587,23 +587,31 @@ def autotest(**kwargs):
 
     # Unit tests
     print("UNIT TESTS".center(80, '#'))
-    print("Tests every functionnality in deep".center(80, '.'))
-    # TODO add unittests
-    print("NOT IMPLEMENTED")
+    print("Tests every functionnality in deep".center(80, '-'))
+    unit_result = pytest.main([
+        "--quiet",
+        "--color=no",
+        "--tb=line",
+        "ludocore_test.py"])
+    if unit_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
+        print("FAIL")
+        print("     To have more details about the errors you should try the "\
+              "command: py.test ludocore_test.py")
+    else:
+        print("SUCCESS")
 
     # Functional tests
     print("FUNCTIONAL TESTS".center(80, '#'))
-    print("Tests actual real life usage and data".center(80, '.'))
+    print("Tests actual real life usage and data".center(80, '-'))
     func_result = pytest.main([
         "--quiet",
         "--color=no",
         "--tb=line",
-        "functional_tests.py"])
-    # pytest returns 0 only if there was no error
+        "functional_test.py"])
     if func_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
         print("FAIL")
         print("     To have more details about the errors you should try the "\
-              "command: py.test functional_tests.py")
+              "command: py.test functional_test.py")
     else:
         print("SUCCESS")
 
