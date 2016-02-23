@@ -17,13 +17,12 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 # ludocore
-from ludocore import generate_all
-from ludocore import clean
+import ludocore
 
 # TODO work in a temp dir for convenience
 # TODO do more in depth testing : output, dir and file created
 def test_generate_all_on_hackathon_data():
     # First we clean the rep
-    assert clean(None)
+    assert ludocore.main("clean")
     # Then we generate everything
-    assert generate_all(None)
+    assert ludocore.main("generate")
