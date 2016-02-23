@@ -412,7 +412,6 @@ def generate_all(data_dir, games_dir, **kwargs):
 
     >>> import tempfile
     >>> import os.path
-    >>> import os
     >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
     >>> generate_all("tests/functional/data", games_dir)
     borgia
@@ -489,7 +488,7 @@ def generate_all(data_dir, games_dir, **kwargs):
 
 
 # TODO add some counter feedback: XXX games page removed, XXX files removed...
-def clean(games_dir=GAMES_DIR, **kwargs):
+def clean(games_dir, **kwargs):
     """
     Removes all the generated files/directory created by :func:`generate_all`.
 
@@ -512,6 +511,18 @@ def clean(games_dir=GAMES_DIR, **kwargs):
 
     Returns ``True`` if all cleanups are a success ``False`` otherwise. This
     result is useful for testing pupose.
+
+    Typical usage:
+
+    >>> import tempfile
+    >>> import os.path
+    >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
+    >>> clean(games_dir)
+    Remove all generated pages and directory: SUCCESS
+    Remove all precompiled python files (*.pyc): SUCCESS
+    Remove all python generated object files (*.pyo): SUCCESS
+    Remove py.test caches directory (__pycache__): SUCCESS
+    True
     """
     # Return value, will be switched to False in case of failure
     result = True
@@ -653,7 +664,6 @@ def _config_parser():
     return parser
 
 
-#   and all pages generated
 def main(commands=None):
     # Configure the parser
     parser = _config_parser()
