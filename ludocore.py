@@ -140,7 +140,7 @@ def read_game_info(path):
 
     Returns a dictionary containing the game data.
 
-    >>> data = read_game_info("tests/functional/data/borgia")
+    >>> data = read_game_info("tests/functional/data/borgia-le-jeu-malsain")
     >>> print(data['audience'])
     Adultes
     >>> print(data['authors'])
@@ -215,7 +215,7 @@ def generate_game_desc(data, games_dir, tpl_name):
 
     Typical usage:
 
-    >>> data = read_game_info("tests/functional/data/borgia")
+    >>> data = read_game_info("tests/functional/data/borgia-le-jeu-malsain")
     >>> import tempfile
     >>> import os.path
     >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
@@ -286,7 +286,7 @@ def render_index(games, games_dir, tpl_name):
 
     Typical usage:
 
-    >>> games = [read_game_info("tests/functional/data/borgia")]
+    >>> games = [read_game_info("tests/functional/data/borgia-le-jeu-malsain")]
     >>> import tempfile
     >>> import os.path
     >>> import os
@@ -414,13 +414,13 @@ def generate_all(data_dir, games_dir, **kwargs):
     >>> import os.path
     >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
     >>> generate_all("tests/functional/data", games_dir)
-    borgia
+    borgia-le-jeu-malsain
         Read game informations: SUCCESS
         Generate game description: SUCCESS
-    coucou
+    coucou-le-jeu-sympa
         Read game informations: SUCCESS
         Generate game description: SUCCESS
-    papa
+    papa-le-jeu-coquin
         Read game informations: SUCCESS
         Generate game description: SUCCESS
     Generate global index: SUCCESS
@@ -534,6 +534,8 @@ def clean(games_dir, **kwargs):
     print("Remove all precompiled python files (*.pyc): ", end='')
     for f in glob.glob("*.pyc"):
         os.remove(f)
+    # TODO remove the *.pyc files from test
+    # TODO remove the *.pyc files from test/functionnal
     print("SUCCESS")
 
     print("Remove all python generated object files (*.pyo): ", end='')
