@@ -1,0 +1,11 @@
+# Some information on dependancy installations...
+
+# fedora
+sudo dnf install npm
+# ubuntu
+sudo dnf install npm
+# windows
+http://blog.teamtreehouse.com/install-node-js-npm-windows
+
+npm install -g bower
+

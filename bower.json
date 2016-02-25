@@ -1,0 +1,25 @@
+{
+  "name": "ludobox-ui",
+  "homepage": "https://github.com/ludobox/ludobox-ui",
+  "authors": [
+    "Pierre-Yves Martin <pym.aldebaran@gmail.com>"
+  ],
+  "description": "offline network open game file sharing software",
+  "main": "ludocore.py",
+  "moduleType": [],
+  "keywords": [
+    "libre",
+    "game",
+    "offline",
+    "sharing"
+  ],
+  "license": "GPLv2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
