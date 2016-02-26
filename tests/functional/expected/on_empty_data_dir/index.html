@@ -1,4 +1,39 @@
-{% include "partials/header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Ludobox</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="/static/css/fonts.css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/skeleton.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/static/images/favicon.png">
+
+</head>
+<body>
+
+<div class="container">
+
+
 <div class="row">
     <div class="twelve columns">
         <h1>Liste des jeux</h1>
@@ -40,18 +75,7 @@
                         </tr>
                     </thead>
                     <tbody class="list">
-                        {% for game in games %}
-                        <tr>
-                            <td class="title">{{ game.title }}</td>
-                            <td class="link"><a href="/static/games/{{ game.slug }}/index.html">{{ game.title }}</a></td>
-                            <td class="type">{{ game.type }}</td>
-                            <td class="themes">{{ game.themes }}</td>
-
-                            <td class="fab_time"> {{game.fab_time}} </td>
-                            <td class="players"> {{game.players}} </td>
-                            <td class="languages"> {{game.languages}} </td>
-                        </tr>
-                        {% endfor %}
+                        
                     </tbody>
                 </table>
             </div>
@@ -83,4 +107,8 @@ document.getElementById('filterByType').onchange = function(e) {
     }
 }
 </script>
-{% include "partials/footer.html" %}
+</div>
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

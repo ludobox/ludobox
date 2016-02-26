@@ -49,17 +49,21 @@ import jinja2
 # To get it: sudo pip install python-slugify
 from slugify import slugify
 
+# flask is the minimal web server used to make the HTML pages available
+from flask import Flask
+server = Flask("LUDOSERVER")  # global web server instance used to defines routes
+
 ACCEPTED_TYPES=["jpg","png","gif", "stl", "pdf"]
 
 # Input directory where we should find JSON files each describing one game
-DATA_DIR = os.path.abspath("data")
+INPUT_DIR = os.path.abspath("data")
 
 # Output directory where we generate the pages:
 #   *   one directory for each game filled with all the revelent data: HTML
 #       description of the game, attached files, docmentation...
 #   *   the wellcome page that gives access to everything
 #   *   the add page that allow us to add a new game
-GAMES_DIR = os.path.abspath("games") # output
+OUTPUT_DIR = os.path.abspath("static")
 
 # Directory where all the template files are stored
 TEMPLATE_DIR = os.path.abspath("templates")
@@ -79,7 +83,8 @@ class LudoboxError(Exception):
         super(LudoboxError, self).__init__(message)
 
 
-def _render_template(tpl_name, data={}):
+# TODO replace this by a call to Flask automatic template renderer func
+def _render_template(tpl_name, data={}, games=[]):
     """
     Encapsulate the rendering of a Jinja2 template.
 
@@ -91,8 +96,10 @@ def _render_template(tpl_name, data={}):
     Arguments:
     tpl_name -- name of the template to render. It must be the name of a file in
                 the template directory `TEMPLATE_DIR`.
-    data -- a dictionary with all the keys needed to render the template.
-            Defaults to empty dictionary.
+    data -- a dictionary containing all the descriptions of one game. Used only
+            if rendering a specific game page. Default to empty dictionnary.
+    games -- a list of all the games descriptions. Used only if rendering global
+             index. Default to empty list.
 
     Returns a string containing the ready-to-use HTML code rendered by Jinja2.
 
@@ -113,7 +120,7 @@ def _render_template(tpl_name, data={}):
         raise LudoboxError(message)
 
     try:
-        html = template.render(data)
+        html = template.render(data=data, games=games)
     except jinja2.TemplateSyntaxError as e:
         # Cleanup anything previously created
         shutil.rmtree(game_path, ignore_errors=True)
@@ -240,7 +247,7 @@ def generate_game_desc(data, games_dir, tpl_name):
     # TODO enclose in a try/except block to catch the exception and add some
     #   context/better advice
     # Render template
-    content = _render_template(tpl_name, data)
+    content = _render_template(tpl_name, data=data)
 
     path = os.path.join(game_path, "index.html")
 
@@ -297,7 +304,7 @@ def render_index(games, games_dir, tpl_name):
     # TODO enclose in a try/except block to catch the exception and add some
     #   context/better advice
     # Render template
-    content = _render_template(tpl_name)
+    content = _render_template(tpl_name, games=games)
 
     path = os.path.join(games_dir, "index.html")
 
@@ -384,19 +391,19 @@ def render_add(games_dir, tpl_name):
         raise LudoboxError(message)
 
 
-def generate_all(data_dir, games_dir, **kwargs):
+def generate_all(input_dir, output_dir, **kwargs):
     """
     Generate all the pages corresponding to the data of the :const:`DATADIR`. It
     also generates a global index giving access to all the game pages and a page
     to add a new game.
 
     Keyword arguments:
-    data_dir -- directory where the game info and data are stored. It will only
-                be read. And it must exist.
-    games_dir -- directory where the game directories, global index and add page
-                 will be created. It must not contain directories with the same
-                 name as any of the slugified game names. It must not contain an
-                 directory named `add` or an `index.html` file.
+    input_dir -- directory where the game info and data are stored. It will only
+                 be read. And it must exist.
+    output_dir -- directory where the games subdirectory (where all game pages
+                  will be created), global index and add page will be created.
+                  It must not contain a subdirectory named `add`, `games` or an
+                  `index.html` file.
 
     kwargs is used here since this function is called by :func:`main` via
     :mod:`argparse`. And all the params are provided automagically by
@@ -413,6 +420,7 @@ def generate_all(data_dir, games_dir, **kwargs):
     >>> import os.path
     >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
     >>> generate_all("tests/functional/data", games_dir)
+    Create games directory: SUCCESS
     borgia-le-jeu-malsain
         Read game informations: SUCCESS
         Generate game description: SUCCESS
@@ -431,20 +439,32 @@ def generate_all(data_dir, games_dir, **kwargs):
     # This stores all JSON from the different games
     games = []
 
-    try:
-        os.makedirs(games_dir)
-    except os.error as e:
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
-        # Create a very explicit message to explain the problem
-        message = "<{error}> occured while creating directory '{path}'".format(
-            error=e.strerror,
-            path=e.filename)
-        raise LudoboxError(message)
+    # We first create a games subdirectory
+    print("Create games directory: ", end='')
+    games_dir = os.path.join(output_dir, "games")
+    if os.path.exists(games_dir):
+        message = "'{path}' already exist impossible to create it.".format(
+            path=games_dir)
+        advice = "Try to use './ludocore.py clean' to remove it."
+        print("FAIL >>", message, advice)
+        result = False
+    else:
+        try:
+            os.makedirs(games_dir)
+            print("SUCCESS")
+        except os.error as e:
+            # TODO Handle more precisely the error and provide an advice for solving
+            #   the problem
+            # Create a very explicit message to explain the problem
+            message = "<{error}> occured while creating directory '{path}'".format(
+                error=e.strerror,
+                path=e.filename)
+            print("FAIL >>", message, advice)
+            result = False
 
     # We list all folders in "games" sorted alphabetically
-    for path in sorted(os.listdir(data_dir)):
-        data_path = os.path.join(data_dir, path)
+    for path in sorted(os.listdir(input_dir)):
+        data_path = os.path.join(input_dir, path)
         if os.path.isdir(data_path):
             # Print the name of the game we are taking care of...
             print(os.path.basename(data_path))
@@ -464,7 +484,8 @@ def generate_all(data_dir, games_dir, **kwargs):
             try:
                 generate_game_desc(game_data, games_dir, SINGLE_TEMPLATE)
             except LudoboxError as e:
-                print("FAIL >>", e)
+                advice = "Try to use './ludocore.py clean' to remove it."
+                print("FAIL >>", e, advice)
                 result = False
                 continue
             print("SUCCESS")
@@ -475,7 +496,7 @@ def generate_all(data_dir, games_dir, **kwargs):
     # We now write the root index.html
     print("Generate global index: ", end='')
     try:
-        render_index(games, games_dir, INDEX_TEMPLATE)
+        render_index(games, output_dir, INDEX_TEMPLATE)
         print("SUCCESS")
     except LudoboxError as e:
         print("FAIL >>", e)
@@ -486,7 +507,7 @@ def generate_all(data_dir, games_dir, **kwargs):
     # We then write the add page
     print("Generate add page: ", end='')
     try:
-        render_add(games_dir, ADD_TEMPLATE)
+        render_add(output_dir, ADD_TEMPLATE)
         print("SUCCESS")
     except LudoboxError as e:
         print("FAIL >>", e)
@@ -498,20 +519,21 @@ def generate_all(data_dir, games_dir, **kwargs):
 
 
 # TODO add some counter feedback: XXX games page removed, XXX files removed...
-def clean(games_dir, **kwargs):
+def clean(output_dir, **kwargs):
     """
     Removes all the generated files/directory created by :func:`generate_all`.
 
     This function will remove:
-    *   the whole `games_dir` directory and its content
+    *   the `output_dir/index.html` file
+    *   the whole `output_dir/add` directory and its content
+    *   the whole `output_dir/games` directory and its content
     *   any *.pyc file generated by previous python execution/test
     *   any *.pyo file generated by previous python execution/test
     *   any __pycache__ files generated by previous python :mod:`py.test`
 
     Keyword arguments:
-    games_dir -- The games directory to clean. It's the place where the games
-                 html representation have been generated. Warning: This
-                 directory will be totally removed!
+    output_dir -- Directory previously used as output for the
+                  :func:`generate_all` function.
 
     kwargs is used here since this function is called by :func:`main` via
     :mod:`argparse`. And all the params are provided automagically by
@@ -526,8 +548,8 @@ def clean(games_dir, **kwargs):
 
     >>> import tempfile
     >>> import os.path
-    >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
-    >>> clean(games_dir)
+    >>> clean_me_i_m_famous = os.path.join(tempfile.mkdtemp(),"dirty")
+    >>> clean(clean_me_i_m_famous)
     Remove all generated pages and directory: SUCCESS
     Remove all precompiled python files (*.pyc): SUCCESS
     Remove all python generated object files (*.pyo): SUCCESS
@@ -538,14 +560,27 @@ def clean(games_dir, **kwargs):
     result = True
 
     print("Remove all generated pages and directory: ", end='')
+    games_dir = os.path.join(output_dir, "games")
     shutil.rmtree(games_dir, ignore_errors=True)
+
+    index_file = os.path.join(output_dir, "index.html")
+    try:
+        os.remove(index_file)
+    except OSError as e:
+        # TODO handle the error more gently... and with more feedback
+        pass
+
+    add_dir = os.path.join(output_dir, "add")
+    shutil.rmtree(add_dir, ignore_errors=True)
     print("SUCCESS")
 
     print("Remove all precompiled python files (*.pyc): ", end='')
     for f in glob.glob("*.pyc"):
         os.remove(f)
-    # TODO remove the *.pyc files from test
-    # TODO remove the *.pyc files from test/functionnal
+    for f in glob.glob("test/*.pyc"):
+        os.remove(f)
+    for f in glob.glob("test/functional/*.pyc"):
+        os.remove(f)
     print("SUCCESS")
 
     print("Remove all python generated object files (*.pyo): ", end='')
@@ -628,6 +663,23 @@ def autotest(**kwargs):
         print("SUCCESS")
 
 
+def serve(debug, **kwargs):
+    """
+    Launch an tiny web server to make the ludobox site available.
+
+    Keyword arguments:
+    debug -- bool to activate the debug mode of the Flask server (for
+             development only NEVER use it in production).
+
+    kwargs is used here since this function is called by :func:`main` via
+    :mod:`argparse`. And all the params are provided automagically by
+    :func:`argparse.ArgumentParser.parse_args` converted to a dict using
+    :func:`vars`.
+    See `Namespace object<https://docs.python.org/2/library/argparse.html#the-namespace-object>`_
+    """
+    server.run(debug=debug)
+
+
 # TODO add an info action that list the default dirs, all actual games installed
 def _config_parser():
     """
@@ -648,17 +700,16 @@ def _config_parser():
         help="Generate all the HTML pages by reading the game data")
     parser_generate.set_defaults(func=generate_all)
     parser_generate.add_argument(
-        "--data_dir",
-        default=DATA_DIR,
+        "--input_dir",
+        default=INPUT_DIR,
         help="data directory where the game info and data are stored. Default "\
-             "to {data_dir}".format(
-                data_dir=DATA_DIR))
+             "to {input_dir}".format(input_dir=INPUT_DIR))
     parser_generate.add_argument(
-        "--games_dir",
-        default=GAMES_DIR,
-        help="directory where the game directories, global index and add page "\
-             "will be created. Default to {games_dir}".format(
-                games_dir=DATA_DIR))
+        "--output_dir",
+        default=OUTPUT_DIR,
+        help="directory where the games subdirectory (where all game pages "\
+             "will be created), global index and add page will be created. "\
+             "Default to {output_dir}".format(output_dir=INPUT_DIR))
 
     # Clean command ############################################################
     parser_clean = subparsers.add_parser(
@@ -667,18 +718,30 @@ def _config_parser():
              "'generate' action")
     parser_clean.set_defaults(func=clean)
     parser_clean.add_argument(
-        "--games_dir",
-        default=GAMES_DIR,
-        help="Directory where the games html representation have been "\
-             "generated. It will be totally removed. Default "\
-             "to {games_dir}".format(
-                games_dir=GAMES_DIR))
+        "--output_dir",
+        default=OUTPUT_DIR,
+        help="Directory previously used as output for the `generate` action. "\
+             "It's where the games subdirectory (where all game pages will be "\
+             "created), global index and add page will be created. Default to "\
+             "{output_dir}".format(output_dir=OUTPUT_DIR))
 
     # Autotest command #########################################################
     parser_autotest = subparsers.add_parser(
         "autotest",
         help="Execute all the test to check if the program works correctly.")
     parser_autotest.set_defaults(func=autotest)
+
+    # Serve command ############################################################
+    parser_serve = subparsers.add_parser(
+        "serve",
+        help="Launch an tiny web server to make the ludobox site available.")
+    parser_serve.set_defaults(func=serve)
+    parser_serve.add_argument(
+        "--debug",
+        default=False,
+        action='store_true',
+        help="activate the debug mode of the Flask server (for development "\
+             "only NEVER use it in production).")
 
     # Returns the, now configured, parser
     return parser

@@ -1,5 +1,8 @@
 venv
-games
+/data
+/static/add/
+/static/games/
+/static/index.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

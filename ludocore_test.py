@@ -25,23 +25,23 @@ import filecmp
 
 def test_generate_all_on_non_empty_data_dir_and_empty_games_dir(tmpdir):
     # A directory with actual game description JSON files
-    data_dir = "tests/functional/data"
+    input_dir = "tests/functional/data"
     # An empty directory for the output
-    games_dir = os.path.join(str(tmpdir),"games")
+    output_dir = os.path.join(str(tmpdir),"out")
 
     # Does the function works without error?
-    assert generate_all(data_dir, games_dir)
+    assert generate_all(input_dir, output_dir)
 
     # Let's go for deep comparison with reference files
-    expected_dir = "tests/functional/expected"
+    expected_dir = "tests/functional/expected/on_hackaton_data_dir"
     expected_files = [
         "add/index.html",
         "index.html",
-        "borgia-le-jeu-malsain/index.html",
-        "coucou-le-jeu-sympa/index.html",
-        "papa-le-jeu-coquin/index.html"]
+        "games/borgia-le-jeu-malsain/index.html",
+        "games/coucou-le-jeu-sympa/index.html",
+        "games/papa-le-jeu-coquin/index.html"]
     match, mismatch, errors = filecmp.cmpfiles(
-        games_dir,
+        output_dir,
         expected_dir,
         expected_files)
     assert errors == []
@@ -51,21 +51,25 @@ def test_generate_all_on_non_empty_data_dir_and_empty_games_dir(tmpdir):
 
 def test_generate_all_on_empty_data_dir(tmpdir):
     # An empty directory as input data
-    data_dir = os.path.join(str(tmpdir),"empty")
-    os.makedirs(data_dir)
+    input_dir = os.path.join(str(tmpdir),"empty")
+    os.makedirs(input_dir)
     # An empty directory for the output
-    games_dir = os.path.join(str(tmpdir),"games")
+    output_dir = os.path.join(str(tmpdir),"out")
 
     # Does the function works without error?
-    assert generate_all(data_dir, games_dir)
+    assert generate_all(input_dir, output_dir)
+
+    # Did it generate a games directory ?
+    games_dir = os.path.join(output_dir, "games")
+    assert os.path.isdir(games_dir)
 
     # Let's go for deep comparison with reference files
-    expected_dir = "tests/functional/expected"
+    expected_dir = "tests/functional/expected/on_empty_data_dir"
     expected_files = [
         "add/index.html",
         "index.html"]
     match, mismatch, errors = filecmp.cmpfiles(
-        games_dir,
+        output_dir,
         expected_dir,
         expected_files)
     assert errors == []
@@ -73,5 +77,5 @@ def test_generate_all_on_empty_data_dir(tmpdir):
     assert sorted(match) == sorted(expected_files)
 
     # Let's be sure we have nothing else in the output dir
-    generated = [n for n in os.listdir(games_dir)]
-    assert sorted(generated) == sorted(["add", "index.html"])
+    generated = [n for n in os.listdir(output_dir)]
+    assert sorted(generated) == sorted(["games", "add", "index.html"])
