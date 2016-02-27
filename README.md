@@ -1,12 +1,20 @@
 # Ludobox UI
 
-User Interface for Ludobox
+User Interface for the Ludobox project.
 
 ## How it works
 
 A python script will generate the following files : a list of all games + a folder containing info of each game.
 
-    python pythoncore.py # generate folders tree
+    python ludocore.py generate # generate folders tree
+
+You can then launch the web server:
+
+    python ludocore.py serve # give http access to ludobox-ui
+
+To know the other usage of the ludocore script:
+
+    python ludocore.py help
 
 ### Templating
 
@@ -20,9 +28,20 @@ Each game is structured as follow
 
 ## App structure
 
-* ```games``` : list all games
-* ```games/add``` : add new games
-* ```games/jeu1``` : display game named "jeu1"
+* ```data``` : where the json description and attached files of all games are
+* ```data/frululu``` : description and attachement for the game named "frululu"
+* ```static``` : all HTML pages are static and served from here
+* ```static/bower_components``` : all web dependancies (CSS, JS and fonts) will
+  be installed here by bower
+* ```static/games``` : list all games
+* ```static/games/frululu``` : display game named "frululu"
+* ```static/add``` : add new games
+* ```static/css``` : project specific CSS
+* ```static/js``` : project specific JS
+* ```static/images``` : project specific images
+* ```templates``` : Jinja2 templates used to generates all the pages
+* ```tests``` : location for all the test data used to test the application
+
 
 ### Data model
 
@@ -49,4 +68,10 @@ Model of a game (JSON)
 
 ## Install dependencies
 
+To install python dependancies:
+
     pip install -r requirements.txt
+
+To install web dependancies (CSS, JS and fonts):
+
+    bower install
