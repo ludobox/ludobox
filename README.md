@@ -2,11 +2,14 @@
 
 User Interface for the Ludobox project.
 
-## How it works
+## Install
 
 Install using ```setup.py```
 
-  python setup.py install
+    python setup.py install
+
+## How it works
+
 
 A python script ```ludobox``` will generate the following files : a list of all games + a folder containing info of each game.
 
