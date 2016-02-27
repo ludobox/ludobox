@@ -78,7 +78,7 @@ Model of a game (JSON)
 
 Install ludobox package in development mode
 
-  python setup.py develop # patch path for development env
+    python setup.py develop # patch path for development env
 
 
 ## Install dependencies  
