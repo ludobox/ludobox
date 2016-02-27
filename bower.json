@@ -21,5 +21,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "skeleton": "skeleton-css#^2.0.4",
+    "raleway-googlefont": "*"
+  }
 }

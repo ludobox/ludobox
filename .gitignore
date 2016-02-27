@@ -1,13 +1,39 @@
-venv
+# Ludobox specific stuff #######################################################
+# Input directory for the ludobox
 /data
+
+# Generated files and directories
 /static/add/
 /static/games/
 /static/index.html
 
+
+# Web dependancies #############################################################
+# We use `bower` to install javascript, css and fonts dependancies so we do not
+# need to have them in the repository. Everything is configured for simple and
+# fast installation.
+# To get those dependancies simply install `bower` on your computer and then:
+#   bower install
+/static/bower_components/
+
+
+# Python dependancies ##########################################################
+# We use `pip` and virtualenv to install python dependancies so we do not need
+# to have them in the repository or on your computer globally. Everything is
+# configured for simple, fast and local installation.
+# To get those dependancies simply install 'pip' and 'virtualenv' on your
+# computer and then:
+# TODO finish the pip and virtualenv tutorial
+
+
+# Python related stuff #########################################################
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
 *$py.class
 
 # py.test cache
+__pycache__/
 .cache/
+
+# Python virtual environnement
+venv
