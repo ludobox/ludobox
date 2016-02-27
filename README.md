@@ -4,17 +4,22 @@ User Interface for the Ludobox project.
 
 ## How it works
 
-A python script will generate the following files : a list of all games + a folder containing info of each game.
+Install using ```setup.py```
 
-    python ludocore.py generate # generate folders tree
+  python setup.py install
+
+A python script ```ludobox``` will generate the following files : a list of all games + a folder containing info of each game.
+
+    ludobox generate # generate folders tree
 
 You can then launch the web server:
 
-    python ludocore.py serve # give http access to ludobox-ui
+    ludobox serve # give http access to ludobox-ui
 
 To know the other usage of the ludocore script:
 
-    python ludocore.py help
+    ludobox help
+
 
 ### Templating
 
@@ -66,7 +71,14 @@ Model of a game (JSON)
     }
 
 
-## Install dependencies
+## Developers
+
+Install ludobox package in development mode
+
+  python setup.py develop # patch path for development env
+
+
+## Install dependencies  
 
 To install python dependancies:
 
