@@ -2,6 +2,8 @@
 
 User Interface for the Ludobox project.
 
+To distribute your games using the Ludobox, see the explanations in [Ludobox Borgia](https://github.com/ludobox/ludobox-borgia).
+
 ## Install
 
 Install using ```setup.py```
@@ -22,7 +24,6 @@ To know the other usage of the ludocore script:
 
     ludobox help
 
-See the [Ludobox Borgia](https://github.com/ludobox/ludobox-borgia) for more explanations about how to distribute your games with Ludobox.
 
 ## App structure
 
