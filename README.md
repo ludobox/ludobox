@@ -2,29 +2,28 @@
 
 User Interface for the Ludobox project.
 
+To distribute your games using the Ludobox, see the explanations in [Ludobox Borgia](https://github.com/ludobox/ludobox-borgia).
+
+## Install
+
+Install using ```setup.py```
+
+    python setup.py install
+
 ## How it works
 
-A python script will generate the following files : a list of all games + a folder containing info of each game.
+A python script ```ludobox``` will generate the following files : a list of all games + a folder containing info of each game.
 
-    python ludocore.py generate # generate folders tree
+    ludobox generate # generate folders tree
 
 You can then launch the web server:
 
-    python ludocore.py serve # give http access to ludobox-ui
+    ludobox serve # give http access to ludobox-ui
 
 To know the other usage of the ludocore script:
 
-    python ludocore.py help
+    ludobox help
 
-### Templating
-
-CSS with [Skeleton](http://getskeleton.com/). Please edit CSS in ```css/style.css```
-
-Each game is structured as follow
-
-* ```/games/game/game-info.json```
-* ```/games/game/game-files.zip``` # any files attached to the game
-* ```/games/game/index.html``` # generated html file
 
 ## App structure
 
@@ -34,34 +33,19 @@ Each game is structured as follow
 * ```static/bower_components``` : all web dependancies (CSS, JS and fonts) will
   be installed here by bower
 * ```static/games``` : list all games
-* ```static/games/frululu``` : display game named "frululu"
+* ```static/games/frululu``` : a game named "frululu"
 * ```static/add``` : add new games
 * ```templates``` : Jinja2 templates used to generates all the pages
 * ```tests``` : location for all the test data used to test the application
 * ```static/customisation``` : directory with all the files that allow customisation of the app (specific Javascript, CSS, images...)
 
-### Data model
+## Developers
 
-Model of a game (JSON)
+Install ludobox package in development mode
 
-    {
-        "timestamp": "10/10/2015 14:52:35",
-        "title": "Borgia, le jeu malsain",
-        "description": "Ouais",
-        "fab_time": "2+ h",
-        "requirements": "IMPRIMANTE",
-        "players": 4,
-        "duration": "60+",
-        "audience": "Adultes",
-        "authors": "Michel",
-        "illustrators": "Jean-Claude",
-        "source": "Le vin",
-        "license": "CC 1.0",
-        "languages": "Français",
-        "themes": "Médiéval, Salopard",
-        "type": 0
-    }
+    python setup.py develop # patch path for development env
 
+CSS templating using [Skeleton](http://getskeleton.com/). Please edit CSS in ```css/style.css```
 
 ## Install dependencies
 
