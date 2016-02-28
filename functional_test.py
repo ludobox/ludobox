@@ -19,6 +19,7 @@ from __future__ import absolute_import
 # ludocore
 import ludocore
 
+
 # TODO do more in depth testing : output, dir and file created
 def test_generate_all_on_hackathon_data_in_empty_games_directory(tmpdir):
     tmp_games_dir = tmpdir.join("games")

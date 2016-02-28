@@ -16,14 +16,6 @@ from __future__ import absolute_import
 # Used to launch autotests of the program
 import doctest
 import pytest
-# unexported constasts used as pytest.main return codes
-# c.f. https://github.com/pytest-dev/pytest/blob/master/_pytest/main.py
-PYTEST_EXIT_OK = 0
-PYTEST_EXIT_TESTSFAILED = 1
-PYTEST_EXIT_INTERRUPTED = 2
-PYTEST_EXIT_INTERNALERROR = 3
-PYTEST_EXIT_USAGEERROR = 4
-PYTEST_EXIT_NOTESTSCOLLECTED = 5
 
 # Used for file or directory manipulation
 import os
@@ -51,9 +43,16 @@ from slugify import slugify
 
 # flask is the minimal web server used to make the HTML pages available
 from flask import Flask
-server = Flask("LUDOSERVER")  # global web server instance used to defines routes
+server = Flask("LUDOSERVER")  # web server instance used to defines routes
 
-ACCEPTED_TYPES=["jpg","png","gif", "stl", "pdf"]
+# unexported constasts used as pytest.main return codes
+# c.f. https://github.com/pytest-dev/pytest/blob/master/_pytest/main.py
+PYTEST_EXIT_OK = 0
+PYTEST_EXIT_TESTSFAILED = 1
+PYTEST_EXIT_INTERRUPTED = 2
+PYTEST_EXIT_INTERNALERROR = 3
+PYTEST_EXIT_USAGEERROR = 4
+PYTEST_EXIT_NOTESTSCOLLECTED = 5
 
 # Input directory where we should find JSON files each describing one game
 INPUT_DIR = os.path.abspath("data")
@@ -71,11 +70,15 @@ SINGLE_TEMPLATE = "single.html"  # template for page to display a single game
 INDEX_TEMPLATE = "index.html"  # template for page to list all games
 ADD_TEMPLATE = "add.html"  # template for page to create new game
 
-# TODO improve this exception by always providing an advice to solve the problem
+
+# TODO improve this exception by always providing an advice to solve the
+#   problem
 # TODO improve this excetion by always providing a context ???
 class LudoboxError(Exception):
     """Base class for all the custom exceptions of the module."""
+
     def __init__(self, message):
+        """Set the message for the exception."""
         # without this you may get DeprecationWarning
         self.message = message
 
@@ -89,17 +92,17 @@ def _render_template(tpl_name, data={}, games=[]):
     Encapsulate the rendering of a Jinja2 template.
 
     This function create a Jinja2 environnement and use it to render the
-    specified template. The fact to use a new environment fr each template while
-    they are all stored in the same directory helps us to provide more testable
-    functions (by a reducing coupling).
+    specified template. The fact to use a new environment fr each template
+    while they are all stored in the same directory helps us to provide more
+    testable functions (by a reducing coupling).
 
     Arguments:
-    tpl_name -- name of the template to render. It must be the name of a file in
-                the template directory `TEMPLATE_DIR`.
+    tpl_name -- name of the template to render. It must be the name of a file
+                in the template directory `TEMPLATE_DIR`.
     data -- a dictionary containing all the descriptions of one game. Used only
             if rendering a specific game page. Default to empty dictionnary.
-    games -- a list of all the games descriptions. Used only if rendering global
-             index. Default to empty list.
+    games -- a list of all the games descriptions. Used only if rendering
+             global index. Default to empty list.
 
     Returns a string containing the ready-to-use HTML code rendered by Jinja2.
 
@@ -125,8 +128,8 @@ def _render_template(tpl_name, data={}, games=[]):
         # Cleanup anything previously created
         shutil.rmtree(game_path, ignore_errors=True)
         # Create a very explicit message to explain the problem
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
         message = "Error while parsing template file {0.filename} "\
                   "at line {0.line} because {0.message}".format(e)
         raise LudoboxError(message)
@@ -167,8 +170,8 @@ def read_game_info(path):
     The game data can come from:
     *   the info.json file
     *   the attached files found in the dir
-    *   somme are also computed from other data like a cleaned name suitable for
-        url generation (slugified name)
+    *   somme are also computed from other data like a cleaned name suitable
+        for url generation (slugified name)
     """
     # Load JSON from the description file of the game
     json_path = os.path.join(path, "info.json")
@@ -176,14 +179,14 @@ def read_game_info(path):
         with open(json_path, "r") as json_file:
             data = json.load(json_file)
     except IOError as e:
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
         # Create a very explicit message to explain the problem
         message = "<{error}> occured while "\
                   "reading game '{game}' info file '{json}'".format(
-            error=e.strerror,
-            game=os.path.basename(path),
-            json=e.filename)
+                    error=e.strerror,
+                    game=os.path.basename(path),
+                    json=e.filename)
         raise LudoboxError(message)
 
     # TODO Add some attachment info
@@ -195,12 +198,12 @@ def read_game_info(path):
 
 
 # TODO append ERROR to the end of the directory name instead of deleting it
-# TODO add some test for this function with different scenario: empty/incoherent
-#   data/are nor readable, directory already exists/is read only...
+# TODO add some test for this function with different scenario:
+#   empty/incoherent data/are nor readable, directory already exists/is read
+#   only...
 def generate_game_desc(data, games_dir, tpl_name):
     """
-    Generate a whole game description in the games directory provided from data
-    dictionary.
+    Generate a game description in the games directory provided from data dict.
 
     The game description generated is composed of:
     *   a game directory named after the game itself. It is created in the
@@ -208,11 +211,11 @@ def generate_game_desc(data, games_dir, tpl_name):
     *   an HTML page describing the whole game generated from a template.
 
     Arguments:
-    data -- a dictionnary with all the informations about the game. Typically it
-            has been generated with :func:`read_game_info()`.
-    games_dir -- directory where the game directories should be created. It must
-                 not contain a directory with the same name as any slugified
-                 game name.
+    data -- a dictionnary with all the informations about the game. Typically
+            it has been generated with :func:`read_game_info()`.
+    games_dir -- directory where the game directories should be created. It
+                 must not contain a directory with the same name as any
+                 slugified game name.
     tpl_name -- a :mod:`jinja2` template file used to generate the HTML
                 description file. It must be located in the `TEMPLATE_DIR`
                 directory.
@@ -232,12 +235,12 @@ def generate_game_desc(data, games_dir, tpl_name):
     game_slug_name = data["slug"]
 
     # Create game dir
-    game_path =  os.path.join(games_dir, game_slug_name)
+    game_path = os.path.join(games_dir, game_slug_name)
     try:
         os.makedirs(game_path)
     except os.error as e:
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
         # Create a very explicit message to explain the problem
         message = "<{error}> occured while creating directory '{path}'".format(
             error=e.strerror,
@@ -253,20 +256,20 @@ def generate_game_desc(data, games_dir, tpl_name):
 
     # Write game index.html
     try:
-        with open(path , "wb") as f:
+        with open(path, "wb") as f:
             f.write(content.encode('utf-8'))
     except IOError as e:
         # Cleanup anything previously created
         # TODO use clean(game=game_name)
         shutil.rmtree(game_path, ignore_errors=True)
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
         # Create a very explicit message to explain the problem
         message = "<{error}> occured while "\
                   "creating game '{game}' index file '{path}'".format(
-            error=e.strerror,
-            game=game_slug_name,
-            path=e.filename)
+                    error=e.strerror,
+                    game=game_slug_name,
+                    path=e.filename)
         raise LudoboxError(message)
 
 
@@ -316,16 +319,16 @@ def render_index(games, games_dir, tpl_name):
 
     # We write the content to the file
     try:
-        with open(path , "wb") as f :
+        with open(path, "wb") as f:
             f.write(content.encode('utf-8'))
     except IOError as e:
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
         # Create a very explicit message to explain the problem
         message = "<{error}> occured while creating global index "\
                   "file '{path}'".format(
-            error=e.strerror,
-            path=e.filename)
+                    error=e.strerror,
+                    path=e.filename)
         raise LudoboxError(message)
 
 
@@ -368,8 +371,8 @@ def render_add(games_dir, tpl_name):
     try:
         os.makedirs(path)
     except os.error as e:
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
         # Create a very explicit message to explain the problem
         message = "<{error}> occured while creating directory '{path}'".format(
             error=e.strerror,
@@ -378,28 +381,29 @@ def render_add(games_dir, tpl_name):
 
     # create add game form
     try:
-        with open(os.path.join(path, "index.html") , "wb") as f :
+        with open(os.path.join(path, "index.html"), "wb") as f:
             f.write(content.encode('utf-8'))
     except IOError as e:
-        # TODO Handle more precisely the error and provide an advice for solving
-        #   the problem
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
         # Create a very explicit message to explain the problem
         message = "<{error}> occured while creating add page index "\
                   "file '{path}'".format(
-            error=e.strerror,
-            path=e.filename)
+                    error=e.strerror,
+                    path=e.filename)
         raise LudoboxError(message)
 
 
 def generate_all(input_dir, output_dir, **kwargs):
     """
-    Generate all the pages corresponding to the data of the :const:`DATADIR`. It
-    also generates a global index giving access to all the game pages and a page
-    to add a new game.
+    Generate all the pages corresponding to the data of the :const:`DATADIR`.
+
+    It also generates a global index giving access to all the game pages and a
+    page to add a new game.
 
     Keyword arguments:
-    input_dir -- directory where the game info and data are stored. It will only
-                 be read. And it must exist.
+    input_dir -- directory where the game info and data are stored. It will
+                 only be read. And it must exist.
     output_dir -- directory where the games subdirectory (where all game pages
                   will be created), global index and add page will be created.
                   It must not contain a subdirectory named `add`, `games` or an
@@ -453,12 +457,13 @@ def generate_all(input_dir, output_dir, **kwargs):
             os.makedirs(games_dir)
             print("SUCCESS")
         except os.error as e:
-            # TODO Handle more precisely the error and provide an advice for solving
-            #   the problem
+            # TODO Handle more precisely the error and provide an advice for
+            #   solving the problem
             # Create a very explicit message to explain the problem
-            message = "<{error}> occured while creating directory '{path}'".format(
-                error=e.strerror,
-                path=e.filename)
+            message = "<{error}> occured while creating directory "\
+                      "'{path}'".format(
+                        error=e.strerror,
+                        path=e.filename)
             print("FAIL >>", message, advice)
             result = False
 
@@ -521,7 +526,7 @@ def generate_all(input_dir, output_dir, **kwargs):
 # TODO add some counter feedback: XXX games page removed, XXX files removed...
 def clean(output_dir, **kwargs):
     """
-    Removes all the generated files/directory created by :func:`generate_all`.
+    Remove all the generated files/directory created by :func:`generate_all`.
 
     This function will remove:
     *   the `output_dir/index.html` file
@@ -627,8 +632,8 @@ def autotest(**kwargs):
     print(nb_oks, "/", nb_tests, "tests are OK.")
     if nb_fails > 0:
         print("FAIL")
-        print("     To have more details about the errors you should try the "\
-              "command: python -m doctest -v ludocore.py")
+        print("     To have more details about the errors you should try "
+              "the command: python -m doctest -v ludocore.py")
     else:
         print("SUCCESS")
 
@@ -642,8 +647,8 @@ def autotest(**kwargs):
         "ludocore_test.py"])
     if unit_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
         print("FAIL")
-        print("     To have more details about the errors you should try the "\
-              "command: py.test ludocore_test.py")
+        print("     To have more details about the errors you should try "
+              "the command: py.test ludocore_test.py")
     else:
         print("SUCCESS")
 
@@ -657,8 +662,8 @@ def autotest(**kwargs):
         "functional_test.py"])
     if func_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
         print("FAIL")
-        print("     To have more details about the errors you should try the "\
-              "command: py.test functional_test.py")
+        print("     To have more details about the errors you should try "
+              "the command: py.test functional_test.py")
     else:
         print("SUCCESS")
 
@@ -680,11 +685,10 @@ def serve(debug, **kwargs):
     server.run(debug=debug)
 
 
-# TODO add an info action that list the default dirs, all actual games installed
+# TODO add an info action that list the default dirs, all actual games
+#   installed
 def _config_parser():
-    """
-    Configure the argument parser and returns it.
-    """
+    """Configure the argument parser and returns it."""
     # Initialise the parsers
     parser = argparse.ArgumentParser(description="Process some integers.")
 
@@ -694,7 +698,7 @@ def _config_parser():
         description="the program needs to know what action you want it to do.",
         help="those are all the possible actions")
 
-    # Generate command #########################################################
+    # Generate command ########################################################
     parser_generate = subparsers.add_parser(
         "generate",
         help="Generate all the HTML pages by reading the game data")
@@ -702,36 +706,36 @@ def _config_parser():
     parser_generate.add_argument(
         "--input_dir",
         default=INPUT_DIR,
-        help="data directory where the game info and data are stored. Default "\
+        help="data directory where the game info and data are stored. Default "
              "to {input_dir}".format(input_dir=INPUT_DIR))
     parser_generate.add_argument(
         "--output_dir",
         default=OUTPUT_DIR,
-        help="directory where the games subdirectory (where all game pages "\
-             "will be created), global index and add page will be created. "\
+        help="directory where the games subdirectory (where all game pages "
+             "will be created), global index and add page will be created. "
              "Default to {output_dir}".format(output_dir=INPUT_DIR))
 
-    # Clean command ############################################################
+    # Clean command ###########################################################
     parser_clean = subparsers.add_parser(
         "clean",
-        help="Removes all the generated files/directory created by the "\
+        help="Removes all the generated files/directory created by the "
              "'generate' action")
     parser_clean.set_defaults(func=clean)
     parser_clean.add_argument(
         "--output_dir",
         default=OUTPUT_DIR,
-        help="Directory previously used as output for the `generate` action. "\
-             "It's where the games subdirectory (where all game pages will be "\
-             "created), global index and add page will be created. Default to "\
+        help="Directory previously used as output for the `generate` action. "
+             "It's where the games subdirectory (where all game pages will be "
+             "created), global index and add page will be created. Default to "
              "{output_dir}".format(output_dir=OUTPUT_DIR))
 
-    # Autotest command #########################################################
+    # Autotest command ########################################################
     parser_autotest = subparsers.add_parser(
         "autotest",
         help="Execute all the test to check if the program works correctly.")
     parser_autotest.set_defaults(func=autotest)
 
-    # Serve command ############################################################
+    # Serve command ###########################################################
     parser_serve = subparsers.add_parser(
         "serve",
         help="Launch an tiny web server to make the ludobox site available.")
@@ -740,7 +744,7 @@ def _config_parser():
         "--debug",
         default=False,
         action='store_true',
-        help="activate the debug mode of the Flask server (for development "\
+        help="activate the debug mode of the Flask server (for development "
              "only NEVER use it in production).")
 
     # Returns the, now configured, parser
@@ -748,6 +752,11 @@ def _config_parser():
 
 
 def main(commands=None):
+    """
+    Launch command parser from real command line or from args.
+
+    This allow easy testing of the command line options/actions.
+    """
     # Configure the parser
     parser = _config_parser()
 

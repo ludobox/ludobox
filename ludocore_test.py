@@ -27,7 +27,7 @@ def test_generate_all_on_non_empty_data_dir_and_empty_games_dir(tmpdir):
     # A directory with actual game description JSON files
     input_dir = "tests/functional/data"
     # An empty directory for the output
-    output_dir = os.path.join(str(tmpdir),"out")
+    output_dir = os.path.join(str(tmpdir), "out")
 
     # Does the function works without error?
     assert generate_all(input_dir, output_dir)
@@ -51,10 +51,10 @@ def test_generate_all_on_non_empty_data_dir_and_empty_games_dir(tmpdir):
 
 def test_generate_all_on_empty_data_dir(tmpdir):
     # An empty directory as input data
-    input_dir = os.path.join(str(tmpdir),"empty")
+    input_dir = os.path.join(str(tmpdir), "empty")
     os.makedirs(input_dir)
     # An empty directory for the output
-    output_dir = os.path.join(str(tmpdir),"out")
+    output_dir = os.path.join(str(tmpdir), "out")
 
     # Does the function works without error?
     assert generate_all(input_dir, output_dir)
