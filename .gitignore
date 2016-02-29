@@ -26,6 +26,12 @@
 # TODO finish the pip and virtualenv tutorial
 
 
+# Editor specific stuff ########################################################
+# Sublime Text
+ludobox-ui.sublime-project
+ludobox-ui.sublime-workspace
+
+
 # Python related stuff #########################################################
 # Byte-compiled / optimized / DLL files
 *.py[cod]

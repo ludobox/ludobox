@@ -25,6 +25,6 @@
   "dependencies": {
     "skeleton": "skeleton-css#^2.0.4",
     "raleway-googlefont": "*",
-    "list.js": "^1.2.0"
+    "datatables.net-dt": "^1.10.11"
   }
 }
