@@ -42,8 +42,8 @@ import jinja2
 from slugify import slugify
 
 # flask is the minimal web server used to make the HTML pages available
-from flask import Flask
-server = Flask("LUDOSERVER")  # web server instance used to defines routes
+import flask
+app = flask.Flask("LUDOSERVER")  # web server instance used to defines routes
 
 # unexported constasts used as pytest.main return codes
 # c.f. https://github.com/pytest-dev/pytest/blob/master/_pytest/main.py
@@ -682,7 +682,13 @@ def serve(debug, **kwargs):
     :func:`vars`.
     See `Namespace object<https://docs.python.org/2/library/argparse.html#the-namespace-object>`_
     """
-    server.run(debug=debug)
+    app.run(host='0.0.0.0', port=8080, debug=debug)
+
+
+@app.route('/')
+def index():
+    """Serve the base url for the project."""
+    return flask.redirect(flask.url_for("static", filename="index.html"))
 
 
 # TODO add an info action that list the default dirs, all actual games
