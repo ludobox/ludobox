@@ -1,75 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
 <head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Ludobox</title>
+    <meta name="description" content="">
+    <meta name="author" content="Clément Renaud, Pierre-Yves Martin">
+    <meta name="copyright" content="DCALK">
+    <meta name="generator" content="Jinja2">
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Ludobox</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!-- Any change in the font used should be done in this file -->
+    <link rel="stylesheet" href="/static/customisation/ludofonts.css">
 
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
-  <link rel="stylesheet" href="/static/css/fonts.css">
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="/static/bower_components/skeleton/css/normalize.css">
+    <link rel="stylesheet" href="/static/bower_components/skeleton/css/skeleton.css">
+    <!-- Any change in the style should be done in this file -->
+    <link rel="stylesheet" href="/static/customisation/ludostyle.css">
 
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="/static/css/normalize.css">
-  <link rel="stylesheet" href="/static/css/skeleton.css">
-  <link rel="stylesheet" href="/static/css/style.css">
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="/static/images/favicon.png">
-
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!-- To change the favicon change this file -->
+    <link rel="icon" type="image/png" href="/static/customisation/images/favicon.png">
 </head>
+
 <body>
-
 <div class="container">
-
-
-
-
-<div class="row">
-    <div class="twelve columns">
-        <h1>Add new game</h1>
+    <div class="row">
+        <div class="twelve columns">
+            <h1>Add new game</h1>
+        </div>
     </div>
-</div>
-<div class="row">
+    <div class="row">
 
-<form>
-  <div class="row">
-    <div class="six columns">
-      <label for="exampleEmailInput">Your email</label>
-      <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
+        <form>
+            <div class="row">
+                <div class="six columns">
+                    <label for="exampleEmailInput">Your email</label>
+                    <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
+                </div>
+                <div class="six columns">
+                    <label for="exampleRecipientInput">Reason for contacting</label>
+                    <select class="u-full-width" id="exampleRecipientInput">
+                        <option value="Option 1">Questions</option>
+                        <option value="Option 2">Admiration</option>
+                        <option value="Option 3">Can I get your number?</option>
+                    </select>
+                </div>
+            </div>
+            <label for="exampleMessage">Message</label>
+            <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
+            <label class="example-send-yourself-copy">
+                <input type="checkbox">
+                <span class="label-body">Send a copy to yourself</span>
+            </label>
+            <input class="button-primary" type="submit" value="Submit">
+        </form>
+
     </div>
-    <div class="six columns">
-      <label for="exampleRecipientInput">Reason for contacting</label>
-      <select class="u-full-width" id="exampleRecipientInput">
-        <option value="Option 1">Questions</option>
-        <option value="Option 2">Admiration</option>
-        <option value="Option 3">Can I get your number?</option>
-      </select>
-    </div>
-  </div>
-  <label for="exampleMessage">Message</label>
-  <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
-  <label class="example-send-yourself-copy">
-    <input type="checkbox">
-    <span class="label-body">Send a copy to yourself</span>
-  </label>
-  <input class="button-primary" type="submit" value="Submit">
-</form>
-
-</div>
-
-
 </div>
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->

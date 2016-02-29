@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "skeleton": "skeleton-css#^2.0.4",
-    "raleway-googlefont": "*"
+    "raleway-googlefont": "*",
+    "list.js": "^1.2.0"
   }
 }

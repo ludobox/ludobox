@@ -1,112 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
 <head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Ludobox</title>
+    <meta name="description" content="">
+    <meta name="author" content="Clément Renaud, Pierre-Yves Martin">
+    <meta name="copyright" content="DCALK">
+    <meta name="generator" content="Jinja2">
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Ludobox</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!-- Any change in the font used should be done in this file -->
+    <link rel="stylesheet" href="/static/customisation/ludofonts.css">
 
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
-  <link rel="stylesheet" href="/static/css/fonts.css">
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="/static/bower_components/skeleton/css/normalize.css">
+    <link rel="stylesheet" href="/static/bower_components/skeleton/css/skeleton.css">
+    <!-- Any change in the style should be done in this file -->
+    <link rel="stylesheet" href="/static/customisation/ludostyle.css">
 
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="/static/css/normalize.css">
-  <link rel="stylesheet" href="/static/css/skeleton.css">
-  <link rel="stylesheet" href="/static/css/style.css">
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="/static/images/favicon.png">
-
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!-- To change the favicon change this file -->
+    <link rel="icon" type="image/png" href="/static/customisation/images/favicon.png">
 </head>
+
 <body>
-
 <div class="container">
-
-
-<div class="row">
-    <div class="twelve columns">
-        <h1>Liste des jeux</h1>
-    </div>
-</div>
-<div class="row" id="games">
-    <div class="twelve columns">
-        <div class="row" id="search-utils">
-            <div class="three columns">
-                <a class="button button-primary" href="/games/add">Add a new game</a>
-            </div>
-            <div class="three columns">
-                <form>
-                    <input class="search" type="search" id="searchGames" placeholder="Search" />
-                </form>
-            </div>
-            <div class="three columns">
-                <button class="sort" data-sort="title">Sort by name</button>
-                <button class="sort" data-sort="type">Sort by type</button>
-                <select name="filterByType" id="filterByType">
-                    <option value="all">All</option>
-                    <option value="video-game">Video Game</option>
-                    <option value="board-game">Board Game</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="twelve columns">
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Title</td>
-                            <td>Link</td>
-                            <td>Type</td>
-                            <td>Themes</td>
-                            <td>fab_time</td>
-                            <td>players</td>
-                            <td>languages</td>
-                        </tr>
-                    </thead>
-                    <tbody class="list">
-                        
-                    </tbody>
-                </table>
-            </div>
+    <div class="row">
+        <div class="twelve columns">
+            <h1>Liste des jeux</h1>
         </div>
     </div>
-</div>
-<script src="/static/js/list.js"></script>
-<script>
-var options = {
-    valueNames: ['title', 'type']
-};
+    <div class="row" id="games">
+        <div class="twelve columns">
+            <div class="row" id="search-utils">
+                <div class="three columns">
+                    <a class="button button-primary" href="/games/add">Add a new game</a>
+                </div>
+                <div class="three columns">
+                    <form>
+                        <input class="search" type="search" id="searchGames" placeholder="Search" />
+                    </form>
+                </div>
+                <div class="three columns">
+                    <button class="sort" data-sort="title">Sort by name</button>
+                    <button class="sort" data-sort="type">Sort by type</button>
+                    <select name="filterByType" id="filterByType">
+                        <option value="all">All</option>
+                        <option value="video-game">Video Game</option>
+                        <option value="board-game">Board Game</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns">
+                    <table>
+                        <caption>Jeux disponibles au téléchargement</caption>
+                        <thead>
+                            <tr>
+                                <td>Title</td>
+                                <td>Link</td>
+                                <td>Type</td>
+                                <td>Themes</td>
+                                <td>fab_time</td>
+                                <td>players</td>
+                                <td>languages</td>
+                            </tr>
+                        </thead>
+                        <tbody class="list">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/bower_components/list.js/dist/list.js"></script>
+    <script>
+        var options = {
+            valueNames: ['title', 'type']
+        };
 
-var gamesList = new List('games', options);
+        var gamesList = new List('games', options);
 
-document.getElementById('filterByType').onchange = function(e) {
-    console.log(e.target.value);
-    if (e.target.value == "all") {
-        gamesList.filter(function(item) {
-            return true
-        });
-    } else {
-        gamesList.filter(function(item) {
-            if (item.values().type == e.target.value) {
-                return true;
+        document.getElementById('filterByType').onchange = function(e) {
+            console.log(e.target.value);
+            if (e.target.value == "all") {
+                gamesList.filter(function(item) {
+                    return true
+                });
             } else {
-                return false;
+                gamesList.filter(function(item) {
+                    if (item.values().type == e.target.value) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
             }
-        });
-    }
-}
-</script>
+        }
+    </script>
 </div>
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
