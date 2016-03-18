@@ -42,30 +42,290 @@
             <h1>Add new game</h1>
         </div>
     </div>
+
     <div class="row">
 
-        <form>
+        <form action="/addgame" method="post">
+
             <div class="row">
                 <div class="six columns">
-                    <label for="exampleEmailInput">Your email</label>
-                    <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
-                </div>
-                <div class="six columns">
-                    <label for="exampleRecipientInput">Reason for contacting</label>
-                    <select class="u-full-width" id="exampleRecipientInput">
-                        <option value="Option 1">Questions</option>
-                        <option value="Option 2">Admiration</option>
-                        <option value="Option 3">Can I get your number?</option>
+                    <!-- Input for "type" field -->
+                    <label for="gameTypeInput">Type</label>
+                    <select
+                        class="u-full-width"
+                        id="gameTypeInput"
+                        name="type"
+                        required>
+                        <option value="game">Jeu</option>
+                        <option value="publication">Publication</option>
+                        <option value="material">Matériel</option>
                     </select>
                 </div>
+
+                <div class="six columns">
+                    <!-- Input for "genre" field -->
+                    <label for="gameGenresInput">Genre</label>
+                    <input
+                        class="u-full-width"
+                        id="gameGenresInput"
+                        name="genre"
+                        required
+                        type="text"
+                        placeholder="Genre(s) séparés par des virgules"
+                    >
+                </div>
             </div>
-            <label for="exampleMessage">Message</label>
-            <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
-            <label class="example-send-yourself-copy">
-                <input type="checkbox">
-                <span class="label-body">Send a copy to yourself</span>
-            </label>
-            <input class="button-primary" type="submit" value="Submit">
+
+            <!-- Input for "title" field -->
+            <label for="gameTitleInput">Titre</label>
+            <input
+                class="u-full-width"
+                id="gameTitleInput"
+                name="title"
+                required
+                type="text"
+                placeholder="Titre du jeu"
+            >
+
+            <!-- Input for "description" field -->
+            <label for="gameDescriptionInput">Description du jeu</label>
+            <textarea
+                class="u-full-width"
+                id="gameDescriptionInput"
+                name="description"
+                required
+                type="text"
+                placeholder="Courte description du jeu..."
+            >
+            </textarea>
+
+            <!-- Input for "themes" field -->
+            <label for="gameThemesInput">Thèmes</label>
+            <input
+                class="u-full-width"
+                id="gameThemesInput"
+                name="themes"
+                required
+                type="text"
+                placeholder="Thème(s) séparés par des virgules"
+            >
+
+            <div class="row">
+                <div class="six columns">
+                    <!-- Input for "publishers" field -->
+                    <label for="gamePublishersInput">Éditeurs</label>
+                    <input
+                        class="u-full-width"
+                        id="gamePublishersInput"
+                        name="publishers"
+                        type="text"
+                        placeholder="Éditeur(s) séparés par des virgules"
+                    >
+                </div>
+
+                <div class="six columns">
+                    <!-- Input for "publication_year" field -->
+                    <label for="gamePublicationYearInput">Année de publication</label>
+                    <input
+                        class="u-full-width"
+                        id="gamePublicationYearInput"
+                        name="publication_year"
+                        type="number" step="1" min="1970" max="2100"
+                        placeholder="2016"
+                    >
+                </div>
+            </div>
+
+            <!-- Input for "authors" field -->
+            <label for="gameAuthorsInput">Auteurs</label>
+            <input
+                class="u-full-width"
+                id="gameAuthorsInput"
+                name="authors"
+                type="text"
+                placeholder="Auteurs(s) séparés par des virgules"
+            >
+
+            <!-- Input for "illustrators" field -->
+            <label for="gameIllustratorsInput">Illustrateurs</label>
+            <input
+                class="u-full-width"
+                id="gameIllustratorsInput"
+                name="illustrators"
+                type="text"
+                placeholder="Illustrateur(s) séparés par des virgules"
+            >
+
+            <div class="row">
+                <div class="three columns">
+                    <!-- Input for "duration" field -->
+                    <label for="gameDurationInput">Durée d'une partie (en minutes)</label>
+                    <input
+                        class="u-full-width"
+                        id="gameDurationInput"
+                        name="duration"
+                        type="number" step="1" min="1" max="1000"
+                        placeholder="Durée moyenne d'une partie"
+                    >
+                </div>
+
+                <div class="nine columns">
+                    <!-- Input for "audience" field -->
+                    <fieldset name="audience">
+                        <legend>Public</legend>
+
+                        <div class="row">
+                            <div class="three columns">
+                                <label>
+                                    <input
+                                        name="audience_children"
+                                        type="checkbox"
+                                    >
+                                    <span class="label-body">Enfants</span>
+                                </label>
+                            </div>
+
+                            <div class="three columns">
+                                <label>
+                                    <input
+                                        id="gameAudienceTeens"
+                                        name="audience_teens"
+                                        type="checkbox"
+                                    >
+                                    <span class="label-body">Adolescents</span>
+                                </label>
+                            </div>
+
+                            <div class="three columns">
+                                <label>
+                                    <input
+                                        id="gameAudienceAdults"
+                                        name="audience_adults"
+                                        type="checkbox"
+                                    >
+                                    <span class="label-body">Adultes</span>
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="six columns">
+                    <!-- Input for "players_min" field -->
+                    <label for="gamePlayersMinInput">Nombre de joueurs minimum</label>
+                    <input
+                        class="u-full-width"
+                        id="gamePlayersMinInput"
+                        name="players_min"
+                        required
+                        type="number" step="1" min="1" max="30"
+                        placeholder="5"
+                    >
+                </div>
+
+                <div class="six columns">
+                    <!-- Input for "players_max" field -->
+                    <label for="gamePlayersMaxInput">Nombre de joueurs maximum</label>
+                    <input
+                        class="u-full-width"
+                        id="gamePlayersMaxInput"
+                        name="players_max"
+                        required
+                        type="number" step="1" min="1" max="30"
+                        placeholder="5"
+                    >
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="six columns">
+                    <!-- Input for "fab_time" field -->
+                    <label for="gameFabTimeInput">Temps de fabrication (en minutes)</label>
+                    <input
+                        class="u-full-width"
+                        id="gameFabTimeInput"
+                        name="fab_time"
+                        type="number" step="1" min="1" max="1000"
+                        placeholder="Temps pour fabriquer le jeu"
+                    >
+                </div>
+
+                <div class="six columns">
+                    <!-- Input for "requirements" field -->
+                    <label for="gameRequirementsInput">Matériel nécessaire à la fabrication</label>
+                    <input
+                        class="u-full-width"
+                        id="gameRequirementsInput"
+                        name="requirements"
+                        type="text"
+                        placeholder="Matériel(s) séparés par des virgules"
+                    >
+                </div>
+            </div>
+
+            <!-- Input for "source" field -->
+            <label for="gameSourceInput">Site web d'origine</label>
+            <input
+                class="u-full-width"
+                id="gameSourceInput"
+                name="source"
+                type="url"
+                placeholder="http://www.website.org/monjeu"
+            >
+
+            <!-- Input for "license" field -->
+            <label for="gameLicenseInput">Licence du jeu</label>
+            <input
+                class="u-full-width"
+                id="gameLicenseInput"
+                name="license"
+                required
+                type="text"
+                placeholder="Ma licence libre préférée"
+            >
+
+            <!-- Input for "languages" field -->
+            <label for="gameLanguagesInput">Langues disponibles</label>
+            <input
+                class="u-full-width"
+                id="gameLanguagesInput"
+                name="languages"
+                required
+                type="text"
+                placeholder="Langue(s) séparés par des virgules"
+            >
+
+            <!-- Input for "ISBN" field -->
+            <label for="gameISBNInput">ISBN</label>
+            <input
+                class="u-full-width"
+                id="gameISBNInput"
+                name="ISBN"
+                type="text"
+                placeholder="ISBN(s) séparés par des virgules"
+            >
+
+            <!-- Input for the game files -->
+            <!-- TODO put all the MIME types in an external files and include them via Jinja2 templating -->
+            <!-- MIME-type reference: http://www.iana.org/assignments/media-types/media-types.xhtml -->
+            <label for="gameFilesInput">Fichiers du jeu</label>
+            <input
+                class="u-full-width"
+                id="gameFilesInput"
+                name="files"
+                type="file" size="60" multiple
+                accept="image/*,application/pdf,application/vnd.oasis.opendocument.application/text,vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.image,application/vnd.oasis.opendocument.graphics,text/rtf,application/zip,application/epub+zip,image/svg+xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,pplication/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,pplication/vnd.openxmlformats-officedocument.presentationml.presentation"
+                placeholder="Les fichiers du jeu"
+            >
+
+            <!-- Validation for the form -->
+            <input
+                type="submit"
+                value="Submit"
+                enctype="multipart/form-data"
+            >
         </form>
 
     </div>
