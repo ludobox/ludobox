@@ -693,7 +693,7 @@ def serve_index():
 
 @app.route('/addgame', methods=["POST"])
 def serve_addgame():
-    """Serve the base url for the project."""
+    """Process the uploads of new games."""
     # TODO replace this dummy return by a true add
     return flask.redirect(flask.url_for("static", filename="index.html"))
 
