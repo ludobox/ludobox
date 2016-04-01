@@ -23,8 +23,8 @@
     "tests"
   ],
   "dependencies": {
-    "skeleton": "skeleton-css#^2.0.4",
-    "raleway-googlefont": "*",
-    "datatables.net-dt": "^1.10.11"
+    "datatables.net-dt": "^1.10.11",
+    "bootstrap": "^3.3.6",
+    "lato-googlefont": "*"
   }
 }

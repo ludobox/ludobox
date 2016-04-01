@@ -1,294 +1,324 @@
 {% include "partials/header.html" %}
-    <div class="row">
-        <div class="twelve columns">
-            <h1>Add new game</h1>
-        </div>
+    <div class="page-header">
+        <h1>Ajouter un nouveau contenu</h1>
     </div>
 
-    <div class="row">
+    <form role="form" class="form-horizontal" action="/addgame" method="post">
 
-        <form action="/addgame" method="post">
+        <legend>Description du jeu à ajouter</legend>
 
-            <div class="row">
-                <div class="six columns">
-                    <!-- Input for "type" field -->
-                    <label for="gameTypeInput">Type</label>
-                    <select
-                        class="u-full-width"
-                        id="gameTypeInput"
-                        name="type"
-                        required>
-                        <option value="game">Jeu</option>
-                        <option value="publication">Publication</option>
-                        <option value="material">Matériel</option>
-                    </select>
-                </div>
-
-                <div class="six columns">
-                    <!-- Input for "genre" field -->
-                    <label for="gameGenresInput">Genre</label>
-                    <input
-                        class="u-full-width"
-                        id="gameGenresInput"
-                        name="genre"
-                        required
-                        type="text"
-                        placeholder="Genre(s) séparés par des virgules"
-                    >
-                </div>
+        <!-- type and genre -->
+        <div class="form-group">
+            <!-- Input for "type" field -->
+            <label for="gameTypeInput" class="col-lg-2 control-label">Type</label>
+            <div class="col-lg-4">
+                <select
+                    class="form-control"
+                    id="gameTypeInput"
+                    name="type"
+                    required>
+                    <option value="game">Jeu</option>
+                    <option value="publication">Publication</option>
+                    <option value="material">Matériel</option>
+                </select>
             </div>
 
-            <!-- Input for "title" field -->
-            <label for="gameTitleInput">Titre</label>
-            <input
-                class="u-full-width"
-                id="gameTitleInput"
-                name="title"
-                required
-                type="text"
-                placeholder="Titre du jeu"
-            >
+            <!-- Input for "genre" field -->
+            <label for="gameGenresInput" class="col-lg-2 control-label">Genres</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gameGenresInput"
+                    name="genre"
+                    type="text"
+                    placeholder="Genre(s) séparés par des virgules"
+                    required
+                >
+            </div>
+        </div>
 
-            <!-- Input for "description" field -->
-            <label for="gameDescriptionInput">Description du jeu</label>
-            <textarea
-                class="u-full-width"
-                id="gameDescriptionInput"
-                name="description"
-                required
-                type="text"
-                placeholder="Courte description du jeu..."
-            >
-            </textarea>
+        <!-- Input for "title" field -->
+        <div class="form-group">
+            <label for="gameTitleInput" class="col-lg-2 control-label">Titre</label>
+            <div class="col-lg-10">
+                <input
+                    class="form-control"
+                    id="gameTitleInput"
+                    name="title"
+                    type="text"
+                    placeholder="Titre du jeu"
+                    required
+                >
+            </div>
+        </div>
 
-            <!-- Input for "themes" field -->
-            <label for="gameThemesInput">Thèmes</label>
-            <input
-                class="u-full-width"
-                id="gameThemesInput"
-                name="themes"
-                required
-                type="text"
-                placeholder="Thème(s) séparés par des virgules"
-            >
+        <!-- Input for "description" field -->
+        <div class="form-group">
+            <label for="gameDescriptionInput" class="col-lg-2 control-label">Description du jeu</label>
+            <div class="col-lg-10">
+                <textarea
+                    class="form-control"
+                    id="gameDescriptionInput"
+                    aria-describedby="gameDescriptionInput_help"
+                    name="description"
+                    type="text"
+                    rows="3"
+                    required
+                >
+                </textarea>
+                <span id="gameDescriptionInput_help" class="help-block">
+                    Décrivez votre jeux en quelques lignes.
+                </span>
+            </div>
+        </div>
 
-            <div class="row">
-                <div class="six columns">
-                    <!-- Input for "publishers" field -->
-                    <label for="gamePublishersInput">Éditeurs</label>
-                    <input
-                        class="u-full-width"
-                        id="gamePublishersInput"
-                        name="publishers"
-                        type="text"
-                        placeholder="Éditeur(s) séparés par des virgules"
-                    >
-                </div>
+        <!-- Input for "themes" field -->
+        <div class="form-group">
+            <label for="gameThemesInput" class="col-lg-2 control-label">Thèmes</label>
+            <div class="col-lg-10">
+                <input
+                    class="form-control"
+                    id="gameThemesInput"
+                    name="themes"
+                    type="text"
+                    placeholder="Thème(s) séparés par des virgules"
+                    required
+                >
+            </div>
+        </div>
 
-                <div class="six columns">
-                    <!-- Input for "publication_year" field -->
-                    <label for="gamePublicationYearInput">Année de publication</label>
-                    <input
-                        class="u-full-width"
-                        id="gamePublicationYearInput"
-                        name="publication_year"
-                        type="number" step="1" min="1970" max="2100"
-                        placeholder="2016"
-                    >
-                </div>
+        <!-- publisher and publication year -->
+        <div class="form-group">
+            <!-- Input for "publishers" field -->
+            <label for="gamePublishersInput" class="col-lg-2 control-label">Éditeurs</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gamePublishersInput"
+                    name="publishers"
+                    type="text"
+                    placeholder="Éditeur(s) séparés par des virgules"
+                >
             </div>
 
+            <!-- Input for "publication_year" field -->
+            <!-- TODO replace this with a select menu https://jqueryui.com/selectmenu/ -->
+            <label for="gamePublicationYearInput" class="col-lg-2 control-label">Année de publication</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gamePublicationYearInput"
+                    name="publication_year"
+                    type="number" step="1" min="1970" max="2100" value="2016"
+                    placeholder="2016"
+                >
+            </div>
+        </div>
+
+        <!-- authors and illustrators names -->
+        <div class="form-group">
             <!-- Input for "authors" field -->
-            <label for="gameAuthorsInput">Auteurs</label>
-            <input
-                class="u-full-width"
-                id="gameAuthorsInput"
-                name="authors"
-                type="text"
-                placeholder="Auteurs(s) séparés par des virgules"
-            >
+            <label for="gameAuthorsInput" class="col-lg-2 control-label">Auteurs</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gameAuthorsInput"
+                    name="authors"
+                    type="text"
+                    placeholder="Auteurs(s) séparés par des virgules"
+                >
+            </div>
 
             <!-- Input for "illustrators" field -->
-            <label for="gameIllustratorsInput">Illustrateurs</label>
-            <input
-                class="u-full-width"
-                id="gameIllustratorsInput"
-                name="illustrators"
-                type="text"
-                placeholder="Illustrateur(s) séparés par des virgules"
-            >
+            <label for="gameIllustratorsInput" class="col-lg-2 control-label">Illustrateurs</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gameIllustratorsInput"
+                    name="illustrators"
+                    type="text"
+                    placeholder="Illustrateur(s) séparés par des virgules"
+                >
+            </div>
+        </div>
 
-            <div class="row">
-                <div class="three columns">
-                    <!-- Input for "duration" field -->
-                    <label for="gameDurationInput">Durée d'une partie (en minutes)</label>
+        <!-- Input for duration and number of player -->
+        <div class="form-group">
+            <!-- Input for "duration" field -->
+            <label for="gameDurationInput" class="col-lg-2 control-label">Durée d'une partie</label>
+            <div class="col-lg-4">
+                <div class="input-group">
                     <input
-                        class="u-full-width"
+                        class="form-control"
                         id="gameDurationInput"
                         name="duration"
-                        type="number" step="1" min="1" max="1000"
+                        type="number" step="1" min="1" max="600" value="30"
                         placeholder="Durée moyenne d'une partie"
                     >
-                </div>
-
-                <div class="nine columns">
-                    <!-- Input for "audience" field -->
-                    <fieldset name="audience">
-                        <legend>Public</legend>
-
-                        <div class="row">
-                            <div class="three columns">
-                                <label>
-                                    <input
-                                        name="audience_children"
-                                        type="checkbox"
-                                    >
-                                    <span class="label-body">Enfants</span>
-                                </label>
-                            </div>
-
-                            <div class="three columns">
-                                <label>
-                                    <input
-                                        id="gameAudienceTeens"
-                                        name="audience_teens"
-                                        type="checkbox"
-                                    >
-                                    <span class="label-body">Adolescents</span>
-                                </label>
-                            </div>
-
-                            <div class="three columns">
-                                <label>
-                                    <input
-                                        id="gameAudienceAdults"
-                                        name="audience_adults"
-                                        type="checkbox"
-                                    >
-                                    <span class="label-body">Adultes</span>
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
+                    <span class="input-group-addon">minutes</span>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="six columns">
-                    <!-- Input for "players_min" field -->
-                    <label for="gamePlayersMinInput">Nombre de joueurs minimum</label>
+            <!-- Input for "players_min" and "players_max" field -->
+            <label for="gamePlayersMinInput" class="col-lg-2 control-label">Nombre de joueurs</label>
+            <div class="col-lg-4">
+                <div class="input-group">
+                    <span class="input-group-addon">de</span>
                     <input
-                        class="u-full-width"
+                        class="form-control"
                         id="gamePlayersMinInput"
                         name="players_min"
                         required
-                        type="number" step="1" min="1" max="30"
-                        placeholder="5"
+                        type="number" step="1" min="1" max="200" value="1"
+                        placeholder="1"
                     >
-                </div>
-
-                <div class="six columns">
-                    <!-- Input for "players_max" field -->
-                    <label for="gamePlayersMaxInput">Nombre de joueurs maximum</label>
+                    <span class="input-group-addon">à</span>
                     <input
-                        class="u-full-width"
+                        class="form-control"
                         id="gamePlayersMaxInput"
                         name="players_max"
                         required
-                        type="number" step="1" min="1" max="30"
+                        type="number" step="1" min="1" max="200" value="5"
                         placeholder="5"
                     >
+                    <span class="input-group-addon">joueurs</span>
                 </div>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="six columns">
-                    <!-- Input for "fab_time" field -->
-                    <label for="gameFabTimeInput">Temps de fabrication (en minutes)</label>
+        <!-- Inputs for gameAudience_* field -->
+        <div class="form-group">
+            <div class="col-lg-6 col-lg-offset-2">
+                <div class="checkbox">
+                    <label>
+                        <input name="gameAudience_children" type="checkbox"> Convient à un public enfant
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input name="gameAudience_teens" type="checkbox"> Convient à un public adolescent
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input name="gameAudience_adults" type="checkbox"> Convient à un public adultes
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <!-- Input for "fab_time" field -->
+            <label for="gameFabTimeInput" class="col-lg-2 control-label">Temps de fabrication</label>
+            <div class="col-lg-4">
+                <div class="input-group">
                     <input
-                        class="u-full-width"
+                        class="form-control"
                         id="gameFabTimeInput"
                         name="fab_time"
                         type="number" step="1" min="1" max="1000"
                         placeholder="Temps pour fabriquer le jeu"
                     >
-                </div>
-
-                <div class="six columns">
-                    <!-- Input for "requirements" field -->
-                    <label for="gameRequirementsInput">Matériel nécessaire à la fabrication</label>
-                    <input
-                        class="u-full-width"
-                        id="gameRequirementsInput"
-                        name="requirements"
-                        type="text"
-                        placeholder="Matériel(s) séparés par des virgules"
-                    >
+                    <span class="input-group-addon">minutes</span>
                 </div>
             </div>
 
-            <!-- Input for "source" field -->
-            <label for="gameSourceInput">Site web d'origine</label>
-            <input
-                class="u-full-width"
-                id="gameSourceInput"
-                name="source"
-                type="url"
-                placeholder="http://www.website.org/monjeu"
-            >
+            <!-- Input for "requirements" field -->
+            <label for="gameRequirementsInput" class="col-lg-2 control-label">Matériel nécessaire</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gameRequirementsInput"
+                    name="requirements"
+                    type="text"
+                    placeholder="Matériel(s) séparés par des virgules"
+                >
+            </div>
+        </div>
 
+        <!-- licence and languages -->
+        <div class="form-group">
             <!-- Input for "license" field -->
-            <label for="gameLicenseInput">Licence du jeu</label>
-            <input
-                class="u-full-width"
-                id="gameLicenseInput"
-                name="license"
-                required
-                type="text"
-                placeholder="Ma licence libre préférée"
-            >
+            <label for="gameLicenseInput" class="col-lg-2 control-label">Licence du jeu</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gameLicenseInput"
+                    name="license"
+                    required
+                    type="text"
+                    placeholder="Ma licence libre préférée"
+                >
+            </div>
 
             <!-- Input for "languages" field -->
-            <label for="gameLanguagesInput">Langues disponibles</label>
-            <input
-                class="u-full-width"
-                id="gameLanguagesInput"
-                name="languages"
-                required
-                type="text"
-                placeholder="Langue(s) séparés par des virgules"
-            >
+            <label for="gameLanguagesInput" class="col-lg-2 control-label">Langues disponibles</label>
+            <div class="col-lg-4">
+                <input
+                    class="form-control"
+                    id="gameLanguagesInput"
+                    name="languages"
+                    required
+                    type="text"
+                    placeholder="Langue(s) séparés par des virgules"
+                >
+            </div>
+        </div>
 
-            <!-- Input for "ISBN" field -->
-            <label for="gameISBNInput">ISBN</label>
-            <input
-                class="u-full-width"
-                id="gameISBNInput"
-                name="ISBN"
-                type="text"
-                placeholder="ISBN(s) séparés par des virgules"
-            >
+        <!-- Input for "source" field -->
+        <div class="form-group">
+            <label for="gameSourceInput" class="col-lg-2 control-label">Site web d'origine</label>
+            <div class="col-lg-10">
+                <input
+                    class="form-control"
+                    id="gameSourceInput"
+                    name="source"
+                    type="url"
+                    placeholder="http://www.website.org/monjeu"
+                >
+            </div>
+        </div>
 
-            <!-- Input for the game files -->
-            <!-- TODO put all the MIME types in an external files and include them via Jinja2 templating -->
-            <!-- MIME-type reference: http://www.iana.org/assignments/media-types/media-types.xhtml -->
-            <label for="gameFilesInput">Fichiers du jeu</label>
-            <input
-                class="u-full-width"
-                id="gameFilesInput"
-                name="files"
-                type="file" size="60" multiple
-                accept="image/*,application/pdf,application/vnd.oasis.opendocument.application/text,vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.image,application/vnd.oasis.opendocument.graphics,text/rtf,application/zip,application/epub+zip,image/svg+xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,pplication/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,pplication/vnd.openxmlformats-officedocument.presentationml.presentation"
-                placeholder="Les fichiers du jeu"
-            >
+        <!-- Input for "ISBN" field -->
+        <div class="form-group">
+            <label for="gameISBNInput" class="col-lg-2 control-label">ISBN</label>
+            <div class="col-lg-10">
+                <input
+                    class="form-control"
+                    id="gameISBNInput"
+                    name="ISBN"
+                    type="text"
+                    placeholder="ISBN(s) séparés par des virgules"
+                >
+            </div>
+        </div>
 
-            <!-- Validation for the form -->
-            <input
-                type="submit"
-                value="Submit"
-                enctype="multipart/form-data"
-            >
-        </form>
+        <!-- Input for the game files -->
+        <!-- TODO put all the MIME types in an external files and include them via Jinja2 templating -->
+        <!-- MIME-type reference: http://www.iana.org/assignments/media-types/media-types.xhtml -->
+        <div class="form-group">
+            <label for="gameFilesInput" class="col-lg-2 control-label">Fichiers du jeu</label>
+            <div class="col-lg-10">
+                <input
+                    id="gameFilesInput"
+                    name="files"
+                    type="file" size="60" multiple
+                    accept="image/*,application/pdf,application/vnd.oasis.opendocument.application/text,vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.image,application/vnd.oasis.opendocument.graphics,text/rtf,application/zip,application/epub+zip,image/svg+xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,pplication/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,pplication/vnd.openxmlformats-officedocument.presentationml.presentation"
+                    placeholder="Les fichiers du jeu"
+                >
+            </div>
+        </div>
 
-    </div>
+        <!-- Validation for the form -->
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">Annuler</button>
+                <button type="submit" class="btn btn-primary" enctype="multipart/form-data">Ajouter</button>
+            </div>
+        </div>
+
+    </form>
+
 {% include  "partials/footer.html" %}
