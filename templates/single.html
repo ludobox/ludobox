@@ -20,7 +20,7 @@
         <dt>Genres</dt>
         <dd>
         {% for genre in data.genres.fr|sort %}
-            <span class="label label-default">{{genre}}</span>
+            <span class="label label-default">{{genre}}</span>&nbsp;
         {% endfor %}
         </dd>
 
@@ -33,7 +33,7 @@
         <dt>Thèmes</dt>
         <dd>
         {% for theme in data.themes.fr|sort %}
-            <span class="label label-default">{{theme}}</span>
+            <span class="label label-default">{{theme}}</span>&nbsp;
         {% endfor %}
         </dd>
 
@@ -55,12 +55,50 @@
         <dt>Nombre de joueurs</dt>
         <dd>de {{data.players_min}} à {{data.players_max}}</dd>
 
-        <!-- TODO traduire les 3 possibilités -->
         <dt>Public</dt>
         <dd>
-        {% for aud in data.audience %}
-            <span class="label label-default">{{aud}}</span>
-        {% endfor %}
+        <!-- we always display the 3 audience and just change the display -->
+        {% if "children" in data.audience %}
+            <span class="label label-success">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Enfants
+                <span class="sr-only">Oui</span>
+            </span>
+        {% else %}
+            <span class="label label-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Enfants
+                <span class="sr-only">Non</span>
+            </span>
+        {% endif %}
+        &nbsp;
+        {% if "teens" in data.audience %}
+            <span class="label label-success">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Adolescents
+                <span class="sr-only">Oui</span>
+            </span>
+        {% else %}
+            <span class="label label-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Adolescents
+                <span class="sr-only">Non</span>
+            </span>
+        {% endif %}
+        &nbsp;
+        {% if "adults" in data.audience %}
+            <span class="label label-success">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Adultes
+                <span class="sr-only">Oui</span>
+            </span>
+        {% else %}
+            <span class="label label-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Adultes
+                <span class="sr-only">Non</span>
+            </span>
+        {% endif %}
         </dd>
 
         <dt>Temps de fabrication</dt>
@@ -69,7 +107,7 @@
         <dt>Matériel nécessaire</dt>
         <dd>
         {% for req in data.requirements.fr|sort %}
-            <span class="label label-default">{{req}}</span>
+            <span class="label label-default">{{req}}</span>&nbsp;
         {% endfor %}
         </dd>
 
@@ -79,7 +117,7 @@
         <dt>Langues disponibles</dt>
         <dd>
         {% for lang in data.languages|sort %}
-            <span class="label label-default">{{lang}}</span>
+            <span class="label label-default">{{lang}}</span>&nbsp;
         {% endfor %}
         </dd>
 
