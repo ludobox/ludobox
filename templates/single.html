@@ -1,27 +1,25 @@
 {% include "partials/header.html" %}
-    <div class="row">
+    <div class="page-header">
         <h1>{{data.title}}</h1>
-        <div class="four column">
-            <ul>
-                <li>timestamp : {{data.timestamp}}</li>
-                <li>title : {{data.title}}</li>
-                <li>description : {{data.description}}</li>
-                <li>fab_time : {{data.fab_time}}</li>
-                <li>requirements : {{data.requirements}}</li>
-                <li>players : {{data.players}}</li>
-                <li>duration : {{data.duration}}</li>
-                <li>audience : {{data.audience}}</li>
-                <li>authours : {{data.authours}}</li>
-                <li>illustrators : {{data.illustrators}}</li>
-                <li>source : {{data.source}}</li>
-                <li>license : {{data.license}}</li>
-                <li>languages : {{data.languages}}</li>
-                <li>themes : {{data.themes}}</li>
-                <li>type : {{data.type}}</li>
-            </ul>
-        </div>
-        <div class="height columns">
-            <a class="button button-primary" href="download">Download</a>
-        </div>
     </div>
-{% include  "partials/footer.html" %}
+
+    <dl class="dl-horizontal">
+        <dt>timestamp</dt><dd>{{data.timestamp}}</dd>
+        <dt>title</dt><dd>{{data.title}}</dd>
+        <dt>description</dt><dd>{{data.description}}</dd>
+        <dt>fab_time</dt><dd>{{data.fab_time}}</dd>
+        <dt>requirements</dt><dd>{{data.requirements}}</dd>
+        <dt>players</dt><dd>{{data.players}}</dd>
+        <dt>duration</dt><dd>{{data.duration}}</dd>
+        <dt>audience</dt><dd>{{data.audience}}</dd>
+        <dt>authours</dt><dd>{{data.authours}}</dd>
+        <dt>illustrators</dt><dd>{{data.illustrators}}</dd>
+        <dt>source</dt><dd>{{data.source}}</dd>
+        <dt>license</dt><dd>{{data.license}}</dd>
+        <dt>languages</dt><dd>{{data.languages}}</dd>
+        <dt>themes</dt><dd>{{data.themes}}</dd>
+        <dt>type</dt><dd>{{data.type}}</dd>
+    </dl>
+
+    <a class="btn btn-primary" href="download">Télécharger</a>
+{% include "partials/footer.html" %}
