@@ -1,18 +1,19 @@
 <!doctype html>
 <html lang="fr">
 <head>
-    <!-- Basic Page Needs
+    <!-- Bootstrap needs this as first elements
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <title>Ludobox</title>
     <meta name="description" content="">
     <meta name="author" content="Clément Renaud, Pierre-Yves Martin">
     <meta name="copyright" content="DCALK">
     <meta name="generator" content="Jinja2">
-
-    <!-- Mobile Specific Metas
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- FONT
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -21,13 +22,18 @@
 
     <!-- CSS
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link rel="stylesheet" type="text/css" href="/static/bower_components/skeleton/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/static/bower_components/skeleton/css/skeleton.css">
+    <!-- DataTables JQuery plugin -->
     <link rel="stylesheet" type="text/css" href="/static/bower_components/datatables.net-dt/css/jquery.dataTables.min.css">
-    <!-- Any change in the style should be done in this file -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="/static/bower_components/dist/css/bootstrap.min.css">
+
+    <!-- CUSTOM CSS
+    Any change in the style should be done in this file.
+    The easier way is to get a theme css file from http://bootswatch.com/
+    but always remove the first line (@import line) since it won't work offline!!! -->
     <link rel="stylesheet" type="text/css" href="/static/customisation/ludostyle.css">
 
-    <!-- Favicon
+    <!-- CUSTOM Favicon
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <!-- To change the favicon change this file -->
     <link rel="icon" type="image/png" href="/static/customisation/images/favicon.png">
@@ -102,15 +108,18 @@
             </div>
         </div>
     </div>
-</div>
+</div> <!-- /container -->
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <!-- JavaScript (in the footer for performance reasons)
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<!-- JQuery -->
 <script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- DataTables JQuery Plugin -->
 <script type="text/javascript" src="/static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<!-- Any change in the javascript should be done in this file -->
+<!-- CUSTOM JAVASCRIPT
+Any change in the javascript should be done in this file -->
 <script type="text/javascript" src="/static/customisation/ludodynamic.js"></script>
 
 </body>
