@@ -150,7 +150,7 @@ def read_game_info(path):
 
     Returns a dictionary containing the game data.
 
-    >>> data = read_game_info("tests/functional/data/borgia-le-jeu-malsain")
+    >>> data = read_game_info("tests/functional/data/hackathon/borgia-le-jeu-malsain")
     >>> print(data['audience'])
     Adultes
     >>> print(data['authors'])
@@ -225,7 +225,7 @@ def generate_game_desc(data, games_dir, tpl_name):
 
     Typical usage:
 
-    >>> data = read_game_info("tests/functional/data/borgia-le-jeu-malsain")
+    >>> data = read_game_info("tests/functional/data/hackathon/borgia-le-jeu-malsain")
     >>> import tempfile
     >>> import os.path
     >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
@@ -296,7 +296,7 @@ def render_index(games, games_dir, tpl_name):
 
     Typical usage:
 
-    >>> games = [read_game_info("tests/functional/data/borgia-le-jeu-malsain")]
+    >>> games = [read_game_info("tests/functional/data/hackathon/borgia-le-jeu-malsain")]
     >>> import tempfile
     >>> import os.path
     >>> import os
@@ -423,7 +423,7 @@ def generate_all(input_dir, output_dir, **kwargs):
     >>> import tempfile
     >>> import os.path
     >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
-    >>> generate_all("tests/functional/data", games_dir)
+    >>> generate_all("tests/functional/data/hackathon", games_dir)
     Create games directory: SUCCESS
     borgia-le-jeu-malsain
         Read game informations: SUCCESS

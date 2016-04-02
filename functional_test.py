@@ -48,7 +48,8 @@ def test_generate_all_then_clean_on_hackathon_data(tmpdir):
 
     # Then we generate everything
     assert ludocore.main(
-        "generate --input_dir tests/functional/data/hackathon --output_dir {tmp}".format(
+        "generate --input_dir tests/functional/data/hackathon "
+        "--output_dir {tmp}".format(
             tmp=tmp_games_dir))
 
     # Last we clean the rep

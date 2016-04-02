@@ -25,7 +25,7 @@ import filecmp
 
 def test_generate_all_on_non_empty_data_dir_and_empty_games_dir(tmpdir):
     # A directory with actual game description JSON files
-    input_dir = "tests/functional/data"
+    input_dir = "tests/functional/data/hackathon"
     # An empty directory for the output
     output_dir = os.path.join(str(tmpdir), "out")
 
@@ -33,7 +33,7 @@ def test_generate_all_on_non_empty_data_dir_and_empty_games_dir(tmpdir):
     assert generate_all(input_dir, output_dir)
 
     # Let's go for deep comparison with reference files
-    expected_dir = "tests/functional/expected/on_hackaton_data_dir"
+    expected_dir = "tests/functional/expected/on_hackathon_data_dir"
     expected_files = [
         "add/index.html",
         "index.html",
