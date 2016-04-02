@@ -49,6 +49,8 @@
 
     <form role="form" class="form-horizontal" action="/addgame" method="post">
 
+        <!-- TODO retirer cette légende ? -->
+        <!-- TODO ajouter un texte d'explication ? -->
         <legend>Description du jeu à ajouter</legend>
 
         <!-- type and genre -->
@@ -61,6 +63,7 @@
                     id="gameTypeInput"
                     name="type"
                     required>
+                    <!-- TODO séparer jeu en jeu video et jeu de plateau ? -->
                     <option value="game">Jeu</option>
                     <option value="publication">Publication</option>
                     <option value="material">Matériel</option>
@@ -79,6 +82,7 @@
                     required
                 >
             </div>
+            <!-- TODO ajouter des suggestions en aide: jeux video, jeu de plateau, jeu d'extérieur, etc -->
         </div>
 
         <!-- Input for "title" field -->
@@ -285,7 +289,7 @@
         <!-- licence and languages -->
         <div class="form-group">
             <!-- Input for "license" field -->
-            <label for="gameLicenseInput" class="col-lg-2 control-label">Licence du jeu</label>
+            <label for="gameLicenseInput" class="col-lg-2 control-label">Licence</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"

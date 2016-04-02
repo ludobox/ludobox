@@ -1,24 +1,89 @@
 {% include "partials/header.html" %}
     <div class="page-header">
-        <h1>{{data.title}}</h1>
+        <h1>{{data.title.fr}}</h1>
     </div>
 
     <dl class="dl-horizontal">
-        <dt>timestamp</dt><dd>{{data.timestamp}}</dd>
-        <dt>title</dt><dd>{{data.title}}</dd>
-        <dt>description</dt><dd>{{data.description}}</dd>
-        <dt>fab_time</dt><dd>{{data.fab_time}}</dd>
-        <dt>requirements</dt><dd>{{data.requirements}}</dd>
-        <dt>players</dt><dd>{{data.players}}</dd>
-        <dt>duration</dt><dd>{{data.duration}}</dd>
-        <dt>audience</dt><dd>{{data.audience}}</dd>
-        <dt>authours</dt><dd>{{data.authours}}</dd>
-        <dt>illustrators</dt><dd>{{data.illustrators}}</dd>
-        <dt>source</dt><dd>{{data.source}}</dd>
-        <dt>license</dt><dd>{{data.license}}</dd>
-        <dt>languages</dt><dd>{{data.languages}}</dd>
-        <dt>themes</dt><dd>{{data.themes}}</dd>
-        <dt>type</dt><dd>{{data.type}}</dd>
+        <!-- TODO traduire les 3 types possibles -->
+        <dt>Type</dt>
+        <dd>{{data.type}}</dd>
+
+        <dt>Genres</dt>
+        <dd>
+        {% for genre in data.genres.fr %}
+            <span class="label label-default">{{genre}}</span>
+        {% endfor %}
+        </dd>
+
+        <dt>Titre</dt>
+        <dd>{{data.title.fr}}</dd>
+
+        <dt>Description du jeu</dt>
+        <dd>{{data.description.fr}}</dd>
+
+        <dt>Thèmes</dt>
+        <dd>
+        {% for theme in data.themes.fr %}
+            <span class="label label-default">{{theme}}</span>
+        {% endfor %}
+        </dd>
+
+        <dt>Éditeurs</dt>
+        <dd>{{data.publishers|join('<br>')}}</dd>
+
+        <dt>Année de publication</dt>
+        <dd>{{data.publication_year}}</dd>
+
+        <dt>Auteurs</dt>
+        <dd>{{data.authors|join('<br>')}}</dd>
+
+        <dt>Illustrateurs</dt>
+        <dd>{{data.illustrators|join('<br>')}}</dd>
+
+        <dt>Durée d'une partie</dt>
+        <dd>{{data.duration}}</dd>
+
+        <dt>Nombre de joueurs</dt>
+        <dd>de {{data.players_min}} à {{data.players_max}}</dd>
+
+        <!-- TODO traduire les 3 possibilités -->
+        <dt>Public</dt>
+        <dd>
+        {% for aud in data.audience %}
+            <span class="label label-default">{{aud}}</span>
+        {% endfor %}
+        </dd>
+
+        <dt>Temps de fabrication</dt>
+        <dd>{{data.fab_time}}</dd>
+
+        <dt>Matériel nécessaire</dt>
+        <dd>
+        {% for req in data.requirements.fr %}
+            <span class="label label-default">{{req}}</span>
+        {% endfor %}
+        </dd>
+
+        <dt>Licence</dt>
+        <dd>{{data.license}}</dd>
+
+        <dt>Langues disponibles</dt>
+        <dd>
+        {% for lang in data.languages %}
+            <span class="label label-default">{{lang}}</span>
+        {% endfor %}
+        </dd>
+
+        <dt>Site web d'origine</dt>
+        <dd>
+            <a href="{{data.source}}">{{data.source}}</a>
+        </dd>
+
+        <dt>ISBN</dt>
+        <dd>{{data.ISBN}}</dd>
+
+        <dt>Fichiers du jeu</dt>
+        <dd></dd>
     </dl>
 
     <a class="btn btn-primary" href="download">Télécharger</a>

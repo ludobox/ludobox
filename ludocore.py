@@ -151,11 +151,11 @@ def read_game_info(path):
     Returns a dictionary containing the game data.
 
     >>> data = read_game_info("tests/functional/data/hackathon/borgia-le-jeu-malsain")
-    >>> print(data['audience'])
-    Adultes
-    >>> print(data['authors'])
+    >>> print(', '.join(data['audience']))
+    adults
+    >>> print(', '.join(data['authors']))
     René
-    >>> print(data['themes'])
+    >>> print(', '.join(data['themes']['fr']))
     Médiéval, Salopard
 
     If anythin goes wrong raise a LudoboxError containing description of the
@@ -192,7 +192,7 @@ def read_game_info(path):
     # TODO Add some attachment info
 
     # Add permalink
-    data["slug"] = slugify(data["title"])
+    data["slug"] = slugify(data["title"]["fr"])
 
     return data
 
