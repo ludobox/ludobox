@@ -27,10 +27,16 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="/static/bower_components/dist/css/bootstrap.min.css">
 
-    <!-- CUSTOM CSS
+    <!-- CUSTOM THEME CSS
     Any change in the style should be done in this file.
     The easier way is to get a theme css file from http://bootswatch.com/
     but always remove the first line (@import line) since it won't work offline!!! -->
+    <link rel="stylesheet" type="text/css" href="/static/customisation/theme-darkly.css">
+
+    <!-- CUSTOM CSS
+    Almost nothing to change here it's just correction to default behaviours of
+    the themes.
+    -->
     <link rel="stylesheet" type="text/css" href="/static/customisation/ludostyle.css">
 
     <!-- CUSTOM Favicon
@@ -43,6 +49,18 @@
 
 <body>
 <div class="container">
+
+<!-- Navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <!-- CUSTOMIZE the name of the app here -->
+            LudoBox
+          </a>
+        </div>
+      </div>
+    </nav>
     <div class="page-header">
         <h1>Borgia, le jeu malsain</h1>
     </div>
