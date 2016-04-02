@@ -26,7 +26,19 @@ def test_generate_all_on_hackathon_data_in_empty_games_directory(tmpdir):
 
     # Then we generate everything
     assert ludocore.main(
-        "generate --input_dir tests/functional/data --output_dir {tmp}".format(
+        "generate --input_dir tests/functional/data/hackathon "
+        "--output_dir {tmp}".format(
+            tmp=tmp_games_dir))
+
+
+# TODO do more in depth testing : output, dir and file created
+def test_generate_all_on_actual_data_in_empty_games_directory(tmpdir):
+    tmp_games_dir = tmpdir.join("games")
+
+    # Then we generate everything
+    assert ludocore.main(
+        "generate --input_dir tests/functional/data/actual "
+        "--output_dir {tmp}".format(
             tmp=tmp_games_dir))
 
 
@@ -36,9 +48,9 @@ def test_generate_all_then_clean_on_hackathon_data(tmpdir):
 
     # Then we generate everything
     assert ludocore.main(
-        "generate --input_dir tests/functional/data --output_dir {tmp}".format(
+        "generate --input_dir tests/functional/data/hackathon --output_dir {tmp}".format(
             tmp=tmp_games_dir))
 
-    # First we clean the rep
+    # Last we clean the rep
     assert ludocore.main(
         "clean --output_dir {tmp}".format(tmp=tmp_games_dir))
