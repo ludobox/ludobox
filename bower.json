@@ -23,8 +23,8 @@
     "tests"
   ],
   "dependencies": {
-    "datatables.net-dt": "^1.10.11",
     "bootstrap": "^3.3.6",
-    "lato-googlefont": "*"
+    "lato-googlefont": "*",
+    "datatables": "^1.10.11"
   }
 }

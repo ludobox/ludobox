@@ -1,4 +1,4 @@
-// Activate dynamic table with DataTables.net
+// Activate dynamic table with DataTables.net and set it to french
 // ref: https://datatables.net
 $(document).ready( function () {
     $('#gamestab').DataTable({

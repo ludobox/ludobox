@@ -4,29 +4,29 @@
         <h1>Liste des jeux</h1>
     </div>
 
-    <table id="gamestab" class="display">
+    <table id="gamestab" class="display" cellspacing="0" width="100%">
         <caption>Jeux disponibles au téléchargement</caption>
         <thead>
             <tr>
-                <td>Title</td>
-                <td>Link</td>
+                <td>Titre</td>
+                <td>Lien</td>
                 <td>Type</td>
-                <td>Themes</td>
-                <td>fab_time</td>
-                <td>players</td>
-                <td>languages</td>
+                <td>Thèmes</td>
+                <td>Temps de fabrication</td>
+                <td>Nombre de joueurs</td>
+                <td>Langues disponibles</td>
             </tr>
         </thead>
         <tbody class="list">
             {% for game in games %}
             <tr>
-                <td class="title">{{ game.title }}</td>
-                <td class="link"><a href="/static/games/{{ game.slug }}/index.html">{{ game.title }}</a></td>
+                <td class="title">{{ game.title.fr }}</td>
+                <td class="link"><a href="/static/games/{{ game.slug }}/index.html">{{ game.title.fr }}</a></td>
                 <td class="type">{{ game.type }}</td>
-                <td class="themes">{{ game.themes }}</td>
+                <td class="themes">{{ game.themes.fr|join(', ') }}</td>
                 <td class="fab_time"> {{game.fab_time}} </td>
                 <td class="players"> {{game.players}} </td>
-                <td class="languages"> {{game.languages}} </td>
+                <td class="languages"> {{game.languages|join(', ')}} </td>
             </tr>
             {% endfor %}
         </tbody>
