@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -52,14 +53,56 @@
 
 <!-- Navigation bar -->
     <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">
-            <!-- CUSTOMIZE the name of the app here -->
-            LudoBox
-          </a>
+        <div class="container">
+            <div class="navbar-header">
+                <!-- This button only appear on small devices as a replacement for the menu -->
+                <button
+                    type="button"
+                    class="navbar-toggle collapsed"
+                    data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1"
+                    aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- This brand text only appear on big devices -->
+                <a class="navbar-brand" href="#">
+                    <!-- CUSTOMIZE the name of the app here -->
+                    <strong>LudoBox</strong>
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/static/index.html">Jeux<span class="sr-only">(current)</span></a>
+                    </li>
+
+                    <!-- TODO make a better usage of this since it points to games display -->
+                    <li>
+                        <a href="/static/index.html">Publications</a>
+                    </li>
+
+                    <!-- TODO make a better usage of this since it points to games display -->
+                    <li>
+                        <a href="/static/index.html">Matériels</a>
+                    </li>
+
+                    <li>
+                        <a href="/static/add/index.html">Ajouter du contenu</a>
+                    </li>
+
+                    <li>
+                        <a href="/static/about.html">À propos</a>
+                    </li>
+                </ul>
+
+                <!-- THINK TO CHANGE VERSION WHEN OUT OF THE ALPHA !! -->
+                <p class="navbar-text navbar-right"><small>Lodobox V3.0alpha</small></p>
+            </div>
         </div>
-      </div>
     </nav>
     <div class="page-header">
         <h1>Coucou, le jeu sympa</h1>
