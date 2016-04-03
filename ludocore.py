@@ -69,6 +69,7 @@ TEMPLATE_DIR = os.path.abspath("templates")
 SINGLE_TEMPLATE = "single.html"  # template for page to display a single game
 INDEX_TEMPLATE = "index.html"  # template for page to list all games
 ADD_TEMPLATE = "add.html"  # template for page to create new game
+ABOUT_TEMPLATE = "about.html"  # template for the about page
 
 
 # TODO improve this exception by always providing an advice to solve the
@@ -394,6 +395,61 @@ def render_add(games_dir, tpl_name):
         raise LudoboxError(message)
 
 
+# TODO add some test for this function with different scenario: index already
+#   exists/or not/is read-only, add dir exist/or not/is read only...
+def render_about(games_dir, tpl_name):
+    """
+    Render the about page.
+
+    This file is created in the specified `games_dir` and is always named
+    `about.html`.
+
+    Arguments:
+    games_dir -- directory where the about file will be created. It must
+                 not contain an `about.html` file. It must exist.
+    tpl_name -- a :mod:`jinja2` template file used to generate the HTML about
+                file. It must be located in the `TEMPLATE_DIR` directory.
+
+    Raise a :exc:`LudoboxError` with a convenient message if anything went
+    wrong. In such case no directory or file is created.
+
+    Typical usage:
+
+    >>> import tempfile
+    >>> import os.path
+    >>> import os
+    >>> games_dir = os.path.join(tempfile.mkdtemp(),"games")
+    >>> os.makedirs(games_dir)  # The games directory must exist
+    >>> render_about(games_dir, "about.html")
+    """
+    # TODO enclose in a try/except block to catch the exception and add some
+    #   context/better advice
+    # Render template
+    content = _render_template(tpl_name)
+
+    path = os.path.join(games_dir, "about.html")
+
+    # Check if there is already an existing about file
+    if os.path.exists(path):
+        message = "Can not create about file '{path}' since a file of "\
+                  "same name already exists.".format(path=path)
+        raise LudoboxError(message)
+
+    # We write the content to the file
+    try:
+        with open(path, "wb") as f:
+            f.write(content.encode('utf-8'))
+    except IOError as e:
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while creating about page "\
+                  "file '{path}'".format(
+                    error=e.strerror,
+                    path=e.filename)
+        raise LudoboxError(message)
+
+
 def generate_all(input_dir, output_dir, **kwargs):
     """
     Generate all the pages corresponding to the data of the :const:`DATADIR`.
@@ -405,9 +461,9 @@ def generate_all(input_dir, output_dir, **kwargs):
     input_dir -- directory where the game info and data are stored. It will
                  only be read. And it must exist.
     output_dir -- directory where the games subdirectory (where all game pages
-                  will be created), global index and add page will be created.
-                  It must not contain a subdirectory named `add`, `games` or an
-                  `index.html` file.
+                  will be created), global index, add page and about page will
+                  be created. It must not contain a subdirectory named `add`,
+                  `games` or an `index.html` or `about.html` file.
 
     kwargs is used here since this function is called by :func:`main` via
     :mod:`argparse`. And all the params are provided automagically by
@@ -436,6 +492,7 @@ def generate_all(input_dir, output_dir, **kwargs):
         Generate game description: SUCCESS
     Generate global index: SUCCESS
     Generate add page: SUCCESS
+    Generate about page: SUCCESS
     True
     """
     # Return value, will be switched to False in case of failure
@@ -513,6 +570,17 @@ def generate_all(input_dir, output_dir, **kwargs):
     print("Generate add page: ", end='')
     try:
         render_add(output_dir, ADD_TEMPLATE)
+        print("SUCCESS")
+    except LudoboxError as e:
+        print("FAIL >>", e)
+        result = False
+        # No need to stop the execution we continue since following action
+        # don't depend on the result of this one
+
+    # We then write the about page
+    print("Generate about page: ", end='')
+    try:
+        render_about(output_dir, ABOUT_TEMPLATE)
         print("SUCCESS")
     except LudoboxError as e:
         print("FAIL >>", e)

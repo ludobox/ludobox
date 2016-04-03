@@ -35,6 +35,7 @@ def test_generate_all_on_non_empty_data_dir_and_empty_games_dir(tmpdir):
     # Let's go for deep comparison with reference files
     expected_dir = "tests/functional/expected/on_hackathon_data_dir"
     expected_files = [
+        "about.html",
         "add/index.html",
         "index.html",
         "games/borgia-le-jeu-malsain/index.html",
@@ -66,6 +67,7 @@ def test_generate_all_on_empty_data_dir(tmpdir):
     # Let's go for deep comparison with reference files
     expected_dir = "tests/functional/expected/on_empty_data_dir"
     expected_files = [
+        "about.html",
         "add/index.html",
         "index.html"]
     match, mismatch, errors = filecmp.cmpfiles(
@@ -78,4 +80,5 @@ def test_generate_all_on_empty_data_dir(tmpdir):
 
     # Let's be sure we have nothing else in the output dir
     generated = [n for n in os.listdir(output_dir)]
-    assert sorted(generated) == sorted(["games", "add", "index.html"])
+    assert sorted(generated) == sorted(
+        ["games", "add", "index.html", "about.html"])
