@@ -1,48 +1,34 @@
 {% set active_nav = "games" %}
 {% include "partials/header.html" %}
-    <div class="row">
-        <div class="twelve columns">
-            <h1>Liste des jeux</h1>
-        </div>
+    <div class="page-header">
+        <h1>Liste des jeux</h1>
     </div>
-    <div class="row" id="games">
-        <div class="twelve columns">
-            <div class="row">
-                <div class="three columns">
-                    <a class="button button-primary" href="add/index.html">Add a new game</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="twelve columns">
-                    <table id="gamestab" class="display">
-                        <caption>Jeux disponibles au téléchargement</caption>
-                        <thead>
-                            <tr>
-                                <td>Title</td>
-                                <td>Link</td>
-                                <td>Type</td>
-                                <td>Themes</td>
-                                <td>fab_time</td>
-                                <td>players</td>
-                                <td>languages</td>
-                            </tr>
-                        </thead>
-                        <tbody class="list">
-                            {% for game in games %}
-                            <tr>
-                                <td class="title">{{ game.title }}</td>
-                                <td class="link"><a href="/static/games/{{ game.slug }}/index.html">{{ game.title }}</a></td>
-                                <td class="type">{{ game.type }}</td>
-                                <td class="themes">{{ game.themes }}</td>
-                                <td class="fab_time"> {{game.fab_time}} </td>
-                                <td class="players"> {{game.players}} </td>
-                                <td class="languages"> {{game.languages}} </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <table id="gamestab" class="display">
+        <caption>Jeux disponibles au téléchargement</caption>
+        <thead>
+            <tr>
+                <td>Title</td>
+                <td>Link</td>
+                <td>Type</td>
+                <td>Themes</td>
+                <td>fab_time</td>
+                <td>players</td>
+                <td>languages</td>
+            </tr>
+        </thead>
+        <tbody class="list">
+            {% for game in games %}
+            <tr>
+                <td class="title">{{ game.title }}</td>
+                <td class="link"><a href="/static/games/{{ game.slug }}/index.html">{{ game.title }}</a></td>
+                <td class="type">{{ game.type }}</td>
+                <td class="themes">{{ game.themes }}</td>
+                <td class="fab_time"> {{game.fab_time}} </td>
+                <td class="players"> {{game.players}} </td>
+                <td class="languages"> {{game.languages}} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% include "partials/footer.html" %}
