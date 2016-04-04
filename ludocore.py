@@ -30,6 +30,9 @@ import argparse
 # easy "low tech" compliant sharing.
 import json
 
+# datetime is used to generate a simple timestamp for each game added
+from datetime import datetime
+
 # Jinja2 is used as a template engine to generate the list of games as an HTML5
 # compliant table.
 # To get it: sudo pip install Jinja2
@@ -770,6 +773,72 @@ def serve_index():
 @app.route('/addgame', methods=["POST"])
 def serve_addgame():
     """Process the uploads of new games."""
+    # An empty dictionnary to store all the data from the form
+    data = {
+        "type": "game",
+        "genres": {"fr": []},
+        "title": {"fr": ""},
+        "description": {"fr": ""},
+        "themes": {"fr": []},
+        "publishers": [],
+        "publication_year": "",
+        "authors": [],
+        "illustrators": [],
+        "duration": "",
+        "audience": [],
+        "players_min": 0,
+        "players_max": 0,
+        "fab_time": 0,
+        "requirements": {"fr": []},
+        "source": "",
+        "license": "",
+        "languages": [],
+        "ISBN": [],
+        "timestamp_add": ""
+    }
+
+    # retrieving all the datas
+    data['type'] = flask.request.form['type']
+    data['genres']['fr'] = \
+        [g.strip() for g in flask.request.form['genres'].split(',')]
+    data['title']['fr'] = flask.request.form['title']
+    data['description']['fr'] = flask.request.form['description'].strip()
+    data['themes']['fr'] = \
+        [t.strip() for t in flask.request.form['themes'].split(',')]
+    data['publishers'] = \
+        [p.strip() for p in flask.request.form['publishers'].split(',')]
+    data['publication_year'] = int(flask.request.form['publication_year'])
+    data['authors'] = \
+        [a.strip() for a in flask.request.form['authors'].split(',')]
+    data['illustrators'] = \
+        [i.strip() for i in flask.request.form['illustrators'].split(',')]
+    data['duration'] = int(flask.request.form['duration'])
+    if 'gameAudience_children' in flask.request.form:
+        data['audience'].append('children')
+    if 'gameAudience_teens' in flask.request.form:
+        data['audience'].append('teens')
+    if 'gameAudience_adults' in flask.request.form:
+        data['audience'].append('adults')
+    data['players_min'] = int(flask.request.form['players_min'])
+    data['players_max'] = int(flask.request.form['players_max'])
+    data['fab_time'] = int(flask.request.form['fab_time'])
+    data['requirements']['fr'] = \
+        [r.strip() for r in flask.request.form['requirements'].split(',')]
+    data['source'] = flask.request.form['source']
+    data['license'] = flask.request.form['license']
+    data['languages'] = \
+        [l.strip() for l in flask.request.form['languages'].split(',')]
+    data['ISBN'] = \
+        [isbn.strip() for isbn in flask.request.form['ISBN'].split(',')]
+    data['timestamp_add'] = datetime.now().isoformat()
+
+    # TODO handle the files uploads
+
+    # Save the game description as pure JSON file
+    # Create the directory for the game
+    # Save the file itself
+    #json.dumps(data, sort_keys=True, indent=4)
+
     # TODO replace this dummy return by a true add
     return flask.redirect(flask.url_for("static", filename="index.html"))
 
