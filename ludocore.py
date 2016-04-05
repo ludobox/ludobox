@@ -201,6 +201,160 @@ def read_game_info(path):
     return data
 
 
+def write_game_info(data, data_dir):
+    """
+    Write a JSON file description of a game according to the provided data.
+
+    This aso create a dedicated directory named after the game to put the file
+    in.
+
+    Arguments:
+    data -- a dictionnary storing all the information about the game. It
+            exactly mimic the structure of the disired JSON file. The
+            data["title"]["fr"] must exist, no other verification is made to
+            check it contains coherent structure or data.
+    data_dir -- directory where all the game directories are stored i.e. where
+                a directory named after the game will be created to store the
+                JSON file. It must exist.
+
+    Returns the path to the directory created to store the JSON file (it
+    should be named after the game!).
+
+    Raises a LudobowError if anything goes wrong.
+
+    the :func:`write_game_info()` and :func:`read_game_info()` function should
+    work nicely together. Any file writen with the first should be readable by
+    the second:
+
+    >>> game_name = "gametest"  # a title with no slugification problem
+    >>> data = {
+    ...     "type": game_name,
+    ...     "genres": {"fr": ["genre 1", "genre 2"]},
+    ...     "title": {"fr": "gametest"},
+    ...     "description": {"fr": "A very long description"},
+    ...     "themes": {"fr": ["theme 1", "theme 2"]},
+    ...     "publishers": ["publisher 1", "publisher 2"],
+    ...     "publication_year": "1979",
+    ...     "authors": ["author 1", "author 2"],
+    ...     "illustrators": ["illustrator 1", "illustrator 2"],
+    ...     "duration": "120",
+    ...     "audience": ["teen", "adults"],
+    ...     "players_min": 1,
+    ...     "players_max": 10,
+    ...     "fab_time": 30,
+    ...     "requirements": {"fr": ["printer", "3d printer", "dice"]},
+    ...     "source": "http://www.thegame.org/game1",
+    ...     "license": "CC0",
+    ...     "languages": ["en", "fr", "br"],
+    ...     "ISBN": ["1234567890123", "1234567890"],
+    ...     "timestamp_add": "10/10/2015 14:52:35"
+    ... }
+    >>> import tempfile
+    >>> data_dir = tempfile.mkdtemp()  # The data directory must exist
+    >>> game_dir = write_game_info(data, data_dir)
+    >>> data2 = read_game_info(game_dir)
+    >>> print(data2["title"]["fr"])
+    gametest
+
+    If anythin goes wrong raise a LudoboxError containing description of the
+    error and advice for fixing it.
+
+    >>> data = {"title": {"fr": "gametest"}}
+    >>> try:
+    ...     write_game_info(data, "stupid/path/to/nowhere")
+    ... except LudoboxError as e:
+    ...     print(e.message)
+    Error occured while writing game info file to path 'stupid/path/to/nowhere'. Data directory 'stupid/path/to/nowhere' does not exist or is not a directory.
+
+    """
+    # first we need the slugified name of the game
+    try:
+        slugified_name = slugify(data["title"]["fr"])
+    except KeyError as e:
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
+        # Create a very explicit message to explain the problem
+        message = "KeyError occured while "\
+                  "writing game info file to path '{path}'. "\
+                  "Impossible to access data['title']['fr'].".format(
+                    path=data_dir)
+        raise LudoboxError(message)
+
+    # Check if the data directory exists
+    if not os.path.exists(data_dir) or not os.path.isdir(data_dir):
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
+        # Create a very explicit message to explain the problem
+        message = "Error occured while "\
+                  "writing game info file to path '{path}'. "\
+                  "Data directory '{data_dir}' does not "\
+                  "exist or is not a directory.".format(
+                    path=data_dir,
+                    data_dir=data_dir)
+        raise LudoboxError(message)
+
+    # Create a directory afte the cleaned name of the game
+    game_path = os.path.join(data_dir, slugified_name)
+    try:
+        os.makedirs(game_path)
+    except Exception as e:
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while "\
+                  "writing game info file to path '{path}' for "\
+                  "game '{game}'. Impossible to create "\
+                  "directory '{game_path}' to store JSON file.".format(
+                    error=e.strerror,
+                    path=data_dir,
+                    game=slugified_name,
+                    game_path=os.path.abspath(game_path))
+        raise LudoboxError(message)
+
+    # Convert the data to JSON
+    try:
+        content = json.dumps(data, sort_keys=True, indent=4)
+    except IOError as e:
+        # Cleanup anything previously created
+        # TODO use clean(game=game_name)
+        shutil.rmtree(game_path, ignore_errors=True)
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while "\
+                  "writing game info file to path '{path}' for "\
+                  "game '{game}'. Impossible to create JSON representation "\
+                  "of the provided data.".format(
+                    error=e.strerror,
+                    path=data_dir,
+                    game=slugified_name)
+        raise LudoboxError(message)
+
+    # Write the JSON file itself
+    json_path = os.path.join(game_path, "info.json")
+    try:
+        with open(json_path, "w") as json_file:
+            json_file.write(content.encode('utf-8'))
+    except IOError as e:
+        # Cleanup anything previously created
+        # TODO use clean(game=game_name)
+        shutil.rmtree(game_path, ignore_errors=True)
+        # TODO Handle more precisely the error and provide an advice for
+        #   solving the problem
+        # Create a very explicit message to explain the problem
+        message = "<{error}> occured while "\
+                  "writing game info file to path '{path}' for "\
+                  "game '{game}'. "\
+                  "Impossible to write JSON file '{json}'.".format(
+                    error=e.strerror,
+                    path=data_dir,
+                    game=slugified_name,
+                    json=json_path)
+        raise LudoboxError(message)
+
+    return game_path
+
+
 # TODO append ERROR to the end of the directory name instead of deleting it
 # TODO add some test for this function with different scenario:
 #   empty/incoherent data/are nor readable, directory already exists/is read
@@ -835,11 +989,46 @@ def serve_addgame():
     # TODO handle the files uploads
 
     # Save the game description as pure JSON file
-    # Create the directory for the game
-    # Save the file itself
-    #json.dumps(data, sort_keys=True, indent=4)
+    try:
+        data_path = write_game_info(data, INPUT_DIR)
+    except LudoboxError as e:
+        # TODO replace this dummy return by a true page showing the failed add
+        return flask.redirect(flask.url_for("static", filename="index.html"))
 
-    # TODO replace this dummy return by a true add
+    # Generate the HTML pages !
+    # # TODO remove this useless re-reading of the generated file...
+    # #      use data directly instead ! (only missing info is slugified name)
+    # print("    Read game informations: ", end='')
+    # try:
+    #     game_data = read_game_info(data_path)
+    # except LudoboxError as e:
+    #     print("FAIL >>", e)
+    #     result = False
+    #     # TODO replace this dummy return by a true page showing the failed add
+    #     return flask.redirect(flask.url_for("static", filename="index.html"))
+    # print("SUCCESS")
+
+    # # Generate game description
+    # print("    Generate game description: ", end='')
+    # try:
+    #     generate_game_desc(game_data, OUTPUT_DIR, SINGLE_TEMPLATE)
+    # except LudoboxError as e:
+    #     advice = "Try to use './ludocore.py clean' to remove it."
+    #     print("FAIL >>", e, advice)
+    #     result = False
+    #     # TODO replace this dummy return by a true page showing the failed add
+    #     return flask.redirect(flask.url_for("static", filename="index.html"))
+    # print("SUCCESS")
+
+    if not clean(OUTPUT_DIR):
+        # TODO replace this dummy return by a true page showing the failed gen
+        return flask.redirect(flask.url_for("static", filename="index.html"))
+
+    if not generate_all(INPUT_DIR, OUTPUT_DIR):
+        # TODO replace this dummy return by a true page showing the failed gen
+        return flask.redirect(flask.url_for("static", filename="index.html"))
+
+    # TODO replace this dummy return by a true page showing the successful add
     return flask.redirect(flask.url_for("static", filename="index.html"))
 
 
