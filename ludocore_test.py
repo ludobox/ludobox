@@ -6,6 +6,20 @@ Here are all the unit tests for the :mod:`ludocore` module.
 The objective of those test is to check all major usage scenarios for each
 function of the :mod:`ludocore` module.
 """
+# Copyright (C) 2016  Pierre-Yves Martin for DCALK
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Python 3 compatibility
 from __future__ import unicode_literals
