@@ -996,30 +996,6 @@ def serve_addgame():
         return flask.redirect(flask.url_for("static", filename="index.html"))
 
     # Generate the HTML pages !
-    # # TODO remove this useless re-reading of the generated file...
-    # #      use data directly instead ! (only missing info is slugified name)
-    # print("    Read game informations: ", end='')
-    # try:
-    #     game_data = read_game_info(data_path)
-    # except LudoboxError as e:
-    #     print("FAIL >>", e)
-    #     result = False
-    #     # TODO replace this dummy return by a true page showing the failed add
-    #     return flask.redirect(flask.url_for("static", filename="index.html"))
-    # print("SUCCESS")
-
-    # # Generate game description
-    # print("    Generate game description: ", end='')
-    # try:
-    #     generate_game_desc(game_data, OUTPUT_DIR, SINGLE_TEMPLATE)
-    # except LudoboxError as e:
-    #     advice = "Try to use './ludocore.py clean' to remove it."
-    #     print("FAIL >>", e, advice)
-    #     result = False
-    #     # TODO replace this dummy return by a true page showing the failed add
-    #     return flask.redirect(flask.url_for("static", filename="index.html"))
-    # print("SUCCESS")
-
     if not clean(OUTPUT_DIR):
         # TODO replace this dummy return by a true page showing the failed gen
         return flask.redirect(flask.url_for("static", filename="index.html"))
