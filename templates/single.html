@@ -8,13 +8,13 @@
         <dt>Type</dt>
         <dd>
         {% if data.type == "game" %}
-            <span class="label label-primary">Jeu</span>
+            <span class="label label-primary">Game</span>
         {% elif data.type == "publication" %}
             <span class="label label-primary">Publication</span>
         {% elif data.type == "material" %}
-            <span class="label label-primary">Matériel</span>
+            <span class="label label-primary">Material</span>
         {% else %}
-            <span class="label label-danger">Inconnu</span>
+            <span class="label label-danger">Unknown</span>
         {% endif %}
         </dd>
 
@@ -25,104 +25,104 @@
         {% endfor %}
         </dd>
 
-        <dt>Titre</dt>
+        <dt>Title</dt>
         <dd>{{data.title.fr}}</dd>
 
-        <dt>Description du jeu</dt>
+        <dt>Description of the game</dt>
         <dd>{{data.description.fr}}</dd>
 
-        <dt>Thèmes</dt>
+        <dt>Themes</dt>
         <dd>
         {% for theme in data.themes.fr|sort %}
             <span class="label label-default">{{theme}}</span>&nbsp;
         {% endfor %}
         </dd>
 
-        <dt>Éditeurs</dt>
+        <dt>Publishers</dt>
         <dd>{{data.publishers|join('<br>')}}</dd>
 
-        <dt>Année de publication</dt>
+        <dt>Year of publication</dt>
         <dd>{{data.publication_year}}</dd>
 
-        <dt>Auteurs</dt>
+        <dt>Authors</dt>
         <dd>{{data.authors|join('<br>')}}</dd>
 
-        <dt>Illustrateurs</dt>
+        <dt>Illustrators</dt>
         <dd>{{data.illustrators|join('<br>')}}</dd>
 
-        <dt>Durée d'une partie</dt>
+        <dt>Duration of the game</dt>
         <dd>{{data.duration}}</dd>
 
-        <dt>Nombre de joueurs</dt>
+        <dt>Number of players</dt>
         <dd>de {{data.players_min}} à {{data.players_max}}</dd>
 
-        <dt>Public</dt>
+        <dt>Audience</dt>
         <dd>
         <!-- we always display the 3 audience and just change the display -->
         {% if "children" in data.audience %}
             <span class="label label-success">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                Enfants
-                <span class="sr-only">Oui</span>
+                Kids
+                <span class="sr-only">Yes</span>
             </span>
         {% else %}
             <span class="label label-danger">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                Enfants
-                <span class="sr-only">Non</span>
+                Kids
+                <span class="sr-only">Yes</span>
             </span>
         {% endif %}
         &nbsp;
         {% if "teens" in data.audience %}
             <span class="label label-success">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                Adolescents
-                <span class="sr-only">Oui</span>
+                Teens
+                <span class="sr-only">Yes</span>
             </span>
         {% else %}
             <span class="label label-danger">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                Adolescents
-                <span class="sr-only">Non</span>
+                Teens
+                <span class="sr-only">No</span>
             </span>
         {% endif %}
         &nbsp;
         {% if "adults" in data.audience %}
             <span class="label label-success">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                Adultes
-                <span class="sr-only">Oui</span>
+                Adults
+                <span class="sr-only">Yes</span>
             </span>
         {% else %}
             <span class="label label-danger">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                Adultes
-                <span class="sr-only">Non</span>
+                Adults
+                <span class="sr-only">No</span>
             </span>
         {% endif %}
         </dd>
 
-        <dt>Temps de fabrication</dt>
+        <dt>Time for making</dt>
         <dd>{{data.fab_time}}</dd>
 
-        <dt>Matériel nécessaire</dt>
+        <dt>Material required</dt>
         <dd>
         {% for req in data.requirements.fr|sort %}
             <span class="label label-default">{{req}}</span>&nbsp;
         {% endfor %}
         </dd>
 
-        <dt>Licence</dt>
+        <dt>License</dt>
         <dd>{{data.license}}</dd>
 
-        <dt>Langues disponibles</dt>
+        <dt>Languages available</dt>
         <dd>
         {% for lang in data.languages|sort %}
             <span class="label label-default">{{lang}}</span>&nbsp;
         {% endfor %}
         </dd>
 
-        <dt>Site web d'origine</dt>
+        <dt>Original website or url source</dt>
         <dd>
             <a href="{{data.source}}">{{data.source}}</a>
         </dd>
@@ -133,9 +133,9 @@
         </dd>
 
         <!-- TODO add the listing to the available data -->
-        <dt>Fichiers du jeu</dt>
+        <dt>Files</dt>
         <dd></dd>
     </dl>
 
-    <a class="btn btn-primary" href="download">Télécharger</a>
+    <a class="btn btn-primary" href="download">Download</a>
 {% include "partials/footer.html" %}
