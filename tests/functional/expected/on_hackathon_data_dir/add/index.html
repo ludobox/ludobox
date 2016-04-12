@@ -29,7 +29,7 @@
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <title>Ludobox</title>
     <meta name="description" content="">
-    <meta name="author" content="Clément Renaud, Pierre-Yves Martin">
+    <meta name="author" content="Clément Renaud, Pierre-Yves Martin cath">
     <meta name="copyright" content="DCALK">
     <meta name="generator" content="Jinja2">
 
@@ -94,7 +94,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="/static/index.html">Jeux<span class="sr-only">(current)</span></a>
+                        <a href="/static/index.html">Games<span class="sr-only">(current)</span></a>
                     </li>
 
                     <!-- TODO make a better usage of this since it points to games display -->
@@ -104,15 +104,15 @@
 
                     <!-- TODO make a better usage of this since it points to games display -->
                     <li>
-                        <a href="/static/index.html">Matériels</a>
+                        <a href="/static/index.html">Material</a>
                     </li>
 
                     <li class="active">
-                        <a href="/static/add/index.html">Ajouter du contenu</a>
+                        <a href="/static/add/index.html">Add content</a>
                     </li>
 
                     <li>
-                        <a href="/static/about.html">À propos</a>
+                        <a href="/static/about.html">About</a>
                     </li>
                 </ul>
 
@@ -122,14 +122,14 @@
         </div>
     </nav>
     <div class="page-header">
-        <h1>Ajouter un nouveau contenu</h1>
+        <h1>Add new content</h1>
     </div>
 
     <form role="form" class="form-horizontal" action="/addgame" method="post">
 
         <!-- TODO retirer cette légende ? -->
         <!-- TODO ajouter un texte d'explication ? -->
-        <legend>Description du jeu à ajouter</legend>
+        <legend>Description of the game</legend>
 
         <!-- type and genre -->
         <div class="form-group">
@@ -142,9 +142,9 @@
                     name="type"
                     required>
                     <!-- TODO séparer jeu en jeu video et jeu de plateau ? -->
-                    <option value="game">Jeu</option>
+                    <option value="game">Game</option>
                     <option value="publication">Publication</option>
-                    <option value="material">Matériel</option>
+                    <option value="material">Material</option>
                 </select>
             </div>
 
@@ -156,7 +156,7 @@
                     id="gameGenresInput"
                     name="genres"
                     type="text"
-                    placeholder="Genre(s) séparés par des virgules"
+                    placeholder="Genre(s) separated by commas"
                     required
                 >
             </div>
@@ -165,14 +165,14 @@
 
         <!-- Input for "title" field -->
         <div class="form-group">
-            <label for="gameTitleInput" class="col-lg-2 control-label">Titre</label>
+            <label for="gameTitleInput" class="col-lg-2 control-label">Title</label>
             <div class="col-lg-10">
                 <input
                     class="form-control"
                     id="gameTitleInput"
                     name="title"
                     type="text"
-                    placeholder="Titre du jeu"
+                    placeholder="Title of the game"
                     required
                 >
             </div>
@@ -180,7 +180,7 @@
 
         <!-- Input for "description" field -->
         <div class="form-group">
-            <label for="gameDescriptionInput" class="col-lg-2 control-label">Description du jeu</label>
+            <label for="gameDescriptionInput" class="col-lg-2 control-label">Description of the game</label>
             <div class="col-lg-10">
                 <textarea
                     class="form-control"
@@ -193,21 +193,21 @@
                 >
                 </textarea>
                 <span id="gameDescriptionInput_help" class="help-block">
-                    Décrivez votre jeux en quelques lignes.
+                    Describe your game in few lines.
                 </span>
             </div>
         </div>
 
         <!-- Input for "themes" field -->
         <div class="form-group">
-            <label for="gameThemesInput" class="col-lg-2 control-label">Thèmes</label>
+            <label for="gameThemesInput" class="col-lg-2 control-label">Themes</label>
             <div class="col-lg-10">
                 <input
                     class="form-control"
                     id="gameThemesInput"
                     name="themes"
                     type="text"
-                    placeholder="Thème(s) séparés par des virgules"
+                    placeholder="Theme(s) separated by commas"
                     required
                 >
             </div>
@@ -216,20 +216,20 @@
         <!-- publisher and publication year -->
         <div class="form-group">
             <!-- Input for "publishers" field -->
-            <label for="gamePublishersInput" class="col-lg-2 control-label">Éditeurs</label>
+            <label for="gamePublishersInput" class="col-lg-2 control-label">Publishers</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"
                     id="gamePublishersInput"
                     name="publishers"
                     type="text"
-                    placeholder="Éditeur(s) séparés par des virgules"
+                    placeholder="Publisher(s) separated by commas"
                 >
             </div>
 
             <!-- Input for "publication_year" field -->
             <!-- TODO replace this with a select menu https://jqueryui.com/selectmenu/ -->
-            <label for="gamePublicationYearInput" class="col-lg-2 control-label">Année de publication</label>
+            <label for="gamePublicationYearInput" class="col-lg-2 control-label">Year of publication</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"
@@ -244,26 +244,26 @@
         <!-- authors and illustrators names -->
         <div class="form-group">
             <!-- Input for "authors" field -->
-            <label for="gameAuthorsInput" class="col-lg-2 control-label">Auteurs</label>
+            <label for="gameAuthorsInput" class="col-lg-2 control-label">Authors</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"
                     id="gameAuthorsInput"
                     name="authors"
                     type="text"
-                    placeholder="Auteurs(s) séparés par des virgules"
+                    placeholder="Authors(s) separated by commas"
                 >
             </div>
 
             <!-- Input for "illustrators" field -->
-            <label for="gameIllustratorsInput" class="col-lg-2 control-label">Illustrateurs</label>
+            <label for="gameIllustratorsInput" class="col-lg-2 control-label">Illustrators</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"
                     id="gameIllustratorsInput"
                     name="illustrators"
                     type="text"
-                    placeholder="Illustrateur(s) séparés par des virgules"
+                    placeholder="Illustrator(s) separated by commas"
                 >
             </div>
         </div>
@@ -271,7 +271,7 @@
         <!-- Input for duration and number of player -->
         <div class="form-group">
             <!-- Input for "duration" field -->
-            <label for="gameDurationInput" class="col-lg-2 control-label">Durée d'une partie</label>
+            <label for="gameDurationInput" class="col-lg-2 control-label">Duration of the game</label>
             <div class="col-lg-4">
                 <div class="input-group">
                     <input
@@ -279,14 +279,14 @@
                         id="gameDurationInput"
                         name="duration"
                         type="number" step="1" min="1" max="600" value="30"
-                        placeholder="Durée moyenne d'une partie"
+                        placeholder="Average duration of the game"
                     >
                     <span class="input-group-addon">minutes</span>
                 </div>
             </div>
 
             <!-- Input for "players_min" and "players_max" field -->
-            <label for="gamePlayersMinInput" class="col-lg-2 control-label">Nombre de joueurs</label>
+            <label for="gamePlayersMinInput" class="col-lg-2 control-label">Number of players</label>
             <div class="col-lg-4">
                 <div class="input-group">
                     <span class="input-group-addon">de</span>
@@ -307,7 +307,7 @@
                         type="number" step="1" min="1" max="200" value="5"
                         placeholder="5"
                     >
-                    <span class="input-group-addon">joueurs</span>
+                    <span class="input-group-addon">players</span>
                 </div>
             </div>
         </div>
@@ -317,17 +317,17 @@
             <div class="col-lg-6 col-lg-offset-2">
                 <div class="checkbox">
                     <label>
-                        <input name="gameAudience_children" type="checkbox"> Convient à un public enfant
+                        <input name="gameAudience_children" type="checkbox"> Convenient for children
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input name="gameAudience_teens" type="checkbox"> Convient à un public adolescent
+                        <input name="gameAudience_teens" type="checkbox"> Convenient for teenagers
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input name="gameAudience_adults" type="checkbox"> Convient à un public adultes
+                        <input name="gameAudience_adults" type="checkbox"> Convenient for adults
                     </label>
                 </div>
             </div>
@@ -337,7 +337,7 @@
 
         <div class="form-group">
             <!-- Input for "fab_time" field -->
-            <label for="gameFabTimeInput" class="col-lg-2 control-label">Temps de fabrication</label>
+            <label for="gameFabTimeInput" class="col-lg-2 control-label">Time of making</label>
             <div class="col-lg-4">
                 <div class="input-group">
                     <input
@@ -345,21 +345,21 @@
                         id="gameFabTimeInput"
                         name="fab_time"
                         type="number" step="1" min="1" max="1000"
-                        placeholder="Temps pour fabriquer le jeu"
+                        placeholder="Time to make the game"
                     >
                     <span class="input-group-addon">minutes</span>
                 </div>
             </div>
 
             <!-- Input for "requirements" field -->
-            <label for="gameRequirementsInput" class="col-lg-2 control-label">Matériel nécessaire</label>
+            <label for="gameRequirementsInput" class="col-lg-2 control-label">Material required</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"
                     id="gameRequirementsInput"
                     name="requirements"
                     type="text"
-                    placeholder="Matériel(s) séparés par des virgules"
+                    placeholder="Material(s) separated by commas"
                 >
             </div>
         </div>
@@ -367,7 +367,7 @@
         <!-- licence and languages -->
         <div class="form-group">
             <!-- Input for "license" field -->
-            <label for="gameLicenseInput" class="col-lg-2 control-label">Licence</label>
+            <label for="gameLicenseInput" class="col-lg-2 control-label">License</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"
@@ -375,12 +375,12 @@
                     name="license"
                     required
                     type="text"
-                    placeholder="Ma licence libre préférée"
+                    placeholder="My favorite free license"
                 >
             </div>
 
             <!-- Input for "languages" field -->
-            <label for="gameLanguagesInput" class="col-lg-2 control-label">Langues disponibles</label>
+            <label for="gameLanguagesInput" class="col-lg-2 control-label">Languages available</label>
             <div class="col-lg-4">
                 <input
                     class="form-control"
@@ -388,21 +388,21 @@
                     name="languages"
                     required
                     type="text"
-                    placeholder="Langue(s) séparés par des virgules"
+                    placeholder="Language(s) separated by commas"
                 >
             </div>
         </div>
 
         <!-- Input for "source" field -->
         <div class="form-group">
-            <label for="gameSourceInput" class="col-lg-2 control-label">Site web d'origine</label>
+            <label for="gameSourceInput" class="col-lg-2 control-label">Original web site</label>
             <div class="col-lg-10">
                 <input
                     class="form-control"
                     id="gameSourceInput"
                     name="source"
                     type="url"
-                    placeholder="http://www.website.org/monjeu"
+                    placeholder="http://www.website.org/mygame"
                 >
             </div>
         </div>
@@ -416,7 +416,7 @@
                     id="gameISBNInput"
                     name="ISBN"
                     type="text"
-                    placeholder="ISBN(s) séparés par des virgules"
+                    placeholder="ISBN(s) separated by commas"
                 >
             </div>
         </div>
@@ -425,14 +425,14 @@
         <!-- TODO put all the MIME types in an external files and include them via Jinja2 templating -->
         <!-- MIME-type reference: http://www.iana.org/assignments/media-types/media-types.xhtml -->
         <div class="form-group">
-            <label for="gameFilesInput" class="col-lg-2 control-label">Fichiers du jeu</label>
+            <label for="gameFilesInput" class="col-lg-2 control-label">Files</label>
             <div class="col-lg-10">
                 <input
                     id="gameFilesInput"
                     name="files"
                     type="file" size="60" multiple
                     accept="image/*,application/pdf,application/vnd.oasis.opendocument.application/text,vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.image,application/vnd.oasis.opendocument.graphics,text/rtf,application/zip,application/epub+zip,image/svg+xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,pplication/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,pplication/vnd.openxmlformats-officedocument.presentationml.presentation"
-                    placeholder="Les fichiers du jeu"
+                    placeholder="Files of the game"
                 >
             </div>
         </div>
@@ -440,8 +440,8 @@
         <!-- Validation for the form -->
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="reset" class="btn btn-default">Annuler</button>
-                <button type="submit" class="btn btn-primary" enctype="multipart/form-data">Ajouter</button>
+                <button type="reset" class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-primary" enctype="multipart/form-data">Add</button>
             </div>
         </div>
 
