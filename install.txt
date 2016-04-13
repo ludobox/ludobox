@@ -3,9 +3,13 @@
 # fedora
 sudo dnf install npm
 # ubuntu
-sudo dnf install npm
+sudo apt-get install npm
 # windows
 http://blog.teamtreehouse.com/install-node-js-npm-windows
 
-npm install -g bower
+sudo npm install -g bower
+# et sulement pour ubuntu
+sudo ln -s /usr/bin/nodejs /usr/bin/node
 
+cd la/ou/se/trouve/ludobox-ui
+bower install
