@@ -59,6 +59,12 @@ import jinja2
 # To get it: sudo pip install python-slugify
 from slugify import slugify
 
+# secure_filename is used to sanitarize the file names provided by the user.
+# All submitted form data can be forged, and filenames can be dangerous.
+# “never trust user input” must be our MOTD
+# More here: http://flask.pocoo.org/docs/0.10/patterns/fileuploads/
+from werkzeug import secure_filename
+
 # flask is the minimal web server used to make the HTML pages available
 import flask
 app = flask.Flask("LUDOSERVER")  # web server instance used to defines routes
@@ -216,18 +222,17 @@ def read_game_info(path):
     return data
 
 
-def write_game_info(data, data_dir):
+def write_game_info(data, attachments, data_dir):
     """
-    Write a JSON file description of a game according to the provided data.
-
-    This aso create a dedicated directory named after the game to put the file
-    in.
+    Write a JSON file description of a game according to the provided data and
+    attachment files in a dedicated directory named after the game.
 
     Arguments:
     data -- a dictionnary storing all the information about the game. It
             exactly mimic the structure of the disired JSON file. The
             data["title"]["fr"] must exist, no other verification is made to
             check it contains coherent structure or data.
+    attachments -- list of files attached to the game (rules, images...).
     data_dir -- directory where all the game directories are stored i.e. where
                 a directory named after the game will be created to store the
                 JSON file. It must exist.
@@ -235,7 +240,7 @@ def write_game_info(data, data_dir):
     Returns the path to the directory created to store the JSON file (it
     should be named after the game!).
 
-    Raises a LudobowError if anything goes wrong.
+    Raises a LudoboxError if anything goes wrong.
 
     the :func:`write_game_info()` and :func:`read_game_info()` function should
     work nicely together. Any file writen with the first should be readable by
@@ -266,7 +271,7 @@ def write_game_info(data, data_dir):
     ... }
     >>> import tempfile
     >>> data_dir = tempfile.mkdtemp()  # The data directory must exist
-    >>> game_dir = write_game_info(data, data_dir)
+    >>> game_dir = write_game_info(data, [],data_dir)
     >>> data2 = read_game_info(game_dir)
     >>> print(data2["title"]["fr"])
     gametest
@@ -276,7 +281,7 @@ def write_game_info(data, data_dir):
 
     >>> data = {"title": {"fr": "gametest"}}
     >>> try:
-    ...     write_game_info(data, "stupid/path/to/nowhere")
+    ...     write_game_info(data, [], "stupid/path/to/nowhere")
     ... except LudoboxError as e:
     ...     print(e.message)
     Error occured while writing game info file to path 'stupid/path/to/nowhere'. Data directory 'stupid/path/to/nowhere' does not exist or is not a directory.
@@ -366,6 +371,51 @@ def write_game_info(data, data_dir):
                     game=slugified_name,
                     json=json_path)
         raise LudoboxError(message)
+
+    # Write the attached files
+    # TODO write actual code here
+    # TODO add some tests for this code
+    if attachments:
+        # Create a directory to store the uploaded files
+        attachments_path = os.path.join(game_path, "files")
+        try:
+            os.makedirs(attachments_path)
+        except Exception as e:
+            # TODO Handle more precisely the error and provide an advice for
+            #   solving the problem
+            # Create a very explicit message to explain the problem
+            message = "<{error}> occured while "\
+                      "writing game info to path '{path}' for "\
+                      "game '{game}'. Impossible to create "\
+                      "directory '{attachments_path}' to store the attached "\
+                      "files.".format(
+                        error=e.strerror,
+                        path=data_dir,
+                        game=slugified_name,
+                        attachments_path=os.path.abspath(attachments_path))
+            raise LudoboxError(message)
+
+        # Write all the files
+        for f in attachments:
+            file_clean_name = secure_filename(f.filename)
+            file_path = os.path.join(attachments_path, file_clean_name)
+            try:
+                f.save(file_path)
+            except Exception as e:
+                # TODO Handle more precisely the error and provide an advice
+                #   for solving the problem
+                # Create a very explicit message to explain the problem
+                message = "<{error}> occured while "\
+                          "writing game info to path '{path}' for "\
+                          "game '{game}'. Impossible to save file"\
+                          "'{file_path}' in the attachment directory "\
+                          "'{attachments_path}'.".format(
+                            error=e.strerror,
+                            path=data_dir,
+                            game=slugified_name,
+                            file_path=os.path.abspath(file_path),
+                            attachments_path=os.path.abspath(attachments_path))
+                raise LudoboxError(message)
 
     return game_path
 
@@ -1001,11 +1051,14 @@ def serve_addgame():
         [isbn.strip() for isbn in flask.request.form['ISBN'].split(',')]
     data['timestamp_add'] = datetime.now().isoformat()
 
-    # TODO handle the files uploads
+    # We get all the files uploaded
+    files = flask.request.files.getlist('files')
+    print("UPLOADED FILES:", [f.filename for f in files])
 
     # Save the game description as pure JSON file
     try:
-        data_path = write_game_info(data, INPUT_DIR)
+        # TODO split this in 2 funcs "write json" and "write attachements"
+        data_path = write_game_info(data, files, INPUT_DIR)
     except LudoboxError as e:
         # TODO replace this dummy return by a true page showing the failed add
         return flask.redirect(flask.url_for("static", filename="index.html"))

@@ -125,7 +125,7 @@
         <h1>Add new content</h1>
     </div>
 
-    <form role="form" class="form-horizontal" action="/addgame" method="post">
+    <form role="form" class="form-horizontal" action="/addgame" method="post" enctype="multipart/form-data">
 
         <!-- TODO retirer cette légende ? -->
         <!-- TODO ajouter un texte d'explication ? -->
@@ -441,7 +441,7 @@
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
                 <button type="reset" class="btn btn-default">Cancel</button>
-                <button type="submit" class="btn btn-primary" enctype="multipart/form-data">Add</button>
+                <button type="submit" class="btn btn-primary">Add</button>
             </div>
         </div>
 
