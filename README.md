@@ -94,6 +94,16 @@ In console go to in the directory where you have retrieved the ludobox-ui code a
 
     bower install
 
+# Launching the server
+
+To launch the server type in a console from de ludobox-ui directory:
+
+    python ludocore.py clean
+    python ludocore.py generate
+    python ludocore.py serve
+
+Push Ctrl+C in the terminal to terminate the server.
+
 # Licence
 
     Copyright (C) 2016  Pierre-Yves Martin for DCALK
