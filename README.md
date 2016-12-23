@@ -10,7 +10,13 @@ Install using ```setup.py```
 
     python setup.py install
 
-## How it works
+## Get started
+
+First, let's get our first game [Borgia](https://github.com/ludobox/borgia-le-jeu-malsain) which is our model for the Ludobox system.
+
+    mkdir data # create a data folder to store our game
+    cd data
+    git clone https://github.com/ludobox/borgia-le-jeu-malsain
 
 A python script ```ludobox``` will generate the following files : a list of all games + a folder containing info of each game.
 
