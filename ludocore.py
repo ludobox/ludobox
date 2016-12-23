@@ -988,6 +988,9 @@ def serve_index():
     """Serve the base url for the project."""
     return flask.redirect(flask.url_for("static", filename="index.html"))
 
+@app.route('/api/<path:path>')
+def serve_api(path):
+    return flask.send_from_directory('data', path)
 
 @app.route('/addgame', methods=["POST"])
 def serve_addgame():
