@@ -112,7 +112,7 @@ Hit Ctrl+C in the terminal to terminate the server.
 
 # Testing
 
-  python ludocore.py autotest
+    python ludocore.py autotest
 
 
 # Licence
