@@ -749,7 +749,7 @@ def generate_all(input_dir, output_dir, **kwargs):
     # We list all folders in "games" sorted alphabetically
     for path in sorted(os.listdir(input_dir)):
         data_path = os.path.join(input_dir, path)
-        if os.path.isdir(data_path):
+        if os.path.isdir(data_path) and os.path.basename(data_path) != "index":
             # Print the name of the game we are taking care of...
             print(os.path.basename(data_path))
 
