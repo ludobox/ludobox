@@ -102,7 +102,12 @@ To launch the server type in a console from de ludobox-ui directory:
     python ludocore.py generate
     python ludocore.py serve
 
-Push Ctrl+C in the terminal to terminate the server.
+Hit Ctrl+C in the terminal to terminate the server.
+
+# Testing
+
+  python ludocore.py autotest
+
 
 # Licence
 
