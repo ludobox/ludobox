@@ -1,5 +1,7 @@
 # Ludobox UI
 
+[![Documentation Status](https://readthedocs.org/projects/ludobox/badge/?version=latest)](http://ludobox.readthedocs.io/en/latest/?badge=latest)
+
 User Interface for the Ludobox project.
 
 Read the docs at [ludobox.readthedocs.io](http://ludobox.readthedocs.io/)
