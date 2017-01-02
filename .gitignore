@@ -33,6 +33,9 @@ ludobox-ui.sublime-project
 ludobox-ui.sublime-workspace
 
 
+# Docs specific stuff #######################################################
+site
+
 # Python related stuff #########################################################
 # Byte-compiled / optimized / DLL files
 *.py[cod]
