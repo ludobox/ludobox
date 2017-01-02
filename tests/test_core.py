@@ -28,7 +28,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 # The functions to test
-from ludocore import generate_all
+from ludobox.core import generate_all
 
 # For file name manipulations
 import os.path

@@ -942,11 +942,11 @@ def autotest(**kwargs):
         "--quiet",
         "--color=no",
         "--tb=line",
-        "ludocore_test.py"])
+        "tests/test_core.py"])
     if unit_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
         print("FAIL")
         print("     To have more details about the errors you should try "
-              "the command: py.test ludocore_test.py")
+              "the command: py.test tests/test_core.py")
     else:
         print("SUCCESS")
 
@@ -957,11 +957,11 @@ def autotest(**kwargs):
         "--quiet",
         "--color=no",
         "--tb=line",
-        "functional_test.py"])
+        "tests/test_generators.py"])
     if func_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
         print("FAIL")
         print("     To have more details about the errors you should try "
-              "the command: py.test functional_test.py")
+              "the command: py.test tests/test_generators.py")
     else:
         print("SUCCESS")
 
