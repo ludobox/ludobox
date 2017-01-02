@@ -4,7 +4,7 @@ pages:
     - Home: index.md
     - Installation: install.md
     - Get Started : get-started.md
-    - Using Ludobox : app.md
+    - Using Ludobox : using.md
     - For Developers: dev.md
     - About: about.md
     # - Contribute : contribute.md
