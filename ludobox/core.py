@@ -62,9 +62,6 @@ from slugify import slugify
 from werkzeug import secure_filename
 
 
-#
-from ludobox.cli import config_parser
-
 # flask is the minimal web server used to make the HTML pages available
 import flask
 app = flask.Flask("LUDOSERVER")  # web server instance used to defines routes
