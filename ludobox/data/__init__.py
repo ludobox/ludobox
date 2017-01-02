@@ -6,10 +6,10 @@ import json
 import requests
 
 from ludobox.config import read_config, read_games_list
-from ludobox.dat import update_with_dat
-from ludobox.crawler import update_from_web_server
+from ludobox.data.dat import update_with_dat
+from ludobox.data.crawler import update_from_web_server
 
-def update_data(config, update_index=False, update_games=False):
+def update_data_with_config(config, update_index=False, update_games=False):
 
     games_list = read_games_list()
     data_dir = config["data_dir"]
@@ -20,11 +20,11 @@ def update_data(config, update_index=False, update_games=False):
     elif config["update_mode"] == "web":
         update_from_web_server(games_list, config, update_index=update_index, update_games=update_index)
 
-if __name__ == "__main__":
+def update_data(**kwargs):
 
     # Read config
     config = read_config()
     print config
 
     # update data using appropriate config
-    update_data(config, update_index=True, update_games=True)
+    update_data_with_config(config, update_index=True, update_games=True)

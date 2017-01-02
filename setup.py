@@ -50,7 +50,7 @@ setup(
       keywords=["game", "public domain"],
       entry_points={
         'console_scripts': [
-            'ludobox = ludocore:main'
+            'ludobox = ludobox.main:main'
         ],
       },
       license='GPL',
