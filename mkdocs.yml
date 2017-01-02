@@ -1,0 +1,13 @@
+site_name: Ludobox Docs
+
+pages:
+    - Home: index.md
+    - Installation: install.md
+    - Get Started : get-started.md
+    - Using Ludobox : app.md
+    - For Developers: dev.md
+    - About: about.md
+    # - Contribute : contribute.md
+    # - About: about.md
+
+theme: readthedocs
