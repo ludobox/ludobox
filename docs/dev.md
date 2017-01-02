@@ -2,6 +2,9 @@
 
     ludobox autotest
 
+### Coverage
+
+    coverage  run --source ludobox -m ludobox.main generate
 
 ### Build the docs
 

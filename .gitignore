@@ -35,6 +35,9 @@ ludobox-ui.sublime-workspace
 
 # Docs specific stuff #######################################################
 site
+.coverage
+
+htmlcov
 
 # Python related stuff #########################################################
 # Byte-compiled / optimized / DLL files
