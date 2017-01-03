@@ -18,9 +18,7 @@ with open(os.path.join(os.getcwd(), "ludobox/model/schema.json")) as f :
 
 def validate_game_data(data):
     """Validate game data based on existing data VS a JSON Schema"""
-    print validate(data, schema)
-
-
+    return validate(data, schema)
 
 
 # TODO test this function with different scenari: existant/inexistant/not
@@ -73,6 +71,9 @@ def read_game_info(path):
                     game=os.path.basename(path),
                     json=e.filename)
         raise LudoboxError(message)
+
+    # validate data
+    validate_game_data(data)
 
     # TODO Add some attachment info
 
@@ -146,6 +147,10 @@ def write_game_info(data, attachments, data_dir):
     Error occured while writing game info file to path 'stupid/path/to/nowhere'. Data directory 'stupid/path/to/nowhere' does not exist or is not a directory.
 
     """
+
+    # validate game data
+    validate_game_data(data)
+
     # first we need the slugified name of the game
     try:
         slugified_name = slugify(data["title"]["fr"])

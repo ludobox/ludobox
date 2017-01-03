@@ -37,6 +37,12 @@ class TestLudoboxContent(unittest.TestCase):
         info = read_game_info(self.game_path)
         write_game_info(info, None ,'/tmp')
 
+        # make sure error is raised with a basic mistake
+        info_wrong = info.copy()
+        info_wrong["type"] = 72
+        self.assertRaises(ValidationError, lambda:write_game_info(info_wrong, None ,'/tmp'))
+
+
     def test_build_index(self):
         """Should build an index containing all data in this field"""
 
