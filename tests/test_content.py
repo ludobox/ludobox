@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
 import unittest
 import shutil
 
@@ -15,6 +16,7 @@ class TestLudoboxContent(unittest.TestCase):
     def setUp(self):
         self.config = read_config()
         self.game_path = os.path.join(os.getcwd(), 'tests/test-data/test-game')
+        self.wrong_game_path = os.path.join(os.getcwd(), 'tests/test-data/wrong-game')
 
     def test_validate_game_data(self):
         """Make sure an info file is parsed properly"""
@@ -28,7 +30,21 @@ class TestLudoboxContent(unittest.TestCase):
 
     def test_read_game_info(self):
         """Make sure an info file is read properly"""
+
         info = read_game_info(self.game_path)
+        with open(os.path.join(self.game_path, 'info.json'), 'r') as f:
+            json_data = json.load(f)
+
+        json_data["slug"] = "2" # add slug
+
+        self.assertEquals(len(info.keys()), len(json_data.keys()) )
+        self.assertEquals(sorted(info.keys()), sorted(json_data.keys()))
+
+        # wrong game raises error
+        self.assertRaises(ValidationError, lambda:read_game_info(self.wrong_game_path))
+
+
+
 
     def test_write_game_info_without_attachements(self):
         """Make sure an info file is written properly"""

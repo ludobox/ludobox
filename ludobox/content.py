@@ -299,8 +299,7 @@ def build_index():
             info_file = os.path.join(path, "info.json")
             # check if folder contains a info.json file
             if os.path.exists(info_file):
-                with open(info_file, "r") as f:
-                    info = json.load(f)
+                info = read_game_info(path)
                 info_files.append(info)
 
     # TODO : filter infos to make the index file smaller
