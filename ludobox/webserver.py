@@ -37,7 +37,7 @@ def serve_index():
 def serve_api(path):
     return flask.send_from_directory('data', path)
 
-@app.route('/api/handshake')
+@app.route('/api')
 def show_hand():
     return flask.jsonify( name= config["ludobox_name"] )
 

@@ -13,7 +13,10 @@ config = read_config()
 
 def build_url(dest):
     """A simple URL parser"""
-    return config["web_server_url"] + "/api/" + dest
+    if dest is None :
+        return config["web_server_url"] + "/api"
+    else :
+        return config["web_server_url"] + "/api/" + dest
 
 def get_data_from_api(dest):
     url = build_url(dest)
@@ -23,9 +26,9 @@ def get_data_from_api(dest):
             return r.json()
     # TODO : handle API errors / etc
 
-def handshake(url) :
+def handshake() :
     """Shake hands with a remote server and get its name"""
-    return get_data_from_api("handshake")
+    return get_data_from_api(None)
 
 def download_index():
     """Shake hands with a remote server and get its name"""

@@ -49,7 +49,9 @@ class TestLudoboxContent(unittest.TestCase):
     def test_write_game_info_without_attachements(self):
         """Make sure an info file is written properly"""
         # delete existing to prevent error
-        shutil.rmtree("/tmp/borgia-le-jeu-malsain")
+        tmp_path = "/tmp/borgia-le-jeu-malsain"
+        if os.path.exists(tmp_path):
+            shutil.rmtree(tmp_path)
         info = read_game_info(self.game_path)
         write_game_info(info, None ,'/tmp')
 
