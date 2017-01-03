@@ -70,8 +70,6 @@ ADD_TEMPLATE = "add.html"  # template for page to create new game
 ABOUT_TEMPLATE = "about.html"  # template for the about page
 
 
-
-
 # TODO replace this by a call to automatic template renderer func
 def _render_template(tpl_name, data={}, games=[]):
     """

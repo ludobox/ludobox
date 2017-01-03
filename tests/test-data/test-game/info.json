@@ -1,3 +1,53 @@
 {
-  "name" : "Test Game"
+  "publishers": [
+    "Les Chiens de l'Enfer"
+  ],
+  "genres": {
+    "fr": [
+      "social",
+      "stratégie"
+    ]
+  },
+  "requirements": {
+    "fr": [
+      "imprimante"
+    ]
+  },
+  "description": {
+    "fr": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia."
+  },
+  "license": "CC BY-NC-SA 4.0",
+  "title": {
+    "fr": "Borgia, le jeu malsain"
+  },
+  "type": "game",
+  "audience": [
+    "adults"
+  ],
+  "publication_year": 2012,
+  "languages": [
+    "fr"
+  ],
+  "themes": {
+    "fr": [
+      "Médiéval",
+      "Salopard",
+      "Religion"
+    ]
+  },
+  "players_min": 3,
+  "source": "http://leschiensdelenfer.org/editions-chiens-de-lenfer/borgia-le-jeu-malsain/",
+  "authors": [
+    "Julien Maudet",
+    "Mary Christides"
+  ],
+  "duration": 60,
+  "fab_time": 120,
+  "ISBN": [],
+  "illustrators": [
+    "Aurélien Biard",
+    "Mary Christides"
+  ],
+  "timestamp_add": "10/10/2015 14:52:35",
+  "players_max": 6
 }
