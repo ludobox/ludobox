@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 import os
 import yaml
 from slugify import slugify
 
+from ludobox.utils import validate_url
+
 # defaults
 GAMES_LIST_FILE =os.path.join(os.getcwd(),"games.yml")
 
-def read_config():
+def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     """Validate and apply settings as defined in config file"""
 
     # default
@@ -17,19 +20,24 @@ def read_config():
     web_server_url = "http://localhost:8080"
 
     # Read the YAML config file
-    config_path = os.path.join(os.getcwd(),"config.yml")
     with open(config_path, "r") as config_file:
         config = yaml.load(config_file)
         print "Config loaded from %s."%config_path
 
-    # TODO: validate config items and check for unknown params
+    # parse port
+    try :
+        port = config["port"]
+    except KeyError:
+        port = 8080 # default value
+
+    # parse name
+    try :
+        ludobox_name = config["ludobox_name"]
+    except KeyError:
+        ludobox_name = "My LudoBox" # default value
+
     if "data_dir" in config.keys() :
         data_dir = config["data_dir"]
-
-    # make data dir
-    if not os.path.exists(data_dir):
-        os.makedirs(data_dir)
-    print "Data will be stored at : %s"%data_dir
 
     if "update_mode" in config.keys() :
         update_mode = config["update_mode"]
@@ -40,13 +48,36 @@ def read_config():
     index_dir = os.path.join(data_dir, 'index')
     index_path = os.path.join(index_dir, 'index.json')
 
-    return {
-        "data_dir" : data_dir,
-        "update_mode" : update_mode,
-        "web_server_url" : web_server_url,
-        "index_dir" : index_dir,
-        "index_path" : index_path
-    }
+    return validate_config(
+        {
+            "data_dir" : data_dir,
+            "update_mode" : update_mode,
+            "web_server_url" : web_server_url,
+            "index_dir" : index_dir,
+            "index_path" : index_path,
+            "port" : port,
+            "ludobox_name" : ludobox_name
+        }
+    )
+
+def validate_config(config):
+    """Validate config items and check for unknown value or params"""
+
+    assert type(config["port"]) is int
+    assert type(config["ludobox_name"]) is str
+    assert validate_url(config["web_server_url"]) is True
+
+    # validate data dir
+    if not os.path.exists(config["data_dir"]):
+        raise ValueError("The path '%s' does not exist. Please create it before starting your Ludobox."%config["data_dir"])
+    print "Data will be stored at : %s"%config["data_dir"]
+
+    # assert update modes
+    assert config["update_mode"] in ["web", "dat"]
+    if config["update_mode"] == "web" :
+        assert validate_url(config["web_server_url"]) is True
+
+    return config
 
 def read_games_list():
     """Read the YAML list of games"""
