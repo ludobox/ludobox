@@ -8,5 +8,5 @@ install:
 # command to run tests
 script:
   - "ludobox serve &" # lauch a ludobox server in the background
-  - "ludobox autotest"
+  - "py.test tests"
   - "killall ludobox" # kill all processes at the end
