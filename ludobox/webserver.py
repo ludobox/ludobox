@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import flask
+from ludobox.config import read_config
+
+
+# parse config
+config = read_config()
+
 app = flask.Flask("LUDOSERVER")  # web server instance used to defines routes
 
 def serve(debug, **kwargs):
@@ -18,7 +24,8 @@ def serve(debug, **kwargs):
     :func:`vars`.
     See `Namespace object<https://docs.python.org/2/library/argparse.html#the-namespace-object>`_
     """
-    app.run(host='0.0.0.0', port=8080, debug=debug)
+
+    app.run(host='0.0.0.0', port=config["port"], debug=debug)
 
 
 @app.route('/')
@@ -29,6 +36,10 @@ def serve_index():
 @app.route('/api/<path:path>')
 def serve_api(path):
     return flask.send_from_directory('data', path)
+
+@app.route('/api/handshake')
+def show_hand():
+    return flask.jsonify( name= config["ludobox_name"] )
 
 @app.route('/addgame', methods=["POST"])
 def serve_addgame():

@@ -2,6 +2,7 @@
 # Input directory for the ludobox
 /data/*
 !/data/README.md
+*.log
 
 # Generated files and directories
 /static/add/

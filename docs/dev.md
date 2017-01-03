@@ -4,7 +4,7 @@
 
 ### Coverage
 
-    coverage  run --source ludobox -m ludobox.main generate
+    coverage  run --source ludobox -m ludobox.main autotest
 
 ### Build the docs
 
