@@ -45,17 +45,8 @@ from datetime import datetime
 # To get it: sudo pip install Jinja2
 import jinja2
 
-
-# secure_filename is used to sanitarize the file names provided by the user.
-# All submitted form data can be forged, and filenames can be dangerous.
-# “never trust user input” must be our MOTD
-# More here: http://flask.pocoo.org/docs/0.10/patterns/fileuploads/
-from werkzeug import secure_filename
-
-# flask is the minimal web server used to make the HTML pages available
-import flask
-
 from ludobox.content import read_game_info
+from ludobox.errors import LudoboxError
 
 # read config file
 from ludobox.config import read_config
@@ -79,22 +70,9 @@ ADD_TEMPLATE = "add.html"  # template for page to create new game
 ABOUT_TEMPLATE = "about.html"  # template for the about page
 
 
-# TODO improve this exception by always providing an advice to solve the
-#   problem
-# TODO improve this excetion by always providing a context ???
-class LudoboxError(Exception):
-    """Base class for all the custom exceptions of the module."""
-
-    def __init__(self, message):
-        """Set the message for the exception."""
-        # without this you may get DeprecationWarning
-        self.message = message
-
-        # Call the base class constructor with the parameters it needs
-        super(LudoboxError, self).__init__(message)
 
 
-# TODO replace this by a call to Flask automatic template renderer func
+# TODO replace this by a call to automatic template renderer func
 def _render_template(tpl_name, data={}, games=[]):
     """
     Encapsulate the rendering of a Jinja2 template.
@@ -609,9 +587,11 @@ def clean(output_dir, **kwargs):
     print("Remove all precompiled python files (*.pyc): ", end='')
     for f in glob.glob("*.pyc"):
         os.remove(f)
-    for f in glob.glob("test/*.pyc"):
+    for f in glob.glob("tests/*.pyc"):
         os.remove(f)
-    for f in glob.glob("test/functional/*.pyc"):
+    for f in glob.glob("ludobox/*.pyc"):
+        os.remove(f)
+    for f in glob.glob("ludobox/data/*.pyc"):
         os.remove(f)
     print("SUCCESS")
 

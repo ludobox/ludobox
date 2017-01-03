@@ -4,11 +4,10 @@
 import os
 import json
 
-# slugify is used to generate clean HTML/URL compliant strings from any unicode
-# string while keeping readability. We use it here to generate clean file name
-# for all generated files.
-# To get it: sudo pip install python-slugify
+from werkzeug import secure_filename
 from slugify import slugify
+
+from ludobox.errors import LudoboxError
 
 from ludobox.config import read_config
 config = read_config()
