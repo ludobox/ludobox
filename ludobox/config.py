@@ -18,6 +18,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     data_dir = os.path.join(os.getcwd(),"data")
     update_mode = "web"
     web_server_url = "http://localhost:8080"
+    upload_allowed = True
 
     # Read the YAML config file
     with open(config_path, "r") as config_file:
@@ -35,6 +36,9 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
         ludobox_name = config["ludobox_name"]
     except KeyError:
         ludobox_name = "My LudoBox" # default value
+
+    if "upload_allowed" in config.keys() :
+        upload_allowed = config["upload_allowed"]
 
     if "data_dir" in config.keys() :
         data_dir = os.path.abspath(config["data_dir"])
@@ -54,7 +58,8 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
             "web_server_url" : web_server_url,
             "index_path" : index_path,
             "port" : port,
-            "ludobox_name" : ludobox_name
+            "ludobox_name" : ludobox_name,
+            "upload_allowed" : upload_allowed
         }
     )
 
@@ -64,6 +69,8 @@ def validate_config(config):
     assert type(config["port"]) is int
     assert type(config["ludobox_name"]) is str
     assert validate_url(config["web_server_url"]) is True
+
+    assert type(config["upload_allowed"]) is bool
 
     # validate data dir
     if not os.path.exists(config["data_dir"]):

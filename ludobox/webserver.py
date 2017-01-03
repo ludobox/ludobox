@@ -3,7 +3,7 @@
 
 import flask
 from ludobox.config import read_config
-
+from ludobox.content import write_game_info
 
 # parse config
 config = read_config()
@@ -44,6 +44,10 @@ def show_hand():
 @app.route('/addgame', methods=["POST"])
 def serve_addgame():
     """Process the uploads of new games."""
+
+    if config["upload_allowed"] is False:
+        return flask.redirect(flask.url_for("static", filename="index.html"))
+
     # An empty dictionnary to store all the data from the form
     data = {
         "type": "game",

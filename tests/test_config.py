@@ -21,7 +21,8 @@ class TestLudoboxConfig(unittest.TestCase):
             "port" : 8080,
             "data_dir" : data_dir,
             "index_path" :index_path,
-            "ludobox_name" : "My LudoBox"
+            "ludobox_name" : "My LudoBox",
+            "upload_allowed" : True
         }
 
     def test_read_config_default(self):

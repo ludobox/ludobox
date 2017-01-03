@@ -10,3 +10,6 @@ web_server_url : http://localhost:8080 # if you have chosen 'web', this is where
 
 # Directory to store all downloaded data -- default to ./data
 # data_dir : /home/$USER/ludobox/data
+
+# enable/disable creation of new games on the box
+upload_allowed : true
