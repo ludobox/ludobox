@@ -4,7 +4,8 @@
 import os
 import argparse
 
-from ludobox.core import generate_all, clean, autotest
+from ludobox.core import generate_all, clean
+from ludobox.testing import autotest
 from ludobox.webserver import serve
 from ludobox.data import update_data
 
