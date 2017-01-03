@@ -62,5 +62,6 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
       ],
-      install_requires=required
+      install_requires=required,
+      test_suite='tests'
       )
