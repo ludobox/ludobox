@@ -37,7 +37,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
         ludobox_name = "My LudoBox" # default value
 
     if "data_dir" in config.keys() :
-        data_dir = config["data_dir"]
+        data_dir = os.path.abspath(config["data_dir"])
 
     if "update_mode" in config.keys() :
         update_mode = config["update_mode"]
