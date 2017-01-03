@@ -1,0 +1,246 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "default": "game",
+      "id": "type"
+    },
+    "genres": {
+      "type": "object",
+      "properties": {
+        "fr": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "default": "stratégie"
+          },
+          "id": "fr"
+        }
+      },
+      "id": "genres",
+      "required": [
+        "fr"
+      ]
+    },
+    "title": {
+      "type": "object",
+      "properties": {
+        "fr": {
+          "type": "string",
+          "minLength": 1,
+          "default": "Borgia, le jeu malsain",
+          "id": "fr"
+        }
+      },
+      "id": "title",
+      "required": [
+        "fr"
+      ]
+    },
+    "description": {
+      "type": "object",
+      "properties": {
+        "fr": {
+          "type": "string",
+          "minLength": 1,
+          "default": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia.",
+          "id": "fr"
+        }
+      },
+      "id": "description",
+      "required": [
+        "fr"
+      ]
+    },
+    "themes": {
+      "type": "object",
+      "properties": {
+        "fr": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "default": "Religion"
+          },
+          "id": "fr"
+        }
+      },
+      "id": "themes",
+      "required": [
+        "fr"
+      ]
+    },
+    "publishers": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "Les Chiens de l'Enfer"
+      },
+      "id": "publishers"
+    },
+    "publication_year": {
+      "type": "integer",
+      "multipleOf": 1,
+      "maximum": 10000,
+      "minimum": 1,
+      "exclusiveMaximum": false,
+      "exclusiveMinimum": false,
+      "default": 2012,
+      "id": "publication_year"
+    },
+    "authors": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "Mary Christides"
+      },
+      "id": "authors"
+    },
+    "illustrators": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "Mary Christides"
+      },
+      "id": "illustrators"
+    },
+    "duration": {
+      "type": "integer",
+      "multipleOf": 1,
+      "maximum": 10000,
+      "minimum": 1,
+      "exclusiveMaximum": false,
+      "exclusiveMinimum": false,
+      "default": 60,
+      "id": "duration"
+    },
+    "audience": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "adults"
+      },
+      "id": "audience"
+    },
+    "players_min": {
+      "type": "integer",
+      "multipleOf": 1,
+      "maximum": 10000,
+      "minimum": 1,
+      "exclusiveMaximum": false,
+      "exclusiveMinimum": false,
+      "default": 3,
+      "id": "players_min"
+    },
+    "players_max": {
+      "type": "integer",
+      "multipleOf": 1,
+      "maximum": 10000,
+      "minimum": 1,
+      "exclusiveMaximum": false,
+      "exclusiveMinimum": false,
+      "default": 6,
+      "id": "players_max"
+    },
+    "fab_time": {
+      "type": "integer",
+      "multipleOf": 1,
+      "maximum": 10000,
+      "minimum": 1,
+      "exclusiveMaximum": false,
+      "exclusiveMinimum": false,
+      "default": 120,
+      "id": "fab_time"
+    },
+    "requirements": {
+      "type": "object",
+      "properties": {
+        "fr": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "default": "imprimante"
+          },
+          "id": "fr"
+        }
+      },
+      "id": "requirements",
+      "required": [
+        "fr"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "default": "http://leschiensdelenfer.org/editions-chiens-de-lenfer/borgia-le-jeu-malsain/",
+      "id": "source"
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "default": "CC BY-NC-SA 4.0",
+      "id": "license"
+    },
+    "languages": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "fr"
+      },
+      "id": "languages"
+    },
+    "ISBN": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {},
+      "id": "ISBN"
+    },
+    "timestamp_add": {
+      "type": "string",
+      "minLength": 1,
+      "default": "10/10/2015 14:52:35",
+      "id": "timestamp_add"
+    }
+  },
+  "id": "/",
+  "required": [
+    "type",
+    "genres",
+    "title",
+    "description",
+    "themes",
+    "publishers",
+    "publication_year",
+    "authors",
+    "illustrators",
+    "duration",
+    "audience",
+    "players_min",
+    "players_max",
+    "fab_time",
+    "requirements",
+    "source",
+    "license",
+    "languages",
+    "ISBN",
+    "timestamp_add"
+  ]
+}

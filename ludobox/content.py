@@ -6,11 +6,22 @@ import json
 
 from werkzeug import secure_filename
 from slugify import slugify
+from jsonschema import validate
 
 from ludobox.errors import LudoboxError
 
 from ludobox.config import read_config
 config = read_config()
+
+with open(os.path.join(os.getcwd(), "ludobox/model/schema.json")) as f :
+    schema = json.load(f)
+
+def validate_game_data(data):
+    """Validate game data based on existing data VS a JSON Schema"""
+    print validate(data, schema)
+
+
+
 
 # TODO test this function with different scenari: existant/inexistant/not
 #   readable dir, info.json present/absent/not readable, with/without attached
