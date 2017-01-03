@@ -27,6 +27,9 @@ def handshake(url) :
     """Shake hands with a remote server and get its name"""
     return get_data_from_api("handshake")
 
+# def download_index():
+#     """Shake hands with a remote server and get its name"""
+
 def download_from_server(url, data_dir, dir) :
     """Download a rep from a ludobox server into data dir"""
     if dir == "index" :

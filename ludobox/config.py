@@ -45,15 +45,13 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     if update_mode == "web" and "web_server_url" in config.keys():
         web_server_url = config["web_server_url"]
 
-    index_dir = os.path.join(data_dir, 'index')
-    index_path = os.path.join(index_dir, 'index.json')
+    index_path = os.path.join(data_dir, 'index.json')
 
     return validate_config(
         {
             "data_dir" : data_dir,
             "update_mode" : update_mode,
             "web_server_url" : web_server_url,
-            "index_dir" : index_dir,
             "index_path" : index_path,
             "port" : port,
             "ludobox_name" : ludobox_name

@@ -13,15 +13,13 @@ class TestLudoboxConfig(unittest.TestCase):
         """Init the tests"""
 
         data_dir = os.path.join(os.getcwd(),"data")
-        index_dir = os.path.join(data_dir, 'index')
-        index_path = os.path.join(index_dir, 'index.json')
+        index_path = os.path.join(data_dir, 'index.json')
 
         self.default_values = {
             "update_mode" : "web",
             "web_server_url" : "http://localhost:8080",
             "port" : 8080,
             "data_dir" : data_dir,
-            "index_dir" :index_dir,
             "index_path" :index_path,
             "ludobox_name" : "My LudoBox"
         }
@@ -47,10 +45,8 @@ class TestLudoboxConfig(unittest.TestCase):
 
         # tests file and dir paths
         data_dir = "./tests"
-        index_dir = os.path.join(data_dir, 'index')
-        index_path = os.path.join(index_dir, 'index.json')
+        index_path = os.path.join(data_dir, 'index.json')
         self.assertEquals(config["data_dir"], data_dir)
-        self.assertEquals(config["index_dir"], index_dir)
         self.assertEquals(config["index_path"], index_path)
 
     def test_read_config_wrong_values(self):
