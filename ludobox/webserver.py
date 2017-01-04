@@ -5,10 +5,9 @@ import json
 from flask import Flask, jsonify, redirect, send_from_directory, request, url_for
 
 from ludobox.config import read_config
-from ludobox.content import write_game
-from ludobox.content import validate_game_data
-
+from ludobox.content import write_game, validate_game_data
 from ludobox.errors import LudoboxError
+from ludobox.core import generate_all, OUTPUT_DIR
 
 # parse config
 config = read_config()
@@ -86,93 +85,28 @@ def create_resource():
     return jsonify({"path" : data_path}), 201
 
 
-# @app.route('/addgame', methods=["POST"])
-# def serve_addgame():
-#     """Process the uploads of new games."""
-#
-#     if app.config["UPLOAD_ALLOWED"] is False:
-#         return redirect(url_for("static", filename="index.html"))
-#
+@app.route('/addgame', methods=["POST"])
+def serve_addgame():
+    """Process the uploads of new games."""
 
-    # # An empty dictionnary to store all the data from the form
-    # data = {
-    #     "type": "game",
-    #     "genres": {"fr": []},
-    #     "title": {"fr": ""},
-    #     "description": {"fr": ""},
-    #     "themes": {"fr": []},
-    #     "publishers": [],
-    #     "publication_year": "",
-    #     "authors": [],
-    #     "illustrators": [],
-    #     "duration": "",
-    #     "audience": [],
-    #     "players_min": 0,
-    #     "players_max": 0,
-    #     "fab_time": 0,
-    #     "requirements": {"fr": []},
-    #     "source": "",
-    #     "license": "",
-    #     "languages": [],
-    #     "ISBN": [],
-    #     "timestamp_add": ""
-    # }
-    #
-    # # retrieving all the datas
-    # data['type'] = request.form['type']
-    # data['genres']['fr'] = \
-    #     [g.strip() for g in request.form['genres'].split(',')]
-    # data['title']['fr'] = request.form['title']
-    # data['description']['fr'] = request.form['description'].strip()
-    # data['themes']['fr'] = \
-    #     [t.strip() for t in request.form['themes'].split(',')]
-    # data['publishers'] = \
-    #     [p.strip() for p in request.form['publishers'].split(',')]
-    # data['publication_year'] = int(request.form['publication_year'])
-    # data['authors'] = \
-    #     [a.strip() for a in request.form['authors'].split(',')]
-    # data['illustrators'] = \
-    #     [i.strip() for i in request.form['illustrators'].split(',')]
-    # data['duration'] = int(request.form['duration'])
-    # if 'gameAudience_children' in request.form:
-    #     data['audience'].append('children')
-    # if 'gameAudience_teens' in request.form:
-    #     data['audience'].append('teens')
-    # if 'gameAudience_adults' in request.form:
-    #     data['audience'].append('adults')
-    # data['players_min'] = int(request.form['players_min'])
-    # data['players_max'] = int(request.form['players_max'])
-    # data['fab_time'] = int(request.form['fab_time'])
-    # data['requirements']['fr'] = \
-    #     [r.strip() for r in request.form['requirements'].split(',')]
-    # data['source'] = request.form['source']
-    # data['license'] = request.form['license']
-    # data['languages'] = \
-    #     [l.strip() for l in request.form['languages'].split(',')]
-    # data['ISBN'] = \
-    #     [isbn.strip() for isbn in request.form['ISBN'].split(',')]
-    # data['timestamp_add'] = datetime.now().isoformat()
-    #
-    # # We get all the files uploaded
-    # files = request.files.getlist('files')
-    # print("UPLOADED FILES:", [f.filename for f in files])
-    #
-    # # Save the game description as pure JSON file
-    # try:
-    #     # TODO split this in 2 funcs "write json" and "write attachements"
-    #     data_path = write_game_info(data, files, INPUT_DIR)
-    # except LudoboxError as e:
-    #     # TODO replace this dummy return by a true page showing the failed add
-    #     return redirect(url_for("static", filename="index.html"))
-    #
-    # # Generate the HTML pages !
-    # if not clean(OUTPUT_DIR):
-    #     # TODO replace this dummy return by a true page showing the failed gen
-    #     return redirect(url_for("static", filename="index.html"))
-    #
-    # if not generate_all(INPUT_DIR, OUTPUT_DIR):
-    #     # TODO replace this dummy return by a true page showing the failed gen
-    #     return redirect(url_for("static", filename="index.html"))
-    #
-    # # TODO replace this dummy return by a true page showing the successful add
-    # return redirect(url_for("static", filename="index.html"))
+    if app.config["UPLOAD_ALLOWED"] is False:
+        return redirect(url_for("static", filename="index.html"))
+
+    # get and parse content
+    info = json.loads(request.form["info"])
+    files = request.files.getlist('files')
+
+    try:
+        # TODO split this in 2 funcs "write json" and "write attachements"
+        data_path = write_game(info, files, app.config["DATA_DIR"])
+    except LudoboxError as e:
+        # TODO replace this dummy return by a true page showing the failed add
+        return redirect(url_for("static", filename="index.html"))
+
+    # Generate the HTML pages !
+    if not generate_all(app.config["DATA_DIR"], OUTPUT_DIR):
+        # TODO replace this dummy return by a true page showing the failed gen
+        return redirect(url_for("static", filename="index.html"))
+
+    # TODO replace this dummy return by a true page showing the successful add
+    return redirect(url_for("static", filename="index.html"))

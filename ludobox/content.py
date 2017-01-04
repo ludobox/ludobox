@@ -92,7 +92,7 @@ def get_resource_slug(data):
         message = "KeyError occured while "\
                   "writing game info file to path '{path}'. "\
                   "Impossible to access data['title']['fr'].".format(
-                    path=data_dir)
+                    path=data)
         raise LudoboxError(message)
 
 def write_game(info, attachments, data_dir):
