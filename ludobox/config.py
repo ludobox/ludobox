@@ -23,7 +23,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     # Read the YAML config file
     with open(config_path, "r") as config_file:
         config = yaml.load(config_file)
-        print "Config loaded from %s."%config_path
+        # print "Config loaded from %s."%config_path
 
     # parse port
     try :
@@ -75,7 +75,7 @@ def validate_config(config):
     # validate data dir
     if not os.path.exists(config["data_dir"]):
         raise ValueError("The path '%s' does not exist. Please create it before starting your Ludobox."%config["data_dir"])
-    print "Data will be stored at : %s"%config["data_dir"]
+    # print "Data will be stored at : %s"%config["data_dir"]
 
     # assert update modes
     assert config["update_mode"] in ["web", "dat"]

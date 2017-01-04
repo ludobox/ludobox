@@ -3,6 +3,7 @@
 
 import os
 import json
+import shutil
 
 from werkzeug import secure_filename
 from slugify import slugify
@@ -19,7 +20,6 @@ with open(os.path.join(os.getcwd(), "ludobox/model/schema.json")) as f :
 def validate_game_data(data):
     """Validate game data based on existing data VS a JSON Schema"""
     return validate(data, schema)
-
 
 # TODO test this function with different scenari: existant/inexistant/not
 #   readable dir, info.json present/absent/not readable, with/without attached
@@ -82,13 +82,26 @@ def read_game_info(path):
 
     return data
 
-def write_game_info(data, attachments, data_dir):
+def get_resource_slug(data):
+    """Get the slugified name of the game based on the data set"""
+    try:
+        # TODO: support for any language !
+        return slugify(data["title"]["fr"])
+    except KeyError as e:
+        # TODO more explicit error message
+        message = "KeyError occured while "\
+                  "writing game info file to path '{path}'. "\
+                  "Impossible to access data['title']['fr'].".format(
+                    path=data_dir)
+        raise LudoboxError(message)
+
+def write_game(info, attachments, data_dir):
     """
     Write a JSON file description of a game according to the provided data and
     attachment files in a dedicated directory named after the game.
 
     Arguments:
-    data -- a dictionnary storing all the information about the game. It
+    info -- a dictionnary storing all the information about the game. It
             exactly mimic the structure of the disired JSON file. The
             data["title"]["fr"] must exist, no other verification is made to
             check it contains coherent structure or data.
@@ -105,183 +118,122 @@ def write_game_info(data, attachments, data_dir):
     the :func:`write_game_info()` and :func:`read_game_info()` function should
     work nicely together. Any file writen with the first should be readable by
     the second:
-
-    >>> game_name = "gametest"  # a title with no slugification problem
-    >>> data = {
-    ...     "type": game_name,
-    ...     "genres": {"fr": ["genre 1", "genre 2"]},
-    ...     "title": {"fr": "gametest"},
-    ...     "description": {"fr": "A very long description"},
-    ...     "themes": {"fr": ["theme 1", "theme 2"]},
-    ...     "publishers": ["publisher 1", "publisher 2"],
-    ...     "publication_year": "1979",
-    ...     "authors": ["author 1", "author 2"],
-    ...     "illustrators": ["illustrator 1", "illustrator 2"],
-    ...     "duration": "120",
-    ...     "audience": ["teen", "adults"],
-    ...     "players_min": 1,
-    ...     "players_max": 10,
-    ...     "fab_time": 30,
-    ...     "requirements": {"fr": ["printer", "3d printer", "dice"]},
-    ...     "source": "http://www.thegame.org/game1",
-    ...     "license": "CC0",
-    ...     "languages": ["en", "fr", "br"],
-    ...     "ISBN": ["1234567890123", "1234567890"],
-    ...     "timestamp_add": "10/10/2015 14:52:35"
-    ... }
-    >>> import tempfile
-    >>> data_dir = tempfile.mkdtemp()  # The data directory must exist
-    >>> game_dir = write_game_info(data, [],data_dir)
-    >>> data2 = read_game_info(game_dir)
-    >>> print(data2["title"]["fr"])
-    gametest
-
-    If anythin goes wrong raise a LudoboxError containing description of the
-    error and advice for fixing it.
-
-    >>> data = {"title": {"fr": "gametest"}}
-    >>> try:
-    ...     write_game_info(data, [], "stupid/path/to/nowhere")
-    ... except LudoboxError as e:
-    ...     print(e.message)
-    Error occured while writing game info file to path 'stupid/path/to/nowhere'. Data directory 'stupid/path/to/nowhere' does not exist or is not a directory.
-
     """
 
-    # validate game data
-    validate_game_data(data)
+    slugified_name = get_resource_slug(info)
 
-    # first we need the slugified name of the game
-    try:
-        slugified_name = slugify(data["title"]["fr"])
-    except KeyError as e:
-        # TODO Handle more precisely the error and provide an advice for
-        #   solving the problem
-        # Create a very explicit message to explain the problem
-        message = "KeyError occured while "\
-                  "writing game info file to path '{path}'. "\
-                  "Impossible to access data['title']['fr'].".format(
-                    path=data_dir)
-        raise LudoboxError(message)
-
-    # Check if the data directory exists
-    if not os.path.exists(data_dir) or not os.path.isdir(data_dir):
-        # TODO Handle more precisely the error and provide an advice for
-        #   solving the problem
-        # Create a very explicit message to explain the problem
-        message = "Error occured while "\
-                  "writing game info file to path '{path}'. "\
-                  "Data directory '{data_dir}' does not "\
-                  "exist or is not a directory.".format(
-                    path=data_dir,
-                    data_dir=data_dir)
-        raise LudoboxError(message)
-
-    # Create a directory afte the cleaned name of the game
+    # Create a directory after the cleaned name of the game
     game_path = os.path.join(data_dir, slugified_name)
     try:
         os.makedirs(game_path)
     except Exception as e:
-        # TODO Handle more precisely the error and provide an advice for
-        #   solving the problem
-        # Create a very explicit message to explain the problem
         message = "<{error}> occured while "\
                   "writing game info file to path '{path}' for "\
                   "game '{game}'. Impossible to create "\
-                  "directory '{game_path}' to store JSON file.".format(
+                  "directory '{game_path}'.".format(
                     error=e.strerror,
                     path=data_dir,
                     game=slugified_name,
                     game_path=os.path.abspath(game_path))
         raise LudoboxError(message)
 
-    # Convert the data to JSON
-    try:
-        content = json.dumps(data, sort_keys=True, indent=4)
-    except IOError as e:
-        # Cleanup anything previously created
-        # TODO use clean(game=game_name)
-        shutil.rmtree(game_path, ignore_errors=True)
-        # TODO Handle more precisely the error and provide an advice for
-        #   solving the problem
-        # Create a very explicit message to explain the problem
-        message = "<{error}> occured while "\
-                  "writing game info file to path '{path}' for "\
-                  "game '{game}'. Impossible to create JSON representation "\
-                  "of the provided data.".format(
-                    error=e.strerror,
-                    path=data_dir,
-                    game=slugified_name)
-        raise LudoboxError(message)
+    # create JSON resource
+    write_info_json(info, game_path)
 
-    # Write the JSON file itself
+    # Write the attached files
+    if attachments:
+        write_attachments(attachments, game_path)
+
+    return game_path
+
+def clean_game(game_path):
+    """Delete an existing rep containing data of a game"""
+    if os.path.exists(game_path):
+        shutil.rmtree(game_path, ignore_errors=True)
+
+def write_info_json(info, game_path):
+    """Write a JSON file based on valid resource data"""
+
+    # validate game data
+    validate_game_data(info)
+
+    # Convert the data to JSON into file
+    content = json.dumps(info, sort_keys=True, indent=4)
     json_path = os.path.join(game_path, "info.json")
+
     try:
         with open(json_path, "w") as json_file:
             json_file.write(content.encode('utf-8'))
     except IOError as e:
         # Cleanup anything previously created
-        # TODO use clean(game=game_name)
-        shutil.rmtree(game_path, ignore_errors=True)
-        # TODO Handle more precisely the error and provide an advice for
-        #   solving the problem
-        # Create a very explicit message to explain the problem
+        clean_game(game_path)
+
+        # TODO Handle more explicit message
         message = "<{error}> occured while "\
-                  "writing game info file to path '{path}' for "\
-                  "game '{game}'. "\
+                  "writing game info file to path '{path}'"\
                   "Impossible to write JSON file '{json}'.".format(
                     error=e.strerror,
-                    path=data_dir,
-                    game=slugified_name,
+                    path=game_path,
                     json=json_path)
         raise LudoboxError(message)
 
-    # Write the attached files
-    # TODO write actual code here
-    # TODO add some tests for this code
-    if attachments:
-        # Create a directory to store the uploaded files
-        attachments_path = os.path.join(game_path, "files")
+
+ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip"]
+
+def allowed_file(filename):
+    """Check for valid file extensions"""
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def write_attachments(attachments, game_path):
+    """Write all files contains in attachements into game directory"""
+
+    # Create a directory to store the uploaded files
+    attachments_path = os.path.join(game_path, "files")
+    try:
+        os.makedirs(attachments_path)
+    except Exception as e:
+        message = "<{error}> occured while "\
+                  "writing game info to path '{path}' for "\
+                  "game '{game}'. Impossible to create "\
+                  "directory '{attachments_path}' to store the attached "\
+                  "files.".format(
+                    error=e.strerror,
+                    path=data_dir,
+                    attachments_path=os.path.abspath(attachments_path))
+        raise LudoboxError(message)
+
+    # Write all the files
+    for f in attachments:
+        file_clean_name = secure_filename(f.filename)
+
+        # check if extension is allowed
+        # TODO: check for more security issues ?
+        if not allowed_file(file_clean_name):
+            message = "<{error}> occured while "\
+                      "writing game game '{game}'. Impossible to save file"\
+                      "'{file_clean_name}' because exstension is not allowed".format(
+                        error=e.strerror,
+                        game=slugified_name,
+                        file_clean_name=file_clean_name)
+
+            raise LudoboxError(message)
+
+        file_path = os.path.join(attachments_path, file_clean_name)
         try:
-            os.makedirs(attachments_path)
+            f.save(file_path)
         except Exception as e:
-            # TODO Handle more precisely the error and provide an advice for
-            #   solving the problem
-            # Create a very explicit message to explain the problem
             message = "<{error}> occured while "\
                       "writing game info to path '{path}' for "\
-                      "game '{game}'. Impossible to create "\
-                      "directory '{attachments_path}' to store the attached "\
-                      "files.".format(
+                      "game '{game}'. Impossible to save file"\
+                      "'{file_path}' in the attachment directory "\
+                      "'{attachments_path}'.".format(
                         error=e.strerror,
                         path=data_dir,
                         game=slugified_name,
+                        file_path=os.path.abspath(file_path),
                         attachments_path=os.path.abspath(attachments_path))
             raise LudoboxError(message)
-
-        # Write all the files
-        for f in attachments:
-            file_clean_name = secure_filename(f.filename)
-            file_path = os.path.join(attachments_path, file_clean_name)
-            try:
-                f.save(file_path)
-            except Exception as e:
-                # TODO Handle more precisely the error and provide an advice
-                #   for solving the problem
-                # Create a very explicit message to explain the problem
-                message = "<{error}> occured while "\
-                          "writing game info to path '{path}' for "\
-                          "game '{game}'. Impossible to save file"\
-                          "'{file_path}' in the attachment directory "\
-                          "'{attachments_path}'.".format(
-                            error=e.strerror,
-                            path=data_dir,
-                            game=slugified_name,
-                            file_path=os.path.abspath(file_path),
-                            attachments_path=os.path.abspath(attachments_path))
-                raise LudoboxError(message)
-
-    return game_path
 
 def build_index():
     """Create an index of all games and content avaible inside the box"""
