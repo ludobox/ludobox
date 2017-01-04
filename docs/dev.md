@@ -14,3 +14,4 @@
 
   pip install bumpversion==0.5.3
   bumpversion patch
+  git push origin master --tags
