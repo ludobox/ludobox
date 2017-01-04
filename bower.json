@@ -1,11 +1,13 @@
 {
-  "name": "ludobox-ui",
-  "homepage": "https://github.com/ludobox/ludobox-ui",
+  "name": "ludobox",
+  "version":"0.8.0",
+  "homepage": "https://github.com/ludobox/ludobox",
   "authors": [
+    "Clément Renaud <clement.renaud@gmail.com>",
     "Pierre-Yves Martin <pym.aldebaran@gmail.com>"
   ],
   "description": "offline network open game file sharing software",
-  "main": "ludocore.py",
+  "main": "ludocore/main.py",
   "moduleType": [],
   "keywords": [
     "libre",
