@@ -15,8 +15,13 @@ config = read_config()
 
 app = Flask("LUDOSERVER")  # web server instance used to defines routes
 
+# config
 app.config["DATA_DIR"] = config["data_dir"] # used for testing
 print "Data will be stored at %s"%app.config["DATA_DIR"]
+
+app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
+print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
+
 
 def serve(debug, **kwargs):
     """
@@ -59,7 +64,7 @@ def create_resource():
     """
 
     # make sure unauthorized boxes can not create new games
-    if config["upload_allowed"] is False:
+    if app.config["UPLOAD_ALLOWED"] is False:
         response = jsonify({'message':'Upload not allowed'})
         return response, 401
 
@@ -81,19 +86,13 @@ def create_resource():
     return jsonify({"path" : data_path}), 201
 
 
-@app.route('/addgame', methods=["POST"])
-def serve_addgame():
-    """Process the uploads of new games."""
-
-    if config["upload_allowed"] is False:
-        return redirect(url_for("static", filename="index.html"))
-
-    print request.form
-    print request.get_json()
-
-    return jsonify( request.data )
-
-    # validate_game_data()
+# @app.route('/addgame', methods=["POST"])
+# def serve_addgame():
+#     """Process the uploads of new games."""
+#
+#     if app.config["UPLOAD_ALLOWED"] is False:
+#         return redirect(url_for("static", filename="index.html"))
+#
 
     # # An empty dictionnary to store all the data from the form
     # data = {

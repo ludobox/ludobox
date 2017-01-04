@@ -44,6 +44,19 @@ class TestLudoboxWebServer(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(json.loads(result.data), {"name" : self.config["ludobox_name"]})
 
+    def test_upload_allowed(self):
+        app.config["UPLOAD_ALLOWED"] = False
+
+        test_app = app.test_client()
+        test_app.testing = True
+
+        result = test_app.post('/api/create',
+                                data={},
+                                content_type='multipart/form-data'
+                                )
+
+        self.assertEqual(result.status_code, 401)
+
     def test_add_game(self):
 
         valid_info = read_game_info(os.path.join(os.getcwd(), 'tests/test-data/test-game'))
