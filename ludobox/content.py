@@ -7,7 +7,7 @@ import shutil
 
 from werkzeug import secure_filename
 from slugify import slugify
-from jsonschema import validate
+from jsonschema import validate, ValidationError
 
 from ludobox.errors import LudoboxError
 
@@ -142,7 +142,11 @@ def write_game(info, attachments, data_dir):
 
     # Write the attached files
     if attachments:
-        write_attachments(attachments, game_path)
+        try :
+            write_attachments(attachments, game_path)
+        except LudoboxError as e:
+            clean_game(game_path)
+            raise LudoboxError(str(e))
 
     return game_path
 
@@ -155,7 +159,22 @@ def write_info_json(info, game_path):
     """Write a JSON file based on valid resource data"""
 
     # validate game data
-    validate_game_data(info)
+    try:
+        validate_game_data(info)
+    except ValidationError as e:
+        print e
+        # Cleanup anything previously created
+        clean_game(game_path)
+
+        # TODO Handle more explicit message
+        message = "<{error}> occured while "\
+                  "validating the game info '{data}'"\
+                  "-- '{txt}'.".format(
+                    error=e.strerror,
+                    info=info,
+                    txt=str(e))
+        raise LudoboxError(message)
+
 
     # Convert the data to JSON into file
     content = json.dumps(info, sort_keys=True, indent=4)
@@ -211,10 +230,9 @@ def write_attachments(attachments, game_path):
         # TODO: check for more security issues ?
         if not allowed_file(file_clean_name):
             message = "<{error}> occured while "\
-                      "writing game game '{game}'. Impossible to save file"\
+                      "writing. Impossible to save file"\
                       "'{file_clean_name}' because exstension is not allowed".format(
-                        error=e.strerror,
-                        game=slugified_name,
+                        error="FileNotAllowed", # TODO create ValidationError
                         file_clean_name=file_clean_name)
 
             raise LudoboxError(message)
@@ -224,13 +242,12 @@ def write_attachments(attachments, game_path):
             f.save(file_path)
         except Exception as e:
             message = "<{error}> occured while "\
-                      "writing game info to path '{path}' for "\
-                      "game '{game}'. Impossible to save file"\
+                      "writing game info to path '{path}'."\
+                      "Impossible to save file"\
                       "'{file_path}' in the attachment directory "\
                       "'{attachments_path}'.".format(
                         error=e.strerror,
                         path=data_dir,
-                        game=slugified_name,
                         file_path=os.path.abspath(file_path),
                         attachments_path=os.path.abspath(attachments_path))
             raise LudoboxError(message)

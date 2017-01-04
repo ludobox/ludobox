@@ -37,9 +37,6 @@ import glob
 # easy "low tech" compliant sharing.
 import json
 
-# datetime is used to generate a simple timestamp for each game added
-from datetime import datetime
-
 # Jinja2 is used as a template engine to generate the list of games as an HTML5
 # compliant table.
 # To get it: sudo pip install Jinja2
