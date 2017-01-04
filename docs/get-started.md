@@ -22,8 +22,8 @@ To know the other usage of the ludocore script:
 
 To launch the server type in a console from de ludobox-ui directory:
 
-    python ludocore.py clean
-    python ludocore.py generate
-    python ludocore.py serve
+    ludobox clean
+    ludobox generate
+    ludobox serve
 
 Hit Ctrl+C in the terminal to terminate the server.

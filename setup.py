@@ -50,7 +50,7 @@ setup(
       keywords=["game", "public domain"],
       entry_points={
         'console_scripts': [
-            'ludobox = ludocore:main'
+            'ludobox = ludobox.main:main'
         ],
       },
       license='GPL',
@@ -62,5 +62,6 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
       ],
-      install_requires=required
+      install_requires=required,
+      test_suite='tests'
       )

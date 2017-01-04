@@ -1,6 +1,8 @@
 # Ludobox specific stuff #######################################################
 # Input directory for the ludobox
-/data
+/data/*
+!/data/README.md
+*.log
 
 # Generated files and directories
 /static/add/
@@ -35,6 +37,9 @@ ludobox-ui.sublime-workspace
 
 # Docs specific stuff #######################################################
 site
+.coverage
+
+htmlcov
 
 # Python related stuff #########################################################
 # Byte-compiled / optimized / DLL files
