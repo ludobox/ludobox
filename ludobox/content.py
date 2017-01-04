@@ -165,16 +165,7 @@ def write_info_json(info, game_path):
         print e
         # Cleanup anything previously created
         clean_game(game_path)
-
-        # TODO Handle more explicit message
-        message = "<{error}> occured while "\
-                  "validating the game info '{data}'"\
-                  "-- '{txt}'.".format(
-                    error=e.strerror,
-                    info=info,
-                    txt=str(e))
-        raise LudoboxError(message)
-
+        raise ValidationError(e)
 
     # Convert the data to JSON into file
     content = json.dumps(info, sort_keys=True, indent=4)
