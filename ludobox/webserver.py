@@ -5,7 +5,7 @@ import time
 
 import sys
 import json
-from flask import Flask, jsonify, send_from_directory, request, render_template, make_response, current_app
+from flask import Flask, jsonify, send_from_directory, request, render_template, url_for, redirect
 
 from datetime import datetime
 from functools import update_wrapper
@@ -105,6 +105,10 @@ def show_hand():
         env = { "python" :  sys.version },
         config = config
     )
+
+@app.route('/api/schema')
+def serve_schema():
+    return send_from_directory('ludobox/model', "schema.json")
 
 @app.route('/api/<path:path>')
 def serve_api(path):

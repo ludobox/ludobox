@@ -87,7 +87,7 @@ class TestLudoboxWebServer(unittest.TestCase):
 
         # check for files
         written_filenames = os.listdir(os.path.join(res["path"], 'files'))
-        self.assertEqual(written_filenames, [f[1] for f in data["files"]])
+        self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
 
     def test_form_add_game(self):
         """Posting data and files using form should create a new game"""
@@ -122,7 +122,7 @@ class TestLudoboxWebServer(unittest.TestCase):
 
         # check for attached files
         written_filenames = os.listdir(os.path.join(path, 'files'))
-        self.assertEqual(written_filenames, [f[1] for f in data["files"]])
+        self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
 
         # HTML page created
         html_game_path = os.path.join(OUTPUT_DIR, os.path.join("games", 'borgia-le-jeu-malsain'))

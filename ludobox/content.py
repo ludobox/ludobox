@@ -78,7 +78,7 @@ def read_game_info(path):
     # TODO Add some attachment info
 
     # Add permalink
-    data["slug"] = slugify(data["title"]["fr"])
+    data["slug"] = slugify(data["title"])
 
     return data
 
@@ -86,7 +86,7 @@ def get_resource_slug(data):
     """Get the slugified name of the game based on the data set"""
     try:
         # TODO: support for any language !
-        return slugify(data["title"]["fr"])
+        return slugify(data["title"])
     except KeyError as e:
         # TODO more explicit error message
         message = "KeyError occured while "\
@@ -103,7 +103,7 @@ def write_game(info, attachments, data_dir):
     Arguments:
     info -- a dictionnary storing all the information about the game. It
             exactly mimic the structure of the disired JSON file. The
-            data["title"]["fr"] must exist, no other verification is made to
+            data["title"] must exist, no other verification is made to
             check it contains coherent structure or data.
     attachments -- list of files attached to the game (rules, images...).
     data_dir -- directory where all the game directories are stored i.e. where
