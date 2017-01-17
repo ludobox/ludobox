@@ -1,53 +1,149 @@
-<!doctype html>
-<html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Ludobox</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-    </head>
-    <body>
-      <h1>Games List</h1>
-      <div id="gamesList"></div>
-      <script>
-        console.log("hello Ludobox !")
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Your page title here :)</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-        // get data
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/api/index.json');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var games = JSON.parse(xhr.responseText);
-                parseGamesIndex(games)
-            }
-            else {
-                throw('Request failed.  Returned status of ' + xhr.status);
-            }
-        };
-        xhr.send();
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <ul class="navbar-list">
+        <li class="navbar-item"><a class="navbar-link" href="/">Ludobox</a></li>
+        <li class="navbar-item">
+          <a class="navbar-link" href="/ludobox-ui/games/add">Add a new game</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
 
-        function parseGamesIndex(games) {
-          console.log(games);
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container" id="games">
+    <div class="row" id="search-utils" style="margin : 3%">
+        <div class="four columns">
+            <form>
+                <input class="search" type="search" id="searchGames" placeholder="Search" />
+            </form>
+        </div>
+        <div class="eight columns">
+            <button class="sort" data-sort="title">Sort by name</button>
+            <button class="sort" data-sort="type">Sort by type</button>
+            <select name="filterByType" id="filterByType">
+                <option value="all">All</option>
+                <option value="video-game">Video Game</option>
+                <option value="board-game">Board Game</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <table class="twelve columns">
+                <thead>
+                    <tr>
+                        <td>Title</td>
+                        <td>Type</td>
+                        <td>Themes</td>
+                        <td>fab_time</td>
+                        <td>players</td>
+                        <td>languages</td>
+                    </tr>
+                </thead>
+                <tbody id="gamesList">
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
 
-          var ul = document.createElement("ul")
+  <script>
+    console.log("hello Ludobox !")
 
-          games.forEach( function(game) {
-            var li = document.createElement("li")
-            li.innerHTML = "<a href='" + game.slug+ "'>"+game.title.fr+"</a>";
-
-            ul.appendChild(li)
-          })
-
-          var div = document.getElementById('gamesList');
-          div.appendChild(ul)
-
+    // get data
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/index.json');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var games = JSON.parse(xhr.responseText);
+            parseGamesIndex(games)
         }
+        else {
+            throw('Request failed.  Returned status of ' + xhr.status);
+        }
+    };
+    xhr.send();
 
+    function parseGamesIndex(games) {
+      console.log(games);
 
+      var tbody = document.getElementById('gamesList');
 
-      </script>
-    </body>
+      var trs = games.forEach( function(game) {
+
+        var tr = document.createElement("tr")
+
+        var title = document.createElement("td")
+        title.innerHTML = "<a href='" + game.slug+ "'>"+game.title.fr+"</a>";
+        tr.appendChild(title);
+
+        ["type", "themes", "fab_time", "players", "languages"].forEach(function(d){
+          var td = getTd(game[d], d)
+          tr.appendChild(td)
+        })
+
+        tbody.appendChild(tr)
+      })
+
+    }
+
+    function getTd(text, cssClass){
+      var td = document.createElement("td")
+      td.innerHTML = text
+      td.className = cssClass
+      return td
+    }
+
+    // document.getElementById('filterByType').onchange = function(e) {
+    //     console.log(e.target.value);
+    //     if (e.target.value == "all") {
+    //         gamesList.filter(function(item) {
+    //             return true
+    //         });
+    //     } else {
+    //         gamesList.filter(function(item) {
+    //             if (item.values().type == e.target.value) {
+    //                 return true;
+    //             } else {
+    //                 return false;
+    //             }
+    //         });
+    //     }
+    // }
+
+  </script>
+</body>
 </html>

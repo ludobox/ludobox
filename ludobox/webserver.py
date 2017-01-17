@@ -45,6 +45,18 @@ def serve_index():
     """Serve the base url for the project."""
     return redirect(url_for("static", filename="index.html"))
 
+@app.route('/js/<path:path>')
+def serve_js(path):
+    return send_from_directory('static/js', path)
+
+@app.route('/css/<path:path>')
+def serve_css(path):
+    return send_from_directory('static/css', path)
+
+@app.route('/images/<path:path>')
+def serve_images(path):
+    return send_from_directory('static/images', path)
+
 @app.route('/api/<path:path>')
 def serve_api(path):
     return send_from_directory('data', path)
