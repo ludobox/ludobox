@@ -72,3 +72,13 @@ def update_from_web_server(games_list, config, update_index=False, update_games=
             url = build_url(slug+"/info.json")
             download_from_server(url, config["data_dir"], slug)
         print "Games data updated."
+
+def download_game_from_remote_server(slug) :
+
+    info_url = build_url(slug+"/info.json")
+
+    # download JSON file
+    download_from_server(info_url, config["data_dir"], slug)
+
+    # download attachements
+    # download_from_server()

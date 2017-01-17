@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import time
+
 import sys
 import json
 from flask import Flask, jsonify, send_from_directory, request, render_template, make_response, current_app
@@ -14,6 +16,8 @@ from ludobox.config import read_config
 from ludobox.content import write_game, validate_game_data
 from ludobox.errors import LudoboxError
 from ludobox.core import generate_all, OUTPUT_DIR
+from ludobox.data.crawler import download_game_from_remote_server
+
 
 # parse config
 config = read_config()
@@ -104,7 +108,7 @@ def show_hand():
 
 @app.route('/api/<path:path>')
 def serve_api(path):
-    return send_from_directory('data', path)
+    return send_from_directory('data', path, mimetype='application/json')
 
 @app.route('/api/create', methods=["POST"])
 def create_resource():
@@ -137,6 +141,21 @@ def create_resource():
 
     # return original JSON
     return jsonify({"path" : data_path}), 201
+
+@app.route('/api/download/<path:path>')
+def download_resource(path):
+    """Download a specific resource."""
+
+    starttime = time.time()
+
+    download_game_from_remote_server(path)
+
+    endtime = time.time()
+    elapsed = endtime - starttime
+
+    return jsonify({ "game" : path, "duration" : elapsed, "status" : "ok"})
+    # return render_template('download.html', remote_server_url=config["web_server_url"] )
+
 
 @app.route('/addgame', methods=["POST"])
 def serve_addgame():
