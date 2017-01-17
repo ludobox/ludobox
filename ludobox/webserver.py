@@ -49,6 +49,15 @@ def serve_index():
 def serve_api(path):
     return send_from_directory('data', path)
 
+@app.route('/ui')
+def serve_ui_index():
+    return send_from_directory("ui","index.html")
+
+# catch all
+@app.route('/ui/<path:path>')
+def serve_ui(path):
+    return send_from_directory("ui","index.html")
+
 @app.route('/api')
 def show_hand():
     return jsonify( name= config["ludobox_name"] )

@@ -1,0 +1,53 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Ludobox</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    </head>
+    <body>
+      <h1>Games List</h1>
+      <div id="gamesList"></div>
+      <script>
+        console.log("hello Ludobox !")
+
+        // get data
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/index.json');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var games = JSON.parse(xhr.responseText);
+                parseGamesIndex(games)
+            }
+            else {
+                throw('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send();
+
+
+        function parseGamesIndex(games) {
+          console.log(games);
+
+          var ul = document.createElement("ul")
+
+          games.forEach( function(game) {
+            var li = document.createElement("li")
+            li.innerHTML = "<a href='" + game.slug+ "'>"+game.title.fr+"</a>";
+
+            ul.appendChild(li)
+          })
+
+          var div = document.getElementById('gamesList');
+          div.appendChild(ul)
+
+        }
+
+
+
+      </script>
+    </body>
+</html>
