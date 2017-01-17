@@ -1,34 +1,104 @@
-{% set active_nav = "games" %}
 {% include "partials/header.html" %}
-    <div class="page-header">
-        <h1>List of games</h1>
-    </div>
+<div class="container" id="games">
+  <div class="row" id="search-utils" style="margin : 3%">
+      <div class="four columns">
+          <form>
+              <input class="search" type="search" id="searchGames" placeholder="Search" />
+          </form>
+      </div>
+      <div class="eight columns">
+          <button class="sort" data-sort="title">Sort by name</button>
+          <button class="sort" data-sort="type">Sort by type</button>
+          <select name="filterByType" id="filterByType">
+              <option value="all">All</option>
+              <option value="video-game">Video Game</option>
+              <option value="board-game">Board Game</option>
+          </select>
+      </div>
+  </div>
+  <div class="row">
+      <div>
+          <table class="twelve columns">
+              <thead>
+                  <tr>
+                      <td>Title</td>
+                      <td>Type</td>
+                      <td>Themes</td>
+                      <td>fab_time</td>
+                      <td>players</td>
+                      <td>languages</td>
+                  </tr>
+              </thead>
+              <tbody id="gamesList">
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
 
-    <table id="gamestab" class="display" cellspacing="0" width="100%">
-        <caption>Games available</caption>
-        <thead>
-            <tr>
-                <td>Title</td>
-                <td>Link</td>
-                <td>Type</td>
-                <td>Themes</td>
-                <td>Time of making</td>
-                <td>Number of players</td>
-                <td>Languages available</td>
-            </tr>
-        </thead>
-        <tbody class="list">
-            {% for game in games %}
-            <tr>
-                <td class="title">{{ game.title.fr }}</td>
-                <td class="link"><a href="/static/games/{{ game.slug }}/index.html">{{ game.title.fr }}</a></td>
-                <td class="type">{{ game.type }}</td>
-                <td class="themes">{{ game.themes.fr|join(', ') }}</td>
-                <td class="fab_time"> {{game.fab_time}} </td>
-                <td class="players"> {{game.players}} </td>
-                <td class="languages"> {{game.languages|join(', ')}} </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<script>
+  console.log("hello Ludobox !")
+
+  // get data
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/api/index.json');
+  xhr.onload = function() {
+      if (xhr.status === 200) {
+          var games = JSON.parse(xhr.responseText);
+          parseGamesIndex(games)
+      }
+      else {
+          throw('Request failed.  Returned status of ' + xhr.status);
+      }
+  };
+  xhr.send();
+
+  function parseGamesIndex(games) {
+    console.log(games);
+
+    var tbody = document.getElementById('gamesList');
+
+    var trs = games.forEach( function(game) {
+
+      var tr = document.createElement("tr")
+
+      var title = document.createElement("td")
+      title.innerHTML = "<a href='/games/" + game.slug+ "'>"+game.title.fr+"</a>";
+      tr.appendChild(title);
+
+      ["type", "themes", "fab_time", "players", "languages"].forEach(function(d){
+        var td = getTd(game[d], d)
+        tr.appendChild(td)
+      })
+
+      tbody.appendChild(tr)
+    })
+
+  }
+
+  function getTd(text, cssClass){
+    var td = document.createElement("td")
+    td.innerHTML = text
+    td.className = cssClass
+    return td
+  }
+
+  // document.getElementById('filterByType').onchange = function(e) {
+  //     console.log(e.target.value);
+  //     if (e.target.value == "all") {
+  //         gamesList.filter(function(item) {
+  //             return true
+  //         });
+  //     } else {
+  //         gamesList.filter(function(item) {
+  //             if (item.values().type == e.target.value) {
+  //                 return true;
+  //             } else {
+  //                 return false;
+  //             }
+  //         });
+  //     }
+  // }
+</script>
+
 {% include "partials/footer.html" %}

@@ -1,10 +1,12 @@
 {% set active_nav = "add" %}
 {% include "partials/header.html" %}
+
+<div class="container">
     <div class="page-header">
         <h1>Add new content</h1>
     </div>
 
-    <form role="form" class="form-horizontal" action="/addgame" method="post" enctype="multipart/form-data">
+    <form role="form" class="row" action="/addgame" method="post" enctype="multipart/form-data">
 
         <!-- TODO retirer cette légende ? -->
         <!-- TODO ajouter un texte d'explication ? -->
@@ -323,7 +325,6 @@
                 <button type="submit" class="btn btn-primary">Add</button>
             </div>
         </div>
-
     </form>
-
+</div>
 {% include  "partials/footer.html" %}

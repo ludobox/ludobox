@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import json
-from flask import Flask, jsonify, redirect, send_from_directory, request, url_for
+from flask import Flask, jsonify, send_from_directory, request, render_template
 
 from datetime import datetime
+
+from ludobox import __version__
 
 from ludobox.config import read_config
 from ludobox.content import write_game, validate_game_data
@@ -40,11 +43,34 @@ def serve(debug, **kwargs):
 
     app.run(host='0.0.0.0', port=config["port"], debug=debug)
 
-@app.route('/')
-def serve_index():
-    """Serve the base url for the project."""
-    return redirect(url_for("static", filename="index.html"))
 
+# TODO : optimize by pre-building files
+@app.route('/')
+def serve_intro():
+    """Serve the intro page."""
+    return render_template('intro.html')
+
+@app.route('/create')
+def serve_create():
+    """Create a new game."""
+    return render_template('add.html')
+
+@app.route('/about')
+def serve_about():
+    """Show the about page."""
+    return render_template('about.html')
+
+@app.route('/games')
+def serve_index():
+    """Serve the games index."""
+    return render_template('index.html')
+
+# catch all
+@app.route('/games/<path:path>')
+def serve_game(path):
+    return render_template('single.html')
+
+# STATIC FILES
 @app.route('/js/<path:path>')
 def serve_js(path):
     return send_from_directory('static/js', path)
@@ -57,22 +83,18 @@ def serve_css(path):
 def serve_images(path):
     return send_from_directory('static/images', path)
 
+# API Calls
+@app.route('/api')
+def show_hand():
+    return jsonify(
+        name= config["ludobox_name"],
+        version =  __version__,
+        env = { "python" :  sys.version }
+    )
+
 @app.route('/api/<path:path>')
 def serve_api(path):
     return send_from_directory('data', path)
-
-@app.route('/ui')
-def serve_ui_index():
-    return send_from_directory("ui","index.html")
-
-# catch all
-@app.route('/ui/<path:path>')
-def serve_ui(path):
-    return send_from_directory("ui","index.html")
-
-@app.route('/api')
-def show_hand():
-    return jsonify( name= config["ludobox_name"] )
 
 @app.route('/api/create', methods=["POST"])
 def create_resource():
