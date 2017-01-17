@@ -63,7 +63,7 @@
       var tr = document.createElement("tr")
 
       var title = document.createElement("td")
-      title.innerHTML = "<a href='/games/" + game.slug+ "'>"+game.title.fr+"</a>";
+      title.innerHTML = "<a href='/games/" + game.slug+ "'>"+game.title+"</a>";
       tr.appendChild(title);
 
       ["type", "themes", "fab_time", "players", "languages"].forEach(function(d){

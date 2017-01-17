@@ -1,7 +1,7 @@
 {% set active_nav = "none" %}
 {% include "partials/header.html" %}
     <div class="page-header">
-        <h1>{{data.title.fr}}</h1>
+        <h1>{{data.title}}</h1>
     </div>
 
     <dl class="dl-horizontal">
@@ -20,20 +20,20 @@
 
         <dt>Genres</dt>
         <dd>
-        {% for genre in data.genres.fr|sort %}
+        {% for genre in data.genres|sort %}
             <span class="label label-default">{{genre}}</span>&nbsp;
         {% endfor %}
         </dd>
 
         <dt>Title</dt>
-        <dd>{{data.title.fr}}</dd>
+        <dd>{{data.title}}</dd>
 
         <dt>Description of the game</dt>
-        <dd>{{data.description.fr}}</dd>
+        <dd>{{data.description}}</dd>
 
         <dt>Themes</dt>
         <dd>
-        {% for theme in data.themes.fr|sort %}
+        {% for theme in data.themes|sort %}
             <span class="label label-default">{{theme}}</span>&nbsp;
         {% endfor %}
         </dd>
@@ -107,7 +107,7 @@
 
         <dt>Material required</dt>
         <dd>
-        {% for req in data.requirements.fr|sort %}
+        {% for req in data.requirements|sort %}
             <span class="label label-default">{{req}}</span>&nbsp;
         {% endfor %}
         </dd>
