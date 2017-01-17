@@ -9,72 +9,37 @@
       "id": "type"
     },
     "genres": {
-      "type": "object",
-      "properties": {
-        "fr": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "default": "stratégie"
-          },
-          "id": "fr"
-        }
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "stratégie"
       },
-      "id": "genres",
-      "required": [
-        "fr"
-      ]
+      "id": "genres"
     },
     "title": {
-      "type": "object",
-      "properties": {
-        "fr": {
-          "type": "string",
-          "minLength": 1,
-          "default": "Borgia, le jeu malsain",
-          "id": "fr"
-        }
-      },
-      "id": "title",
-      "required": [
-        "fr"
-      ]
+      "type": "string",
+      "minLength": 1,
+      "default": "Borgia, le jeu malsain",
+      "id": "title"
     },
     "description": {
-      "type": "object",
-      "properties": {
-        "fr": {
-          "type": "string",
-          "minLength": 1,
-          "default": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia.",
-          "id": "fr"
-        }
-      },
-      "id": "description",
-      "required": [
-        "fr"
-      ]
+      "type": "string",
+      "minLength": 1,
+      "default": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia.",
+      "id": "description"
     },
     "themes": {
       "type": "object",
-      "properties": {
-        "fr": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "default": "Religion"
-          },
-          "id": "fr"
-        }
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "A theme"
       },
-      "id": "themes",
-      "required": [
-        "fr"
-      ]
+      "id": "themes"
     },
     "publishers": {
       "type": "array",
@@ -168,22 +133,14 @@
     },
     "requirements": {
       "type": "object",
-      "properties": {
-        "fr": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": {
-            "type": "string",
-            "minLength": 0,
-            "default": "imprimante"
-          },
-          "id": "fr"
-        }
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 0,
+        "default": "imprimante"
       },
-      "id": "requirements",
-      "required": [
-        "fr"
-      ]
+      "id": "requirements"
     },
     "source": {
       "type": "string",

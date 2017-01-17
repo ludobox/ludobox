@@ -2,39 +2,27 @@
   "publishers": [
     "Les Chiens de l'Enfer"
   ],
-  "genres": {
-    "fr": [
-      "social",
-      "stratégie"
-    ]
-  },
-  "requirements": {
-    "fr": [
+  "genres": [
+    "social",
+    "stratégie"
+  ],
+  "requirements":[
       "imprimante"
-    ]
-  },
-  "description": {
-    "fr": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia."
-  },
+  ],
+  "description": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia.",
   "license": "CC BY-NC-SA 4.0",
-  "title": {
-    "fr": "Borgia, le jeu malsain"
-  },
+  "title": "Borgia, le jeu malsain",
   "type": "game",
   "audience": [
     "adults"
   ],
   "publication_year": 2012,
-  "languages": [
-    "fr"
-  ],
-  "themes": {
-    "fr": [
+  "language": "fr",
+  "themes": [
       "Médiéval",
       "Salopard",
       "Religion"
-    ]
-  },
+  ],
   "players_min": 3,
   "source": "http://leschiensdelenfer.org/editions-chiens-de-lenfer/borgia-le-jeu-malsain/",
   "authors": [
