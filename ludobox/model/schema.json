@@ -154,15 +154,12 @@
       "default": "CC BY-NC-SA 4.0",
       "id": "license"
     },
-    "languages": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "fr"
-      },
-      "id": "languages"
+    "language": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2,
+      "default": "en",
+      "id": "language"
     },
     "ISBN": {
       "type": "array",
@@ -194,7 +191,7 @@
     "fab_time",
     "source",
     "license",
-    "languages",
+    "language",
     "ISBN",
     "timestamp_add"
   ]
