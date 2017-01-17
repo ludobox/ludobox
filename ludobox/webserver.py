@@ -3,9 +3,10 @@
 
 import sys
 import json
-from flask import Flask, jsonify, send_from_directory, request, render_template
+from flask import Flask, jsonify, send_from_directory, request, render_template, make_response, current_app
 
 from datetime import datetime
+from functools import update_wrapper
 
 from ludobox import __version__
 
@@ -26,7 +27,7 @@ print "Data will be stored at %s"%app.config["DATA_DIR"]
 app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
 print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
 
-def serve(debug, **kwargs):
+def serve(debug, port, **kwargs):
     """
     Launch an tiny web server to make the ludobox site available.
 
@@ -41,8 +42,11 @@ def serve(debug, **kwargs):
     See `Namespace object<https://docs.python.org/2/library/argparse.html#the-namespace-object>`_
     """
 
-    app.run(host='0.0.0.0', port=config["port"], debug=debug)
+    # check if port number is ok
+    if port is None : _port = config["port"]
+    else : _port = int(port)
 
+    app.run(host='0.0.0.0', port=_port, debug=debug)
 
 # TODO : optimize by pre-building files
 @app.route('/')
@@ -54,6 +58,11 @@ def serve_intro():
 def serve_create():
     """Create a new game."""
     return render_template('add.html')
+
+@app.route('/download')
+def serve_download_index():
+    """List of available games."""
+    return render_template('download.html', remote_server_url=config["web_server_url"] )
 
 @app.route('/about')
 def serve_about():
@@ -89,7 +98,8 @@ def show_hand():
     return jsonify(
         name= config["ludobox_name"],
         version =  __version__,
-        env = { "python" :  sys.version }
+        env = { "python" :  sys.version },
+        config = config
     )
 
 @app.route('/api/<path:path>')

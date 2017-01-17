@@ -74,6 +74,10 @@ def config_parser():
         action='store_true',
         help="activate the debug mode of the Flask server (for development "
              "only NEVER use it in production).")
+    parser_serve.add_argument(
+        "--port",
+        default=None,
+        help="define port to serve the web application.")
 
     # Update Data command ###########################################################
     # TODO : parse options to update index only or re-download everything
