@@ -9,7 +9,7 @@
 
   // get data
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/api/'+slug+'/info.json');
+  xhr.open('GET', '/api/games/'+slug+'/info.json');
   xhr.onload = function() {
       if (xhr.status === 200) {
           var game = JSON.parse(xhr.responseText);
