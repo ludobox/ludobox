@@ -13,7 +13,7 @@ from functools import update_wrapper
 from ludobox import __version__
 
 from ludobox.config import read_config
-from ludobox.content import write_game, validate_game_data
+from ludobox.content import write_game, validate_game_data, get_games_index
 from ludobox.errors import LudoboxError
 from ludobox.core import generate_all, OUTPUT_DIR
 from ludobox.data.crawler import download_game_from_remote_server
@@ -110,7 +110,12 @@ def show_hand():
 def serve_schema():
     return send_from_directory('ludobox/model', "schema.json")
 
-@app.route('/api/<path:path>')
+@app.route('/api/games')
+def serve_games_json_index():
+    games_index = get_games_index()
+    return jsonify(games_index)
+
+@app.route('/api/games/<path:path>')
 def serve_api(path):
     return send_from_directory('data', path, mimetype='application/json')
 

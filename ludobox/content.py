@@ -243,12 +243,8 @@ def write_attachments(attachments, game_path):
                         attachments_path=os.path.abspath(attachments_path))
             raise LudoboxError(message)
 
-def build_index():
-    """Create an index of all games and content avaible inside the box"""
-
-    # TODO : check are you sure to update index (y/n) ?
-    # if os.path.exists(config["index_path"]):
-
+def get_games_index():
+    """Loop through all and parse an index of available games"""
     info_files = []
 
     # loop through all folders
@@ -261,6 +257,18 @@ def build_index():
             if os.path.exists(info_file):
                 info = read_game_info(path)
                 info_files.append(info)
+
+    return info_files
+
+
+
+def build_index():
+    """Create a JSON index file of all games available inside the box"""
+
+    # TODO : check are you sure to update index (y/n) ?
+    # if os.path.exists(config["index_path"]):
+
+    info_files = get_games_index()
 
     # TODO : filter infos to make the index file smaller
     with open(config["index_path"], "wb") as index_file:
