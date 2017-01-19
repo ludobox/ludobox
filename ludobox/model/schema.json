@@ -181,18 +181,12 @@
     "title",
     "description",
     "themes",
-    "publishers",
-    "authors",
-    "illustrators",
     "duration",
     "audience",
-    "players_min",
-    "players_max",
     "fab_time",
     "source",
     "license",
     "language",
-    "ISBN",
     "timestamp_add"
   ]
 }
