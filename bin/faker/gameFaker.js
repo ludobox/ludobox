@@ -9,7 +9,7 @@ var ROOT_DIR = '../../data/';
 
 function createSampleGame() {
   var sample = jsf(schema);
-  var slug = slugify(sample.title);
+  var slug = slugify(sample.title).toLowerCase();
 
   var dir = ROOT_DIR+slug;
 
