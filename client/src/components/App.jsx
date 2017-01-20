@@ -19,25 +19,29 @@ export default class App extends React.Component {
     console.log("Download "+ slug + "...")
     axios.get(`${this.props.url}/api/games/${slug}/info.json`)
       .then(res => {
-        console.log(res.data);
+        var info = res.data
+        console.log(info);
 
         // get list of files
         axios.get(`${this.props.url}/api/files/${slug}`)
           .then(res => {
-            console.log(res.data);
+            var files  = res.data;
+
+            // post the game
+            axios.post(`/api/create`, {info, files})
+            .then(res => {
+              console.log(res);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+
           })
           .catch(function (error) {
             console.log(error);
           });
 
-        // // post the game
-        // axios.post(`/api/create`, res.data)
-        // .then(res => {
-        //   console.log(res);
-        // })
-        // .catch(function (error) {
-        //   console.log(error);
-        // });
 
       });
   }

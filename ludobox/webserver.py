@@ -3,6 +3,7 @@
 
 import time
 
+import os
 import sys
 import json
 from flask import Flask, jsonify, send_from_directory, request, render_template, url_for, redirect
@@ -13,10 +14,9 @@ from functools import update_wrapper
 from ludobox import __version__
 
 from ludobox.config import read_config
-from ludobox.content import write_game, validate_game_data, get_games_index
+from ludobox.content import write_info_json, write_game, validate_game_data, get_games_index
 from ludobox.errors import LudoboxError
 from ludobox.core import generate_all, OUTPUT_DIR
-from ludobox.data.crawler import download_game_from_remote_server
 
 
 # parse config
@@ -53,35 +53,10 @@ def serve(debug, port, **kwargs):
     app.run(host='0.0.0.0', port=_port, debug=debug)
 
 # TODO : optimize by pre-building files
-@app.route('/')
+@app.route('/', methods=['GET'])
 def serve_intro():
-    """Serve the intro page."""
-    return render_template('intro.html')
-
-@app.route('/create')
-def serve_create():
-    """Create a new game."""
-    return render_template('add.html')
-
-@app.route('/download')
-def serve_download_index():
-    """List of available games."""
-    return render_template('download.html', remote_server_url=config["web_server_url"] )
-
-@app.route('/about')
-def serve_about():
-    """Show the about page."""
-    return render_template('about.html')
-
-@app.route('/games')
-def serve_index():
-    """Serve the games index."""
+    """Serve the main page."""
     return render_template('index.html')
-
-# catch all
-@app.route('/games/<path:path>')
-def serve_game(path):
-    return render_template('single.html')
 
 # STATIC FILES
 @app.route('/js/<path:path>')
@@ -119,6 +94,36 @@ def serve_games_json_index():
 def serve_api(path):
     return send_from_directory('data', path, mimetype='application/json')
 
+@app.route('/api/files/<path:path>')
+def serve_files_list(path):
+    files_path = os.path.join("data", os.path.join(path,"files"))
+    file_list = os.listdir(files_path)
+    return jsonify(file_list)
+
+@app.route('/api/clone', methods=["POST"])
+def clone_resource():
+    """
+    This function clone a resource
+    it takes a valid JSON description of the game
+    and will then proceed to the download the files.
+    """
+    # TODO : convert to decorator
+    # make sure unauthorized boxes can not create new games
+    if app.config["UPLOAD_ALLOWED"] is False:
+        response = jsonify({'message':'Upload not allowed'})
+        return response, 401
+
+    data = request.get_json()
+
+    info = info["data"]
+    files_list = info["files"]
+
+    write_info_json(info)
+    # download_from_server
+
+    # return original JSON
+    return jsonify({"path" : data_path}), 201
+
 @app.route('/api/create', methods=["POST"])
 def create_resource():
     """
@@ -150,130 +155,3 @@ def create_resource():
 
     # return original JSON
     return jsonify({"path" : data_path}), 201
-
-@app.route('/api/download/<path:path>')
-def download_resource(path):
-    """Download a specific resource."""
-
-    starttime = time.time()
-
-    download_game_from_remote_server(path)
-
-    endtime = time.time()
-    elapsed = endtime - starttime
-
-    return jsonify({ "game" : path, "duration" : elapsed, "status" : "ok"})
-    # return render_template('download.html', remote_server_url=config["web_server_url"] )
-
-
-@app.route('/addgame', methods=["POST"])
-def serve_addgame():
-    """Process the uploads of new games."""
-
-
-    if app.config["UPLOAD_ALLOWED"] is False:
-        return redirect(url_for("static", filename="index.html"))
-
-    # get and parse content
-
-    # TODO : fix hack to check if info comes from json or straight HTML form
-    if len(request.form) != 20:
-        info = json.loads(request.form["info"])
-    else : # not a JSON
-        info = parse_post_form(request.form)
-
-    files = request.files.getlist('files')
-    print files
-
-    data_path = write_game(info, files, app.config["DATA_DIR"])
-
-    # try:
-    #     # TODO split this in 2 funcs "write json" and "write attachements"
-    # except LudoboxError as e:
-    #     # TODO replace this dummy return by a true page showing the failed add
-    #     return redirect(url_for("static", filename="index.html"))
-
-    # Generate the HTML pages !
-    if not generate_all(app.config["DATA_DIR"], OUTPUT_DIR):
-        # TODO replace this dummy return by a true page showing the failed gen
-        return redirect(url_for("static", filename="index.html"))
-
-    # TODO replace this dummy return by a true page showing the successful add
-    return redirect(url_for("static", filename="index.html"))
-
-def parse_post_form(form):
-    # An empty dictionnary to store all the data from the form
-    data = {
-        "type": "game",
-        "genres": {"fr": []},
-        "title": {"fr": ""},
-        "description": {"fr": ""},
-        "themes": {"fr": []},
-        "publishers": [],
-        "publication_year": "",
-        "authors": [],
-        "illustrators": [],
-        "duration": "",
-        "audience": [],
-        "players_min": 0,
-        "players_max": 0,
-        "fab_time": 0,
-        "requirements": {"fr": []},
-        "source": "",
-        "license": "",
-        "languages": [],
-        "ISBN": [],
-        "timestamp_add": ""
-    }
-
-    # retrieving all the datas
-    data['type'] = request.form['type']
-    data['genres']['fr'] = \
-        [g.strip() for g in request.form['genres'].split(',')]
-    data['title']['fr'] = request.form['title']
-    data['description']['fr'] = request.form['description'].strip()
-    data['themes']['fr'] = \
-        [t.strip() for t in request.form['themes'].split(',')]
-    data['publishers'] = \
-        [p.strip() for p in request.form['publishers'].split(',')]
-    data['publication_year'] = int(request.form['publication_year'])
-    data['authors'] = \
-        [a.strip() for a in request.form['authors'].split(',')]
-    data['illustrators'] = \
-        [i.strip() for i in request.form['illustrators'].split(',')]
-    data['duration'] = int(request.form['duration'])
-    if 'gameAudience_children' in request.form:
-        data['audience'].append('children')
-    if 'gameAudience_teens' in request.form:
-        data['audience'].append('teens')
-    if 'gameAudience_adults' in request.form:
-        data['audience'].append('adults')
-    data['players_min'] = int(request.form['players_min'])
-    data['players_max'] = int(request.form['players_max'])
-    data['fab_time'] = int(request.form['fab_time'])
-    data['requirements']['fr'] = \
-        [r.strip() for r in request.form['requirements'].split(',')]
-    data['source'] = request.form['source']
-    data['license'] = request.form['license']
-    data['languages'] = \
-        [l.strip() for l in request.form['languages'].split(',')]
-    data['ISBN'] = \
-        [isbn.strip() for isbn in request.form['ISBN'].split(',')]
-    data['timestamp_add'] = datetime.now().isoformat()
-
-    return data
-
-# add unlimited CORS access
-@app.after_request
-def add_cors(resp):
-    """ Ensure all responses have the CORS headers. This ensures any failures are also accessible
-        by the client. """
-    resp.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin','*')
-    resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET'
-    resp.headers['Access-Control-Allow-Headers'] = request.headers.get(
-        'Access-Control-Request-Headers', 'Authorization' )
-    # set low for debugging
-    if app.debug:
-        resp.headers['Access-Control-Max-Age'] = '1'
-    return resp

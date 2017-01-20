@@ -1,5 +1,6 @@
 # Ludobox specific stuff #######################################################
 # Input directory for the ludobox
+oldies
 /data/*
 !/data/README.md
 *.log

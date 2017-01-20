@@ -10,8 +10,8 @@ from slugify import slugify
 from jsonschema import validate, ValidationError
 
 from ludobox.errors import LudoboxError
-
 from ludobox.config import read_config
+
 config = read_config()
 
 with open(os.path.join(os.getcwd(), "ludobox/model/schema.json")) as f :
