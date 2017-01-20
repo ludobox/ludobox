@@ -89,44 +89,44 @@ class TestLudoboxWebServer(unittest.TestCase):
         written_filenames = os.listdir(os.path.join(res["path"], 'files'))
         self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
 
-    def test_form_add_game(self):
-        """Posting data and files using form should create a new game"""
-
-        # delete everything first
-        clean(OUTPUT_DIR)
-
-        valid_info = read_game_info(os.path.join(os.getcwd(), 'tests/test-data/test-game'))
-        data = {
-            'files': [
-                (StringIO('my readme'), 'test-README.txt'),
-                (StringIO('my rules'), 'test-RULES.txt'),
-                (io.BytesIO(b"abcdef"), 'test.jpg')
-            ],
-            'info': json.dumps(valid_info)
-        }
-
-        result = self.app.post('/addgame',
-                                data=data,
-                                content_type='multipart/form-data'
-                                )
-
-        # redirect
-        self.assertEqual(result.status_code, 302)
-
-        path = '/tmp/data/borgia-le-jeu-malsain'
-
-        # load JSON info data
-        with open(os.path.join(path, 'info.json'), 'r' )as  f:
-            stored_info = json.load(f)
-        self.assertEqual(stored_info, valid_info)
-
-        # check for attached files
-        written_filenames = os.listdir(os.path.join(path, 'files'))
-        self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
-
-        # HTML page created
-        html_game_path = os.path.join(OUTPUT_DIR, os.path.join("games", 'borgia-le-jeu-malsain'))
-        print html_game_path
-        self.assertTrue(os.path.exists(html_game_path))
-        self.assertTrue(os.path.isdir(html_game_path))
-        self.assertTrue(os.path.exists(os.path.join(html_game_path, 'index.html')))
+    # def test_form_add_game(self):
+    #     """Posting data and files using form should create a new game"""
+    #
+    #     # delete everything first
+    #     clean(OUTPUT_DIR)
+    #
+    #     valid_info = read_game_info(os.path.join(os.getcwd(), 'tests/test-data/test-game'))
+    #     data = {
+    #         'files': [
+    #             (StringIO('my readme'), 'test-README.txt'),
+    #             (StringIO('my rules'), 'test-RULES.txt'),
+    #             (io.BytesIO(b"abcdef"), 'test.jpg')
+    #         ],
+    #         'info': json.dumps(valid_info)
+    #     }
+    #
+    #     result = self.app.post('/addgame',
+    #                             data=data,
+    #                             content_type='multipart/form-data'
+    #                             )
+    #
+    #     # redirect
+    #     self.assertEqual(result.status_code, 302)
+    #
+    #     path = '/tmp/data/borgia-le-jeu-malsain'
+    #
+    #     # load JSON info data
+    #     with open(os.path.join(path, 'info.json'), 'r' )as  f:
+    #         stored_info = json.load(f)
+    #     self.assertEqual(stored_info, valid_info)
+    #
+    #     # check for attached files
+    #     written_filenames = os.listdir(os.path.join(path, 'files'))
+    #     self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
+    #
+    #     # HTML page created
+    #     html_game_path = os.path.join(OUTPUT_DIR, os.path.join("games", 'borgia-le-jeu-malsain'))
+    #     print html_game_path
+    #     self.assertTrue(os.path.exists(html_game_path))
+    #     self.assertTrue(os.path.isdir(html_game_path))
+    #     self.assertTrue(os.path.exists(os.path.join(html_game_path, 'index.html')))
