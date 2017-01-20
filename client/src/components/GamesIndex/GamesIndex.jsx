@@ -2,6 +2,10 @@ import React from 'react'
 
 export default class GameIndex extends React.Component {
 
+  handleClick(slug){
+    this.props.fetchGame(slug)
+  }
+
   render() {
     let rows = this.props.games.map( game => (
       <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
@@ -26,9 +30,13 @@ export default class GameIndex extends React.Component {
           <td>
             <a
               href="#"
-              onClick={ this.props.fetchGame.bind(this,game.slug) }
+              onClick={() => this.handleClick(game.slug) }
               >
-              Download
+              {this.props.downloading.indexOf(game.slug) === -1 ?
+                "Download"
+                :
+                "Downloading..."
+              }
             </a>
           </td>
           :

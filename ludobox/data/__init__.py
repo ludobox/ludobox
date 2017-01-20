@@ -7,7 +7,7 @@ import requests
 
 from ludobox.config import read_config, read_games_list
 from ludobox.data.dat import update_with_dat
-from ludobox.data.crawler import update_from_web_server
+from ludobox.data.crawler import update_from_web_server, download_from_server
 
 def update_data_with_config(config, update_index=False, update_games=False):
 

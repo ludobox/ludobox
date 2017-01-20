@@ -14,9 +14,11 @@ from functools import update_wrapper
 from ludobox import __version__
 
 from ludobox.config import read_config
-from ludobox.content import write_info_json, write_game, validate_game_data, get_games_index
+from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index
 from ludobox.errors import LudoboxError
 from ludobox.core import generate_all, OUTPUT_DIR
+
+from ludobox.data.crawler import download_from_server
 
 
 # parse config
@@ -117,15 +119,30 @@ def clone_resource():
         return response, 401
 
     data = request.get_json()
+    print data
 
-    info = info["data"]
-    files_list = info["files"]
+    info = data["info"]
+    files_list = data["files"]
+    slug = data["slug"]
 
-    write_info_json(info)
-    # download_from_server
+    game_path = os.path.join(app.config["DATA_DIR"], slug)
+    if not os.path.exists(game_path):
+        create_game_path(game_path)
+
+    # clone the JSON info
+    write_info_json(info, game_path)
+
+    # make sub-rep to store files
+    files_path = os.path.join(game_path, "files")
+    if not os.path.exists(files_path):
+        os.makedirs(files_path)
+
+    # download files from server
+    for f in files_list:
+        download_from_server(f["url"], files_path, f["filename"])
 
     # return original JSON
-    return jsonify({"path" : data_path}), 201
+    return jsonify({"path" : game_path}), 201
 
 @app.route('/api/create', methods=["POST"])
 def create_resource():

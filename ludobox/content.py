@@ -95,6 +95,21 @@ def get_resource_slug(data):
                     path=data)
         raise LudoboxError(message)
 
+def create_game_path(game_path) :
+    """Create the dir to store the game"""
+    try:
+        os.makedirs(game_path)
+    except Exception as e:
+        message = "<{error}> occured while "\
+                  "writing game info file to path '{path}'."\
+                  "Impossible to create "\
+                  "directory '{game_path}'.".format(
+                    error=e.strerror,
+                    path=config['data_dir'],
+                    game_path=os.path.abspath(game_path))
+        raise LudoboxError(message)
+    print "path created : %s"%game_path
+
 def write_game(info, attachments, data_dir):
     """
     Write a JSON file description of a game according to the provided data and
@@ -124,18 +139,7 @@ def write_game(info, attachments, data_dir):
 
     # Create a directory after the cleaned name of the game
     game_path = os.path.join(data_dir, slugified_name)
-    try:
-        os.makedirs(game_path)
-    except Exception as e:
-        message = "<{error}> occured while "\
-                  "writing game info file to path '{path}' for "\
-                  "game '{game}'. Impossible to create "\
-                  "directory '{game_path}'.".format(
-                    error=e.strerror,
-                    path=data_dir,
-                    game=slugified_name,
-                    game_path=os.path.abspath(game_path))
-        raise LudoboxError(message)
+    create_game_path(game_path)
 
     # create JSON resource
     write_info_json(info, game_path)
@@ -186,7 +190,6 @@ def write_info_json(info, game_path):
                     path=game_path,
                     json=json_path)
         raise LudoboxError(message)
-
 
 ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip"]
 
@@ -259,8 +262,6 @@ def get_games_index():
                 info_files.append(info)
 
     return info_files
-
-
 
 def build_index():
     """Create a JSON index file of all games available inside the box"""

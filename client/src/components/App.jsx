@@ -12,42 +12,57 @@ export default class App extends React.Component {
     this.state = {
       localGames: [],
       remoteGames: [],
+      downloading : []
     };
   }
 
   fetchGame(slug) {
+    console.log(this);
     console.log("Download "+ slug + "...")
-    axios.get(`${this.props.url}/api/games/${slug}/info.json`)
+    this.setState({ downloading : [...this.state.downloading, slug]  })
+
+    axios.get(`${this.props.remote_address}/api/games/${slug}/info.json`)
       .then(res => {
         var info = res.data
         console.log(info);
 
         // get list of files
-        axios.get(`${this.props.url}/api/files/${slug}`)
+        axios.get(`${this.props.remote_address}/api/files/${slug}`)
           .then(res => {
-            var files  = res.data;
+            var files  = res.data.map( n =>
+              ({
+                url : `${this.props.remote_address}/api/games/${slug}/files/${n}`,
+                filename : n
+              })
+            );
+            console.log(files);
 
-            // post the game
-            axios.post(`/api/create`, {info, files})
+            // save the game
+            axios.post(`/api/clone`, {info, files, slug})
             .then(res => {
               console.log(res);
+              this.fetchIndex()
+              this.setState({
+                downloading : this.state.downloading
+                .splice(this.state.downloading.indexOf(slug))
+               })
             })
             .catch(function (error) {
               console.log(error);
+              this.setState({
+                downloading : this.state.downloading
+                .splice(this.state.downloading.indexOf(slug))
+               })
             });
-
 
           })
           .catch(function (error) {
             console.log(error);
           });
-
-
       });
   }
 
-  componentDidMount() {
-
+  fetchIndex() {
     if (this.props.remote_address) {
       axios.get(`${this.props.remote_address}/api/games`)
         .then(res => {
@@ -61,6 +76,10 @@ export default class App extends React.Component {
         const localGames = res.data;
         this.setState({ localGames });
       });
+  }
+
+  componentDidMount() {
+    this.fetchIndex()
   }
 
   render() {
@@ -86,7 +105,8 @@ export default class App extends React.Component {
             <GamesIndex
             games={remoteGames}
             url={ this.props.remote_address}
-            fetchGame={this.fetchGame}
+            fetchGame={this.fetchGame.bind(this)}
+            downloading={this.state.downloading}
             />
           :
           "No games available."
