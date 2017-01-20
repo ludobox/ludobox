@@ -97,7 +97,10 @@ def serve_api(path):
 @app.route('/api/files/<path:path>')
 def serve_files_list(path):
     files_path = os.path.join("data", os.path.join(path,"files"))
-    file_list = os.listdir(files_path)
+    if os.path.exists(files_path):
+        file_list = os.listdir(files_path)
+    else :
+        file_list = []
     return jsonify(file_list)
 
 @app.route('/api/clone', methods=["POST"])
