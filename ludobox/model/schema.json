@@ -1,34 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Ludobox Game",
+  "description": "A game for Ludobox's catalog",
   "type": "object",
   "properties": {
-    "type": {
-      "type": "string",
-      "minLength": 1,
-      "default": "game",
-      "id": "type"
-    },
-    "genres": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "stratégie"
-      },
-      "id": "genres"
-    },
     "title": {
       "type": "string",
       "minLength": 1,
       "default": "Borgia, le jeu malsain",
-      "id": "title"
+      "id": "title",
+      "title": "Title",
+      "description": "The title of the game"
     },
     "description": {
       "type": "string",
       "minLength": 1,
       "default": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia.",
-      "id": "description"
+      "id": "description",
+      "title": "Description",
+      "description": "Desribe the content of the game"
     },
     "themes": {
       "type": "object",
@@ -39,7 +29,29 @@
         "minLength": 1,
         "default": "A theme"
       },
-      "id": "themes"
+      "id": "themes",
+      "title": "Themes",
+      "description": "Thematics of the game"
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "default": "game",
+      "id": "type",
+      "title": "Type",
+      "description": "Is that a game, a book or sth else ?"
+    },
+    "genres": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "default": "stratégie"
+      },
+      "id": "genres",
+      "title": "Genre",
+      "description": "TYpe of gameplay (adventure, role, etc.)"
     },
     "publishers": {
       "type": "array",
@@ -49,17 +61,21 @@
         "minLength": 1,
         "default": "Les Chiens de l'Enfer"
       },
-      "id": "publishers"
+      "id": "publishers",
+      "title": "Publisher(s)",
+      "description": "Who published this game?"
     },
     "publication_year": {
       "type": "integer",
       "multipleOf": 1,
-      "maximum": 10000,
+      "maximum": 2100,
       "minimum": 1,
       "exclusiveMaximum": false,
       "exclusiveMinimum": false,
       "default": 2012,
-      "id": "publication_year"
+      "id": "publication_year",
+      "title": "Publication Year",
+      "description": "When was this game published ?"
     },
     "authors": {
       "type": "array",
@@ -69,7 +85,9 @@
         "minLength": 1,
         "default": "Mary Christides"
       },
-      "id": "authors"
+      "id": "authors",
+      "title": "Authors",
+      "description": "Who are the authors ?"
     },
     "illustrators": {
       "type": "array",
@@ -79,7 +97,10 @@
         "minLength": 1,
         "default": "Mary Christides"
       },
-      "id": "illustrators"
+      "id": "illustrators",
+      "title": "Illustrators / Artists",
+      "description": "Who are the illustrators and artists ?"
+
     },
     "duration": {
       "type": "integer",
@@ -89,7 +110,9 @@
       "exclusiveMaximum": false,
       "exclusiveMinimum": false,
       "default": 60,
-      "id": "duration"
+      "id": "duration",
+      "title": "Duration of a game",
+      "description": "How long last a game ? (in minutes)"
     },
     "audience": {
       "type": "array",
@@ -99,7 +122,9 @@
         "minLength": 1,
         "default": "adults"
       },
-      "id": "audience"
+      "id": "audience",
+      "title": "Audience",
+      "description": "Who should play this game ?"
     },
     "players_min": {
       "type": "integer",
@@ -109,7 +134,9 @@
       "exclusiveMaximum": false,
       "exclusiveMinimum": false,
       "default": 3,
-      "id": "players_min"
+      "id": "players_min",
+      "title": "Max numbers of players",
+      "description": "Maximum number of players"
     },
     "players_max": {
       "type": "integer",
@@ -119,7 +146,9 @@
       "exclusiveMaximum": false,
       "exclusiveMinimum": false,
       "default": 6,
-      "id": "players_max"
+      "id": "players_max",
+      "title": "Min numbers of players",
+      "description": "Minimum number of players"
     },
     "fab_time": {
       "type": "integer",
@@ -129,7 +158,9 @@
       "exclusiveMaximum": false,
       "exclusiveMinimum": false,
       "default": 120,
-      "id": "fab_time"
+      "id": "fab_time",
+      "title": "Fabrication Time",
+      "description": "How much time does it take to fabricate the game?"
     },
     "requirements": {
       "type": "object",
@@ -140,38 +171,50 @@
         "minLength": 0,
         "default": "imprimante"
       },
-      "id": "requirements"
+      "id": "requirements",
+      "title": "Requirements",
+      "description": "What do you need to fabricate this game?"
     },
     "source": {
       "type": "string",
       "minLength": 0,
       "default": "http://leschiensdelenfer.org/editions-chiens-de-lenfer/borgia-le-jeu-malsain/",
-      "id": "source"
+      "id": "source",
+      "title": "Source / Link",
+      "description": "A link to the game website or page"
     },
     "license": {
       "type": "string",
       "minLength": 1,
       "default": "CC BY-NC-SA 4.0",
-      "id": "license"
+      "id": "license",
+      "title": "License",
+      "description": "The license"
     },
     "language": {
       "type": "string",
       "minLength": 1,
       "maxLength": 2,
       "default": "en",
-      "id": "language"
+      "id": "language",
+      "title": "Language",
+      "description": "Language required to play the game / read the instructions"
     },
     "ISBN": {
       "type": "array",
       "uniqueItems": false,
       "items": {},
-      "id": "ISBN"
+      "id": "ISBN",
+      "title": "ISBN",
+      "description": "ISBN (if applicable)"
     },
     "timestamp_add": {
       "type": "string",
       "minLength": 1,
       "default": "10/10/2015 14:52:35",
-      "id": "timestamp_add"
+      "id": "timestamp_add",
+      "title": "Updated time",
+      "description": "Last time this info has been updated"
     }
   },
   "id": "/",

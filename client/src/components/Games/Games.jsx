@@ -1,8 +1,8 @@
 import React from 'react'
-import axios from 'axios'
 
 import GamesTable from '../GamesTable/GamesTable.jsx'
 
+// TODO: move all data logic to a separate API file
 export default class Games extends React.Component {
 
   constructor(props) {
