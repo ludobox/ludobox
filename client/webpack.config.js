@@ -32,8 +32,6 @@ if(process.env.NODE_ENV === 'production'){
     devtool = 'eval'
 }
 
-
-
 let node_modules_dir = path.resolve(__dirname, 'node_modules');
 
 module.exports = {

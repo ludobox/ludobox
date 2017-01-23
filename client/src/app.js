@@ -18,9 +18,8 @@ render((
       <Route path="about" component={AboutPage}/>
       <Route path="create" component={AddGame}/>
       <Route path="download" component={RemoteGames}/>
-      <Route path="games" component={Games} >
-        <Route path="/games/:gameId" component={Game}/>
-      </Route>
+      <Route path="games" component={Games} />
+      <Route path="games/:gameSlug" component={Game}/>
       <Route path="*" component={Page404}/>
       <IndexRedirect to="/home" />
     </Route>
