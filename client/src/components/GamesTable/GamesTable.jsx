@@ -3,7 +3,6 @@ import React from 'react'
 export default class GamesTable extends React.Component {
 
   render() {
-    console.log(this.props.games);
     let rows = this.props.games.map( game => (
       <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
         key={game.slug}>

@@ -39,10 +39,11 @@ export default class RemoteGames extends React.Component {
 
     // // check which games already exists locally on the box
     let localGamesSlugs = this.state.localGames.map( d => d.slug)
+
     let games = this.state.remoteGames.map( d => {
-        let existsLocally = localGamesSlugs.indexOf(d.slug) != -1 ? true : false;;
-        return { ...d, existsLocally}
-      })
+      let existsLocally = localGamesSlugs.indexOf(d.slug) !== -1 ? true : false;
+      return { ...d, existsLocally}
+    })
 
     return (
       <div>
