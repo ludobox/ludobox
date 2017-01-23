@@ -83,10 +83,3 @@ def validate_config(config):
         assert validate_url(config["web_server_url"]) is True
 
     return config
-
-def read_games_list():
-    """Read the YAML list of games"""
-    with open(GAMES_LIST_FILE, "r") as gamefile:
-        game_list = yaml.load(gamefile)
-        print "Games list loaded : %s games"%len(game_list["games"])
-    return game_list["games"]

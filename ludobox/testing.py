@@ -64,18 +64,3 @@ def autotest(**kwargs):
               "the command: py.test tests")
     else:
         print("SUCCESS")
-
-    # Functional tests
-    print("FUNCTIONAL TESTS".center(80, '#'))
-    print("Tests actual real life usage and data".center(80, '-'))
-    func_result = pytest.main([
-        "--quiet",
-        "--color=no",
-        "--tb=line",
-        "tests/functional_tests.py"])
-    if func_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
-        print("FAIL")
-        print("     To have more details about the errors you should try "
-              "the command: py.test tests/functional_tests.py")
-    else:
-        print("SUCCESS")

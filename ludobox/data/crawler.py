@@ -44,20 +44,3 @@ def download_from_server(url, dest_dir, filename) :
     testfile = urllib.URLopener()
     testfile.retrieve(url, file_path)
     print "Data from %s saved in %s "%(url,filename)
-
-
-def update_from_web_server(games_list, config, update_index=False, update_games=False):
-    """Alternative methods to update through another Ludobox server"""
-
-    if not os.path.isfile(config["index_path"]) or update_index :
-        # update index
-        url = build_url("index/index.json")
-        download_from_server(url, config["data_dir"], "index")
-
-    # download games
-    if update_games:
-        for game_name in games_list:
-            slug = slugify(game_name)
-            url = build_url(slug+"/info.json")
-            download_from_server(url, config["data_dir"], slug)
-        print "Games data updated."
