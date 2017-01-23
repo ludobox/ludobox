@@ -28,9 +28,9 @@ export default class Games extends React.Component {
         <h3>Games</h3>
         <p>All the games contained in the box</p>
         {
-          this.state.localGames.length ?
+          this.state.games.length ?
           <GamesTable
-            games={this.state.localGames}
+            games={this.state.games}
           />
           :
           "No games available."
