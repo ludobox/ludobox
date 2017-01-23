@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class GameIndex extends React.Component {
+export default class GamesTable extends React.Component {
 
   handleClick(slug){
     this.props.fetchGame(slug)

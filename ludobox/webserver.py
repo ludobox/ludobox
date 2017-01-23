@@ -54,12 +54,6 @@ def serve(debug, port, **kwargs):
 
     app.run(host='0.0.0.0', port=_port, debug=debug)
 
-# TODO : optimize by pre-building files
-@app.route('/', methods=['GET'])
-def serve_intro():
-    """Serve the main page."""
-    return render_template('index.html')
-
 # STATIC FILES
 @app.route('/js/<path:path>')
 def serve_js(path):
@@ -175,6 +169,13 @@ def create_resource():
 
     # return original JSON
     return jsonify({"path" : data_path}), 201
+
+
+@app.route('/', defaults={'path': ''}, methods=['GET'])
+@app.route('/<path:path>', methods=['GET'])
+def catch_all(path):
+    """Serve the main page."""
+    return render_template('index.html')
 
 # add unlimited CORS access
 @app.after_request
