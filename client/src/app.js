@@ -9,15 +9,15 @@ import Games from './components/Games/Games.jsx'
 import AboutPage from './components/About/About.jsx'
 import AddGame from './components/AddGame/AddGame.jsx'
 import Page404 from './components/404/404.jsx'
-
-const LUDOBOX_REMOTE_ADDRESS = "http://192.168.1.30:8080";
+import RemoteGames from './components/RemoteGames/RemoteGames.jsx'
 
 render((
   <Router history={browserHistory}>
-    <Route path="/" component={App} remote_address={LUDOBOX_REMOTE_ADDRESS}>
+    <Route path="/" component={App}>
       <Route path="home" component={Home}/>
       <Route path="about" component={AboutPage}/>
       <Route path="create" component={AddGame}/>
+      <Route path="download" component={RemoteGames}/>
       <Route path="games" component={Games} >
         <Route path="/games/:gameId" component={Game}/>
       </Route>

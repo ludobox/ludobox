@@ -16,6 +16,9 @@ export default class NavBar extends React.Component {
             <li className="navbar-item">
               <a className="navbar-link" href="/create">Add game</a>
             </li>
+            <li className="navbar-item">
+              <a className="navbar-link" href="/download">Download</a>
+            </li>
             <li className="navbar-item"><a className="navbar-link" href="/about">About</a></li>
           </ul>
         </div>

@@ -26,22 +26,6 @@ export default class GamesTable extends React.Component {
         <td>{game.type}</td>
         <td>{game.fab_time}</td>
         <td>{game.language}</td>
-        { ! game.existsLocally && this.props.url ?
-          <td>
-            <a
-              href="#"
-              onClick={() => this.handleClick(game.slug) }
-              >
-              {this.props.downloading.indexOf(game.slug) === -1 ?
-                "Download"
-                :
-                "Downloading..."
-              }
-            </a>
-          </td>
-          :
-          null
-        }
       </tr>
     ))
 
