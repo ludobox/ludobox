@@ -55,6 +55,8 @@ export default class RemoteGames extends React.Component {
           this.state.remoteGames.length ?
           <GamesTable
             games={games}
+            remoteApi={this.remoteApi}
+            localApi={this.localApi}
           />
           :
           "No games available."

@@ -1,36 +1,59 @@
 import React from 'react'
 
-import APIClient from "../../api.js"
-
 export default class DownloadButton extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      downloading: false
+      downloading: false,
+      game : {},
+      gameReady: false,
+      files : [],
+      filesReady : false
     };
   }
 
-  this.handleClick(gameSlug) {
+  // TODO fix callback spagheti
+  handleClick(gameSlug) {
     this.setState({ downloading : true })
-    this.props.api.fetchGame(gameSlug,
-      game => this.setState({ downloading : false }),
-      game => this.setState({ downloading : false })
-    )
+
+    // get the game
+    this.props.remoteApi.getGame(gameSlug, game => {
+      this.setState({ game })
+      this.setState({ gameReady : true })
+      // donwload files list
+      this.props.remoteApi.getGameFilesList(gameSlug, files => {
+        this.setState({ files })
+        this.setState({ filesReady : true })
+        let opts = {
+            info : this.state.game,
+            files : files,
+            slug : gameSlug
+          }
+        console.log(opts);
+        this.props.localApi.cloneGame( opts, clonedGame => {
+            console.log(clonedGame);
+        })
+      })
+    })
   }
 
   render () {
+
     return (
-      {
-        this.state.downloading ?
+      <span>
+        { this.state.downloading ?
           "Downloading..."
-        :
+
+          :
           <a
             href="#"
-            onClick={() => this.handleClick(gameSlug) }
+            onClick={() => this.handleClick(this.props.slug) }
             >
-              "Download"
+            Download
           </a>
-      }
+        }
+      </span>
     )
   }
+}

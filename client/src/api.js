@@ -25,6 +25,19 @@ export default class APIClient {
       })
   }
 
+  post(url, payload, callback, errorCallback) {
+    console.log("POST : " + url)
+    axios.post(url, payload)
+      .then(res => {
+        var info = res.data
+        callback(info);
+      })
+      .catch((error) => {
+        this.handleError(error, errorCallback)
+      })
+  }
+
+
   getURL(path) {
     return this.baseUrl ? `${this.baseUrl}/api/${path}` : `/api/${path}`
   }
@@ -34,9 +47,23 @@ export default class APIClient {
     this.get(gameUrl, game => callback(game))
   }
 
-  getGameFilesList(slug) {
-    let gameUrl = this.getURL(`files/${slug}/info.json`);
-    this.get(gameUrl, files => console.log(files))
+  getGameFilesList(slug, callback) {
+    let gameUrl = this.getURL(`files/${slug}`);
+
+    this.get(gameUrl, files =>
+      callback(files.map( f => (
+        {
+          url : this.getURL(`files/${f}`),
+          filename : f
+        }
+      )))
+    )
+  }
+
+  cloneGame(opts, callback) {
+    console.log(opts);
+    let gameUrl = this.getURL(`clone`);
+    this.post(gameUrl, opts, path => callback(path))
   }
 
   getGames(callback) {
