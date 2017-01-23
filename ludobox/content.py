@@ -259,7 +259,16 @@ def get_games_index():
             # check if folder contains a info.json file
             if os.path.exists(info_file):
                 info = read_game_info(path)
-                info_files.append(info)
+                print info.keys()
+                wanted_keys = [
+                    "title",
+                    "description",
+                    "fab_time",
+                    "duration",
+                    "audience"
+                    ]
+
+                info_files.append({ k : info[k] for k in wanted_keys })
 
     return info_files
 
