@@ -2,23 +2,15 @@ import React from 'react'
 
 export default class GamesTable extends React.Component {
 
-  handleClick(slug){
-    this.props.fetchGame(slug)
-  }
-
   render() {
+    console.log(this.props.games);
     let rows = this.props.games.map( game => (
       <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
         key={game.slug}>
         <td>
           <a
-            href={
-              !game.existsLocally ?
-                this.props.url+"/games/"+game.slug
-                :
-                "/games/"+game.slug
-            }
-            target="_blank"
+            href={"/games/"+game.slug}
+            // target="_blank"
             >
             {game.title}
           </a>
