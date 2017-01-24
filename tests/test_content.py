@@ -110,8 +110,8 @@ class TestLudoboxContent(unittest.TestCase):
     #     write_attachements(test_files, self.tmp_path)
 
 
-    def test_build_index(self):
-        """Should build an index containing all data in this field"""
-
-        build_index()
-        self.assertTrue(os.path.exists(self.config["index_path"]))
+    # def test_build_index(self):
+    #     """Should build an index containing all data in this field"""
+    #
+    #     build_index()
+    #     self.assertTrue(os.path.exists(self.config["index_path"]))

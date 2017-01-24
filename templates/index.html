@@ -1,34 +1,41 @@
-{% set active_nav = "games" %}
-{% include "partials/header.html" %}
-    <div class="page-header">
-        <h1>List of games</h1>
-    </div>
+<!-- DOCTYPE HTML -->
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <title>Ludobox</title>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
 
-    <table id="gamestab" class="display" cellspacing="0" width="100%">
-        <caption>Games available</caption>
-        <thead>
-            <tr>
-                <td>Title</td>
-                <td>Link</td>
-                <td>Type</td>
-                <td>Themes</td>
-                <td>Time of making</td>
-                <td>Number of players</td>
-                <td>Languages available</td>
-            </tr>
-        </thead>
-        <tbody class="list">
-            {% for game in games %}
-            <tr>
-                <td class="title">{{ game.title.fr }}</td>
-                <td class="link"><a href="/static/games/{{ game.slug }}/index.html">{{ game.title.fr }}</a></td>
-                <td class="type">{{ game.type }}</td>
-                <td class="themes">{{ game.themes.fr|join(', ') }}</td>
-                <td class="fab_time"> {{game.fab_time}} </td>
-                <td class="players"> {{game.players}} </td>
-                <td class="languages"> {{game.languages|join(', ')}} </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% include "partials/footer.html" %}
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Your page title here :)</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/skeleton.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+  <div id="ludobox" class="container">
+  </div>
+  <script src="/js/bundle.js" charset="utf-8"></script>
+</body>
+</html>

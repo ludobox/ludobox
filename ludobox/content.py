@@ -10,8 +10,8 @@ from slugify import slugify
 from jsonschema import validate, ValidationError
 
 from ludobox.errors import LudoboxError
-
 from ludobox.config import read_config
+
 config = read_config()
 
 with open(os.path.join(os.getcwd(), "ludobox/model/schema.json")) as f :
@@ -78,7 +78,7 @@ def read_game_info(path):
     # TODO Add some attachment info
 
     # Add permalink
-    data["slug"] = slugify(data["title"]["fr"])
+    data["slug"] = slugify(data["title"])
 
     return data
 
@@ -86,7 +86,7 @@ def get_resource_slug(data):
     """Get the slugified name of the game based on the data set"""
     try:
         # TODO: support for any language !
-        return slugify(data["title"]["fr"])
+        return slugify(data["title"])
     except KeyError as e:
         # TODO more explicit error message
         message = "KeyError occured while "\
@@ -94,6 +94,21 @@ def get_resource_slug(data):
                   "Impossible to access data['title']['fr'].".format(
                     path=data)
         raise LudoboxError(message)
+
+def create_game_path(game_path) :
+    """Create the dir to store the game"""
+    try:
+        os.makedirs(game_path)
+    except Exception as e:
+        message = "<{error}> occured while "\
+                  "writing game info file to path '{path}'."\
+                  "Impossible to create "\
+                  "directory '{game_path}'.".format(
+                    error=e.strerror,
+                    path=config['data_dir'],
+                    game_path=os.path.abspath(game_path))
+        raise LudoboxError(message)
+    print "path created : %s"%game_path
 
 def write_game(info, attachments, data_dir):
     """
@@ -103,7 +118,7 @@ def write_game(info, attachments, data_dir):
     Arguments:
     info -- a dictionnary storing all the information about the game. It
             exactly mimic the structure of the disired JSON file. The
-            data["title"]["fr"] must exist, no other verification is made to
+            data["title"] must exist, no other verification is made to
             check it contains coherent structure or data.
     attachments -- list of files attached to the game (rules, images...).
     data_dir -- directory where all the game directories are stored i.e. where
@@ -124,18 +139,7 @@ def write_game(info, attachments, data_dir):
 
     # Create a directory after the cleaned name of the game
     game_path = os.path.join(data_dir, slugified_name)
-    try:
-        os.makedirs(game_path)
-    except Exception as e:
-        message = "<{error}> occured while "\
-                  "writing game info file to path '{path}' for "\
-                  "game '{game}'. Impossible to create "\
-                  "directory '{game_path}'.".format(
-                    error=e.strerror,
-                    path=data_dir,
-                    game=slugified_name,
-                    game_path=os.path.abspath(game_path))
-        raise LudoboxError(message)
+    create_game_path(game_path)
 
     # create JSON resource
     write_info_json(info, game_path)
@@ -186,7 +190,6 @@ def write_info_json(info, game_path):
                     path=game_path,
                     json=json_path)
         raise LudoboxError(message)
-
 
 ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip"]
 
@@ -243,12 +246,8 @@ def write_attachments(attachments, game_path):
                         attachments_path=os.path.abspath(attachments_path))
             raise LudoboxError(message)
 
-def build_index():
-    """Create an index of all games and content avaible inside the box"""
-
-    # TODO : check are you sure to update index (y/n) ?
-    # if os.path.exists(config["index_path"]):
-
+def get_games_index():
+    """Loop through all and parse an index of available games"""
     info_files = []
 
     # loop through all folders
@@ -260,7 +259,28 @@ def build_index():
             # check if folder contains a info.json file
             if os.path.exists(info_file):
                 info = read_game_info(path)
-                info_files.append(info)
+                wanted_keys = [
+                    "title",
+                    "description",
+                    "fab_time",
+                    "duration",
+                    "slug",
+                    "audience",
+                    "language",
+                    "type"
+                    ]
+
+                info_files.append({ k : info[k] for k in wanted_keys })
+
+    return info_files
+
+def build_index():
+    """Create a JSON index file of all games available inside the box"""
+
+    # TODO : check are you sure to update index (y/n) ?
+    # if os.path.exists(config["index_path"]):
+
+    info_files = get_games_index()
 
     # TODO : filter infos to make the index file smaller
     with open(config["index_path"], "wb") as index_file:
