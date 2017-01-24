@@ -9,6 +9,8 @@ import shutil
 import io
 from StringIO import StringIO
 
+from jsonschema import validate, ValidationError
+
 from ludobox.webserver import app
 from ludobox.config import read_config
 from ludobox.content import read_game_info
@@ -43,6 +45,44 @@ class TestLudoboxWebServer(unittest.TestCase):
 
         self.assertEqual(result.status_code, 200)
         # self.assertEqual(json.loads(result.data), {"name" : self.config["ludobox_name"]})
+
+    def test_css(self):
+        result = self.app.get('/css/style.css')
+        self.assertEqual(result.status_code, 200)
+
+    def test_js(self):
+        result = self.app.get('/js/bundle.js')
+        self.assertEqual(result.status_code, 200)
+
+    def test_js(self):
+        result = self.app.get('/images/favicon.png')
+        self.assertEqual(result.status_code, 200)
+
+    def test_schema(self):
+        result = self.app.get('/api/schema')
+        self.assertEqual(result.status_code, 200)
+
+        schema = json.loads(result.data)
+        self.assertIs(type(schema), dict)
+        print schema
+
+        self.assertRaises(ValidationError, lambda : validate({ "test" : [1,3,2,4]}, schema))
+
+    def test_files_api_with_no_files(self):
+        result = self.app.get('/api/files/dsdqdqs')
+        data = json.loads(result.data)
+        self.assertEquals(data, [])
+
+    def test_files_api_with_no_files(self):
+        result = self.app.get('/api/files/borgia-le-jeu-malsain')
+        data = json.loads(result.data)
+        self.assertEquals(data, ["README.md"])
+
+    def test_game_index(self):
+        result = self.app.get('/api/games')
+        data = json.loads(result.data)
+        self.assertIs(type(data), list)
+        self.assertTrue(type(data[0]), dict)
 
     def test_upload_allowed(self):
         app.config["UPLOAD_ALLOWED"] = False
