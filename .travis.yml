@@ -13,3 +13,5 @@ script:
   - "ludobox serve &" # lauch a ludobox server in the background
   - "py.test tests"
   - "killall ludobox" # kill all processes at the end
+  - "cd client"
+  - "npm test"
