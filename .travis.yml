@@ -8,13 +8,8 @@ install:
   - "cd data"
   - "git clone https://github.com/ludobox/borgia-le-jeu-malsain"
   - "cd .."
-  - "cd client"
-  - "npm install"
-  - "cd .."
 # command to run tests
 script:
   - "ludobox serve &" # lauch a ludobox server in the background
   - "py.test tests"
   - "killall ludobox" # kill all processes at the end
-  - "cd client"
-  - "npm test"
