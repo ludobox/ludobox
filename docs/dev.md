@@ -22,11 +22,11 @@ To test, you need some data. You can generate fake game descriptions using the `
 
 ### Testing
 
-    ludobox autotest
+    py.test tests
 
 ### Coverage
 
-    coverage  run --source ludobox -m ludobox.main autotest
+    coverage  run --source ludobox -m py.test tests
 
 ### Build the docs
 
