@@ -5,6 +5,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <span>
+        <h3>Hello !</h3>
         <p>Welcome to Ludobox :)</p>
         <p>What would you like to do ?</p>
         <ul>
