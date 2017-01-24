@@ -12,7 +12,6 @@ from StringIO import StringIO
 from ludobox.webserver import app
 from ludobox.config import read_config
 from ludobox.content import read_game_info
-from ludobox.core import OUTPUT_DIR, clean
 
 class TestLudoboxWebServer(unittest.TestCase):
 

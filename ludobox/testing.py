@@ -26,10 +26,6 @@ def autotest(**kwargs):
     *   unittest from the `tests` directory. Those test are here to check that
         every function works as expected and that all functionnalities are ok
         even in corner cases. They use :mod:`pytest` module.
-    *   functionnal tests that try to replicate actuel usecases. They are
-        located in `functional_test.py`. They use :mod:`pytest` module. This is
-        the equivalent of doing :command:`py.test --quiet --tb=line
-        functional_test.py`
 
     kwargs is used here since this function is called by :func:`main` via
     :mod:`argparse`. And all the params are provided automagically by
@@ -55,7 +51,7 @@ def autotest(**kwargs):
     print("Tests every functionnality in deep".center(80, '-'))
     unit_result = pytest.main([
         "--quiet",
-        "--color=no",
+        "--color=yes",
         "--tb=line",
         "tests"])
     if unit_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):

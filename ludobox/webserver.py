@@ -16,7 +16,6 @@ from ludobox import __version__
 from ludobox.config import read_config
 from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index
 from ludobox.errors import LudoboxError
-from ludobox.core import generate_all, OUTPUT_DIR
 
 from ludobox.data.crawler import download_from_server
 
