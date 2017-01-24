@@ -4,7 +4,6 @@
 import os
 import argparse
 
-from ludobox.testing import autotest
 from ludobox.webserver import serve
 
 # TODO: move this to config file
@@ -23,12 +22,6 @@ def config_parser():
         title="actions",
         description="the program needs to know what action you want it to do.",
         help="those are all the possible actions")
-
-    # Autotest command ########################################################
-    parser_autotest = subparsers.add_parser(
-        "autotest",
-        help="Execute all the test to check if the program works correctly.")
-    parser_autotest.set_defaults(func=autotest)
 
     # Serve command ###########################################################
     parser_serve = subparsers.add_parser(
