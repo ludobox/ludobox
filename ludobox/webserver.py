@@ -32,7 +32,13 @@ print "Data will be stored at %s"%app.config["DATA_DIR"]
 app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
 print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
 
-def serve(debug, port, **kwargs):
+def get_server_port(port):
+    # check if port number is ok
+    if port is None : _port = config["port"]
+    else : _port = int(port)
+    return _port
+
+def serve(debug, _port, **kwargs):
     """
     Launch an tiny web server to make the ludobox site available.
 
@@ -46,12 +52,9 @@ def serve(debug, port, **kwargs):
     :func:`vars`.
     See `Namespace object<https://docs.python.org/2/library/argparse.html#the-namespace-object>`_
     """
-
-    # check if port number is ok
-    if port is None : _port = config["port"]
-    else : _port = int(port)
-
-    app.run(host='0.0.0.0', port=_port, debug=debug)
+    
+    port = get_server_port(_port)
+    app.run(host='0.0.0.0', port=port, debug=debug)
 
 # STATIC FILES
 @app.route('/js/<path:path>')

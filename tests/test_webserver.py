@@ -11,7 +11,7 @@ from StringIO import StringIO
 
 from jsonschema import validate, ValidationError
 
-from ludobox.webserver import app
+from ludobox.webserver import app, get_server_port
 from ludobox.config import read_config
 from ludobox.content import read_game_info
 
@@ -33,6 +33,12 @@ class TestLudoboxWebServer(unittest.TestCase):
 
         # propagate the exceptions to the test client
         self.app.testing = True
+
+
+    def test_get_server_port(self):
+        """Test default and custom port for server"""
+        self.assertEquals(get_server_port(None), 8080)
+        self.assertEquals(get_server_port(4040), 4040)
 
     def test_home_status_code(self):
         result = self.app.get('/')
