@@ -38,7 +38,7 @@ def get_server_port(port):
     else : _port = int(port)
     return _port
 
-def serve(debug, _port, **kwargs):
+def serve(debug, port, **kwargs):
     """
     Launch an tiny web server to make the ludobox site available.
 
@@ -52,9 +52,9 @@ def serve(debug, _port, **kwargs):
     :func:`vars`.
     See `Namespace object<https://docs.python.org/2/library/argparse.html#the-namespace-object>`_
     """
-    
-    port = get_server_port(_port)
-    app.run(host='0.0.0.0', port=port, debug=debug)
+
+    _port = get_server_port(port)
+    app.run(host='0.0.0.0', port=_port, debug=debug)
 
 # STATIC FILES
 @app.route('/js/<path:path>')

@@ -15,7 +15,7 @@ OUTPUT_DIR = os.path.join(os.getcwd(),"static")
 def config_parser():
     """Configure the argument parser and returns it."""
     # Initialise the parsers
-    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser = argparse.ArgumentParser(description="Ludobox server.")
 
     # Add all the actions (subcommands)
     subparsers = parser.add_subparsers(
