@@ -58,7 +58,8 @@
           "title": "Genre",
           "description": "TYpe of gameplay (adventure, role, etc.)"
         }
-      }
+      },
+      "required": ["content_type"]
     },
     "credentials": {
       "type": "object",
@@ -67,7 +68,8 @@
         "license": {
           "type": "string",
           "minLength": 1,
-          "default": "CC BY-NC-SA 4.0",
+          "default": "Unknown",
+          "enum" : ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"],
           "id": "license",
           "title": "License",
           "description": "The license"
@@ -121,7 +123,8 @@
           "description": "Who are the illustrators and artists ?"
 
         }
-      }
+      },
+      "required": ["license"]
     },
     "audience": {
       "type": "object",
@@ -189,11 +192,13 @@
           "title": "Language",
           "description": "Language required to play the game / read the instructions"
         }
-      }
+      },
+      "required": ["language"]
     },
     "fabrication": {
       "type": "object",
       "title" : "Fabrication - who to fabricate this game ?",
+      "required": ["fab_time"],
       "properties": {
         "fab_time": {
           "type": "integer",
@@ -241,7 +246,8 @@
           "title": "ISBN",
           "description": "ISBN (if applicable)"
         }
-      }
+      },
+      "required": ["url"]
     },
     "timestamp_add": {
       "type": "string",
@@ -254,16 +260,7 @@
   },
   "id": "/",
   "required": [
-    "type",
-    "genres",
     "title",
-    "themes",
-    "duration",
-    "audience",
-    "fab_time",
-    "source",
-    "license",
-    "language",
     "timestamp_add"
   ]
 }

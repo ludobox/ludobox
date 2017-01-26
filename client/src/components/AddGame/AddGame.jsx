@@ -4,8 +4,28 @@ import Form from 'react-jsonschema-form';
 import Dropzone from 'react-dropzone';
 
 import {ToastContainer, ToastMessage} from 'react-toastr';
-console.log(schema);
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
+
+import CustomFieldTemplate from './FieldTemplate.jsx';
+
+import APIClient from "../../api.js"
+
+const style = {
+  form: {
+    columnCount: 3
+  },
+  dropZone : {
+    borderWidth: 4,
+    borderColor: '#CCC',
+    borderStyle: 'dashed',
+    borderRadius: 4,
+    margin: 30,
+    padding: 30,
+    width: 500,
+    height: 300,
+    transition: 'all 0.5s'
+  }
+}
 
 const uiSchema = {
   "ui:order": [
@@ -46,6 +66,7 @@ export default class AddGame extends React.Component {
 
   constructor(props) {
     super(props)
+    this.api = new APIClient()
     this.state = {
       files : [],
       info : {}
@@ -59,26 +80,38 @@ export default class AddGame extends React.Component {
     });
   }
 
-  success() {
-    console.log(this);
-    this.refs.container.success(
-      "You have successfully added a new game.",
-      "Congrats !",
-      {
-      closeButton:true,
-      timeOut: 5000
+  onSubmit(resp){
+    console.log("yay I'm valid!")
+    this.setState({ info : resp.formData })
+    if( ! this.state.files.length)
+      this.refs.container.error(
+          "Please add a file...",
+          "No files attached",
+        {
+          closeButton:true,
+          handleOnClick: function() { console.log("click") }
+        }
+      )
+    else {
+      // POST
+      console.log(`ok, let's post that info with ${this.state.files.length} files !`)
 
-    });
+      this.api.postGame(resp.formData, this.state.files, (resp) =>
+        console.log(resp)
+      )
+    }
+
   }
 
   errors(errors) {
     console.log("errors");
-    this.refs.container.error(
-        errors.toString(),
-        "There is errors...",
-      {
-        closeButton:true
-      });
+
+    // this.refs.container.error(
+    //     errors.toString(),
+    //     "There is errors...",
+    //   {
+    //     closeButton:true
+    //   });
   }
 
   render() {
@@ -86,7 +119,10 @@ export default class AddGame extends React.Component {
     return (
       <span>
         <h3>Add a new game !</h3>
-        <Dropzone onDrop={this.onDrop.bind(this)}>
+        <Dropzone
+          onDrop={this.onDrop.bind(this)}
+          style={style.dropZone}
+          >
           <div>Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>
         {
@@ -94,22 +130,25 @@ export default class AddGame extends React.Component {
           <div>
             <p>Uploading {this.state.files.length} files...</p>
             <ul>
-              {this.state.files.map( file =>  <li>{file.name}</li> )}
+              {this.state.files.map( file =>  <li key={file.name}>{file.name}</li> )}
             </ul>
           </div>
           :
             null
         }
-        {/* <ToastContainer ref="container"
+        <ToastContainer ref="container"
             toastMessageFactory={ToastMessageFactory}
-            className="toast-top-right" /> */}
+            className="toast-top-right" />
 
         <Form
           schema={schema}
           uiSchema={uiSchema}
+          formData={this.state.info}
           // onChange={this.success.bind(this)}
-          onSubmit={this.success.bind(this)}
-          onError={this.errors.bind(this)} />
+          // FieldTemplate={CustomFieldTemplate}
+          onSubmit={ this.onSubmit.bind(this)}
+          onError={ ({errors}) => this.errors.bind(this, errors)}
+          />
 
       </span>
     )

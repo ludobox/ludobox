@@ -66,6 +66,23 @@ export default class APIClient {
     this.post(gameUrl, opts, path => callback(path))
   }
 
+  postGame(info, files, callback) {
+    console.log(info, files);
+    let gameUrl = this.getURL(`create`);
+
+    // create payload
+    const payload = new FormData();
+    // add files
+    files.forEach( file =>
+      payload.append('files', file, file.name)
+    )
+    // add info
+    payload.append("info", JSON.stringify(info));
+
+    // POST !
+    this.post(gameUrl, payload, path => callback(path))
+  }
+
   getGames(callback) {
     let gamesUrl = this.getURL(`games`);
     this.get(gamesUrl, gamesList => callback(gamesList))

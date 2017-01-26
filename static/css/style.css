@@ -39,16 +39,18 @@
    color: #33C3F0; }
 
 
-legend[id^="root__"] {
-  font-weight: normal;
-}
-p[id^="root__"] {
-  font-size: 1.5em;
-  border-bottom: 1px solid #ccc;
+/*Hide the useless title */
+[id^="root__"] {
+  display :none
 }
 
 textarea, input  {
   width : 100%;
+}
+
+.form-group:nth-child(2n) {
+  break-before: always;
+  display: inline-block;
 }
 
 .checkbox-inline input {
@@ -61,6 +63,12 @@ textarea, input  {
   border-bottom: 1px solid #ccc;
   width : 100%;
   font-weight: normal;
+}
+
+.rjsf {
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
 }
 
 .btn-add > i, .array-item-move-down > i, .array-item-move-up >i {

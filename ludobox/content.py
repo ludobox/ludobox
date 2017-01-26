@@ -191,7 +191,7 @@ def write_info_json(info, game_path):
                     json=json_path)
         raise LudoboxError(message)
 
-ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip"]
+ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip", "pdf"]
 
 def allowed_file(filename):
     """Check for valid file extensions"""
