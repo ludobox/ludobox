@@ -37,3 +37,54 @@
    color: #222; }
  .navbar-link.active {
    color: #33C3F0; }
+
+
+legend[id^="root__"] {
+  font-weight: normal;
+}
+p[id^="root__"] {
+  font-size: 1.5em;
+  border-bottom: 1px solid #ccc;
+}
+
+textarea, input  {
+  width : 100%;
+}
+
+.checkbox-inline input {
+  width : auto;
+}
+
+.rjsf > div > fieldset > div > fieldset > legend  {
+  margin: 1.5em 0 1em 0;
+  font-size: 1.5em;
+  border-bottom: 1px solid #ccc;
+  width : 100%;
+  font-weight: normal;
+}
+
+.btn-add > i, .array-item-move-down > i, .array-item-move-up >i {
+  display: none;
+}
+
+.array-item-move-down:after { content: "▼"; }
+.array-item-move-up:after { content: "▲"; }
+.btn-add::after { content: "+"; }
+
+.array-item div {
+  display: inline-block;
+}
+.array-item-toolbox {
+  margin-left: .5em;
+  width: 7em;
+}
+.btn.array-item-remove > i {
+  display: none;
+}
+.btn.array-item-remove:after {
+  content: "-";
+}
+
+.error-detail, .errors {
+  color : red
+}
