@@ -6,8 +6,6 @@ import Dropzone from 'react-dropzone';
 import {ToastContainer, ToastMessage} from 'react-toastr';
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
-import CustomFieldTemplate from './FieldTemplate.jsx';
-
 import APIClient from "../../api.js"
 
 const style = {
