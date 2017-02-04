@@ -23,7 +23,8 @@ from ludobox.data.crawler import download_from_server
 # parse config
 config = read_config()
 
-app = Flask("LUDOSERVER")  # web server instance used to defines routes
+tmpl_dir = os.path.join(os.path.join(os.getcwd(), 'server'), 'templates')
+app = Flask("LUDOSERVER", template_folder=tmpl_dir)  # web server instance used to defines routes
 
 # config
 app.config["DATA_DIR"] = config["data_dir"] # used for testing
@@ -31,6 +32,7 @@ print "Data will be stored at %s"%app.config["DATA_DIR"]
 
 app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
 print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
+
 
 def get_server_port(port):
     # check if port number is ok
@@ -59,15 +61,15 @@ def serve(debug, port, **kwargs):
 # STATIC FILES
 @app.route('/js/<path:path>')
 def serve_js(path):
-    return send_from_directory('static/js', path)
+    return send_from_directory('public/js', path)
 
 @app.route('/css/<path:path>')
 def serve_css(path):
-    return send_from_directory('static/css', path)
+    return send_from_directory('public/css', path)
 
 @app.route('/images/<path:path>')
 def serve_images(path):
-    return send_from_directory('static/images', path)
+    return send_from_directory('public/images', path)
 
 # API Calls
 @app.route('/api')
@@ -81,7 +83,7 @@ def show_hand():
 
 @app.route('/api/schema')
 def serve_schema():
-    return send_from_directory('ludobox/model', "schema.json")
+    return send_from_directory('model', "schema.json")
 
 @app.route('/api/games')
 def serve_games_json_index():

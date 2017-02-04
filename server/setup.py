@@ -29,7 +29,7 @@ except ImportError:
 version = "0.8.0"  # [major].[minor].[release]
 
 # parse README
-with open('README.md') as readme_file:
+with open('../README.md') as readme_file:
     long_description = readme_file.read()
 
 # parse requirements
@@ -38,7 +38,7 @@ with open('requirements.txt') as f:
 
 setup(
       name="ludobox",
-      packages=find_packages(exclude=['tests']),
+      packages=find_packages(exclude=['client','tests', 'model', 'data', 'docs', 'templates']),
       version=version,
       description="Ludobox",
       long_description=long_description,

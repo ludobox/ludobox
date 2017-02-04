@@ -60,7 +60,7 @@ class TestLudoboxWebServer(unittest.TestCase):
         result = self.app.get('/js/bundle.js')
         self.assertEqual(result.status_code, 200)
 
-    def test_js(self):
+    def test_images(self):
         result = self.app.get('/images/favicon.png')
         self.assertEqual(result.status_code, 200)
 
@@ -105,7 +105,7 @@ class TestLudoboxWebServer(unittest.TestCase):
 
     def test_api_add_game(self):
 
-        valid_info = read_game_info(os.path.join(os.getcwd(), 'tests/test-data/test-game'))
+        valid_info = read_game_info(os.path.join(os.getcwd(), 'server/tests/test-data/test-game'))
 
         data = {
             'files': [
@@ -140,7 +140,7 @@ class TestLudoboxWebServer(unittest.TestCase):
     #     # delete everything first
     #     clean(OUTPUT_DIR)
     #
-    #     valid_info = read_game_info(os.path.join(os.getcwd(), 'tests/test-data/test-game'))
+    #     valid_info = read_game_info(os.path.join(os.getcwd(), 'server/tests/test-data/test-game'))
     #     data = {
     #         'files': [
     #             (StringIO('my readme'), 'test-README.txt'),

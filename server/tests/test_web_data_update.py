@@ -11,11 +11,13 @@ class TestLudoboxWebDataUpdate(unittest.TestCase):
     """Testing utils function"""
 
     def setUp(self):
-        test_config_file = os.path.join(os.getcwd(),"tests/test_config.yml")
+        test_config_file = os.path.join(os.getcwd(),"server/tests/test_config.yml")
         self.config = read_config(config_path=test_config_file)
+        print self.config
 
     def test_build_url(self):
         url = build_url("index.json")
+        print url
         self.assertEquals(url, "http://localhost:8080/api/index.json")
 
     def test_handshake(self):

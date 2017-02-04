@@ -14,7 +14,7 @@ from ludobox.config import read_config
 
 config = read_config()
 
-with open(os.path.join(os.getcwd(), "ludobox/model/schema.json")) as f :
+with open(os.path.join(os.getcwd(), "model/schema.json")) as f :
     schema = json.load(f)
 
 def validate_game_data(data):

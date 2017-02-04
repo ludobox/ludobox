@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# A command line install tool for Ludobox
+#
+
+# prevent using sudo
+if [ "$EUID" -eq 0 ]
+  then echo "You are running this script as root. Please use another user."
+  exit
+fi
+
+# check if virtual env exist
+if [[ -z "$VIRTUAL_ENV" ]]; then
+    echo "No VIRTUAL_ENV is set. We advice you to use Python Virtual Env to avoid messing with sudo."
+    exit
+else
+    echo "VIRTUAL_ENV is set"
+fi
+
+# TODO : check python version
+
+# install python app
+( cd server ; python setup.py install )
