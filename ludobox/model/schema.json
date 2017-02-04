@@ -7,7 +7,6 @@
     "title": {
       "type": "string",
       "minLength": 1,
-      "default": "Borgia, le jeu malsain",
       "id": "title",
       "title": "Title",
       "description": "The title of the game"
@@ -19,7 +18,6 @@
         "summary": {
           "type": "string",
           "minLength": 1,
-          "default": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia.",
           "id": "summary",
           "title": "Summary",
           "description": "Desribe the content of the game"
@@ -51,12 +49,11 @@
           "uniqueItems": false,
           "items": {
             "type": "string",
-            "minLength": 1,
-            "default": "stratégie"
+            "minLength": 1
           },
           "id": "genres",
           "title": "Genre",
-          "description": "TYpe of gameplay (adventure, role, etc.)"
+          "description": "Type of gameplay (adventure, role, etc.)"
         }
       },
       "required": ["content_type"]
@@ -79,8 +76,7 @@
           "uniqueItems": false,
           "items": {
             "type": "string",
-            "minLength": 1,
-            "default": "Les Chiens de l'Enfer"
+            "minLength": 1
           },
           "id": "publishers",
           "title": "Publisher(s)",
@@ -93,7 +89,7 @@
           "minimum": 1,
           "exclusiveMaximum": false,
           "exclusiveMinimum": false,
-          "default": 2012,
+          "default": 1900,
           "id": "publication_year",
           "title": "Publication Year",
           "description": "When was this game published ?"
@@ -103,8 +99,7 @@
           "uniqueItems": false,
           "items": {
             "type": "string",
-            "minLength": 1,
-            "default": "Mary Christides"
+            "minLength": 1
           },
           "id": "authors",
           "title": "Authors",
@@ -115,8 +110,7 @@
           "uniqueItems": false,
           "items": {
             "type": "string",
-            "minLength": 1,
-            "default": "Mary Christides"
+            "minLength": 1
           },
           "id": "illustrators",
           "title": "Illustrators / Artists",
@@ -233,7 +227,6 @@
         "url": {
           "type": "string",
           "minLength": 0,
-          "default": "http://leschiensdelenfer.org/editions-chiens-de-lenfer/borgia-le-jeu-malsain/",
           "id": "url",
           "title": "Homepage / Link",
           "description": "A link to the game website or page"
