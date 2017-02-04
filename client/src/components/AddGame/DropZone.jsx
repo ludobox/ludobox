@@ -22,10 +22,10 @@ export default class DropZone extends React.Component {
   }
 
   onDrop(files) {
-    console.log(files);
     this.setState({
       files: [...this.state.files, ...files]
     });
+    this.props.handleAddFiles(files)
   }
 
   render() {

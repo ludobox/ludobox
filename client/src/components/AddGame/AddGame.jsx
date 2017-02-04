@@ -126,6 +126,10 @@ export default class AddGame extends React.Component {
     this.setState({selectedTab : name });
   }
 
+  handleAddFiles(files) {
+    this.setState({files : files });
+  }
+
   onSubmit(resp){
     console.log("yay I'm valid!")
     this.setState({ info : resp.formData })
@@ -181,7 +185,9 @@ export default class AddGame extends React.Component {
           >
           <h4>Add a new game</h4>
           <Element id="files">
-            <DropZone />
+            <DropZone
+              handleAddFiles={this.handleAddFiles.bind(this)}
+            />
           </Element>
           <Form
             schema={schema}
