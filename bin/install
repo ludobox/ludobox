@@ -3,21 +3,103 @@
 # A command line install tool for Ludobox
 #
 
-# prevent using sudo
-if [ "$EUID" -eq 0 ]
-  then echo "You are running this script as root. Please use another user."
-  exit
+# colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+INFO='\033[0;33m'
+# DARK_GRAY='\033[1;30m'
+NC='\033[0m' # No Color
+
+echo -e "${GREEN}Welcome to the Ludobox Installer \n ${NC}"
+
+
+# ask for confirmation
+function are_you_sure() {
+  read -p "Are you sure you want to continue (y/n)? " answer
+  case ${answer:0:1} in
+      y|Y )
+        echo "As you wish..."
+      ;;
+      * )
+          echo "Bye ! "
+          exit
+      ;;
+  esac
+}
+# notify when using sudo
+if [ "$EUID" -eq 0 ]; then
+  echo "You are running this script as root. "
+  are_you_sure
 fi
 
-# check if virtual env exist
+# notify when no virtual env exists
 if [[ -z "$VIRTUAL_ENV" ]]; then
-    echo "No VIRTUAL_ENV is set. We advice you to use Python Virtual Env to avoid messing with sudo."
-    exit
-else
-    echo "VIRTUAL_ENV is set"
+    echo "No virtual env has been set"
+    echo "We advice to use Virtualenv to avoid messing with your system settings."
+    are_you_sure
 fi
 
 # TODO : check python version
 
 # install python app
-( cd server ; python setup.py install )
+while true; do
+    read -p "Do you want to install Ludobox (y/n) ?" yn
+    case $yn in
+        [Yy]* ) ( cd server ; python setup.py install ); break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+echo
+echo -e "${GREEN}Installation successful ! ${NC}"
+
+echo
+echo -e "${INFO}Now, let's do some configuration. ${NC}"
+
+# interactive config
+LUDOBOX_NAME="My LudoBox"
+LUDOBOX_PORT=8080
+
+# check if the port is a number
+function read_port_number() {
+  echo -e "On which port do you want your box to run ${BLUE}(default : '$LUDOBOX_PORT')${NC}"
+  read input_port
+  re='^[0-9]+$'
+
+  if [[ -n "$input_port" ]] && ! [[ $input_port =~ $re ]] ; then
+    echo -e "${RED}Error:  Port should be a number${NC}"
+    read_port_number
+  fi
+}
+
+
+# create tmp config
+tmpfile=$(mktemp /tmp/ludobox-config.yml.XXXXXX)
+cp config.yml.sample tmpfile
+
+#
+echo -e "What is the name of your box ? ${BLUE}(default : '$LUDOBOX_NAME')${NC}"
+read input_name
+if [ -n "$input_name" ];
+then sed -i -e "s/$LUDOBOX_NAME/$input_name/g" tmpfile
+fi
+
+# port number
+read_port_number
+if [[ -n "$input_port" ]] ; then
+  sed -i -e "s/$LUDOBOX_PORT/$input_port/g" tmpfile
+fi
+
+# copy the right version
+mv tmpfile config.yml
+rm "$tmpfile"
+
+echo
+echo -e "${GREEN}Congrats, Installation successful ! ${NC}"
+echo -e "Your config file has been saved at 'config.yml'"
+
+echo
+echo -e "${INFO}Type 'ludobox start' in your terminal to get started right away.${NC}"
+echo -e "${INFO}Use 'ludobox --help' to see all available commands.${NC}"
