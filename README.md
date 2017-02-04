@@ -11,6 +11,7 @@ User Interface for the [Ludobox](http://ludobox.net) project.
     git clone https://github.com/ludobox/ludobox
     cd ludobox
     ./bin/install
+    ludobox start
 
 Read the docs at [ludobox.readthedocs.io](http://ludobox.readthedocs.io/)
 

@@ -79,18 +79,18 @@ def config_parser():
     parser_clean.set_defaults(func=clean)
 
     # Serve command ###########################################################
-    parser_serve = subparsers.add_parser(
-        "serve",
-        help="Launch an tiny web server to make the ludobox site available.")
-    parser_serve.set_defaults(func=serve)
+    parser_start = subparsers.add_parser(
+        "start",
+        help="Launch a tiny Ludobox web server.")
+    parser_start.set_defaults(func=serve)
 
-    parser_serve.add_argument(
+    parser_start.add_argument(
         "--debug",
         default=False,
         action='store_true',
         help="activate the debug mode of the Flask server (for development "
              "only NEVER use it in production).")
-    parser_serve.add_argument(
+    parser_start.add_argument(
         "--port",
         default=None,
         help="define port to serve the web application.")
