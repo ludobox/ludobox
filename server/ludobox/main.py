@@ -3,12 +3,16 @@
 
 import os
 import argparse
+import py
 
 from ludobox.webserver import serve
 
 # TODO: move this to config file
 INPUT_DIR = os.path.join(os.getcwd(),"data")
 OUTPUT_DIR = os.path.join(os.getcwd(),"static")
+
+def test(**kwargs):
+    py.test.cmdline.main("server/tests")
 
 # TODO add an info action that list the default dirs, all actual games
 #   installed
@@ -23,11 +27,17 @@ def config_parser():
         description="the program needs to know what action you want it to do.",
         help="those are all the possible actions")
 
+    # Test command ###########################################################
+    parser_serve = subparsers.add_parser(
+        "test",
+        help="Run server tests.")
+    parser_serve.set_defaults(func=test)
+
     # Serve command ###########################################################
     parser_serve = subparsers.add_parser(
         "serve",
         help="Launch an tiny web server to make the ludobox site available.")
-    parser_serve.set_defaults(func=serve)
+
     parser_serve.add_argument(
         "--debug",
         default=False,
