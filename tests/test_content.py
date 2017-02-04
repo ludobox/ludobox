@@ -27,6 +27,13 @@ class TestLudoboxContent(unittest.TestCase):
         self.tmp_path = "/tmp/test-le-jeu-coquin"
         clean_game(self.tmp_path)
 
+    def test_borgia_game_data(self):
+        """Make sure the borgias are okay with the model"""
+        borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain')
+        print borgia_game_path
+        borgia_info = read_game_info(borgia_game_path)
+        self.assertEquals(validate_game_data(borgia_info), None)
+
     def test_validate_game_data(self):
         """Make sure an info file is parsed properly"""
         info = read_game_info(self.game_path)
@@ -34,7 +41,7 @@ class TestLudoboxContent(unittest.TestCase):
 
         # make sure error is raised with a basic mistake
         info_wrong = info.copy()
-        info_wrong["type"] = 72
+        info_wrong["description"] = 72
         self.assertRaises(ValidationError, lambda:validate_game_data(info_wrong))
 
     def test_read_game_info(self):
@@ -68,7 +75,7 @@ class TestLudoboxContent(unittest.TestCase):
         """Make sure an error is raised before writing invalid data"""
         info = read_game_info(self.game_path)
         info_wrong = info.copy()
-        info_wrong["type"] = 72
+        info_wrong["description"] = 72
         self.assertRaises(ValidationError, lambda:write_info_json(info_wrong, self.tmp_path))
 
     def test_clean_game(self):

@@ -262,12 +262,9 @@ def get_games_index():
                 wanted_keys = [
                     "title",
                     "description",
-                    "fab_time",
-                    "duration",
                     "slug",
                     "audience",
-                    "language",
-                    "type"
+                    "content_type"
                     ]
 
                 info_files.append({ k : info[k] for k in wanted_keys })

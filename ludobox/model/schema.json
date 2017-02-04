@@ -34,16 +34,6 @@
           "title": "Themes",
           "description": "Thematics of the game"
         },
-        "content_type": {
-          "type": "string",
-          "enum": ["game", "book", "material"],
-          "enumNames": ["Book", "Game", "Material"],
-          "default": "game",
-          "id": "content_type",
-          "title": "Content Type",
-          "description": "Is that a game, a book or sth else ?"
-
-        },
         "genres": {
           "type": "array",
           "uniqueItems": false,
@@ -55,8 +45,7 @@
           "title": "Genre",
           "description": "Type of gameplay (adventure, role, etc.)"
         }
-      },
-      "required": ["content_type"]
+      }
     },
     "credentials": {
       "type": "object",
@@ -242,6 +231,16 @@
       },
       "required": ["url"]
     },
+    "content_type": {
+      "type": "string",
+      "enum": ["game", "book", "material"],
+      "enumNames": ["Book", "Game", "Material"],
+      "default": "game",
+      "id": "content_type",
+      "title": "Content Type",
+      "description": "Is that a game, a book or sth else ?"
+
+    },
     "timestamp_add": {
       "type": "string",
       "minLength": 1,
@@ -254,6 +253,9 @@
   "id": "/",
   "required": [
     "title",
+    "content_type",
+    "description",
+    "fabrication",
     "timestamp_add"
   ]
 }
