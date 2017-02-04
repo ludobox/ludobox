@@ -7,206 +7,239 @@
     "title": {
       "type": "string",
       "minLength": 1,
-      "default": "Borgia, le jeu malsain",
       "id": "title",
       "title": "Title",
       "description": "The title of the game"
     },
     "description": {
-      "type": "string",
-      "minLength": 1,
-      "default": "Grâce à ce jeu de carte fabuleusement illustré et immoralement conçu, vous allez, si tant est que vous soyez majeur, partager le sort de l’une des personnalités qui vécue en 1492, au côté du Pape Alexandre VI, dans la Rome des Borgia.",
-      "id": "description",
-      "title": "Description",
-      "description": "Desribe the content of the game"
-    },
-    "themes": {
       "type": "object",
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "A theme"
-      },
-      "id": "themes",
-      "title": "Themes",
-      "description": "Thematics of the game"
+      "title" : "Description of the game",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "id": "summary",
+          "title": "Summary",
+          "description": "Desribe the content of the game"
+        },
+        "themes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "default": "A theme"
+          },
+          "id": "themes",
+          "title": "Themes",
+          "description": "Thematics of the game"
+        },
+        "genres": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "id": "genres",
+          "title": "Genre",
+          "description": "Type of gameplay (adventure, role, etc.)"
+        }
+      }
     },
-    "type": {
-      "type": "string",
-      "minLength": 1,
-      "default": "game",
-      "id": "type",
-      "title": "Type",
-      "description": "Is that a game, a book or sth else ?"
-    },
-    "genres": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "stratégie"
-      },
-      "id": "genres",
-      "title": "Genre",
-      "description": "TYpe of gameplay (adventure, role, etc.)"
-    },
-    "publishers": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "Les Chiens de l'Enfer"
-      },
-      "id": "publishers",
-      "title": "Publisher(s)",
-      "description": "Who published this game?"
-    },
-    "publication_year": {
-      "type": "integer",
-      "multipleOf": 1,
-      "maximum": 2100,
-      "minimum": 1,
-      "exclusiveMaximum": false,
-      "exclusiveMinimum": false,
-      "default": 2012,
-      "id": "publication_year",
-      "title": "Publication Year",
-      "description": "When was this game published ?"
-    },
-    "authors": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "Mary Christides"
-      },
-      "id": "authors",
-      "title": "Authors",
-      "description": "Who are the authors ?"
-    },
-    "illustrators": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "Mary Christides"
-      },
-      "id": "illustrators",
-      "title": "Illustrators / Artists",
-      "description": "Who are the illustrators and artists ?"
+    "credentials": {
+      "type": "object",
+      "title" : "Credentials - who created this game ?",
+      "properties": {
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "default": "Unknown",
+          "enum" : ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"],
+          "id": "license",
+          "title": "License",
+          "description": "The license"
+        },
+        "publishers": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "id": "publishers",
+          "title": "Publisher(s)",
+          "description": "Who published this game?"
+        },
+        "publication_year": {
+          "type": "integer",
+          "multipleOf": 1,
+          "maximum": 2100,
+          "minimum": 1,
+          "exclusiveMaximum": false,
+          "exclusiveMinimum": false,
+          "default": 1900,
+          "id": "publication_year",
+          "title": "Publication Year",
+          "description": "When was this game published ?"
+        },
+        "authors": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "id": "authors",
+          "title": "Authors",
+          "description": "Who are the authors ?"
+        },
+        "illustrators": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "id": "illustrators",
+          "title": "Illustrators / Artists",
+          "description": "Who are the illustrators and artists ?"
 
-    },
-    "duration": {
-      "type": "integer",
-      "multipleOf": 1,
-      "maximum": 10000,
-      "minimum": 1,
-      "exclusiveMaximum": false,
-      "exclusiveMinimum": false,
-      "default": 60,
-      "id": "duration",
-      "title": "Duration of a game",
-      "description": "How long last a game ? (in minutes)"
+        }
+      },
+      "required": ["license"]
     },
     "audience": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "default": "adults"
-      },
-      "id": "audience",
-      "title": "Audience",
-      "description": "Who should play this game ?"
-    },
-    "players_min": {
-      "type": "integer",
-      "multipleOf": 1,
-      "maximum": 10000,
-      "minimum": 1,
-      "exclusiveMaximum": false,
-      "exclusiveMinimum": false,
-      "default": 3,
-      "id": "players_min",
-      "title": "Max numbers of players",
-      "description": "Maximum number of players"
-    },
-    "players_max": {
-      "type": "integer",
-      "multipleOf": 1,
-      "maximum": 10000,
-      "minimum": 1,
-      "exclusiveMaximum": false,
-      "exclusiveMinimum": false,
-      "default": 6,
-      "id": "players_max",
-      "title": "Min numbers of players",
-      "description": "Minimum number of players"
-    },
-    "fab_time": {
-      "type": "integer",
-      "multipleOf": 1,
-      "maximum": 10000,
-      "minimum": 1,
-      "exclusiveMaximum": false,
-      "exclusiveMinimum": false,
-      "default": 120,
-      "id": "fab_time",
-      "title": "Fabrication Time",
-      "description": "How much time does it take to fabricate the game?"
-    },
-    "requirements": {
       "type": "object",
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string",
-        "minLength": 0,
-        "default": "imprimante"
+      "title" : "Audience - who should play this game ?",
+      "properties": {
+        "age": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["Children", "Teenagers", "Adults"]
+          },
+          "id": "age",
+          "uniqueItems": true,
+          "title": "Age Requirements",
+          "description": "Who should play this game ?"
+        },
+        "number_of_players" : {
+          "type": "object",
+          "title" : "Number of Players",
+          "properties" : {
+            "players_min": {
+              "type": "integer",
+              "multipleOf": 1,
+              "maximum": 100,
+              "minimum": 1,
+              "exclusiveMaximum": false,
+              "exclusiveMinimum": false,
+              "default": 3,
+              "id": "players_min",
+              "title": "Max numbers of players",
+              "description": "Maximum number of players"
+            },
+            "players_max": {
+              "type": "integer",
+              "multipleOf": 1,
+              "maximum": 100,
+              "minimum": 1,
+              "exclusiveMaximum": false,
+              "exclusiveMinimum": false,
+              "default": 6,
+              "id": "players_max",
+              "title": "Min numbers of players",
+              "description": "Minimum number of players"
+            }
+          }
+        },
+        "duration": {
+          "type": "integer",
+          "multipleOf": 1,
+          "maximum": 10000,
+          "minimum": 1,
+          "exclusiveMaximum": false,
+          "exclusiveMinimum": false,
+          "default": 60,
+          "id": "duration",
+          "title": "Duration of each game",
+          "description": "How long last a game ? (in minutes)"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2,
+          "default": "en",
+          "id": "language",
+          "title": "Language",
+          "description": "Language required to play the game / read the instructions"
+        }
       },
-      "id": "requirements",
-      "title": "Requirements",
-      "description": "What do you need to fabricate this game?"
+      "required": ["language"]
     },
-    "source": {
+    "fabrication": {
+      "type": "object",
+      "title" : "Fabrication - who to fabricate this game ?",
+      "required": ["fab_time"],
+      "properties": {
+        "fab_time": {
+          "type": "integer",
+          "multipleOf": 1,
+          "maximum": 10000,
+          "minimum": 1,
+          "exclusiveMaximum": false,
+          "exclusiveMinimum": false,
+          "default": 120,
+          "id": "fab_time",
+          "title": "Fabrication Time",
+          "description": "How much time does it take to fabricate the game?"
+        },
+        "requirements": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0,
+            "default": "imprimante"
+          },
+          "id": "requirements",
+          "title": "Requirements",
+          "description": "What do you need to fabricate this game?"
+        }
+      }
+    },
+    "source" : {
+      "type": "object",
+      "title" : "Sources - ref and further reading about this game",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 0,
+          "id": "url",
+          "title": "Homepage / Link",
+          "description": "A link to the game website or page"
+        },
+        "ISBN": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {},
+          "id": "ISBN",
+          "title": "ISBN",
+          "description": "ISBN (if applicable)"
+        }
+      },
+      "required": ["url"]
+    },
+    "content_type": {
       "type": "string",
-      "minLength": 0,
-      "default": "http://leschiensdelenfer.org/editions-chiens-de-lenfer/borgia-le-jeu-malsain/",
-      "id": "source",
-      "title": "Source / Link",
-      "description": "A link to the game website or page"
-    },
-    "license": {
-      "type": "string",
-      "minLength": 1,
-      "default": "CC BY-NC-SA 4.0",
-      "id": "license",
-      "title": "License",
-      "description": "The license"
-    },
-    "language": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 2,
-      "default": "en",
-      "id": "language",
-      "title": "Language",
-      "description": "Language required to play the game / read the instructions"
-    },
-    "ISBN": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {},
-      "id": "ISBN",
-      "title": "ISBN",
-      "description": "ISBN (if applicable)"
+      "enum": ["game", "book", "material"],
+      "enumNames": ["Book", "Game", "Material"],
+      "default": "game",
+      "id": "content_type",
+      "title": "Content Type",
+      "description": "Is that a game, a book or sth else ?"
+
     },
     "timestamp_add": {
       "type": "string",
@@ -219,17 +252,10 @@
   },
   "id": "/",
   "required": [
-    "type",
-    "genres",
     "title",
+    "content_type",
     "description",
-    "themes",
-    "duration",
-    "audience",
-    "fab_time",
-    "source",
-    "license",
-    "language",
+    "fabrication",
     "timestamp_add"
   ]
 }

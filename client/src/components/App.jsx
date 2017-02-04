@@ -7,8 +7,11 @@ export default class App extends React.Component {
   render() {
     return (
       <span>
-        <NavBar />  
-        {this.props.children}
+        <NavBar />
+        <div className="main">
+          {this.props.children}
+
+        </div>
       </span>
     )
   }

@@ -191,7 +191,7 @@ def write_info_json(info, game_path):
                     json=json_path)
         raise LudoboxError(message)
 
-ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip"]
+ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip", "pdf"]
 
 def allowed_file(filename):
     """Check for valid file extensions"""
@@ -262,12 +262,9 @@ def get_games_index():
                 wanted_keys = [
                     "title",
                     "description",
-                    "fab_time",
-                    "duration",
                     "slug",
                     "audience",
-                    "language",
-                    "type"
+                    "content_type"
                     ]
 
                 info_files.append({ k : info[k] for k in wanted_keys })

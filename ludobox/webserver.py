@@ -155,10 +155,10 @@ def create_resource():
         response = jsonify({'message':'Upload not allowed'})
         return response, 401
 
-    info = json.loads(request.form["info"])
     files = request.files.getlist('files')
-
     print("UPLOADED FILES:", [f.filename for f in files])
+
+    info = json.loads(request.form["info"])
 
     # Save the game description as pure JSON file
     data_path = write_game(info, files, app.config["DATA_DIR"])
