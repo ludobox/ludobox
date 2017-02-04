@@ -1,17 +1,42 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Python 3 compatibility
+from __future__ import print_function
+
 import os
+import glob
+import shutil
 import argparse
 import py
 
 from ludobox.webserver import serve
 
+
 # TODO: move this to config file
 INPUT_DIR = os.path.join(os.getcwd(),"data")
 OUTPUT_DIR = os.path.join(os.getcwd(),"static")
 
+def clean(**kwargs):
+    """Delete tmp files"""
+
+    print("Remove all precompiled python files (*.pyc): ", end='')
+    for f in glob.glob("server/**/*.pyc"):
+        os.remove(f)
+    print("SUCCESS")
+
+    print("Remove all python generated object files (*.pyo): ", end='')
+    for f in glob.glob("server/**/*.pyo"):
+        os.remove(f)
+    print("SUCCESS")
+
+    print("Remove py.test caches directory (__pycache__): ", end='')
+    shutil.rmtree("__pycache__", ignore_errors=True)
+    shutil.rmtree("server/tests/__pycache__", ignore_errors=True)
+    print("SUCCESS")
+
 def test(**kwargs):
+    """Run tests from the command line"""
     py.test.cmdline.main("server/tests")
 
 # TODO add an info action that list the default dirs, all actual games
@@ -32,6 +57,12 @@ def config_parser():
         "test",
         help="Run server tests.")
     parser_serve.set_defaults(func=test)
+
+    # Clean command ###########################################################
+    parser_serve = subparsers.add_parser(
+        "clean",
+        help="Remove usuless and temp files from the folder.")
+    parser_serve.set_defaults(func=clean)
 
     # Serve command ###########################################################
     parser_serve = subparsers.add_parser(
