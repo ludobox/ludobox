@@ -5,6 +5,7 @@ import DownloadButton from '../RemoteGames/DownloadButton.jsx'
 export default class GamesTable extends React.Component {
 
   render() {
+    console.log(this.props.games);
     let rows = this.props.games.map( game => (
       <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
         key={game.slug}>
@@ -16,9 +17,9 @@ export default class GamesTable extends React.Component {
             {game.title}
           </a>
         </td>
-        <td>{game.type}</td>
-        <td>{game.fab_time}</td>
-        <td>{game.language}</td>
+        <td>{game.content_type}</td>
+        <td>{game.fabrication ? game.fabrication.fab_time : null}</td>
+        <td>{game.audience ? game.audience.language : null }</td>
         {
           ! game.existsLocally && this.props.remoteApi && this.props.localApi ?
           <td>

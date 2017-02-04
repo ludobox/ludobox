@@ -26,7 +26,9 @@
 }
 
 .navbar > .container {
-   width: 100%; }
+   width: 100%;
+   margin: 0
+ }
  .navbar-list {
    list-style: none;
    margin-bottom: 0; }
