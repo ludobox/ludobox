@@ -17,25 +17,13 @@ Navigate to the code folder and type :
 
 That's it !
 
-#### Alternative methods
-
-You can also install directly the Python library using ```setup.py```
-
-    cd server
-    python setup.py install
-
-You will need to copy and edit the config file for the app to start
-
-    cp config.yml.sample config.yml
-
-
 ###  Start your box !
 
 In your terminal :
 
     ludobox start
 
-In your browser, navigate to http://localhost:8080
+In your browser, navigate to [http://localhost:8080](http://localhost:8080)
 
 You can now use your box !
 

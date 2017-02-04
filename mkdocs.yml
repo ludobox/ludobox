@@ -2,13 +2,13 @@ site_name: Ludobox Docs
 
 pages:
     - Home: index.md
-    - Get Started :
-      - Installation: install.md
-      - First Steps : get-started.md
-      - Using Your Ludobox : using.md
-    - For Developers :
-      - Contribute  : dev.md
-      - API Reference : api.md
+    - Installation: install.md
+    - Get Started : get-started.md
+    - Devices :
+      - Raspberry Pi : rpi.md
+    - Architecture : architecture.md
+    - Developement : dev.md
+    - API Reference : api.md
     - About: about.md
     # - Contribute : contribute.md
     # - About: about.md

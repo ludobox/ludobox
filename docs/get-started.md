@@ -6,24 +6,14 @@ First, let's get our first game [Borgia](https://github.com/ludobox/borgia-le-je
     cd data
     git clone https://github.com/ludobox/borgia-le-jeu-malsain
 
-A python script ```ludobox``` will generate the following files : a list of all games + a folder containing info of each game.
-
-    ludobox generate # generate folders tree
-
 You can then launch the web server:
 
-    ludobox serve # give http access to ludobox-ui
+    ludobox start
 
-To know the other usage of the ludocore script:
-
-    ludobox help
-
-## Launching the server
-
-To launch the server type in a console from de ludobox-ui directory:
-
-    ludobox clean
-    ludobox generate
-    ludobox serve
+In your browser, navigate to [http://localhost:8080](http://localhost:8080)
 
 Hit Ctrl+C in the terminal to terminate the server.
+
+To know more about the other available commands :
+
+    ludobox help
