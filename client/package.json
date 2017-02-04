@@ -53,6 +53,7 @@
     "react-dropzone": "^3.9.2",
     "react-jsonschema-form": "^0.41.2",
     "react-router": "^3.0.2",
+    "react-scroll": "^1.4.5",
     "react-toastr": "^2.8.2"
   },
   "nyc": {

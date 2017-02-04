@@ -52,7 +52,10 @@
   display :none
 }
 
-textarea, input  {
+.addGameForm .form-group {
+  width: 100%
+}
+textarea, input, select  {
   width : 100%;
 }
 

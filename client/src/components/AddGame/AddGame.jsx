@@ -1,28 +1,50 @@
 import React from 'react';
 import schema from '../../../../ludobox/model/schema.json';
 import Form from 'react-jsonschema-form';
-import Dropzone from 'react-dropzone';
+
+import { Events, Element} from 'react-scroll'
 
 import {ToastContainer, ToastMessage} from 'react-toastr';
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 import APIClient from "../../api.js"
 
+import AddGameFormHeader from "./AddGameFormHeader.jsx"
+// import TabPanel from "./TabPanel.jsx"
+import DropZone from "./DropZone.jsx"
+
 const style = {
-  form: {
-    columnCount: 3
+  addGameForm : {
+    marginTop : "8rem"
   },
-  dropZone : {
-    borderWidth: 4,
-    borderColor: '#CCC',
-    borderStyle: 'dashed',
-    borderRadius: 4,
-    margin: 30,
-    padding: 30,
-    width: 500,
-    height: 300,
-    transition: 'all 0.5s'
+  form: {
   }
+}
+
+function TabFieldTemplate(props) {
+  const {id, classNames, label, help, required, description, errors, children} = props;
+
+  let name = id.split("_").pop('root')
+  let isHeader = id.split("_").length === 2;
+
+  let fieldTemplate = isHeader ?
+    <Element name={name}>
+      {/* <label htmlFor={id}>{label}{required ? "*" : null}</label> */}
+      {description}
+      {children}
+      {errors}
+      {help}
+    </Element>
+    :
+    <div className={classNames}>
+      {/* <label htmlFor={id}>{label}{required ? "*" : null}</label> */}
+      {description}
+      {children}
+      {errors}
+      {help}
+    </div>
+
+  return fieldTemplate
 }
 
 const uiSchema = {
@@ -60,22 +82,48 @@ const uiSchema = {
   "timestamp_add" : { "ui:widget": "hidden" } // added on the server
 }
 
+const tabsItems = [
+  {
+    name : "files",
+    icon : "icono-folder"
+  },
+  {
+    name : "description",
+    icon : "icono-document"
+  },
+  {
+    name : "audience",
+    icon : "icono-user"
+  },
+  {
+    name : "credentials",
+    icon : "icono-tag"
+  },
+  {
+    name : "source",
+    icon : "icono-asterisk"
+  },
+  {
+    name : "fabrication",
+    icon : "icono-market"
+  }
+]
+
+
 export default class AddGame extends React.Component {
 
   constructor(props) {
     super(props)
     this.api = new APIClient()
     this.state = {
+      selectedTab : "files", // default to files
       files : [],
       info : {}
     };
   }
 
-  onDrop(files) {
-    console.log(files);
-    this.setState({
-      files: [...this.state.files, ...files]
-    });
+  handleClickTabMenu(name) {
+    this.setState({selectedTab : name });
   }
 
   onSubmit(resp){
@@ -115,40 +163,37 @@ export default class AddGame extends React.Component {
   render() {
 
     return (
-      <span>
-        <h3>Add a new game !</h3>
-        <Dropzone
-          onDrop={this.onDrop.bind(this)}
-          style={style.dropZone}
-          >
-          <div>Try dropping some files here, or click to select files to upload.</div>
-        </Dropzone>
-        {
-          this.state.files ?
-          <div>
-            <p>Uploading {this.state.files.length} files...</p>
-            <ul>
-              {this.state.files.map( file =>  <li key={file.name}>{file.name}</li> )}
-            </ul>
-          </div>
-          :
-            null
-        }
+      <div>
         <ToastContainer ref="container"
             toastMessageFactory={ToastMessageFactory}
             className="toast-top-right" />
+        <h3>Add a new game !</h3>
 
-        <Form
-          schema={schema}
-          uiSchema={uiSchema}
-          formData={this.state.info}
-          // onChange={this.success.bind(this)}
-          // FieldTemplate={CustomFieldTemplate}
-          onSubmit={ this.onSubmit.bind(this)}
-          onError={ ({errors}) => this.errors.bind(this, errors)}
+
+        <AddGameFormHeader
+          handleClickTabMenu={this.handleClickTabMenu.bind(this)}
+          selectedTab={this.state.selectedTab}
+          tabsItems={tabsItems}
           />
-
-      </span>
+        <div
+          className="addGameForm"
+          style={style.addGameForm}
+          >
+          <h4>Add a new game</h4>
+          <Element id="files">
+            <DropZone />
+          </Element>
+          <Form
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={this.state.info}
+            // onChange={this.success.bind(this)}
+            FieldTemplate={TabFieldTemplate}
+            onSubmit={ this.onSubmit.bind(this)}
+            onError={ ({errors}) => this.errors.bind(this, errors)}
+            />
+        </div>
+      </div>
     )
   }
 }
