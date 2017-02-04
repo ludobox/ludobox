@@ -42,9 +42,11 @@ def clean(**kwargs):
     shutil.rmtree("server/tests/__pycache__", ignore_errors=True)
     print("SUCCESS")
 
-def test(**kwargs):
+def test(fulltrace, **kwargs):
     """Run tests from the command line"""
-    py.test.cmdline.main("server/tests")
+    cmd = "server/tests"
+    if fulltrace : cmd = cmd + " --fulltrace"
+    py.test.cmdline.main(cmd)
 
 # TODO add an info action that list the default dirs, all actual games
 #   installed
@@ -63,6 +65,11 @@ def config_parser():
     parser_test = subparsers.add_parser(
         "test",
         help="Run server tests.")
+    parser_test.add_argument(
+        "--fulltrace",
+        default=False,
+        action='store_true',
+        help="Show the complete test log")
     parser_test.set_defaults(func=test)
 
     # Clean command ###########################################################

@@ -21,8 +21,8 @@ class TestLudoboxContent(unittest.TestCase):
 
     def setUp(self):
         self.config = read_config()
-        self.game_path = os.path.join(os.getcwd(), 'tests/test-data/test-game')
-        self.wrong_game_path = os.path.join(os.getcwd(), 'tests/test-data/wrong-game')
+        self.game_path = os.path.join(os.getcwd(), 'server/tests/test-data/test-game')
+        self.wrong_game_path = os.path.join(os.getcwd(), 'server/tests/test-data/wrong-game')
 
         self.tmp_path = "/tmp/test-le-jeu-coquin"
         clean_game(self.tmp_path)
