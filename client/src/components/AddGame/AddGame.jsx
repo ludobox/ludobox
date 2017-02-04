@@ -1,5 +1,5 @@
 import React from 'react';
-import schema from '../../../../ludobox/model/schema.json';
+import schema from '../../../../model/schema.json';
 import Form from 'react-jsonschema-form';
 
 import { Events, Element} from 'react-scroll'
