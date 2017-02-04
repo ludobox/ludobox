@@ -81,7 +81,7 @@ def show_hand():
 
 @app.route('/api/schema')
 def serve_schema():
-    return send_from_directory('ludobox/model', "schema.json")
+    return send_from_directory('model', "schema.json")
 
 @app.route('/api/games')
 def serve_games_json_index():
