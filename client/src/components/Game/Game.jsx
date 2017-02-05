@@ -21,17 +21,36 @@ export default class Game extends React.Component {
   }
   render() {
 
-    var gameContent = Object.keys(this.state.game).map( key => (
-      <li key={key + this.state.game.slug}>
-        <b>{key}</b> : {this.state.game[key]}
-      </li>
-    ))
+    var gameContent = Object.keys(this.state.game)
+      // .sort()
+      .map( key => {
+
+      let children;
+      if (typeof this.state.game[key] === "object") {
+        let li = Object.keys(this.state.game[key]).map(d => (
+            this.state.game[key][d] != ""
+            ?
+            <li key={key+d}><b>{d}</b> : {this.state.game[key][d]}</li>
+            :
+            null
+        ))
+        children = <ul>{li}</ul>
+      } else {
+        children = this.state.game[key]
+      }
+
+      return (
+        <li key={key + this.state.game.slug}>
+          <b>{key}</b> : {children}
+        </li>
+      )
+    })
+
 
     return (
       <span>
         <h1>{this.state.game.title}</h1>
-        <p>{this.state.game.description}</p>
-        <ul>
+        <ul style = {{ listStyle : "none" }}>
           {gameContent}
         </ul>
       </span>
