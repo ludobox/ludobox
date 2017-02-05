@@ -1,5 +1,5 @@
 var jsf = require('json-schema-faker');
-var schema = require('../../ludobox/model/schema');
+var schema = require('../../model/schema');
 var jsonfile = require('jsonfile');
 var slugify = require('slugify')
 var fs = require('fs');
