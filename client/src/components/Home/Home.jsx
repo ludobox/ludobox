@@ -16,7 +16,7 @@ export default class Home extends React.Component {
             <a href="/create">Create a new game</a>
           </li>
           <li>
-            <a href="/create">Download more games</a>
+            <a href="/download">Download more games</a>
           </li>
           <li>
             <a href="/about">Learn more about the Ludobox project</a>
