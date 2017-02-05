@@ -38,7 +38,7 @@ module.exports = {
   devtool: devtool,
   entry: './src/app.js',
   output: {
-    path: __dirname + '/../public /js',
+    path: __dirname + '/../public/js',
     filename: 'bundle.js',
     publicPath: '/dist/'
   },
