@@ -55,12 +55,12 @@ const uiSchema = {
     'fabrication',
     'credentials',
     'source',
-    'timestamp_add'
+    'timestamp_add',
+    'content_type'
   ],
   "description" : {
     "summary": { "ui:widget": "textarea" },
     // should be default to game for now
-    "content_type" : { "ui:disabled" : true, "ui:widget": "hidden" }
   },
   "audience" : {
     "age": { "ui:widget": "checkboxes", "ui:options": { inline: true }},
@@ -79,6 +79,7 @@ const uiSchema = {
   "source"  : {
     "url": { "ui:widget": "uri" }
   },
+  "content_type" : { "ui:disabled" : true, "ui:widget": "hidden" },
   "timestamp_add" : { "ui:widget": "hidden" } // added on the server
 }
 
