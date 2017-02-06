@@ -42,6 +42,15 @@ export default class APIClient {
     return this.baseUrl ? `${this.baseUrl}/api/${path}` : `/api/${path}`
   }
 
+
+  // APIpublic methods
+
+  getInfo(callback) {
+    let infoUrl = `/api`;
+    console.log(infoUrl)
+    this.get(infoUrl, info => callback(info))
+  }
+
   getGame(slug, callback) {
     let gameUrl = this.getURL(`games/${slug}/info.json`);
     this.get(gameUrl, game => callback(game))

@@ -20,6 +20,7 @@ export default class NavBar extends React.Component {
               <a className="navbar-link" href="/download">Download</a>
             </li>
             <li className="navbar-item"><a className="navbar-link" href="/about">About</a></li>
+            <li className="navbar-item"><a disabled className="navbar-link" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a></li>
           </ul>
         </div>
       </nav>
