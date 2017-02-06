@@ -9,6 +9,7 @@ install:
   - "cd data"
   - "git clone https://github.com/ludobox/borgia-le-jeu-malsain"
   - "cd .."
+  - "cp config.yml.sample config.yml"
 # command to run tests
 script:
   - "ludobox start &" # lauch a ludobox server in the background
