@@ -7,6 +7,7 @@ We want to keep playing even in the most extreme conditions, so Ludobox is made 
 #### Minimum Viable Architecture
 
 We design for a *“Minimum Viable Architecture”*, that is :
+
 - hardware requirements should be minimal
 - static files are prefered
 - index and pages can be rebuilt manually
@@ -15,6 +16,7 @@ We design for a *“Minimum Viable Architecture”*, that is :
 #### Small and cute
 
 We want our app to stay *small and cute*, that is :
+
 - well-written, in a way that is pleasant to read
 - as small as possible, so we can now all its parts and move fast
 - fun to use and fun to develop, using technologies and frameworks that we like
