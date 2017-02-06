@@ -1,4 +1,7 @@
 # Ludobox specific stuff #######################################################
+
+config.yml
+
 # Input directory for the ludobox
 oldies
 /data/*
