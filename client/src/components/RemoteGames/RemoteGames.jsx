@@ -47,10 +47,15 @@ export default class RemoteGames extends React.Component {
 
     return (
       <div>
-        <h3>Remote Games</h3>
-        <p>
-          {`Remote server at : ${this.remoteAddress} (${this.state.remoteGames.length} games)`}
-        </p>
+        <h3>Download games on this box</h3>
+        {
+          this.state.remoteGames.length ?
+          <p>
+            {`Remote server at : ${this.remoteAddress} (${this.state.remoteGames.length} games)`}
+          </p>
+          :
+          null
+        }
         {
           this.state.remoteGames.length ?
           <GamesTable
@@ -59,7 +64,7 @@ export default class RemoteGames extends React.Component {
             localApi={this.localApi}
           />
           :
-          "No games available."
+          "No additional games available, sorry."
         }
       </div>
     )
