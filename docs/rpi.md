@@ -33,7 +33,7 @@ Add your network info to `wpa_supplicant.conf`
 
 # Install the software
 
-Check for your local IP on your router
+Check for your local IP on your router / define an alias
 
 Connect to your pi
 
