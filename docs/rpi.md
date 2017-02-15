@@ -12,6 +12,7 @@ We need to :
 Download Raspbian and copy to the pi
 
     sudo dd bs=4M if=2017-01-11-raspbian-jessie-lite.img of=/dev/mmcblk0
+    sync
 
 
 [Enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/) (add an `ssh` file to `/boot` disk )
