@@ -9,7 +9,7 @@ We need to :
 
 # Setup Raspbian
 
-Download Raspbian and copy to the pi
+Download [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) and copy to the pi
 
     sudo dd bs=4M if=2017-01-11-raspbian-jessie-lite.img of=/dev/mmcblk0
     sync
