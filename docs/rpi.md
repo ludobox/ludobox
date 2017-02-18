@@ -60,9 +60,9 @@ Fix language issue
 
 Install
 
-  git clone https://github.com/ludobox/ludobox
-  cd ludobox
-  python setup.py install
+    git clone https://github.com/ludobox/ludobox
+    cd ludobox
+    python setup.py install
 
 
 
