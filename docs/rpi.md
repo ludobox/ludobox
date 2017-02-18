@@ -64,7 +64,7 @@ Install
     cd ludobox
     ./bin/install
 
-
+Enjoy !
 
 # Configure a WIFI access point (hotspot)
 
