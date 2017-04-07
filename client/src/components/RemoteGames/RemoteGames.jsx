@@ -3,17 +3,12 @@ import GamesTable from '../GamesTable/GamesTable.jsx'
 
 import APIClient from "../../api.js"
 
-const LUDOBOX_REMOTE_ADDRESS = "http://192.168.1.30:8080";
-
 export default class RemoteGames extends React.Component {
 
   constructor(props) {
     super(props)
-    const options = { baseUrl : LUDOBOX_REMOTE_ADDRESS }
-    this.remoteApi = new APIClient(options);
-    this.remoteAddress = options.baseUrl;
 
-    // fetch data from the box
+    // fetch data from the local box
     this.localApi = new APIClient();
 
     this.state = {
@@ -30,8 +25,20 @@ export default class RemoteGames extends React.Component {
     this.localApi.getGames(localGames =>  this.setState({ localGames }) );
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.config && nextProps.config.config.web_server_url) {
+
+      // connect to remote server
+      this.remoteAddress = nextProps.config.config.web_server_url;
+      this.remoteApi = new APIClient({ baseUrl : this.remoteAddress });
+
+      // get all data
+      this.fetchRemoteGames()
+    }
+  }
+
   componentDidMount() {
-    this.fetchRemoteGames()
     this.fetchLocalGames()
   }
 

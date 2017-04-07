@@ -19,11 +19,20 @@ export default class App extends React.Component {
 
   render() {
     console.log(this.state.config);
+
+    // pass API children
+    const childrenWithProps = React.Children.map(this.props.children,
+     (child) => React.cloneElement(child, {
+       api: this.api,
+       config : this.state.config
+     })
+    );
+
     return (
       <span>
         <NavBar config={this.state.config}/>
         <div className="main">
-          {this.props.children}
+          {childrenWithProps}
         </div>
       </span>
     )

@@ -6,7 +6,7 @@ export default class Home extends React.Component {
     return (
       <span>
         <h3>Hello !</h3>
-        <p>Welcome to Ludobox :)</p>
+        <p className="welcome">Welcome to {this.props.config.name ? this.props.config.name: "Ludobox"} :)</p>
         <p>What would you like to do ?</p>
         <ul>
           <li>

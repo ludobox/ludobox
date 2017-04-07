@@ -5,6 +5,5 @@ port: 4000 # the port to serve the interface (default to 8080)
 
 
 # Update settings
-update_mode : web # you can select 'dat' or 'web'
-web_server_url : http://box.ludobox.net # if you have chosen 'web', this is where the update will come from
+web_server_url : http://localhost:8080 # if you have chosen 'web', this is where the update will come from
 data_dir : ./server/tests/test-data # default to ./data

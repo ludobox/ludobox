@@ -92,7 +92,10 @@ def serve_games_json_index():
 
 @app.route('/api/games/<path:path>')
 def serve_api(path):
-    return send_from_directory('data', path, mimetype='application/json')
+    if path[-4:] == "json" :
+        return send_from_directory('data', path, mimetype='application/json')
+    else :
+        return send_from_directory('data', path)
 
 @app.route('/api/files/<path:path>')
 def serve_files_list(path):

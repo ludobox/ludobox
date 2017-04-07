@@ -3,7 +3,6 @@
 ludobox_name : "My LudoBox"
 port: 8080 # the port to serve the interface (default to 8080)
 
-
 # The source of your games
 web_server_url : http://box.ludobox.net
 

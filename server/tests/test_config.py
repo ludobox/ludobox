@@ -42,7 +42,7 @@ class TestLudoboxConfig(unittest.TestCase):
 
         self.assertEquals(config["port"], 4000)
         self.assertEquals(config["ludobox_name"], "My LudoBox")
-        self.assertEquals(config["web_server_url"], "http://box.ludobox.net")
+        self.assertEquals(config["web_server_url"], "http://localhost:8080")
 
         # tests file and dir paths
         data_dir = os.path.join(os.getcwd(), "server/tests/test-data")
