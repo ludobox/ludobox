@@ -35,8 +35,9 @@ fi
 
 # notify when no virtual env exists
 if [[ -z "$VIRTUAL_ENV" ]]; then
-    echo "No virtual env has been set"
+    echo "No virtual env has been set."
     echo "We advice to use Virtualenv to avoid messing with your system settings."
+    echo "Check the documentation to see how to use Virtualenv."
     are_you_sure
 fi
 
