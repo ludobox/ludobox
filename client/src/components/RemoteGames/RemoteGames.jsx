@@ -27,7 +27,7 @@ export default class RemoteGames extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.log("nextProps",nextProps);
-    if (nextProps.config ) {
+    if (nextProps.config && nextProps.config.config.web_server_url) {
 
       // connect to remote server
       this.remoteAddress = nextProps.config.config.web_server_url;

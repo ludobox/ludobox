@@ -30,7 +30,10 @@ export default class Game extends React.Component {
         let li = Object.keys(this.state.game[key]).map(d => (
             this.state.game[key][d] != ""
             ?
-            <li key={key+d}><b>{d}</b> : {this.state.game[key][d]}</li>
+              typeof this.state.game[key][d] !== 'object' ?
+                <li key={key+d}><b>{d}</b> : {this.state.game[key][d]}</li>
+                :
+                null
             :
             null
         ))
