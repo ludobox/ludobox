@@ -31,8 +31,8 @@ export default class DownloadButton extends React.Component {
             slug : gameSlug
           }
         console.log(opts);
-        this.props.localApi.cloneGame( opts, clonedGame => {
-            console.log(clonedGame);
+          this.props.localApi.cloneGame( opts, clonedGame => {
+            console.log(clonedGame, "game cloned.");
         })
       })
     })

@@ -26,7 +26,7 @@ export default class RemoteGames extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps",nextProps);
+
     if (nextProps.config && nextProps.config.config.web_server_url) {
 
       // connect to remote server
@@ -44,7 +44,6 @@ export default class RemoteGames extends React.Component {
 
   render() {
 
-    console.log(this.props.config);
     // // check which games already exists locally on the box
     let localGamesSlugs = this.state.localGames.map( d => d.slug)
 
