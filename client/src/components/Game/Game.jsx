@@ -8,7 +8,8 @@ export default class Game extends React.Component {
     super(props)
     this.api = new APIClient()
     this.state = {
-      game: {}
+      game: {},
+      files: []
     };
   }
 
@@ -16,9 +17,15 @@ export default class Game extends React.Component {
     this.api.getGame(slug, game => this.setState({ game }));
   }
 
+  fetchFiles(slug) {
+    this.api.getGameFilesList(slug, files => this.setState({ files }));
+  }
+
   componentDidMount() {
     this.fetchGame(this.props.params.gameSlug)
+    this.fetchFiles(this.props.params.gameSlug)
   }
+
   render() {
 
     var gameContent = Object.keys(this.state.game)
@@ -49,12 +56,22 @@ export default class Game extends React.Component {
       )
     })
 
+    let files = this.state.files.map( file =>
+      <a href={file.url}>
+        {file.filename}
+      </a>
+    )
+
 
     return (
       <span>
         <h1>{this.state.game.title}</h1>
         <ul style = {{ listStyle : "none" }}>
           {gameContent}
+        </ul>
+        <h4>Available Files</h4>
+        <ul>
+          {files}
         </ul>
       </span>
     )
