@@ -9,9 +9,10 @@ We need to :
 
 # Setup Raspbian
 
-Download Raspbian and copy to the pi
+Download [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) and copy to the pi
 
     sudo dd bs=4M if=2017-01-11-raspbian-jessie-lite.img of=/dev/mmcblk0
+    sync
 
 
 [Enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/) (add an `ssh` file to `/boot` disk )
@@ -32,7 +33,7 @@ Add your network info to `wpa_supplicant.conf`
 
 # Install the software
 
-Check for your local IP on your router
+Check for your local IP on your router / define an alias
 
 Connect to your pi
 
@@ -59,11 +60,11 @@ Fix language issue
 
 Install
 
-  git clone https://github.com/ludobox/ludobox
-  cd ludobox
-  python setup.py install
+    git clone https://github.com/ludobox/ludobox
+    cd ludobox
+    ./bin/install
 
-
+Enjoy !
 
 # Configure a WIFI access point (hotspot)
 

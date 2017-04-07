@@ -14,10 +14,9 @@ GAMES_LIST_FILE =os.path.join(os.getcwd(),"games.yml")
 def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     """Validate and apply settings as defined in config file"""
 
-    # default
+    # default values
     data_dir = os.path.join(os.getcwd(),"data")
-    update_mode = "web"
-    web_server_url = "http://localhost:8080"
+    web_server_url = "http://box.ludobox.net"
     upload_allowed = True
 
     # Read the YAML config file
@@ -43,10 +42,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     if "data_dir" in config.keys() :
         data_dir = os.path.abspath(config["data_dir"])
 
-    if "update_mode" in config.keys() :
-        update_mode = config["update_mode"]
-
-    if update_mode == "web" and "web_server_url" in config.keys():
+    if "web_server_url" in config.keys():
         web_server_url = config["web_server_url"]
 
     index_path = os.path.join(data_dir, 'index.json')
@@ -54,7 +50,6 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     return validate_config(
         {
             "data_dir" : data_dir,
-            "update_mode" : update_mode,
             "web_server_url" : web_server_url,
             "index_path" : index_path,
             "port" : port,
@@ -76,10 +71,5 @@ def validate_config(config):
     if not os.path.exists(config["data_dir"]):
         raise ValueError("The path '%s' does not exist. Please create it before starting your Ludobox."%config["data_dir"])
     # print "Data will be stored at : %s"%config["data_dir"]
-
-    # assert update modes
-    assert config["update_mode"] in ["web", "dat"]
-    if config["update_mode"] == "web" :
-        assert validate_url(config["web_server_url"]) is True
 
     return config
