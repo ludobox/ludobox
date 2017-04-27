@@ -69,7 +69,7 @@ def test(fulltrace, **kwargs):
 
 # TODO add an info action that list the default dirs, all actual games
 #   installed
-def config_parser():
+def parse_args(args):
     """Configure the argument parser and returns it."""
     # Initialise the parsers
     parser = argparse.ArgumentParser(description="Ludobox server.")
@@ -115,29 +115,18 @@ def config_parser():
         help="define port to serve the web application.")
 
     # Returns the, now configured, parser
-    return parser
+    return parser.parse_args(args)
 
 
 def main(commands=None):
     """
     Launch command parser from real command line or from args.
-
-    This allow easy testing of the command line options/actions.
     """
     # Configure the parser
-    parser = config_parser()
+    # commands.split()
+    args = parse_args(sys.argv[1:])
 
-    # Parse the args
-    if commands is None:
-        # When executed has a script
-        args = parser.parse_args()
-    else:
-        # When executed in the tests
-        args = parser.parse_args(commands.split())
-
-    # Call whatever function was selected
     return args.func(**vars(args))  # We use `vars` to convert args to a dict
-
 
 if __name__ == "__main__":
     main()
