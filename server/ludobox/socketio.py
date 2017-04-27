@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from flask_socketio import SocketIO, emit
-from gevent import monkey
-
-monkey.patch_all()
 
 # socket io
 socket = SocketIO()

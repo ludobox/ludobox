@@ -32,6 +32,7 @@ print "Data will be stored at %s"%app.config["DATA_DIR"]
 app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
 print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
 
+socket.init_app(app)
 
 # STATIC FILES
 @app.route('/js/<path:path>')

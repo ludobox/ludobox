@@ -30,5 +30,4 @@ def serve(debug, port, **kwargs):
     """
 
     _port = get_server_port(port)
-    socket.init_app(app)
     socket.run(app, host='0.0.0.0', port=_port, debug=debug)
