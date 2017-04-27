@@ -1,9 +1,11 @@
 import React from 'react'
 import io from 'socket.io-client'
 
-
-const url = location.port ? 'http://' + document.domain + ':' + location.port : 'http://' + document.domain
-
+const url =
+  (typeof window !== 'undefined') ? // for testing without a browser
+    location.port ? 'http://' + document.domain + ':' + location.port : 'http://' + document.domain
+  :
+  null;
 
 import NavBar from './NavBar/NavBar.jsx'
 import APIClient from "../api.js"
