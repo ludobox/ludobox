@@ -17,6 +17,7 @@ from ludobox.config import read_config
 from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index
 from ludobox.errors import LudoboxError
 from ludobox.data.crawler import download_from_server
+from ludobox.socketio import socket
 
 # parse config
 config = read_config()
@@ -104,8 +105,12 @@ def clone_resource():
     if not os.path.exists(game_path):
         create_game_path(game_path)
 
+    socket.emit("downloadEvent", {"slug" : slug, "message" : "Game path created." })
+
     # clone the JSON info
     write_info_json(info, game_path)
+
+    socket.emit("downloadEvent", {"slug" : slug, "message" : "Game info copied." })
 
     # make sub-rep to store files
     files_path = os.path.join(game_path, "files")
@@ -113,9 +118,16 @@ def clone_resource():
         os.makedirs(files_path)
 
     # download files from server
-    for f in files_list:
+    for i, f in enumerate(files_list):
+        socket.emit("downloadEvent", {
+            "slug" : slug,
+            "message" : "File %s/%s downloading..."%(i,len(files_list))
+        })
         download_from_server(f["url"], files_path, f["filename"])
-
+        socket.emit("downloadEvent", {
+            "slug" : slug,
+            "message" : "File %s/%s downloaded."%(i,len(files_list))
+        })
     # return original JSON
     return jsonify({"path" : game_path}), 201
 

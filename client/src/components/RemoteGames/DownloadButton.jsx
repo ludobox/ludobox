@@ -10,8 +10,16 @@ export default class DownloadButton extends React.Component {
       gameReady: false,
       files : [],
       filesReady : false,
-      downloadEnded: false
+      downloadEvent: null
     };
+  }
+
+  componentDidMount() {
+    this.props.socket.on("downloadEvent", message => {
+      console.log("downloadEvent", message);
+      if(message.slug === this.props.slug)
+        this.setState({ downloadEvent : message.message })
+    })
   }
 
   // TODO fix callback spagheti
@@ -41,19 +49,16 @@ export default class DownloadButton extends React.Component {
   render () {
 
     return (
-      <span>
+      <span style={{overflow:"hidden"}}>
         { this.state.downloading ?
-          "Downloading..."
+          this.state.downloadEvent
           :
-            this.state.downloadEnded ?
-            null
-            :
-            <a
-              href="#"
-              onClick={() => this.handleClick(this.props.slug) }
-              >
-              Download
-            </a>
+          <a
+            href="#"
+            onClick={() => this.handleClick(this.props.slug) }
+            >
+            Download
+          </a>
         }
       </span>
     )
