@@ -149,7 +149,6 @@ def write_game(info, attachments, data_dir):
         try :
             write_attachments(attachments, game_path)
         except LudoboxError as e:
-            clean_game(game_path)
             raise LudoboxError(str(e))
 
     return game_path

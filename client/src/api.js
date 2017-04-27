@@ -33,6 +33,10 @@ export default class APIClient {
         callback(info);
       })
       .catch((error) => {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+
         this.handleError(error, errorCallback)
       })
   }
