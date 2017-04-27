@@ -18,13 +18,13 @@ class TestLudoboxWebDataUpdate(unittest.TestCase):
     def test_build_url(self):
         url = build_url("index.json")
         print url
-        self.assertEquals(url, "http://localhost:8080/api/index.json")
+        self.assertEquals(url, "http://box.ludobox.net/api/index.json")
 
     def test_handshake(self):
         """Should shake hands with the distant server and get its name."""
         base_url = self.config["web_server_url"]
         res = handshake()
-        self.assertEquals(res["name"], "My LudoBox")
+        self.assertEquals(res["name"], "LudoBox Mothership")
 
     def test_get_game_index_file(self):
         """Should retrieve an index containing all games"""
