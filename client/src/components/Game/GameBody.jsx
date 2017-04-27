@@ -4,9 +4,12 @@ class SmallList extends React.Component {
   constructor(props) { super(props) }
   render() {
     const styleLi = {
-      display : "inline",
-      padding : ".5em",
-      margin : "0 0.5em",
+      // display : "inline",
+      padding : "0 .5em",
+      margin : ".5em ",
+      width: "auto",
+      lineHeight: "2.5em",
+      display: "inline-block",
       border : "1px solid #ccc"
     },
     styleUl = { listStyle : "none"}
