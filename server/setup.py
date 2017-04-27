@@ -26,7 +26,7 @@ except ImportError:
     from distutils.core import setup, find_packages
 
 # Leave the following line to match the regexp [0-9]*\.[0-9]*\.[0-9]*
-version = "0.9.2"  # [major].[minor].[release]
+version = "0.9.3"  # [major].[minor].[release]
 
 # parse README
 with open('../README.md') as readme_file:
