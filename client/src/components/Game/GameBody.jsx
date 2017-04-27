@@ -1,5 +1,7 @@
 import React from 'react'
 
+import EditableText from '../Form/EditableText.jsx'
+
 class SmallList extends React.Component {
   constructor(props) { super(props) }
   render() {
@@ -30,25 +32,59 @@ export default class GameBody extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      game : this.props.game
+    }
+    this.updateGameData = this.updateGameData.bind(this)
+  }
+
+  updateGameData(dataChange) {
+    console.log(dataChange);
+    const id = dataChange.id.split(".")
+    switch (id.length) {
+      case 1 :
+        const update = {}
+        update[dataChange.id] = dataChange.value
+        console.log(update);
+        this.setState({ game : Object.assign(this.state.game, update) })
+        break;
+      default:
+        console.log("ok")
+    }
   }
 
   render() {
     // console.log(this.props.game);
 
-    const audience = this.props.game.audience,
-      credentials = this.props.game.credentials,
-      description = this.props.game.description,
-      fabrication = this.props.game.fabrication,
-      source = this.props.game.source,
-      timestamp_add = this.props.game.timestamp_add,
-      title = this.props.game.title,
-      content_type = this.props.game.content_type;
+    const {
+      audience,
+      credentials,
+      description ,
+      fabrication ,
+      source ,
+      timestamp_add,
+      title ,
+      content_type ,
+    } = this.state.game
 
     return (
       <div>
-        <h1>{title}</h1>
+        <h1>
+          <EditableText
+            type="input"
+            defaultValue={title}
+            fieldId="title"
+            saveChanges={this.updateGameData}
+            />
+        </h1>
+
         <SmallList items={ description.themes.concat(description.genres)}/>
-        <p>{description.summary}</p>
+          <EditableText
+            type="textarea"
+            defaultValue={description.summary}
+            fieldId="description.summary"
+            saveChanges={this.updateGameData}
+            />
         <p>
           Webpage: <a href="{source.url}" target="_blank">{source.url}</a>
           <br/>
@@ -107,4 +143,21 @@ export default class GameBody extends React.Component {
       </div>
     )
   }
+}
+
+// helper from http://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-with-string-key
+
+Object.byString = function(o, s) {
+    s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+    s = s.replace(/^\./, '');           // strip a leading dot
+    var a = s.split('.');
+    for (var i = 0, n = a.length; i < n; ++i) {
+        var k = a[i];
+        if (k in o) {
+            o = o[k];
+        } else {
+            return;
+        }
+    }
+    return o;
 }
