@@ -9,9 +9,9 @@ import glob
 import shutil
 import argparse
 import py
+import sys
 
-from ludobox.webserver import serve
-
+from ludobox.run import serve
 
 # TODO: move this to config file
 INPUT_DIR = os.path.join(os.getcwd(),"data")
@@ -44,13 +44,32 @@ def clean(**kwargs):
 
 def test(fulltrace, **kwargs):
     """Run tests from the command line"""
+
+    # unexported constasts used as pytest.main return codes
+    # c.f. https://github.com/pytest-dev/pytest/blob/master/_pytest/main.py
+    PYTEST_EXIT_OK = 0
+    PYTEST_EXIT_TESTSFAILED = 1
+    PYTEST_EXIT_INTERRUPTED = 2
+    PYTEST_EXIT_INTERNALERROR = 3
+    PYTEST_EXIT_USAGEERROR = 4
+    PYTEST_EXIT_NOTESTSCOLLECTED = 5
+
     cmd = "server/tests"
+
     if fulltrace : cmd = cmd + " --fulltrace"
-    py.test.cmdline.main(cmd)
+
+    unit_result = py.test.cmdline.main(cmd)
+    # return the right code
+    if unit_result not in (PYTEST_EXIT_OK, PYTEST_EXIT_NOTESTSCOLLECTED):
+        print("To have more details about the errors you should try the command: py.test tests", file=sys.stderr)
+        sys.exit("TESTS : FAIL")
+    else:
+        print("TESTS : SUCCESS")
+
 
 # TODO add an info action that list the default dirs, all actual games
 #   installed
-def config_parser():
+def parse_args(args):
     """Configure the argument parser and returns it."""
     # Initialise the parsers
     parser = argparse.ArgumentParser(description="Ludobox server.")
@@ -96,29 +115,18 @@ def config_parser():
         help="define port to serve the web application.")
 
     # Returns the, now configured, parser
-    return parser
+    return parser.parse_args(args)
 
 
 def main(commands=None):
     """
     Launch command parser from real command line or from args.
-
-    This allow easy testing of the command line options/actions.
     """
     # Configure the parser
-    parser = config_parser()
+    # commands.split()
+    args = parse_args(sys.argv[1:])
 
-    # Parse the args
-    if commands is None:
-        # When executed has a script
-        args = parser.parse_args()
-    else:
-        # When executed in the tests
-        args = parser.parse_args(commands.split())
-
-    # Call whatever function was selected
     return args.func(**vars(args))  # We use `vars` to convert args to a dict
-
 
 if __name__ == "__main__":
     main()

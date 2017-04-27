@@ -24,6 +24,7 @@ export default class GamesTable extends React.Component {
           ! game.existsLocally && this.props.remoteApi && this.props.localApi ?
           <td>
             <DownloadButton
+              socket={this.props.socket}
               remoteApi={this.props.remoteApi}
               localApi={this.props.localApi}
               slug={game.slug}
@@ -37,7 +38,7 @@ export default class GamesTable extends React.Component {
 
     return (
       <div>
-        <table className="twelve columns">
+        <table className="twelve columns" style={{tableLayout:fixed}}>
             <thead>
                 <tr>
                     <td>Title</td>

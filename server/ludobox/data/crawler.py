@@ -6,8 +6,10 @@ import json
 import urllib
 import requests
 from slugify import slugify
+from flask_socketio import emit
 
 from ludobox.config import read_config
+from ludobox.socketio import socket
 
 # read and parse config
 config = read_config()
@@ -44,3 +46,4 @@ def download_from_server(url, dest_dir, filename) :
     testfile = urllib.URLopener()
     testfile.retrieve(url, file_path)
     print "Data from %s saved in %s "%(url,filename)
+    socket.emit("downloadEnded", {"url" : url, "filename" : filename }, namespace='/')

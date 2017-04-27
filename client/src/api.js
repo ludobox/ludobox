@@ -8,8 +8,8 @@ export default class APIClient {
   }
 
   handleError(error, errorCallback) {
-    console.log("ERROR : " + error)
-    if (errorCallback) errorCallback(error)
+    // console.log("ERROR : " + error)
+    if (errorCallback && error.response) errorCallback(error.response.data)
     else throw error
   }
 
@@ -75,7 +75,7 @@ export default class APIClient {
     this.post(gameUrl, opts, path => callback(path))
   }
 
-  postGame(info, files, callback) {
+  postGame(info, files, callback, callbackError) {
     console.log(info, files);
     let gameUrl = this.getURL(`create`);
 
@@ -89,7 +89,11 @@ export default class APIClient {
     payload.append("info", JSON.stringify(info));
 
     // POST !
-    this.post(gameUrl, payload, path => callback(path))
+    this.post(gameUrl,
+      payload,
+      path => callback(path),
+      error => callbackError(error)
+    )
   }
 
   getGames(callback) {
