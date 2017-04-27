@@ -10,7 +10,7 @@ import shutil
 import argparse
 import py
 
-from ludobox.webserver import serve
+from ludobox.run import serve
 
 
 # TODO: move this to config file

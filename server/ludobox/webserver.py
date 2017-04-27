@@ -16,9 +16,7 @@ from ludobox import __version__
 from ludobox.config import read_config
 from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index
 from ludobox.errors import LudoboxError
-
 from ludobox.data.crawler import download_from_server
-
 
 # parse config
 config = read_config()
@@ -33,30 +31,6 @@ print "Data will be stored at %s"%app.config["DATA_DIR"]
 app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
 print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
 
-
-def get_server_port(port):
-    # check if port number is ok
-    if port is None : _port = config["port"]
-    else : _port = int(port)
-    return _port
-
-def serve(debug, port, **kwargs):
-    """
-    Launch an tiny web server to make the ludobox site available.
-
-    Keyword arguments:
-    debug -- bool to activate the debug mode of the Flask server (for
-             development only NEVER use it in production).
-
-    kwargs is used here since this function is called by :func:`main` via
-    :mod:`argparse`. And all the params are provided automagically by
-    :func:`argparse.ArgumentParser.parse_args` converted to a dict using
-    :func:`vars`.
-    See `Namespace object<https://docs.python.org/2/library/argparse.html#the-namespace-object>`_
-    """
-
-    _port = get_server_port(port)
-    app.run(host='0.0.0.0', port=_port, debug=debug)
 
 # STATIC FILES
 @app.route('/js/<path:path>')

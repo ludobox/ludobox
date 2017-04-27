@@ -9,7 +9,8 @@ export default class DownloadButton extends React.Component {
       game : {},
       gameReady: false,
       files : [],
-      filesReady : false
+      filesReady : false,
+      downloadEnded: false
     };
   }
 
@@ -21,7 +22,7 @@ export default class DownloadButton extends React.Component {
     this.props.remoteApi.getGame(gameSlug, game => {
       this.setState({ game })
       this.setState({ gameReady : true })
-      // donwload files list
+      // download files list
       this.props.remoteApi.getGameFilesList(gameSlug, files => {
         this.setState({ files })
         this.setState({ filesReady : true })
@@ -30,7 +31,6 @@ export default class DownloadButton extends React.Component {
             files : files,
             slug : gameSlug
           }
-        console.log(opts);
           this.props.localApi.cloneGame( opts, clonedGame => {
             console.log(clonedGame, "game cloned.");
         })
@@ -44,14 +44,16 @@ export default class DownloadButton extends React.Component {
       <span>
         { this.state.downloading ?
           "Downloading..."
-
           :
-          <a
-            href="#"
-            onClick={() => this.handleClick(this.props.slug) }
-            >
-            Download
-          </a>
+            this.state.downloadEnded ?
+            null
+            :
+            <a
+              href="#"
+              onClick={() => this.handleClick(this.props.slug) }
+              >
+              Download
+            </a>
         }
       </span>
     )

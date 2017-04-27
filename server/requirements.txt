@@ -1,5 +1,6 @@
 python-slugify==1.2.1
-Flask>=0.10.1,<1.0.0
+Flask==0.12.1
+Flask-SocketIO==2.8.6
 PyYAML==3.12
 requests==2.12.4
 jsonschema==2.5.1

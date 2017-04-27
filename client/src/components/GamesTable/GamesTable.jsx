@@ -24,6 +24,7 @@ export default class GamesTable extends React.Component {
           ! game.existsLocally && this.props.remoteApi && this.props.localApi ?
           <td>
             <DownloadButton
+              socket={this.props.socket}
               remoteApi={this.props.remoteApi}
               localApi={this.props.localApi}
               slug={game.slug}

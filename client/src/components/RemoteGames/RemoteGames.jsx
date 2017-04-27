@@ -40,6 +40,16 @@ export default class RemoteGames extends React.Component {
 
   componentDidMount() {
     this.fetchLocalGames()
+
+    this.props.socket.on("downloadEvent", message => {
+      console.log("downloadEnded", message);
+      this.setState({ downloadEvent : message })
+    })
+
+    this.props.socket.on("downloadEnded", message => {
+      console.log("downloadEnded", message);
+      this.fetchLocalGames()
+    })
   }
 
   render() {
@@ -67,6 +77,7 @@ export default class RemoteGames extends React.Component {
           this.state.remoteGames.length ?
           <GamesTable
             games={games}
+            socket={this.props.socket}
             remoteApi={this.remoteApi}
             localApi={this.localApi}
           />
