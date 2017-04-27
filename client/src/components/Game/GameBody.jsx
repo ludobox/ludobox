@@ -41,13 +41,19 @@ export default class GameBody extends React.Component {
   updateGameData(dataChange) {
     console.log(dataChange);
     const id = dataChange.id.split(".")
+    let update = {}
     switch (id.length) {
       case 1 :
-        const update = {}
-        update[dataChange.id] = dataChange.value
+        update[dataChange.id] = dataChange.text
         console.log(update);
         this.setState({ game : Object.assign(this.state.game, update) })
         break;
+      // case 2 :
+      //   update[id[0]] = {}
+      //   update[id[0]][id[1]] = dataChange.text
+      //   console.log(update);
+      //   this.setState({ game : Object.assign(this.state.game, update) })
+      //   break;
       default:
         console.log("ok")
     }

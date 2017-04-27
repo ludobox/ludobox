@@ -20,7 +20,6 @@ class EditableText extends React.Component {
     }
     this.handleEditToggle = this.handleEditToggle.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    // this.handleSave = this.handleSave.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
