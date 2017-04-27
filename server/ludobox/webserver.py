@@ -14,7 +14,7 @@ from functools import update_wrapper
 from ludobox import __version__
 
 from ludobox.config import read_config
-from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index
+from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index, get_resource_slug
 from ludobox.errors import LudoboxError
 from ludobox.data.crawler import download_from_server
 from ludobox.socketio import socket
@@ -154,14 +154,9 @@ def create_resource():
     # Save the game description as pure JSON file
     data_path = write_game(info, files, app.config["DATA_DIR"])
 
-    # try:
-    #     # TODO handle API exceptions properly
-    # except LudoboxError as e:
-    #     # TODO replace this dummy return by a true page showing the failed add
-    #     return redirect(url_for("static", filename="index.html"))
+    slugified_name = get_resource_slug(info)
 
-    # return original JSON
-    return jsonify({"path" : data_path}), 201
+    return jsonify({"path" : data_path, "slug" : slugified_name}), 201
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET'])

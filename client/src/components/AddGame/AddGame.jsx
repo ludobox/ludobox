@@ -4,6 +4,8 @@ import Form from 'react-jsonschema-form';
 
 import { Events, Element} from 'react-scroll'
 
+import { browserHistory } from 'react-router'
+
 import {ToastContainer, ToastMessage} from 'react-toastr';
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
@@ -147,22 +149,33 @@ export default class AddGame extends React.Component {
       // POST
       console.log(`ok, let's post that info with ${this.state.files.length} files !`)
 
-      this.api.postGame(resp.formData, this.state.files, (resp) =>
-        console.log(resp)
+      this.api.postGame(resp.formData,
+        this.state.files,
+        resp => { // SUCCESS : Game created
+          // console.log(path);
+          // show feedback
+          this.refs.container.success(
+              "Games stored ok!",
+              "Bravo",
+            {
+              closeButton:true,
+              handleOnClick: function() { console.log("click") }
+            }
+          )
+          // go to page
+          browserHistory.push('/games/'+resp.slug);
+        },
+        error => this.refs.container.error(
+            error.message,
+            null,
+          {
+            closeButton:true,
+            handleOnClick: function() { console.log("click") }
+          }
+        )
       )
     }
 
-  }
-
-  errors(errors) {
-    console.log("errors");
-
-    // this.refs.container.error(
-    //     errors.toString(),
-    //     "There is errors...",
-    //   {
-    //     closeButton:true
-    //   });
   }
 
   render() {
