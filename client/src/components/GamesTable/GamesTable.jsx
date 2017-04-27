@@ -38,7 +38,7 @@ export default class GamesTable extends React.Component {
 
     return (
       <div>
-        <table className="twelve columns" style={{tableLayout:fixed}}>
+        <table className="twelve columns" style={{tableLayout:"fixed"}}>
             <thead>
                 <tr>
                     <td>Title</td>
