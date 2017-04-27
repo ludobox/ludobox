@@ -11,7 +11,8 @@ from StringIO import StringIO
 
 from jsonschema import validate, ValidationError
 
-from ludobox.webserver import app, get_server_port
+from ludobox.webserver import app
+from ludobox.run import get_server_port
 from ludobox.config import read_config
 from ludobox.content import read_game_info
 

@@ -16,8 +16,7 @@ class TestLudoboxConfig(unittest.TestCase):
         index_path = os.path.join(data_dir, 'index.json')
 
         self.default_values = {
-            "update_mode" : "web",
-            "web_server_url" : "http://localhost:8080",
+            "web_server_url" : "http://box.ludobox.net",
             "port" : 8080,
             "data_dir" : data_dir,
             "index_path" :index_path,
@@ -32,6 +31,7 @@ class TestLudoboxConfig(unittest.TestCase):
 
         # make sure keys are the same
         self.assertEquals(len(config.keys()), len(self.default_values.keys()) )
+        print config.keys()
         self.assertEquals(sorted(config.keys()), sorted(self.default_values.keys()))
         self.assertEquals(config, self.default_values)
 
@@ -69,11 +69,6 @@ class TestLudoboxConfig(unittest.TestCase):
         config = self.default_values.copy()
         config["data_dir"] = "/home/ludobox"
         self.assertRaises(ValueError, lambda:validate_config(config))
-
-        # update mode
-        config = self.default_values.copy()
-        config["update_mode"] = "hjhjhjs"
-        self.assertRaises(AssertionError, lambda:validate_config(config))
 
         # make sure that there is an URL in
         config = self.default_values.copy()
