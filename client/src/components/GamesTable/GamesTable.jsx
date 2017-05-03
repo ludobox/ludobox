@@ -26,7 +26,7 @@ export default class GamesTable extends React.Component {
 
     let languages = games.map(g => g.audience.language)
 
-    let languagesOptions = [...new Set(languages), 'any'] // get unique languages
+    let languagesOptions = ['any', ...new Set(languages)] // get unique languages
       .map( lg => {
         return (
           <option key={lg} value={lg}>
