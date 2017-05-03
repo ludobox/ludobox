@@ -25,7 +25,7 @@ export default class Games extends React.Component {
   render() {
     return (
       <span>
-        <header style={{paddingBottom : "2em"}}>
+        <header style={{paddingBottom : "4em"}}>
           <img src="/images/ludobox-punchline1-to-change.png" />
         </header>
         {
