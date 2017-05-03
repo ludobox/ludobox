@@ -4,25 +4,34 @@ export default class Home extends React.Component {
 
   render() {
     return (
-      <span>
-        <h3>Hello !</h3>
-        <p className="welcome">Welcome to {this.props.config.name ? this.props.config.name: "Ludobox"} :)</p>
-        <p>What would you like to do ?</p>
-        <ul>
-          <li>
-            <a href="/games">Browse games on this box</a>
-          </li>
-          <li>
-            <a href="/create">Create a new game</a>
-          </li>
-          <li>
-            <a href="/download">Download games on my box</a>
-          </li>
-          <li>
-            <a href="/about">Learn more about the Ludobox project</a>
-          </li>
-        </ul>
-      </span>
+        <div className="row">
+          <div className="six columns">
+            <img
+              className="ludobox-logo"
+              src="/images/ludobox-logo-color2.png"
+            />
+          </div>
+          <div className="six columns" style={{ textAlign : 'center', 'paddingTop' : '2em'}}>
+            <h3 className="welcome">
+              Welcome to {this.props.config.name ? this.props.config.name: "Ludobox"}
+            </h3>
+            <p>What would you like to do ?</p>
+            <ul style={{ listStyle : 'none' }}>
+              <li>
+                <a className="button button-primary" href="/games">Browse games</a>
+              </li>
+              <li>
+                <a className="button" href="/create">Add a new game</a>
+              </li>
+              <li>
+                <a className="button" href="/download">Download more games</a>
+              </li>
+              <li>
+                <a className="button" href="/about">Learn about Ludobox</a>
+              </li>
+            </ul>
+          </div>
+        </div>
     )
   }
 }

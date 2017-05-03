@@ -112,3 +112,23 @@ textarea, input, select  {
   color : #333;
   border-color : #333;
 }
+
+.ludobox-nav-header {
+  margin: 0 auto;
+
+  background: url("/images/ludobox-icon.png") no-repeat center center;
+  background-size: 60%;
+  display:block;
+
+  height:50px;
+  width:50px;
+
+  /* Hide the text. */
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%
+}
