@@ -54,7 +54,7 @@ export default class GamesTable extends React.Component {
               {game.title}
             </a>
           </td>
-          <td>{game.fabrication ? game.fabrication.fab_time : null}</td>
+          {/* <td>{game.fabrication ? game.fabrication.fab_time : null}</td> */}
           <td>{game.audience ? game.audience.language : null }</td>
           {
             ! game.existsLocally && this.props.remoteApi && this.props.localApi ?
@@ -74,23 +74,33 @@ export default class GamesTable extends React.Component {
 
     return (
       <div>
-        <input
-          type="text"
-          value={ filterStr }
-          onChange={ e => this.changeFilterStr(e.target.value) }
-          placeholder="Lookup a game"
-        />
-        <select
-          value={ selectedLanguage }
-          onChange={e => this.selectLanguage(e.target.value)}
-          >
-          {languagesOptions}
-        </select>
+        <div className="row">
+          <div className="six columns">
+            <label>Search</label>
+            <input
+              type="text"
+              id="filterStrField"
+              value={ filterStr }
+              onChange={ e => this.changeFilterStr(e.target.value) }
+              placeholder="Lookup a game"
+            />
+          </div>
+          <div className="two columns">
+            <label>Language</label>
+            <select
+              id="languageSelector"
+              value={ selectedLanguage }
+              onChange={e => this.selectLanguage(e.target.value)}
+              >
+                {languagesOptions}
+              </select>
+          </div>
+        </div>
         <table className="twelve columns" style={{tableLayout:"fixed"}}>
             <thead>
                 <tr>
                     <td>Title</td>
-                    <td>Fab Time</td>
+                    {/* <td>Fab Time</td> */}
                     <td>Language</td>
                     {
                       this.props.remoteApi ?
