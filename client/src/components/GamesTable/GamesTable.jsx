@@ -7,7 +7,8 @@ export default class GamesTable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      filterStr : ''
+      filterStr : '',
+      selectedLanguage : 'any'
     }
   }
 
@@ -15,13 +16,33 @@ export default class GamesTable extends React.Component {
     this.setState({ filterStr : filterStr })
   }
 
+  selectLanguage(selectedLanguage){
+    this.setState({ selectedLanguage : selectedLanguage })
+  }
+
   render() {
-    // console.log(this.props.games);
     let { games } = this.props
-    let { filterStr } = this.state
+    let { filterStr, selectedLanguage } = this.state
+
+    let languages = games.map(g => g.audience.language)
+
+    let languagesOptions = [...new Set(languages), 'any'] // get unique languages
+      .map( lg => {
+        return (
+          <option key={lg} value={lg}>
+            {lg}
+          </option>
+          )
+        }
+      )
 
     let rows = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
+      .filter(g =>
+        selectedLanguage !== 'any' ?
+          g.audience.language === selectedLanguage
+        : true // show all games by default
+      )
       .map( game => (
         <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
           key={game.slug}>
@@ -33,7 +54,6 @@ export default class GamesTable extends React.Component {
               {game.title}
             </a>
           </td>
-          <td>{game.content_type}</td>
           <td>{game.fabrication ? game.fabrication.fab_time : null}</td>
           <td>{game.audience ? game.audience.language : null }</td>
           {
@@ -58,12 +78,18 @@ export default class GamesTable extends React.Component {
           type="text"
           value={ filterStr }
           onChange={ e => this.changeFilterStr(e.target.value) }
+          placeholder="Lookup a game"
         />
+        <select
+          value={ selectedLanguage }
+          onChange={e => this.selectLanguage(e.target.value)}
+          >
+          {languagesOptions}
+        </select>
         <table className="twelve columns" style={{tableLayout:"fixed"}}>
             <thead>
                 <tr>
                     <td>Title</td>
-                    <td>Type</td>
                     <td>Fab Time</td>
                     <td>Language</td>
                     {
