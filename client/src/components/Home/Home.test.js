@@ -13,7 +13,7 @@ describe('<Home />', () => {
   it('should say Hello', () => {
     const home = shallow(<Home config={config}/>);
     const title = home.find('h3');
-    assert.match(title.text(), /^Hello/)
+    assert.match(title.text(), /^Welcome/)
   })
 
   it('should display the name of the box', () => {
