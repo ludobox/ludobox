@@ -14,6 +14,9 @@ class SmallList extends React.Component {
     },
     styleUl = { listStyle : "none"}
 
+    // prevent crashing on null value 
+    if(!this.props.items) return null
+
     const lis = this.props.items.map( (item, i) =>
       <li key={i} style={styleLi}>{item}</li>
     )
