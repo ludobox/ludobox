@@ -63,7 +63,8 @@ def validate_config(config):
 
     assert type(config["port"]) is int
     assert type(config["ludobox_name"]) is str
-    assert validate_url(config["web_server_url"]) is True
+    if config["web_server_url"] is not None:
+        assert validate_url(config["web_server_url"]) is True
 
     assert type(config["upload_allowed"]) is bool
 
