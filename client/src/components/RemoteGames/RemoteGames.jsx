@@ -63,7 +63,7 @@ export default class RemoteGames extends React.Component {
         {
           this.state.remoteGames.length ?
           <p>
-            {`Remote server at : ${this.remoteAddress} (${this.state.remoteGames.length} games)`}
+            {`Download from the Ludobox at : ${this.remoteAddress} (${this.state.remoteGames.length} games)`}
           </p>
           :
           null
