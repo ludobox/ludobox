@@ -7,6 +7,10 @@ const style = {
 export default class NavBar extends React.Component {
 
   render() {
+
+    let hasRemote = Object.keys(this.props.config).length ?
+    this.props.config.config.web_server_url : true ;
+
     return (
       <nav className="navbar" style={style}>
         <div className="container">
@@ -17,9 +21,14 @@ export default class NavBar extends React.Component {
             <li className="navbar-item">
               <a className="navbar-link" href="/create">Add game</a>
             </li>
-            <li className="navbar-item">
-              <a className="navbar-link" href="/download">Download</a>
-            </li>
+            {
+              hasRemote ?
+              <li className="navbar-item">
+                <a className="navbar-link" href="/download">Download</a>
+              </li>
+              :
+              null
+            }
             <li className="navbar-item"><a className="navbar-link" href="/about">About</a></li>
             <li className="navbar-item"><a disabled className="navbar-link" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a></li>
           </ul>
