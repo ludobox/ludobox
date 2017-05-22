@@ -3,6 +3,10 @@ import React from 'react'
 export default class Home extends React.Component {
 
   render() {
+
+    let hasRemote = Object.keys(this.props.config).length && this.props.config.config ?
+    this.props.config.config.web_server_url : true ;
+
     return (
         <div className="row">
           <div className="six columns">
@@ -23,9 +27,14 @@ export default class Home extends React.Component {
               <li>
                 <a className="button" href="/create">Add a new game</a>
               </li>
-              <li>
-                <a className="button" href="/download">Download more games</a>
-              </li>
+              {
+                hasRemote ?
+                <li>
+                  <a className="button" href="/download">Download more games</a>
+                </li>
+                :
+                null
+              }
               <li>
                 <a className="button" href="/about">Learn about Ludobox</a>
               </li>

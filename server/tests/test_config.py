@@ -72,6 +72,7 @@ class TestLudoboxConfig(unittest.TestCase):
 
         # make sure that there is an URL in
         config = self.default_values.copy()
-        config["update_mode"] = "web"
         config["web_server_url"] = ""
         self.assertRaises(AssertionError, lambda:validate_config(config))
+        config["web_server_url"] = None
+        validate_config(config)

@@ -16,6 +16,9 @@ class SmallList extends React.Component {
     },
     styleUl = { listStyle : "none"}
 
+    // prevent crashing on null value
+    if(!this.props.items) return null
+
     const lis = this.props.items.map( (item, i) =>
       <li key={i} style={styleLi}>{item}</li>
     )
@@ -92,7 +95,7 @@ export default class GameBody extends React.Component {
             saveChanges={this.updateGameData}
             />
         <p>
-          Webpage: <a href="{source.url}" target="_blank">{source.url}</a>
+          Webpage: <a href={source.url} target="_blank">{source.url}</a>
           <br/>
           Published in {credentials.publication_year} under license : {credentials.license}
         </p>

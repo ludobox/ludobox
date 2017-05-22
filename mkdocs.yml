@@ -4,6 +4,7 @@ pages:
     - Home: index.md
     - Installation: install.md
     - Get Started : get-started.md
+    - Config : config.md
     - Devices :
       - Raspberry Pi : rpi.md
     - Architecture : architecture.md
