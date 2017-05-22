@@ -122,3 +122,4 @@ class TestLudoboxContent(unittest.TestCase):
     #
     #     build_index()
     #     self.assertTrue(os.path.exists(self.config["index_path"]))
+    
