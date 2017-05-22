@@ -4,7 +4,7 @@ export default class Home extends React.Component {
 
   render() {
 
-    let hasRemote = Object.keys(this.props.config).length ?
+    let hasRemote = Object.keys(this.props.config).length && this.props.config.config ?
     this.props.config.config.web_server_url : true ;
 
     return (

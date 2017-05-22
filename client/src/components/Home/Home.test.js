@@ -21,4 +21,30 @@ describe('<Home />', () => {
     const welcome = home.find('.welcome');
     assert.include(welcome.text(), config.name)
   })
+
+  it('should show `download` when web_server_url is not null', () => {
+    const home = shallow(<Home config={
+      {
+        config : {
+          ...config,
+          web_server_url : "http://box.ludobox.net"
+        }
+      }
+    }/>);
+    const download = home.find('a[href="/download"]');
+    assert.equal(download.length, 1);
+  })
+
+  it('should hide `download` when web_server_url is null', () => {
+    const home = shallow(<Home config={
+      {
+        config : {
+          ...config,
+          web_server_url : null
+        }
+      }
+    }/>);
+    const download = home.find('a[href="/download"]');
+    assert.equal(download.length, 0);
+  })
 })
