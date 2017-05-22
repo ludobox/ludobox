@@ -274,17 +274,6 @@ def get_games_index():
 
     return info_files
 
-def build_index():
-    """Create a JSON index file of all games available inside the box"""
-
-    # TODO : check are you sure to update index (y/n) ?
-    # if os.path.exists(config["index_path"]):
-
-    info_files = get_games_index()
-
-    # TODO : filter infos to make the index file smaller
-    with open(config["index_path"], "wb") as index_file:
-        info = json.dump(info_files, index_file)
 
 def update_game_info(game_path, new_game_info):
     """

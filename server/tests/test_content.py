@@ -12,7 +12,7 @@ from StringIO import StringIO
 from jsonschema import ValidationError
 
 from ludobox.config import read_config
-from ludobox.content import build_index, read_game_info, validate_game_data, allowed_file, clean_game
+from ludobox.content import read_game_info, validate_game_data, allowed_file, clean_game
 from ludobox.content import write_game, write_info_json, write_attachments
 
 
@@ -115,11 +115,3 @@ class TestLudoboxContent(unittest.TestCase):
     #     os.makedirs(self.tmp_path)
     #
     #     write_attachements(test_files, self.tmp_path)
-
-
-    # def test_build_index(self):
-    #     """Should build an index containing all data in this field"""
-    #
-    #     build_index()
-    #     self.assertTrue(os.path.exists(self.config["index_path"]))
-    
