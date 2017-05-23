@@ -115,7 +115,7 @@ export default class AddGame extends React.Component {
     }
 
     return (
-      <form onSubmit={ resp => this.handleSubmit(resp)}>
+      <form onSubmit={ resp => this.handleSubmit(resp)} className="addGame">
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <GameForm
           game={game}
