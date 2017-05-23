@@ -1,6 +1,16 @@
 import React from 'react'
+import AlertContainer from 'react-alert'
+
 import APIClient from "../../api.js"
 import GameForm from "../GameForm/GameForm.jsx"
+
+const alertOptions = {
+  offset: 14,
+  position: 'bottom left',
+  theme: 'dark',
+  time: 5000,
+  transition: 'scale'
+}
 
 export default class Game extends React.Component {
 
@@ -31,6 +41,8 @@ export default class Game extends React.Component {
   sendChanges() {
     console.log("changes are sent to server")
     console.log(this.state.game);
+
+    
 
     this.setState({
       editMode : false
@@ -73,12 +85,14 @@ export default class Game extends React.Component {
 
     let editButton = editMode ?
       <span>
-        <a onClick={() => this.sendChanges()}
+        <a className="button"
+          onClick={() => this.sendChanges()}
           style={editButtonStyle}
           >
           <i className="icono-check"></i>
         </a>
-        <a onClick={() => this.cancelChanges()}
+        <a className="button"
+          onClick={() => this.cancelChanges()}
           style={editButtonStyle}
           >
           <i className="icono-cross"></i>
@@ -86,10 +100,11 @@ export default class Game extends React.Component {
       </span>
       :
       <a
+        className="button"
         onClick={() => this.handleEditToggle()}
         style={editButtonStyle}
         >
-        <i className="icono-gear"></i>(EDIT)
+        Edit
       </a>
 
     return (
@@ -110,6 +125,8 @@ export default class Game extends React.Component {
           :
           null
         }
+
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </span>
     )
   }

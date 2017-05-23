@@ -36,6 +36,8 @@ export default class FilesList extends React.Component {
       </li>
     )
 
+    const newFiles = this.props.newFiles || []
+
     return (
       <span>
         <ul>
@@ -43,7 +45,7 @@ export default class FilesList extends React.Component {
         </ul>
         {this.props.editing ?
           <DropZone
-            files={this.props.newFiles} // pass new files to be added
+            files={newFiles} // pass new files to be added
             handleAddFiles={files => this.props.handleAddFiles(files)}
           />
           :
