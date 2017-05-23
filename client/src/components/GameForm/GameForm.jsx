@@ -18,47 +18,11 @@ const languages = ISO6391.getAllCodes()
 
 export default class GameForm extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      game : this.props.game,
-      editMode : false,
-      prevGame : null
-    }
-  }
-
-  sendChanges() {
-    console.log("changes are sent to server")
-    console.log(this.state.game);
-
-    this.setState({
-      editMode : false
-    })
-
-  }
-
-  cancelChanges() {
-    console.log("changes cancelled")
-    this.setState({
-      game : Object.assign({}, this.state.prevGame),
-      prevGame : null,
-      editMode : false
-    })
-  }
-
-  handleEditToggle() {
-    this.setState({
-      editMode : !this.state.editMode,
-      prevGame : JSON.parse(JSON.stringify(this.state.game)) // add a backup
-    })
-  }
-
-  handleSendChanges() {
-    this.updateGameData()
+  updateGame(game) {
+    this.props.updateGame(game)
   }
 
   render() {
-
     const {
       audience,
       credentials,
@@ -68,40 +32,12 @@ export default class GameForm extends React.Component {
       timestamp_add,
       title ,
       content_type ,
-    } = this.state.game
+    } = this.props.game
 
-    const { editMode } = this.state
-
-    // edit button
-    let editButtonStyle = {
-      fontSize:"10pt",
-      cursor : "pointer"
-    }
-
-    let editButton = editMode ?
-      <span>
-        <a onClick={() => this.sendChanges()}
-          style={editButtonStyle}
-          >
-          <i className="icono-check"></i>
-        </a>
-        <a onClick={() => this.cancelChanges()}
-          style={editButtonStyle}
-          >
-          <i className="icono-cross"></i>
-        </a>
-      </span>
-      :
-      <a
-        onClick={() => this.handleEditToggle()}
-        style={editButtonStyle}
-        >
-        <i className="icono-gear"></i>(EDIT)
-      </a>
+    const { editMode } = this.props
 
     return (
       <form>
-        {editButton}
         <h1>
           <EditableText
             type="input"
@@ -109,9 +45,9 @@ export default class GameForm extends React.Component {
             editing={editMode}
             placeholder="Add a title..."
             handleChange={ d => {
-              let game  = this.state.game
+              let game  = this.props.game
               game.title = d
-              this.setState({ game });
+              this.updateGame( game );
             }}
             />
         </h1>
@@ -122,9 +58,9 @@ export default class GameForm extends React.Component {
             items={ description.themes.concat(description.genres)}
             editing={editMode}
             handleChange={ d => {
-              let game  = this.state.game
+              let game  = this.props.game
               game.description.themes = d.items
-              this.setState({ game });
+              this.updateGame( game );
             }}
           /> */}
 
@@ -134,9 +70,9 @@ export default class GameForm extends React.Component {
             placeholder="Add a description..."
             editing={editMode}
             handleChange={ d => {
-              let game  = this.state.game
+              let game  = this.props.game
               game.description.summary = d
-              this.setState({ game });
+              this.updateGame( game );
             }}
             />
         <p>
@@ -152,9 +88,9 @@ export default class GameForm extends React.Component {
                fieldType="url"
                editing={editMode}
                handleChange={ d => {
-                 let game  = this.state.game
+                 let game  = this.props.game
                  game.source.url = d
-                 this.setState({ game });
+                 this.updateGame( game );
                }}
                />
               }
@@ -165,9 +101,9 @@ export default class GameForm extends React.Component {
             value={credentials.license}
             options={licenses}
             handleChange={ d => {
-              let game  = this.state.game
+              let game  = this.props.game
               game.credentials.license = d
-              this.setState({ game });
+              this.updateGame( game );
             }}
           />
           <br/>
@@ -177,9 +113,9 @@ export default class GameForm extends React.Component {
             value={credentials.publication_year}
             options={years}
             handleChange={ d => {
-              let game  = this.state.game
+              let game  = this.props.game
               game.credentials.publication_year = d
-              this.setState({ game });
+              this.updateGame( game );
             }}
           />
 
@@ -195,9 +131,9 @@ export default class GameForm extends React.Component {
                 value={audience.language}
                 options={languages}
                 handleChange={ d => {
-                  let game  = this.state.game
+                  let game  = this.props.game
                   game.audience.language = d
-                  this.setState({ game });
+                  this.updateGame( game );
                 }}
               />
 
@@ -208,9 +144,9 @@ export default class GameForm extends React.Component {
                 editing={editMode}
                 value={audience.number_of_players.players_min}
                 handleChange={ d => {
-                  let game  = this.state.game
+                  let game  = this.props.game
                   game.audience.number_of_players.players_min = d
-                  this.setState({ game });
+                  this.updateGame( game );
                 }}
               />
                -
@@ -219,9 +155,9 @@ export default class GameForm extends React.Component {
                 editing={editMode}
                 value={audience.number_of_players.players_max}
                 handleChange={ d => {
-                  let game  = this.state.game
+                  let game  = this.props.game
                   game.audience.number_of_players.players_max = d
-                  this.setState({ game });
+                  this.updateGame( game );
                 }}
               />
               <br/>
@@ -230,9 +166,9 @@ export default class GameForm extends React.Component {
               editing={editMode}
               value={audience.duration}
               handleChange={ d => {
-                let game  = this.state.game
+                let game  = this.props.game
                 game.audience.duration = d
-                this.setState({ game });
+                this.updateGame( game );
               }}
             />
             </p>
@@ -244,9 +180,9 @@ export default class GameForm extends React.Component {
               options={ages}
               editing={editMode}
               handleChange={ d => {
-                let game  = this.state.game
+                let game  = this.props.game
                 game.audience.age = d
-                this.setState({ game });
+                this.updateGame( game );
               }}
             />
           </div>
@@ -266,9 +202,9 @@ export default class GameForm extends React.Component {
                   value={fabrication.fab_time}
                   fieldId="fabrication.fab_time"
                   handleChange={ d => {
-                    let game  = this.state.game
+                    let game  = this.props.game
                     game.fabrication.fab_time = d
-                    this.setState({ game });
+                    this.updateGame( game );
                   }}
               />
               </p>
@@ -296,9 +232,9 @@ export default class GameForm extends React.Component {
               items={credentials.authors}
               editing={editMode}
               handleChange={ d => {
-                let game  = this.state.game
+                let game  = this.props.game
                 game.credentials.authors = d
-                this.setState({ game });
+                this.updateGame( game );
               }}
             />
           </div>
@@ -308,9 +244,9 @@ export default class GameForm extends React.Component {
               items={credentials.illustrators}
               editing={editMode}
               handleChange={ d => {
-                let game  = this.state.game
+                let game  = this.props.game
                 game.credentials.illustrators = d
-                this.setState({ game });
+                this.updateGame( game );
               }}
             />
           </div>
@@ -320,9 +256,9 @@ export default class GameForm extends React.Component {
               items={credentials.publishers}
               editing={editMode}
               handleChange={ d => {
-                let game  = this.state.game
+                let game  = this.props.game
                 game.credentials.publishers = d
-                this.setState({ game });
+                this.updateGame( game );
               }}
             />
           </div>
