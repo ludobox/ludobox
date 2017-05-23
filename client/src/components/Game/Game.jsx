@@ -28,20 +28,12 @@ export default class Game extends React.Component {
 
   render() {
 
-    let files = this.state.files.map( file =>
-      <a href={file.url}>
-        {
-          `${file.filename.substring(0, 8)}... (${file.filename.split('.').pop().toUpperCase()})`
-        }
-      </a>
-    )
-
     return (
       <span>
         { this.state.game && this.state.files ?
           <GameBody
             game={this.state.game}
-            files={files}
+            files={this.state.files}
           />
           :
           null

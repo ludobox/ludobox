@@ -5,16 +5,15 @@ import FreeTagging from '../Form/FreeTagging.jsx'
 import MultiSelect from '../Form/MultiSelect.jsx'
 import Selector from '../Form/Selector.jsx'
 import Number from '../Form/Number.jsx'
+import FilesList from '../Form/FilesList.jsx'
 
 import ISO6391 from 'iso-639-1'
 
 const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
 
-// 50 last years
-const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )
 
+const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i ) // 50 last years
 const ages = ["Children", "Teenagers", "Adults"]
-
 const languages = ISO6391.getAllCodes()
 
 export default class GameBody extends React.Component {
@@ -207,7 +206,28 @@ export default class GameBody extends React.Component {
               />
 
               <br/>
-              Number_of_players:   {audience.number_of_players.players_min}-{audience.number_of_players.players_max}
+              Number of players :
+              { editMode ? " (minimum)" : null}
+              <Number
+                editing={editMode}
+                defaultValue={audience.number_of_players.players_min}
+                handleChange={ d => {
+                  let game  = this.state.game
+                  game.audience.number_of_players.players_min = d.value
+                  this.setState({ game });
+                }}
+              />
+               -
+              { editMode ? "Number_of_players (maximum)" : null}
+              <Number
+                editing={editMode}
+                defaultValue={audience.number_of_players.players_max}
+                handleChange={ d => {
+                  let game  = this.state.game
+                  game.audience.number_of_players.players_max = d.value
+                  this.setState({ game });
+                }}
+              />
               <br/>
             Duration of each play (minutes):
             <Number
@@ -240,20 +260,23 @@ export default class GameBody extends React.Component {
 
         <div className="row">
           <div className="six columns">
-            {/* <h5>Fabrication</h5> */}
-            <p>
-              Fab time (minutes):
-              <Number
-                editing={editMode}
-                defaultValue={fabrication.fab_time}
-                fieldId="fabrication.fab_time"
-                handleChange={ d => {
-                  let game  = this.state.game
-                  game.fabrication.fab_time = d.value
-                  this.setState({ game });
-                }}
+            { ! editMode ?
+              <h5>Fabrication time : {fabrication.fab_time} minutes </h5>
+              :
+              <p>
+                Fabrication time (minutes):
+                <Number
+                  editing={editMode}
+                  defaultValue={fabrication.fab_time}
+                  fieldId="fabrication.fab_time"
+                  handleChange={ d => {
+                    let game  = this.state.game
+                    game.fabrication.fab_time = d.value
+                    this.setState({ game });
+                  }}
               />
-            </p>
+              </p>
+            }
             <MultiSelect
               options={["ha"]}
               defaultValue={fabrication.requirements}
@@ -261,7 +284,9 @@ export default class GameBody extends React.Component {
           </div>
           <div className="six columns">
             <h5>Download files</h5>
-            {/* <MultiSelect items={this.props.files}/> */}
+            <FilesList
+              files={this.props.files}
+            />
           </div>
         </div>
 
