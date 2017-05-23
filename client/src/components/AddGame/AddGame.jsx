@@ -54,7 +54,7 @@ export default class AddGame extends React.Component {
 
   postGame(formData) {
     this.api.postGame(this.state.game,
-      this.state.files,
+      this.state.newFiles,
       resp => { // SUCCESS : Game created
         console.log(resp);
         // show feedback

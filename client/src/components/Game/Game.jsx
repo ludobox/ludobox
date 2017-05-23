@@ -105,6 +105,7 @@ export default class Game extends React.Component {
             files={this.state.files}
             editMode={editMode}
             updateGame={game => this.updateGame(game)}
+            errors={{}}
           />
           :
           null
