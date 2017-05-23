@@ -48,7 +48,7 @@ export default class MultiSelect extends React.Component {
               size={8}
               style={{ height: '20%'}}
               onChange={ (e) => this.handleChange(e)}
-              value={this.props.selected}
+              value={this.props.value}
               >
               {options}
             </select>

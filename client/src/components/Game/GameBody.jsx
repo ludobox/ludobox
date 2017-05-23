@@ -240,7 +240,7 @@ export default class GameBody extends React.Component {
               editing={editMode}
               handleChange={ d => {
                 let game  = this.state.game
-                game.audience.age = d.items
+                game.audience.age = d
                 this.setState({ game });
               }}
             />
@@ -262,7 +262,7 @@ export default class GameBody extends React.Component {
                   fieldId="fabrication.fab_time"
                   handleChange={ d => {
                     let game  = this.state.game
-                    game.fabrication.fab_time = d.value
+                    game.fabrication.fab_time = d
                     this.setState({ game });
                   }}
               />
@@ -297,7 +297,7 @@ export default class GameBody extends React.Component {
               editing={editMode}
               handleChange={ d => {
                 let game  = this.state.game
-                game.credentials.authors = d.items
+                game.credentials.authors = d
                 this.setState({ game });
               }}
             />
@@ -309,7 +309,7 @@ export default class GameBody extends React.Component {
               editing={editMode}
               handleChange={ d => {
                 let game  = this.state.game
-                game.credentials.illustrators = d.items
+                game.credentials.illustrators = d
                 this.setState({ game });
               }}
             />
@@ -321,7 +321,7 @@ export default class GameBody extends React.Component {
               editing={editMode}
               handleChange={ d => {
                 let game  = this.state.game
-                game.credentials.publishers = d.items
+                game.credentials.publishers = d
                 this.setState({ game });
               }}
             />

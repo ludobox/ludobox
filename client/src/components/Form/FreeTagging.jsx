@@ -14,17 +14,9 @@ styleUl = { listStyle : "none"}
 
 export default class FreeTagging extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      items : this.props.items
-    }
-  }
-
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      let items = [...this.state.items, e.target.value]
-      this.setState({ items })
+      let items = [...this.props.items, e.target.value]
       this.handleChange( items )
       this.refs.newItemInput = ""
     }
@@ -32,16 +24,15 @@ export default class FreeTagging extends React.Component {
 
   removeItem(item) {
     // remove
-    let {items} = this.state
+    let {items} = this.props
     let i = items.indexOf(item);
     if (i > -1) items.splice(i, 1);
 
-    this.setState({ items })
     this.handleChange(items)
   }
 
   handleChange(items) {
-    this.props.handleChange({ items })
+    this.props.handleChange( items )
   }
 
   render() {
@@ -49,7 +40,7 @@ export default class FreeTagging extends React.Component {
     // prevent crashing on null value
     if(!this.props.items) return null
 
-    const lis = this.state.items.map( (item, i) =>
+    const lis = this.props.items.map( (item, i) =>
       <li key={i}
         style={styleLi}
         >
