@@ -4,6 +4,9 @@ import AlertContainer from 'react-alert'
 import APIClient from "../../api.js"
 import GameForm from "../GameForm/GameForm.jsx"
 
+import validator from 'is-my-json-valid'
+import model from '../../../../model/schema.json'
+
 const alertOptions = {
   offset: 14,
   position: 'bottom left',
@@ -17,10 +20,12 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props)
     this.api = new APIClient()
+    this.validate = validator(model)
     this.state = {
       game: null,
       prevGame : null,
       files: [],
+      errors: [],
       editMode : false
     };
   }
@@ -39,14 +44,29 @@ export default class Game extends React.Component {
   }
 
   sendChanges() {
-    console.log("changes are sent to server")
-    console.log(this.state.game);
 
-    
+    // data validation
+    this.validate(this.state.game);
+    console.log(this.validate.errors);
 
-    this.setState({
-      editMode : false
-    })
+    if (this.validate.errors) {
+      this.msg.error(this.validate.errors.length + " errors.")
+
+      const errors = {}
+      this.validate.errors.map( error =>
+        errors[error.field.slice(5)] = error.message
+      )
+      this.setState({ errors })
+    } else {
+      this.setState({errors : {}})
+
+      // send changes to server
+      // console.log("changes are sent to server")
+      this.setState({
+        editMode : false
+      })
+    }
+
   }
 
   cancelChanges() {
@@ -120,7 +140,7 @@ export default class Game extends React.Component {
             files={this.state.files}
             editMode={editMode}
             updateGame={game => this.updateGame(game)}
-            errors={{}}
+            errors={this.state.errors}
           />
           :
           null
