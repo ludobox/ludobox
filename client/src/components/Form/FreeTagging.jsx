@@ -73,6 +73,7 @@ export default class FreeTagging extends React.Component {
               }>
               <input
                 placeholder="Type sth here..."
+                type="text"
                 ref="newItemInput"
                 onKeyPress={this.handleKeyPress}
               />

@@ -26,6 +26,7 @@ export default class EditableText extends React.Component {
         <span>
           {this.props.type === 'input' ?
             <input
+              type={this.props.fieldType ? this.props.fieldType : "text"}
               value={this.props.text || ""}
               onChange={(e) => this.handleChange(e)}
               name={this.props.fieldId}

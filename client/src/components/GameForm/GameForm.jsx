@@ -100,7 +100,7 @@ export default class GameForm extends React.Component {
       </a>
 
     return (
-      <div>
+      <form>
         {editButton}
         <h1>
           <EditableText
@@ -149,6 +149,7 @@ export default class GameForm extends React.Component {
               <EditableText
                type="input"
                text={source.url}
+               fieldType="url"
                editing={editMode}
                handleChange={ d => {
                  let game  = this.state.game
@@ -330,7 +331,7 @@ export default class GameForm extends React.Component {
         <hr/>
 
         <p>{content_type} added on {timestamp_add}.</p>
-      </div>
+      </form>
     )
   }
 }
