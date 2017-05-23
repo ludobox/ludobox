@@ -49,7 +49,7 @@ export default class GameBody extends React.Component {
   handleEditToggle() {
     this.setState({
       editMode : !this.state.editMode,
-      prevGame : Object.assign({}, this.state.game) // add a backup
+      prevGame : JSON.parse(JSON.stringify(this.state.game)) // add a backup
     })
   }
 
@@ -98,22 +98,18 @@ export default class GameBody extends React.Component {
         <i className="icono-gear"></i>(EDIT)
       </a>
 
-    console.log(title);
-
     return (
       <div>
         {editButton}
         <h1>
           <EditableText
             type="input"
-            defaultValue={title}
-            fieldId="title"
+            text={title}
             editing={editMode}
             handleChange={ d => {
               let game  = this.state.game
-              game.title = d.text
+              game.title = d
               this.setState({ game });
-              console.log(this.state.prevGame.title, this.state.game.title);
             }}
             />
         </h1>
@@ -132,12 +128,11 @@ export default class GameBody extends React.Component {
 
           <EditableText
             type="textarea"
-            defaultValue={description.summary}
-            fieldId="description.summary"
+            text={description.summary}
             editing={editMode}
             handleChange={ d => {
               let game  = this.state.game
-              game.description.summary = d.text
+              game.description.summary = d
               this.setState({ game });
             }}
             />
@@ -150,12 +145,11 @@ export default class GameBody extends React.Component {
               :
               <EditableText
                type="input"
-               defaultValue={source.url}
-               fieldId="source.url"
+               text={source.url}
                editing={editMode}
                handleChange={ d => {
                  let game  = this.state.game
-                 game.source.url = d.text
+                 game.source.url = d
                  this.setState({ game });
                }}
                />
