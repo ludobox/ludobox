@@ -2,6 +2,12 @@ import React from 'react'
 
 import EditableText from '../Form/EditableText.jsx'
 import SmallList from '../Form/SmallList.jsx'
+import Selector from '../Form/Selector.jsx'
+
+const licenses =  ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
+
+// 50 last years
+const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )
 
 export default class GameBody extends React.Component {
 
@@ -28,13 +34,6 @@ export default class GameBody extends React.Component {
       prevGame : null,
       editMode : false
     })
-  }
-
-  handleChange(dataChange) {
-    console.log(dataChange);
-    console.log(this);
-    // 'a.b.etc'.split('.').reduce((o,i)=>o[i], obj)
-    // this.setState({ text:  })
   }
 
   handleEditToggle() {
@@ -115,7 +114,11 @@ export default class GameBody extends React.Component {
             defaultValue={description.summary}
             fieldId="description.summary"
             editing={editMode}
-            handleChange={this.handleChange}
+            handleChange={ d => {
+              let game  = this.state.game
+              game.description.summary = d.text
+              this.setState({ game });
+            }}
             />
         <p>
             Webpage:
@@ -129,11 +132,40 @@ export default class GameBody extends React.Component {
                defaultValue={source.url}
                fieldId="source.url"
                editing={editMode}
-               handleChange={this.handleChange}
+               handleChange={ d => {
+                 let game  = this.state.game
+                 game.source.url = d.text
+                 this.setState({ game });
+               }}
                />
               }
           <br/>
-          Published in {credentials.publication_year} under license : {credentials.license}
+          Under license :
+          <Selector
+            editing={editMode}
+            defaultValue={credentials.license}
+            options={licenses}
+            fieldId="credentials.license"
+            handleChange={ d => {
+              let game  = this.state.game
+              game.credentials.license = d.value
+              this.setState({ game });
+            }}
+          />
+          <br/>
+          Published in : 
+          <Selector
+            editing={editMode}
+            defaultValue={credentials.publication_year}
+            options={years}
+            fieldId="credentials.publication_year"
+            handleChange={ d => {
+              let game  = this.state.game
+              game.credentials.publication_year = d.value
+              this.setState({ game });
+            }}
+          />
+
         </p>
         <hr/>
 
