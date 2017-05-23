@@ -158,12 +158,11 @@ export default class GameBody extends React.Component {
           Under license :
           <Selector
             editing={editMode}
-            defaultValue={credentials.license}
+            value={credentials.license}
             options={licenses}
-            fieldId="credentials.license"
             handleChange={ d => {
               let game  = this.state.game
-              game.credentials.license = d.value
+              game.credentials.license = d
               this.setState({ game });
             }}
           />
@@ -171,12 +170,11 @@ export default class GameBody extends React.Component {
           Published in :
           <Selector
             editing={editMode}
-            defaultValue={credentials.publication_year}
+            value={credentials.publication_year}
             options={years}
-            fieldId="credentials.publication_year"
             handleChange={ d => {
               let game  = this.state.game
-              game.credentials.publication_year = d.value
+              game.credentials.publication_year = d
               this.setState({ game });
             }}
           />
@@ -190,11 +188,11 @@ export default class GameBody extends React.Component {
               Language:
               <Selector
                 editing={editMode}
-                defaultValue={audience.language}
+                value={audience.language}
                 options={languages}
                 handleChange={ d => {
                   let game  = this.state.game
-                  game.audience.language = d.value
+                  game.audience.language = d
                   this.setState({ game });
                 }}
               />
@@ -204,10 +202,10 @@ export default class GameBody extends React.Component {
               { editMode ? " (minimum)" : null}
               <Number
                 editing={editMode}
-                defaultValue={audience.number_of_players.players_min}
+                value={audience.number_of_players.players_min}
                 handleChange={ d => {
                   let game  = this.state.game
-                  game.audience.number_of_players.players_min = d.value
+                  game.audience.number_of_players.players_min = d
                   this.setState({ game });
                 }}
               />
@@ -215,10 +213,10 @@ export default class GameBody extends React.Component {
               { editMode ? "Number_of_players (maximum)" : null}
               <Number
                 editing={editMode}
-                defaultValue={audience.number_of_players.players_max}
+                value={audience.number_of_players.players_max}
                 handleChange={ d => {
                   let game  = this.state.game
-                  game.audience.number_of_players.players_max = d.value
+                  game.audience.number_of_players.players_max = d
                   this.setState({ game });
                 }}
               />
@@ -226,11 +224,10 @@ export default class GameBody extends React.Component {
             Duration of each play (minutes):
             <Number
               editing={editMode}
-              defaultValue={audience.duration}
-              fieldId="audience.duration"
+              value={audience.duration}
               handleChange={ d => {
                 let game  = this.state.game
-                game.audience.duration = d.value
+                game.audience.duration = d
                 this.setState({ game });
               }}
             />
@@ -238,7 +235,7 @@ export default class GameBody extends React.Component {
           </div>
           <div className="six columns">
             <MultiSelect
-              defaultValue={audience.age}
+              value={audience.age}
               options={ages}
               editing={editMode}
               handleChange={ d => {
@@ -273,7 +270,7 @@ export default class GameBody extends React.Component {
             }
             <MultiSelect
               options={["ha"]}
-              defaultValue={fabrication.requirements}
+              value={fabrication.requirements}
             />
           </div>
           <div className="six columns">

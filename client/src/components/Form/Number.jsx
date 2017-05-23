@@ -1,18 +1,9 @@
 import React from 'react'
 
 export default class Number extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      text : null,
-      editing : false,
-      value : this.props.defaultValue
-    }
-  }
 
   handleChange(e) {
-    this.setState({ value : e.target.value });
-    this.props.handleChange({value : e.target.value})
+    this.props.handleChange(e.target.value)
   }
 
   render() {
@@ -21,12 +12,12 @@ export default class Number extends React.Component {
       this.props.editing ?
         <input
           onChange={ e => this.handleChange(e)}
-          value={this.state.value}
+          value={this.props.value}
           type="number"
         />
       :
       <span>
-        {this.state.value}
+        {this.props.value}
       </span>
     )
   }

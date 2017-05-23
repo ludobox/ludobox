@@ -14,31 +14,20 @@ styleUl = { listStyle : "none"}
 
 export default class MultiSelect extends React.Component {
 
-  constructor(props) {
-    super(props)
-    console.log(this.props.defaultValue);
-    this.state = {
-      selected : this.props.defaultValue
-    }
-  }
-
   handleChange(e) {
-    console.log(e.target.value);
-
      const items = [...e.target.options]
       .filter(o => o.selected)
       .map(o => o.value)
 
-      this.setState({ selected : items })
-      this.props.handleChange({ items })
+      this.props.handleChange( items )
   }
 
   render() {
 
     // prevent crashing on null value
-    if(!this.state.selected) return null
+    if(!this.props.value) return null
 
-    const lis = this.state.selected.map( (item, i) =>
+    const lis = this.props.value.map( (item, i) =>
       <li key={i}
         style={styleLi}
         >
@@ -59,7 +48,7 @@ export default class MultiSelect extends React.Component {
               size={8}
               style={{ height: '20%'}}
               onChange={ (e) => this.handleChange(e)}
-              value={this.state.selected}
+              value={this.props.selected}
               >
               {options}
             </select>
