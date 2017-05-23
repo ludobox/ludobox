@@ -14,7 +14,9 @@ export default class History extends React.Component {
     this.setState({showDetails : !this.state.showDetails})
   }
   render() {
-    const lis = this.props.history.map( event =>
+    const history = this.props.history ? this.props.history : []
+
+    const lis = history.map( event =>
       <li key={event.ts}>{event.ts}</li>
     )
     const { showDetails } = this.state

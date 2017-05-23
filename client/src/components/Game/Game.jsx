@@ -163,7 +163,7 @@ export default class Game extends React.Component {
           </div>
           <div className="six columns">
             {
-              this.state.game ?
+              this.state.game && this.state.game.history ?
               <History
                 history={this.state.game.history}
               />
