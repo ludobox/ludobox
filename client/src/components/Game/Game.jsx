@@ -3,6 +3,7 @@ import AlertContainer from 'react-alert'
 
 import APIClient from "../../api.js"
 import GameForm from "../GameForm/GameForm.jsx"
+import History from "./History.jsx"
 
 import validator from 'is-my-json-valid'
 import model from '../../../../model/schema.json'
@@ -141,10 +142,6 @@ export default class Game extends React.Component {
     return (
       <span>
 
-        {editButton}
-
-        <hr />
-
         { this.state.game && this.state.files ?
           <GameForm
             game={this.state.game}
@@ -157,7 +154,29 @@ export default class Game extends React.Component {
           null
         }
 
+
+        <hr />
+
+        <div className="row" style={{paddingBottom : '3em'}}>
+          <div className="six columns">
+            {editButton}
+          </div>
+          <div className="six columns">
+            {
+              this.state.game ?
+              <History
+                history={this.state.game.history}
+              />
+              :
+              null
+            }
+          </div>
+        </div>
+
+
+
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+
       </span>
     )
   }
