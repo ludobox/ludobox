@@ -16,77 +16,58 @@ export default class MultiSelect extends React.Component {
 
   constructor(props) {
     super(props)
+    console.log(this.props.defaultValue);
     this.state = {
-      items : this.props.items
+      selected : this.props.defaultValue
     }
   }
 
-  handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      let items = [...this.state.items, e.target.value]
-      this.setState({ items })
-      this.handleChange( items )
-      this.refs.newItemInput = ""
-    }
-  }
+  handleChange(e) {
+    console.log(e.target.value);
 
-  removeItem(item) {
-    // remove
-    let {items} = this.state
-    let i = items.indexOf(item);
-    if (i > -1) items.splice(i, 1);
+     const items = [...e.target.options]
+      .filter(o => o.selected)
+      .map(o => o.value)
 
-    this.setState({ items })
-    this.handleChange(items)
-  }
-
-  handleChange(items) {
-    this.props.handleChange({ items })
+      this.setState({ selected : items })
+      this.props.handleChange({ items })
   }
 
   render() {
 
     // prevent crashing on null value
-    if(!this.props.items) return null
+    if(!this.state.selected) return null
 
-    const lis = this.state.items.map( (item, i) =>
+    const lis = this.state.selected.map( (item, i) =>
       <li key={i}
         style={styleLi}
         >
         {item}
-        { this.props.editing ?
-          <a onClick={() => this.removeItem(item)}
-            style={{cursor : "pointer"}}
-            >
-            <i className="icono-cross"></i>
-          </a>
-          :
-          null
-        }
       </li>
+    )
+
+    const options = this.props.options.map( (item,i) =>
+      <option key={i} value={item}>{item}</option>
     )
 
     return (
       <span>
-        <ul style={styleUl}>
-          {lis}
         {
           this.props.editing ?
-            <li style={
-              Object.assign(styleLi, {
-                padding : "10px 0.5em 0 0.5em"
-               })
-              }>
-              <input
-                placeholder="Type sth here..."
-                ref="newItemInput"
-                onKeyPress={this.handleKeyPress}
-              />
-            </li>
+            <select
+              multiple
+              size={8}
+              style={{ height: '20%'}}
+              onChange={ (e) => this.handleChange(e)}
+              value={this.state.selected}
+              >
+              {options}
+            </select>
           :
-          null
+            <ul style={styleUl}>
+              {lis}
+            </ul>
         }
-        </ul>
       </span>
     )
 

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import EditableText from '../Form/EditableText.jsx'
+import FreeTagging from '../Form/FreeTagging.jsx'
 import MultiSelect from '../Form/MultiSelect.jsx'
 import Selector from '../Form/Selector.jsx'
 import Number from '../Form/Number.jsx'
@@ -11,7 +12,6 @@ const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unkn
 const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )
 
 const ages = ["Children", "Teenagers", "Adults"]
-
 
 export default class GameBody extends React.Component {
 
@@ -27,7 +27,7 @@ export default class GameBody extends React.Component {
   sendChanges() {
     console.log("changes are sent to server")
     console.log(this.state.game);
-    
+
     this.setState({
       editMode : false
     })
@@ -115,7 +115,18 @@ export default class GameBody extends React.Component {
             />
         </h1>
 
-        <MultiSelect items={ description.themes.concat(description.genres)}/>
+          {/*
+            // TODO : themes and genres
+            <FreeTagging
+            items={ description.themes.concat(description.genres)}
+            editing={editMode}
+            handleChange={ d => {
+              let game  = this.state.game
+              game.description.themes = d.items
+              this.setState({ game });
+            }}
+          /> */}
+
           <EditableText
             type="textarea"
             defaultValue={description.summary}
@@ -197,7 +208,16 @@ export default class GameBody extends React.Component {
             </p>
           </div>
           <div className="six columns">
-            <MultiSelect items={audience.age}/>
+            <MultiSelect
+              defaultValue={audience.age}
+              options={ages}
+              editing={editMode}
+              handleChange={ d => {
+                let game  = this.state.game
+                game.audience.age = d.items
+                this.setState({ game });
+              }}
+            />
           </div>
         </div>
 
@@ -219,11 +239,14 @@ export default class GameBody extends React.Component {
                 }}
               />
             </p>
-            <MultiSelect items={fabrication.requirements}/>
+            <MultiSelect
+              options={["ha"]}
+              defaultValue={fabrication.requirements}
+            />
           </div>
           <div className="six columns">
             <h5>Download files</h5>
-            <MultiSelect items={this.props.files}/>
+            {/* <MultiSelect items={this.props.files}/> */}
           </div>
         </div>
 
@@ -238,7 +261,7 @@ export default class GameBody extends React.Component {
               fieldId="fabrication.fab_time"
             />
              */}
-            <MultiSelect
+            <FreeTagging
               items={credentials.authors}
               editing={editMode}
               handleChange={ d => {
@@ -250,11 +273,27 @@ export default class GameBody extends React.Component {
           </div>
           <div className="four columns">
             <p>Illustrators</p>
-            <MultiSelect items={credentials.illustrators}/>
+            <FreeTagging
+              items={credentials.illustrators}
+              editing={editMode}
+              handleChange={ d => {
+                let game  = this.state.game
+                game.credentials.illustrators = d.items
+                this.setState({ game });
+              }}
+            />
           </div>
           <div className="four columns">
             <p>Publishers</p>
-            <MultiSelect items={credentials.publishers}/>
+            <FreeTagging
+              items={credentials.publishers}
+              editing={editMode}
+              handleChange={ d => {
+                let game  = this.state.game
+                game.credentials.publishers = d.items
+                this.setState({ game });
+              }}
+            />
           </div>
         </div>
 
