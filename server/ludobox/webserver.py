@@ -14,7 +14,7 @@ from functools import update_wrapper
 from ludobox import __version__
 
 from ludobox.config import read_config
-from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index, get_resource_slug
+from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index, get_resource_slug, update_game_info
 from ludobox.errors import LudoboxError
 from ludobox.data.crawler import download_from_server
 from ludobox.socketio import socket
@@ -159,6 +159,23 @@ def create_resource():
 
     return jsonify({"path" : data_path, "slug" : slugified_name}), 201
 
+@app.route('/api/update', methods=["POST"])
+def update_resource():
+    """
+    This function allow to post 2 things :
+
+    * info : the dict containing the (valid) updated description of the game
+    * slug : path/slug of the game
+
+    """
+
+    new_game_info = json.loads(request.form["info"])
+    game_slug = json.loads(request.form["slug"])
+    game_path = os.path.join(app.config["DATA_DIR"], game_slug)
+
+    update_game_info(game_path, new_game_info)
+
+    return jsonify({"message" : "ok! updated"}), 201
 
 @app.route('/', defaults={'path': ''}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])

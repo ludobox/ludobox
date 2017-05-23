@@ -60,13 +60,24 @@ export default class Game extends React.Component {
     } else {
       this.setState({errors : {}})
 
+      // get slug
+      let slug = document.location.pathname.split("/").pop()
+      console.log(slug);
       // send changes to server
-      // console.log("changes are sent to server")
+      this.api.updateGame(this.state.game,
+        slug,
+        resp => { // SUCCESS : Game created
+          // show feedback
+          this.msg.success( "Bravo, your game has been updated!")
+        },
+        error => this.msg.error( error.message )
+      )
+
+      // switch to read mode
       this.setState({
         editMode : false
       })
     }
-
   }
 
   cancelChanges() {
