@@ -1,65 +1,51 @@
 import React from 'react'
 
 import EditableText from '../Form/EditableText.jsx'
-
-class SmallList extends React.Component {
-  constructor(props) { super(props) }
-  render() {
-    const styleLi = {
-      // display : "inline",
-      padding : "0 .5em",
-      margin : ".5em ",
-      width: "auto",
-      lineHeight: "2.5em",
-      display: "inline-block",
-      border : "1px solid #ccc"
-    },
-    styleUl = { listStyle : "none"}
-
-    // prevent crashing on null value
-    if(!this.props.items) return null
-
-    const lis = this.props.items.map( (item, i) =>
-      <li key={i} style={styleLi}>{item}</li>
-    )
-
-    return (
-      <ul style={styleUl}>
-        {lis}
-      </ul>
-    )
-  }
-}
+import SmallList from '../Form/SmallList.jsx'
 
 export default class GameBody extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      game : this.props.game
+      game : this.props.game,
+      editMode : false,
+      prevGame : null
     }
-    this.updateGameData = this.updateGameData.bind(this)
   }
 
-  updateGameData(dataChange) {
+  sendChanges() {
+    console.log("changes are sent to server")
+    this.setState({
+      editMode : false
+    })
+  }
+
+  cancelChanges() {
+    console.log("changes cancelled")
+    this.setState({
+      game : Object.assign({}, this.state.prevGame),
+      prevGame : null,
+      editMode : false
+    })
+  }
+
+  handleChange(dataChange) {
     console.log(dataChange);
-    const id = dataChange.id.split(".")
-    let update = {}
-    switch (id.length) {
-      case 1 :
-        update[dataChange.id] = dataChange.text
-        console.log(update);
-        this.setState({ game : Object.assign(this.state.game, update) })
-        break;
-      // case 2 :
-      //   update[id[0]] = {}
-      //   update[id[0]][id[1]] = dataChange.text
-      //   console.log(update);
-      //   this.setState({ game : Object.assign(this.state.game, update) })
-      //   break;
-      default:
-        console.log("ok")
-    }
+    console.log(this);
+    // 'a.b.etc'.split('.').reduce((o,i)=>o[i], obj)
+    // this.setState({ text:  })
+  }
+
+  handleEditToggle() {
+    this.setState({
+      editMode : !this.state.editMode,
+      prevGame : Object.assign({}, this.state.game) // add a backup
+    })
+  }
+
+  handleSendChanges() {
+    this.updateGameData()
   }
 
   render() {
@@ -76,14 +62,50 @@ export default class GameBody extends React.Component {
       content_type ,
     } = this.state.game
 
+    const { editMode } = this.state
+
+    let editButtonStyle = {
+      fontSize:"10pt",
+      cursor : "pointer"
+    }
+    let editButton = editMode ?
+      <span>
+        <a onClick={() => this.sendChanges()}
+          style={editButtonStyle}
+          >
+          <i className="icono-check"></i>
+        </a>
+        <a onClick={() => this.cancelChanges()}
+          style={editButtonStyle}
+          >
+          <i className="icono-cross"></i>
+        </a>
+      </span>
+      :
+      <a
+        onClick={() => this.handleEditToggle()}
+        style={editButtonStyle}
+        >
+        <i className="icono-gear"></i>(EDIT)
+      </a>
+
+    console.log(title);
+
     return (
       <div>
+        {editButton}
         <h1>
           <EditableText
             type="input"
             defaultValue={title}
             fieldId="title"
-            saveChanges={this.updateGameData}
+            editing={editMode}
+            handleChange={ d => {
+              let game  = this.state.game
+              game.title = d.text
+              this.setState({ game });
+              console.log(this.state.prevGame.title, this.state.game.title);
+            }}
             />
         </h1>
 
@@ -92,10 +114,24 @@ export default class GameBody extends React.Component {
             type="textarea"
             defaultValue={description.summary}
             fieldId="description.summary"
-            saveChanges={this.updateGameData}
+            editing={editMode}
+            handleChange={this.handleChange}
             />
         <p>
-          Webpage: <a href={source.url} target="_blank">{source.url}</a>
+            Webpage:
+            { !editMode ?
+              <a href={source.url} target="_blank">
+                {source.url}
+              </a>
+              :
+              <EditableText
+               type="input"
+               defaultValue={source.url}
+               fieldId="source.url"
+               editing={editMode}
+               handleChange={this.handleChange}
+               />
+              }
           <br/>
           Published in {credentials.publication_year} under license : {credentials.license}
         </p>
