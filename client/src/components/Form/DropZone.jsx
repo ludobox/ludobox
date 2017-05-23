@@ -10,7 +10,7 @@ const style = {
     margin: 30,
     padding: 30,
     width: "80%",
-    height: 300,
+    height: 100,
     transition: 'all 0.5s'
   }
 }
@@ -38,7 +38,7 @@ export default class DropZone extends React.Component {
           <div>Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>
         {
-          this.state.files ?
+          this.state.files.length ?
           <div>
             <p>Uploading {this.state.files.length} files...</p>
             <ul>

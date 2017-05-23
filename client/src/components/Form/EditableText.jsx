@@ -26,9 +26,10 @@ export default class EditableText extends React.Component {
         <span>
           {this.props.type === 'input' ?
             <input
-              value={this.props.text}
+              value={this.props.text || ""}
               onChange={(e) => this.handleChange(e)}
               name={this.props.fieldId}
+              placeholder={this.props.placeholder}
               ref="textField"
               style={this.props.style}
             />
@@ -40,7 +41,9 @@ export default class EditableText extends React.Component {
               </span>
               <textarea
                 rows={15}
+                style={{height : '30%'}}
                 value={this.props.text}
+                placeholder={this.props.placeholder}
                 onChange={(e) => this.handleChange(e)}
                 name={this.props.fieldId}
                 ref="textField"

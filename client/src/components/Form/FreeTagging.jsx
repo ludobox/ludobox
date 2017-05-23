@@ -38,24 +38,27 @@ export default class FreeTagging extends React.Component {
   render() {
 
     // prevent crashing on null value
-    if(!this.props.items) return null
+    // if return null
 
-    const lis = this.props.items.map( (item, i) =>
-      <li key={i}
-        style={styleLi}
-        >
-        {item}
-        { this.props.editing ?
-          <a onClick={() => this.removeItem(item)}
-            style={{cursor : "pointer"}}
-            >
-            <i className="icono-cross"></i>
-          </a>
-          :
-          null
-        }
-      </li>
-    )
+    const lis = (this.props.items) ?
+      this.props.items.map( (item, i) =>
+        <li key={i}
+          style={styleLi}
+          >
+          {item}
+          { this.props.editing ?
+            <a onClick={() => this.removeItem(item)}
+              style={{cursor : "pointer"}}
+              >
+              <i className="icono-cross"></i>
+            </a>
+            :
+            null
+          }
+        </li>
+      )
+      :
+      null
 
     return (
       <span>

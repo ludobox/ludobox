@@ -11,12 +11,12 @@ import ISO6391 from 'iso-639-1'
 
 const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
 
-
 const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i ) // 50 last years
+
 const ages = ["Children", "Teenagers", "Adults"]
 const languages = ISO6391.getAllCodes()
 
-export default class GameBody extends React.Component {
+export default class GameForm extends React.Component {
 
   constructor(props) {
     super(props)
@@ -58,7 +58,6 @@ export default class GameBody extends React.Component {
   }
 
   render() {
-    // console.log(this.props.game);
 
     const {
       audience,
@@ -73,10 +72,12 @@ export default class GameBody extends React.Component {
 
     const { editMode } = this.state
 
+    // edit button
     let editButtonStyle = {
       fontSize:"10pt",
       cursor : "pointer"
     }
+
     let editButton = editMode ?
       <span>
         <a onClick={() => this.sendChanges()}
@@ -106,6 +107,7 @@ export default class GameBody extends React.Component {
             type="input"
             text={title}
             editing={editMode}
+            placeholder="Add a title..."
             handleChange={ d => {
               let game  = this.state.game
               game.title = d
@@ -129,6 +131,7 @@ export default class GameBody extends React.Component {
           <EditableText
             type="textarea"
             text={description.summary}
+            placeholder="Add a description..."
             editing={editMode}
             handleChange={ d => {
               let game  = this.state.game
@@ -234,6 +237,7 @@ export default class GameBody extends React.Component {
             </p>
           </div>
           <div className="six columns">
+            {editMode ? "Audience Age" : null}
             <MultiSelect
               value={audience.age}
               options={ages}
@@ -258,7 +262,7 @@ export default class GameBody extends React.Component {
                 Fabrication time (minutes):
                 <Number
                   editing={editMode}
-                  defaultValue={fabrication.fab_time}
+                  value={fabrication.fab_time}
                   fieldId="fabrication.fab_time"
                   handleChange={ d => {
                     let game  = this.state.game
@@ -277,6 +281,7 @@ export default class GameBody extends React.Component {
             <h5>Download files</h5>
             <FilesList
               files={this.props.files}
+              editing={editMode}
             />
           </div>
         </div>
@@ -286,12 +291,6 @@ export default class GameBody extends React.Component {
         <div className="row">
           <div className="four columns">
             <p>Authors</p>
-            {/* <Number
-
-              defaultValue={fabrication.fab_time}
-              fieldId="fabrication.fab_time"
-            />
-             */}
             <FreeTagging
               items={credentials.authors}
               editing={editMode}

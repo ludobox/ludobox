@@ -24,16 +24,16 @@ export default class MultiSelect extends React.Component {
 
   render() {
 
-    // prevent crashing on null value
-    if(!this.props.value) return null
-
-    const lis = this.props.value.map( (item, i) =>
-      <li key={i}
-        style={styleLi}
-        >
-        {item}
-      </li>
-    )
+    const lis = this.props.value ?
+      this.props.value.map( (item, i) =>
+        <li key={i}
+          style={styleLi}
+          >
+          {item}
+        </li>
+      )
+      :
+      null
 
     const options = this.props.options.map( (item,i) =>
       <option key={i} value={item}>{item}</option>

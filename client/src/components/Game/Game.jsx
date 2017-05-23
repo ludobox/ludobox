@@ -1,6 +1,6 @@
 import React from 'react'
 import APIClient from "../../api.js"
-import GameBody from "./GameBody.jsx"
+import GameForm from "../GameForm/GameForm.jsx"
 
 export default class Game extends React.Component {
 
@@ -31,7 +31,7 @@ export default class Game extends React.Component {
     return (
       <span>
         { this.state.game && this.state.files ?
-          <GameBody
+          <GameForm
             game={this.state.game}
             files={this.state.files}
           />
