@@ -73,7 +73,7 @@ export default class FreeTagging extends React.Component {
         {
           this.props.editing ?
             <li style={
-              Object.assign(styleLi, {
+              Object.assign({}, styleLi, {
                 padding : "10px 0.5em 0 0.5em"
                })
               }>

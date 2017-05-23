@@ -6,12 +6,16 @@ import MultiSelect from '../Form/MultiSelect.jsx'
 import Selector from '../Form/Selector.jsx'
 import Number from '../Form/Number.jsx'
 
+import ISO6391 from 'iso-639-1'
+
 const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
 
 // 50 last years
 const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )
 
 const ages = ["Children", "Teenagers", "Adults"]
+
+const languages = ISO6391.getAllCodes()
 
 export default class GameBody extends React.Component {
 
@@ -190,7 +194,18 @@ export default class GameBody extends React.Component {
         <div className="row">
           <div className="six columns">
             <p>
-              Language:  {audience.language}
+              Language:
+              <Selector
+                editing={editMode}
+                defaultValue={audience.language}
+                options={languages}
+                handleChange={ d => {
+                  let game  = this.state.game
+                  game.audience.language = d.value
+                  this.setState({ game });
+                }}
+              />
+
               <br/>
               Number_of_players:   {audience.number_of_players.players_min}-{audience.number_of_players.players_max}
               <br/>
