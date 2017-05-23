@@ -20,7 +20,6 @@ export default class EditableText extends React.Component {
   }
 
   render() {
-
     if ( this.props.editing ) {
       return (
         <span>
@@ -32,7 +31,7 @@ export default class EditableText extends React.Component {
               name={this.props.fieldId}
               placeholder={this.props.placeholder}
               ref="textField"
-              style={this.props.style}
+              style={this.props.error ? {borderColor: 'red'} : null}
             />
           : null}
           {this.props.type === 'textarea' ?
@@ -42,7 +41,11 @@ export default class EditableText extends React.Component {
               </span>
               <textarea
                 rows={15}
-                style={{height : '30%'}}
+                style={this.props.error ?
+                  {height : '30%', borderColor: 'red'}
+                  :
+                  {height : '30%'}
+                }
                 value={this.props.text}
                 placeholder={this.props.placeholder}
                 onChange={(e) => this.handleChange(e)}
@@ -50,7 +53,17 @@ export default class EditableText extends React.Component {
                 ref="textField"
               />
             </span>
-          : null}
+          :
+          null}
+          {
+            this.props.error ?
+            <span style={{fontSize:'10pt', color : 'red'}}>
+              { this.props.error }
+            </span>
+            :
+            null
+          }
+
         </span>
       )
     }

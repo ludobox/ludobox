@@ -9,12 +9,12 @@ import FilesList from '../Form/FilesList.jsx'
 
 import ISO6391 from 'iso-639-1'
 
-const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
+const licenses = [null, "CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
 
-const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i ) // 50 last years
+const years = [null, ...Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )] // 50 last years
 
 const ages = ["Children", "Teenagers", "Adults"]
-const languages = ISO6391.getAllCodes()
+const languages = [null, ...ISO6391.getAllCodes()]
 
 export default class GameForm extends React.Component {
 
@@ -34,14 +34,14 @@ export default class GameForm extends React.Component {
       content_type ,
     } = this.props.game
 
-    const { editMode } = this.props
-
+    const { editMode, errors } = this.props
     return (
-      <form>
+      <div>
         <h1>
           <EditableText
             type="input"
             text={title}
+            error={errors["title"]}
             editing={editMode}
             placeholder="Add a title..."
             handleChange={ d => {
@@ -68,6 +68,7 @@ export default class GameForm extends React.Component {
             type="textarea"
             text={description.summary}
             placeholder="Add a description..."
+            error={errors["description.summary"]}
             editing={editMode}
             handleChange={ d => {
               let game  = this.props.game
@@ -85,6 +86,7 @@ export default class GameForm extends React.Component {
               <EditableText
                type="input"
                text={source.url}
+               error={errors["source.url"]}
                fieldType="url"
                editing={editMode}
                handleChange={ d => {
@@ -99,6 +101,7 @@ export default class GameForm extends React.Component {
           <Selector
             editing={editMode}
             value={credentials.license}
+            error={errors["credentials.license"]}
             options={licenses}
             handleChange={ d => {
               let game  = this.props.game
@@ -111,6 +114,7 @@ export default class GameForm extends React.Component {
           <Selector
             editing={editMode}
             value={credentials.publication_year}
+            error={errors["credentials.publication_year"]}
             options={years}
             handleChange={ d => {
               let game  = this.props.game
@@ -129,6 +133,7 @@ export default class GameForm extends React.Component {
               <Selector
                 editing={editMode}
                 value={audience.language}
+                error={errors["audience.language"]}
                 options={languages}
                 handleChange={ d => {
                   let game  = this.props.game
@@ -143,6 +148,7 @@ export default class GameForm extends React.Component {
               <Number
                 editing={editMode}
                 value={audience.number_of_players.players_min}
+                error={errors["audience.number_of_players.players_min"]}
                 handleChange={ d => {
                   let game  = this.props.game
                   game.audience.number_of_players.players_min = d
@@ -154,6 +160,7 @@ export default class GameForm extends React.Component {
               <Number
                 editing={editMode}
                 value={audience.number_of_players.players_max}
+                error={errors["audience.number_of_players.players_max"]}
                 handleChange={ d => {
                   let game  = this.props.game
                   game.audience.number_of_players.players_max = d
@@ -165,6 +172,7 @@ export default class GameForm extends React.Component {
             <Number
               editing={editMode}
               value={audience.duration}
+              error={errors["audience.duration"]}
               handleChange={ d => {
                 let game  = this.props.game
                 game.audience.duration = d
@@ -177,6 +185,7 @@ export default class GameForm extends React.Component {
             {editMode ? "Audience Age" : null}
             <MultiSelect
               value={audience.age}
+              error={errors["audience.age"]}
               options={ages}
               editing={editMode}
               handleChange={ d => {
@@ -199,6 +208,7 @@ export default class GameForm extends React.Component {
                 Fabrication time (minutes):
                 <Number
                   editing={editMode}
+                  error={errors["fabrication.fab_time"]}
                   value={fabrication.fab_time}
                   fieldId="fabrication.fab_time"
                   handleChange={ d => {
@@ -218,7 +228,11 @@ export default class GameForm extends React.Component {
             <h5>Download files</h5>
             <FilesList
               files={this.props.files}
+              newFiles={this.props.newFiles}
               editing={editMode}
+              handleAddFiles={ files =>
+                this.props.handleAddFiles(files)
+              }
             />
           </div>
         </div>
@@ -231,6 +245,7 @@ export default class GameForm extends React.Component {
             <FreeTagging
               items={credentials.authors}
               editing={editMode}
+              error={errors["credentials.authors"]}
               handleChange={ d => {
                 let game  = this.props.game
                 game.credentials.authors = d
@@ -242,6 +257,7 @@ export default class GameForm extends React.Component {
             <p>Illustrators</p>
             <FreeTagging
               items={credentials.illustrators}
+              error={errors["credentials.illustrators"]}
               editing={editMode}
               handleChange={ d => {
                 let game  = this.props.game
@@ -254,6 +270,7 @@ export default class GameForm extends React.Component {
             <p>Publishers</p>
             <FreeTagging
               items={credentials.publishers}
+              error={errors["credentials.publishers"]}
               editing={editMode}
               handleChange={ d => {
                 let game  = this.props.game
@@ -267,7 +284,7 @@ export default class GameForm extends React.Component {
         <hr/>
 
         <p>{content_type} added on {timestamp_add}.</p>
-      </form>
+      </div>
     )
   }
 }

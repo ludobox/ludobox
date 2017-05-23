@@ -1,5 +1,12 @@
 import React from 'react'
+import validator from 'is-my-json-valid'
+import AlertContainer from 'react-alert'
+
+import { browserHistory } from 'react-router'
+
 import GameForm from "../GameForm/GameForm.jsx"
+import APIClient from "../../api.js"
+import model from '../../../../model/schema.json'
 
 const emptyGame = {
   audience : {
@@ -7,11 +14,21 @@ const emptyGame = {
   },
   credentials : {},
   description  : {},
-  fabrication  : {},
+  fabrication  : {
+    fab_time : 0
+  },
   source  : {},
   title  : null,
-  timestamp_add : null,
-  content_type  : null,
+  timestamp_add : String(new Date()),
+  content_type  : "game",
+}
+
+const alertOptions = {
+  offset: 14,
+  position: 'bottom left',
+  theme: 'dark',
+  time: 5000,
+  transition: 'scale'
 }
 
 export default class AddGame extends React.Component {
@@ -19,77 +36,76 @@ export default class AddGame extends React.Component {
   constructor(props) {
     super(props)
 
+    this.api = new APIClient()
+    this.validate = validator(model)
     this.state = {
       game : emptyGame,
+      newFiles: [],
       files: [],
-      editMode : true
+      editMode : true,
+      errors: {}
     };
   }
 
-  // onSubmit(resp){
-  //   // TODO : validate data
-  //   console.log("yay I'm valid!")
-  //
-  //   this.setState({ info : resp.formData })
-  //   if( ! this.state.files.length)
-  //     this.refs.container.error(
-  //         "Please add a file...",
-  //         "No files attached",
-  //       {
-  //         closeButton:true,
-  //         handleOnClick: function() { console.log("click") }
-  //       }
-  //     )
-  //   else {
-  //     // POST
-  //     console.log(`ok, let's post that info with ${this.state.files.length} files !`)
-  //
-  //     this.api.postGame(resp.formData,
-  //       this.state.files,
-  //       resp => { // SUCCESS : Game created
-  //         // console.log(path);
-  //         // show feedback
-  //         this.refs.container.success(
-  //             "Games stored ok!",
-  //             "Bravo",
-  //           {
-  //             closeButton:true,
-  //             handleOnClick: function() { console.log("click") }
-  //           }
-  //         )
-  //         // go to page
-  //         browserHistory.push('/games/'+resp.slug);
-  //       },
-  //       error => this.refs.container.error(
-  //           error.message,
-  //           null,
-  //         {
-  //           closeButton:true,
-  //           handleOnClick: function() { console.log("click") }
-  //         }
-  //       )
-  //     )
-  //   }
-  // }
+  handleAddFiles(files) {
+    console.log(files);
+    this.setState({newFiles : files });
+  }
+
+  postGame(formData) {
+    this.api.postGame(this.state.game,
+      this.state.files,
+      resp => { // SUCCESS : Game created
+        console.log(resp);
+        // show feedback
+        this.msg.success( "Bravo, your games has been created!")
+        // go to page
+        browserHistory.push('/games/'+resp.slug);
+      },
+      error => this.msg.error( error.message )
+    )
+  }
 
   updateGame(game) {
     this.setState({game})
   }
 
-  handleCreate() {
-    console.log("create new game");
-  }
+  handleSubmit(e) {
+    e.preventDefault()
 
-  handleClearContent() {
-    this.setState({ game : emptyGame })
+    console.log("create new game");
+
+    // data validation
+    this.validate(this.state.game);
+    console.log(this.validate.errors);
+
+    if (this.validate.errors) {
+      this.msg.error(this.validate.errors.length + " errors.")
+
+      const errors = {}
+      this.validate.errors.map( error =>
+        errors[error.field.slice(5)] = error.message
+      )
+      this.setState({ errors })
+    } else {
+      this.setState({errors : {}})
+
+      // check if files has been attached
+      if( ! this.state.newFiles.length) {
+        this.msg.error("No files attached, Please add a file...")
+      } else {
+        this.postGame()
+      }
+    }
   }
 
   render() {
 
     const {
       game,
-      files,
-      editMode
+      newFiles,
+      editMode,
+      errors
     } = this.state;
 
     // edit button
@@ -99,28 +115,26 @@ export default class AddGame extends React.Component {
     }
 
     return (
-      <span>
+      <form onSubmit={ resp => this.handleSubmit(resp)}>
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <GameForm
           game={game}
-          files={files}
           editMode={editMode}
           updateGame={game => this.updateGame(game)}
+          errors={errors}
+          files={[]} //no files
+          newFiles={newFiles}
+          handleAddFiles={ files => this.handleAddFiles(files)}
         />
         <hr/>
-        <a
-          onClick={() => this.handleCreate()}
-          style={editButtonStyle}
-          >
-          <i className="icono-check"></i>(CREATE NEW GAME)
-        </a>
-        <a
-          onClick={() => this.handleClearContent()}
-          style={editButtonStyle}
-          >
-          <i className="icono-trash"></i>(DELETE)
-        </a>
+        <input
+          type="submit"
+          className="btn btn-primary"
+          // onClick={e => e.preventDefault()}
+          value="Create new Game"
+          />
         <br/>
-      </span>
+      </form>
     )
   }
 }
