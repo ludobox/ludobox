@@ -1,7 +1,7 @@
 import React from 'react'
 
 import EditableText from '../Form/EditableText.jsx'
-import SmallList from '../Form/SmallList.jsx'
+import MultiSelect from '../Form/MultiSelect.jsx'
 import Selector from '../Form/Selector.jsx'
 import Number from '../Form/Number.jsx'
 
@@ -13,7 +13,7 @@ const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )
 const ages = ["Children", "Teenagers", "Adults"]
 
 
-export default class MultiSelect extends React.Component {
+export default class GameBody extends React.Component {
 
   constructor(props) {
     super(props)
@@ -26,9 +26,12 @@ export default class MultiSelect extends React.Component {
 
   sendChanges() {
     console.log("changes are sent to server")
+    console.log(this.state.game);
+    
     this.setState({
       editMode : false
     })
+
   }
 
   cancelChanges() {
@@ -112,7 +115,7 @@ export default class MultiSelect extends React.Component {
             />
         </h1>
 
-        <SmallList items={ description.themes.concat(description.genres)}/>
+        <MultiSelect items={ description.themes.concat(description.genres)}/>
           <EditableText
             type="textarea"
             defaultValue={description.summary}
@@ -194,7 +197,7 @@ export default class MultiSelect extends React.Component {
             </p>
           </div>
           <div className="six columns">
-            <SmallList items={audience.age}/>
+            <MultiSelect items={audience.age}/>
           </div>
         </div>
 
@@ -216,11 +219,11 @@ export default class MultiSelect extends React.Component {
                 }}
               />
             </p>
-            <SmallList items={fabrication.requirements}/>
+            <MultiSelect items={fabrication.requirements}/>
           </div>
           <div className="six columns">
             <h5>Download files</h5>
-            <SmallList items={this.props.files}/>
+            <MultiSelect items={this.props.files}/>
           </div>
         </div>
 
@@ -229,15 +232,29 @@ export default class MultiSelect extends React.Component {
         <div className="row">
           <div className="four columns">
             <p>Authors</p>
-            <SmallList items={credentials.authors}/>
+            {/* <Number
+
+              defaultValue={fabrication.fab_time}
+              fieldId="fabrication.fab_time"
+            />
+             */}
+            <MultiSelect
+              items={credentials.authors}
+              editing={editMode}
+              handleChange={ d => {
+                let game  = this.state.game
+                game.credentials.authors = d.items
+                this.setState({ game });
+              }}
+            />
           </div>
           <div className="four columns">
             <p>Illustrators</p>
-            <SmallList items={credentials.illustrators}/>
+            <MultiSelect items={credentials.illustrators}/>
           </div>
           <div className="four columns">
             <p>Publishers</p>
-            <SmallList items={credentials.publishers}/>
+            <MultiSelect items={credentials.publishers}/>
           </div>
         </div>
 
