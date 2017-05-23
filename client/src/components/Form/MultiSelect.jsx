@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class SmallList extends React.Component {
+export default class MultiSelect extends React.Component {
 
   render() {
     const styleLi = {

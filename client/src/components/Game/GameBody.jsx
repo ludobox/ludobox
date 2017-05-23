@@ -3,13 +3,17 @@ import React from 'react'
 import EditableText from '../Form/EditableText.jsx'
 import SmallList from '../Form/SmallList.jsx'
 import Selector from '../Form/Selector.jsx'
+import Number from '../Form/Number.jsx'
 
-const licenses =  ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
+const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
 
 // 50 last years
 const years = Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )
 
-export default class GameBody extends React.Component {
+const ages = ["Children", "Teenagers", "Adults"]
+
+
+export default class MultiSelect extends React.Component {
 
   constructor(props) {
     super(props)
@@ -153,7 +157,7 @@ export default class GameBody extends React.Component {
             }}
           />
           <br/>
-          Published in : 
+          Published in :
           <Selector
             editing={editMode}
             defaultValue={credentials.publication_year}
@@ -176,7 +180,18 @@ export default class GameBody extends React.Component {
               <br/>
               Number_of_players:   {audience.number_of_players.players_min}-{audience.number_of_players.players_max}
               <br/>
-            Duration of each play: {audience.duration} min</p>
+            Duration of each play (minutes):
+            <Number
+              editing={editMode}
+              defaultValue={audience.duration}
+              fieldId="audience.duration"
+              handleChange={ d => {
+                let game  = this.state.game
+                game.audience.duration = d.value
+                this.setState({ game });
+              }}
+            />
+            </p>
           </div>
           <div className="six columns">
             <SmallList items={audience.age}/>
@@ -188,7 +203,19 @@ export default class GameBody extends React.Component {
         <div className="row">
           <div className="six columns">
             {/* <h5>Fabrication</h5> */}
-            <p>Fab time: {fabrication.fab_time} min</p>
+            <p>
+              Fab time (minutes):
+              <Number
+                editing={editMode}
+                defaultValue={fabrication.fab_time}
+                fieldId="fabrication.fab_time"
+                handleChange={ d => {
+                  let game  = this.state.game
+                  game.fabrication.fab_time = d.value
+                  this.setState({ game });
+                }}
+              />
+            </p>
             <SmallList items={fabrication.requirements}/>
           </div>
           <div className="six columns">
