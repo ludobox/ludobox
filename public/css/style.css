@@ -132,3 +132,7 @@ textarea, input, select  {
 img {
   max-width: 100%
 }
+
+.addGame h1 {
+  font-size: 1em
+}

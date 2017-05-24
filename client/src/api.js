@@ -96,6 +96,67 @@ export default class APIClient {
     )
   }
 
+  updateGame(info, slug, callback, callbackError) {
+    console.log(info);
+    let gameUpdateUrl = this.getURL(`update`);
+
+    // create payload
+    const payload = new FormData();
+    // // add files
+    // files.forEach( file =>
+    //   payload.append('files', file, file.name)
+    // )
+    // add info
+    payload.append("info", JSON.stringify(info));
+    payload.append("slug", JSON.stringify(slug));
+
+    // POST !
+    this.post(gameUpdateUrl,
+      payload,
+      path => callback(path),
+      error => callbackError(error)
+    )
+  }
+
+  postFiles(slug, files, callback, callbackError) {
+
+    let gameUrl = this.getURL(`postFiles`);
+
+    // create payload
+    const payload = new FormData();
+    // add files
+    files.forEach( file =>
+      payload.append('files', file, file.name)
+    )
+    // add info
+    payload.append("slug", JSON.stringify(slug));
+
+    // POST !
+    this.post(gameUrl,
+      payload,
+      path => callback(path),
+      error => callbackError(error)
+    )
+  }
+
+  deleteFile(filepath, callback, callbackError) {
+
+    let gameUrl = this.getURL(`deleteFile`);
+
+    // create payload
+    const payload = new FormData();
+
+    // add info
+    payload.append("toDelete", JSON.stringify(filepath));
+
+    // POST !
+    this.post(gameUrl,
+      payload,
+      path => callback(path),
+      error => callbackError(error)
+    )
+  }
+
   getGames(callback) {
     let gamesUrl = this.getURL(`games`);
     this.get(gamesUrl, gamesList => callback(gamesList))

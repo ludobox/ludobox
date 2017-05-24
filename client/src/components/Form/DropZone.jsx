@@ -10,22 +10,15 @@ const style = {
     margin: 30,
     padding: 30,
     width: "80%",
-    height: 300,
+    height: 100,
     transition: 'all 0.5s'
   }
 }
 export default class DropZone extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = { files : [] }
-  }
-
   onDrop(files) {
-    this.setState({
-      files: [...this.state.files, ...files]
-    });
-    this.props.handleAddFiles(files)
+    const filesList = [...this.props.files, ...files]
+    this.props.handleAddFiles(filesList)
   }
 
   render() {
@@ -38,11 +31,11 @@ export default class DropZone extends React.Component {
           <div>Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>
         {
-          this.state.files ?
+          this.props.files.length ?
           <div>
-            <p>Uploading {this.state.files.length} files...</p>
+            <p>Added {this.props.files.length} files.</p>
             <ul>
-              {this.state.files.map( file =>  <li key={file.name}>{file.name}</li> )}
+              {this.props.files.map( file =>  <li key={file.name}>{file.name}</li> )}
             </ul>
           </div>
           :

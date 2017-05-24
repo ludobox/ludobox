@@ -4,6 +4,10 @@
 import os
 import json
 import shutil
+from datetime import datetime
+
+from jsonpatch import make_patch
+from ludobox.utils import json_serial # convert datetime
 
 from werkzeug import secure_filename
 from slugify import slugify
@@ -171,7 +175,7 @@ def write_info_json(info, game_path):
         raise ValidationError(e)
 
     # Convert the data to JSON into file
-    content = json.dumps(info, sort_keys=True, indent=4)
+    content = json.dumps(info, sort_keys=True, indent=4, default=json_serial)
     json_path = os.path.join(game_path, "info.json")
 
     try:
@@ -203,16 +207,17 @@ def write_attachments(attachments, game_path):
     # Create a directory to store the uploaded files
     attachments_path = os.path.join(game_path, "files")
     try:
-        os.makedirs(attachments_path)
+        if not os.path.exists(attachments_path):
+            os.makedirs(attachments_path)
     except Exception as e:
-        message = "<{error}> occured while "\
-                  "writing game info to path '{path}' for "\
-                  "game '{game}'. Impossible to create "\
+        message = "<Error> occured while "\
+                  "writing game info to path '{path}'. "\
+                  "Impossible to create "\
                   "directory '{attachments_path}' to store the attached "\
                   "files.".format(
-                    error=e.strerror,
-                    path=data_dir,
+                    path=game_path,
                     attachments_path=os.path.abspath(attachments_path))
+        print message
         raise LudoboxError(message)
 
     # Write all the files
@@ -231,6 +236,7 @@ def write_attachments(attachments, game_path):
             raise LudoboxError(message)
 
         file_path = os.path.join(attachments_path, file_clean_name)
+        print file_path
         try:
             f.save(file_path)
         except Exception as e:
@@ -270,14 +276,62 @@ def get_games_index():
 
     return info_files
 
-def build_index():
-    """Create a JSON index file of all games available inside the box"""
+def update_game_info(game_path, new_game_info):
+    """
+    Update game info based on changes
 
-    # TODO : check are you sure to update index (y/n) ?
-    # if os.path.exists(config["index_path"]):
+    - create patch changes using JSON patch (RFC 6902)
+    - store patch in an history array within the JSON file
+    - replace info original content with updated content
+    """
 
-    info_files = get_games_index()
+    original_info = read_game_info(game_path)
 
-    # TODO : filter infos to make the index file smaller
-    with open(config["index_path"], "wb") as index_file:
-        info = json.dump(info_files, index_file)
+    # create patch
+    patch = make_patch(new_game_info,original_info)
+
+    if not len(list(patch)) :
+        return original_info
+
+    # if patch
+    # parse an event
+    event = {
+        "patch" : patch,
+        "ts" : datetime.now().isoformat()
+    }
+
+    # init history if empty
+    if "history" not in new_game_info.keys():
+        new_game_info["history"] = []
+
+    # add event to history
+    new_game_info["history"].append(event)
+
+    # write updated game to file
+    write_info_json(new_game_info, game_path )
+    return new_game_info
+
+def store_files(game_path, attachments):
+    """
+    Write files
+
+    - attachments: files to be uploaded to the game folder
+    - path
+    """
+    print attachments
+
+    # Write the attached files
+    if attachments:
+        try :
+            write_attachments(attachments, game_path)
+        except LudoboxError as e:
+            raise LudoboxError(str(e))
+
+    return game_path
+
+def delete_file(file_path):
+    try:
+        os.remove(file_path)
+    except OSError:
+        pass
+    return file_path
