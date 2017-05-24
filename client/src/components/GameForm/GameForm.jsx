@@ -230,9 +230,9 @@ export default class GameForm extends React.Component {
               files={this.props.files}
               newFiles={this.props.newFiles}
               editing={editMode}
-              handleAddFiles={ files =>
-                this.props.handleAddFiles(files)
-              }
+              handleFileUpload={this.props.handleFileUpload }
+              handleDeleteFile={this.props.handleDeleteFile }
+              handleAddFiles={ files => this.props.handleAddFiles(files) }
             />
           </div>
         </div>

@@ -14,7 +14,7 @@ from functools import update_wrapper
 from ludobox import __version__
 
 from ludobox.config import read_config
-from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index, get_resource_slug, update_game_info
+from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index, get_resource_slug, update_game_info, store_files, delete_file
 from ludobox.errors import LudoboxError
 from ludobox.data.crawler import download_from_server
 from ludobox.socketio import socket
@@ -176,6 +176,53 @@ def update_resource():
     update_game_info(game_path, new_game_info)
 
     return jsonify({"message" : "ok! updated"}), 201
+
+def get_file_list(game_path):
+    files_path = os.path.join(game_path,"files")
+    if os.path.exists(files_path):
+        file_list = os.listdir(files_path)
+    else :
+        file_list = []
+    return file_list
+
+@app.route('/api/postFiles', methods=["POST"])
+def post_files():
+    """
+    This function allow to post 2 things :
+
+    * files : an array of files
+    * slug : path/slug of the game
+
+    """
+
+    files = request.files.getlist('files')
+    print("UPLOADED FILES:", [f.filename for f in files])
+
+
+    game_slug = json.loads(request.form["slug"])
+    game_path = os.path.join(app.config["DATA_DIR"], game_slug)
+
+    store_files(game_path, files)
+
+    file_list =get_file_list(game_path)
+    return jsonify({"message" : "files added", "files" : file_list }), 201
+
+@app.route('/api/deleteFile', methods=["POST"])
+def delete_files():
+
+    to_delete = json.loads(request.form["toDelete"])
+    print to_delete
+
+    game_path = os.path.join(app.config["DATA_DIR"], to_delete["slug"])
+    to_delete_path = os.path.join(os.path.join(game_path, "files"), to_delete["fileName"])
+    print to_delete_path
+
+    delete_file(to_delete_path)
+
+    file_list =get_file_list(game_path)
+
+    return jsonify({"message" : "files added", "files" : file_list }), 203
+
 
 @app.route('/', defaults={'path': ''}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])

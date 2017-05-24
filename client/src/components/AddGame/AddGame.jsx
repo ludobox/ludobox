@@ -125,6 +125,7 @@ export default class AddGame extends React.Component {
           files={[]} //no files
           newFiles={newFiles}
           handleAddFiles={ files => this.handleAddFiles(files)}
+          handleFileUpload={null}
         />
         <hr/>
         <input

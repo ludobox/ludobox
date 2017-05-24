@@ -207,16 +207,17 @@ def write_attachments(attachments, game_path):
     # Create a directory to store the uploaded files
     attachments_path = os.path.join(game_path, "files")
     try:
-        os.makedirs(attachments_path)
+        if not os.path.exists(attachments_path):
+            os.makedirs(attachments_path)
     except Exception as e:
-        message = "<{error}> occured while "\
-                  "writing game info to path '{path}' for "\
-                  "game '{game}'. Impossible to create "\
+        message = "<Error> occured while "\
+                  "writing game info to path '{path}'. "\
+                  "Impossible to create "\
                   "directory '{attachments_path}' to store the attached "\
                   "files.".format(
-                    error=e.strerror,
-                    path=data_dir,
+                    path=game_path,
                     attachments_path=os.path.abspath(attachments_path))
+        print message
         raise LudoboxError(message)
 
     # Write all the files
@@ -235,6 +236,7 @@ def write_attachments(attachments, game_path):
             raise LudoboxError(message)
 
         file_path = os.path.join(attachments_path, file_clean_name)
+        print file_path
         try:
             f.save(file_path)
         except Exception as e:
@@ -274,7 +276,6 @@ def get_games_index():
 
     return info_files
 
-
 def update_game_info(game_path, new_game_info):
     """
     Update game info based on changes
@@ -309,3 +310,28 @@ def update_game_info(game_path, new_game_info):
     # write updated game to file
     write_info_json(new_game_info, game_path )
     return new_game_info
+
+def store_files(game_path, attachments):
+    """
+    Write files
+
+    - attachments: files to be uploaded to the game folder
+    - path
+    """
+    print attachments
+
+    # Write the attached files
+    if attachments:
+        try :
+            write_attachments(attachments, game_path)
+        except LudoboxError as e:
+            raise LudoboxError(str(e))
+
+    return game_path
+
+def delete_file(file_path):
+    try:
+        os.remove(file_path)
+    except OSError:
+        pass
+    return file_path

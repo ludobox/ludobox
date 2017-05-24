@@ -26,9 +26,74 @@ export default class Game extends React.Component {
       game: null,
       prevGame : null,
       files: [],
+      newFiles: [],
       errors: [],
       editMode : false
     };
+  }
+
+  handleAddFiles(files) {
+    console.log(files);
+    this.setState({newFiles : files });
+  }
+
+  handleDeleteFile(fileName) {
+
+    // get slug
+    let slug = document.location.pathname.split("/").pop()
+    console.log(slug);
+
+    this.api.deleteFile({ fileName, slug },
+      resp => { // SUCCESS : File deleted
+        console.log(resp.files);
+        // show feedback
+        this.msg.success( "Your file have been deleted.")
+
+        const files = resp.files.map( f => ({
+          url : this.api.getURL(`games/${slug}/files/${f}`),
+          filename : f
+        }))
+
+        this.setState({editMode : false, files})
+      },
+      error => {
+        console.log(error);
+        this.msg.error( error.message )}
+    )
+
+
+  }
+
+  handleFileUpload() {
+    console.log(this.state.newFiles);
+
+    if (!this.state.newFiles.length) {
+      this.msg.error("No files. Please add a file to upload.")
+      return
+    }
+
+    // get slug
+    let slug = document.location.pathname.split("/").pop()
+    console.log(slug);
+    // send files to server
+    this.api.postFiles(slug,
+      this.state.newFiles,
+      resp => { // SUCCESS : Game created
+        console.log(resp.files);
+        // show feedback
+        this.msg.success( "Bravo, your files have been posted!")
+
+        const files = resp.files.map( f => ({
+          url : this.api.getURL(`games/${slug}/files/${f}`),
+          filename : f
+        }))
+
+        this.setState({editMode : false, files})
+      },
+      error => {
+        console.log(error);
+        this.msg.error( error.message )}
+    )
   }
 
   fetchGame(slug) {
@@ -145,10 +210,14 @@ export default class Game extends React.Component {
         { this.state.game && this.state.files ?
           <GameForm
             game={this.state.game}
-            files={this.state.files}
             editMode={editMode}
             updateGame={game => this.updateGame(game)}
             errors={this.state.errors}
+            files={this.state.files}
+            newFiles={this.state.newFiles}
+            handleAddFiles={ files => this.handleAddFiles(files)}
+            handleDeleteFile={ file => this.handleDeleteFile(file)}
+            handleFileUpload={ files => this.handleFileUpload(files)} // if defined, will add a upload button to push files directly
           />
           :
           null

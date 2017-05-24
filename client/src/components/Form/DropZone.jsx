@@ -33,7 +33,7 @@ export default class DropZone extends React.Component {
         {
           this.props.files.length ?
           <div>
-            <p>Uploading {this.props.files.length} files...</p>
+            <p>Added {this.props.files.length} files.</p>
             <ul>
               {this.props.files.map( file =>  <li key={file.name}>{file.name}</li> )}
             </ul>

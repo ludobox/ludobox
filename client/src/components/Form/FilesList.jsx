@@ -4,15 +4,25 @@ import DropZone from './DropZone.jsx'
 
 export default class FilesList extends React.Component {
 
-  removeFile() {
+  removeFile(file) {
     let confirmFileDeletion = confirm("Are you sure you want to delete this file?");
     if (confirmFileDeletion === true) {
-      // TODO : add a file
-      console.log("File is going to be deleted from the server.")
+      this.props.handleDeleteFile(file.filename)
     }
   }
 
   render() {
+
+    const {handleFileUpload} = this.props
+
+    let uploader = handleFileUpload ?
+      <a className="button"
+        onClick={files => handleFileUpload(files)}
+        >Upload Files
+      </a>
+      :
+      null
+
     let files = this.props.files.map( file =>
       <li key={file.filename}>
         <a
@@ -44,10 +54,13 @@ export default class FilesList extends React.Component {
           {files}
         </ul>
         {this.props.editing ?
-          <DropZone
-            files={newFiles} // pass new files to be added
-            handleAddFiles={files => this.props.handleAddFiles(files)}
-          />
+          <span>
+            <DropZone
+              files={newFiles} // pass new files to be added
+              handleAddFiles={files => this.props.handleAddFiles(files)}
+            />
+            {uploader}
+          </span>
           :
           null
         }
