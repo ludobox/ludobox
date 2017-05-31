@@ -21,7 +21,7 @@ render((
       <Route path="games" component={Games} />
       <Route path="games/:gameSlug" component={Game}/>
       <Route path="*" component={Page404}/>
-      <IndexRedirect to="/home" />
+      <IndexRedirect to="/games" />
     </Route>
   </Router>
 ), document.getElementById('ludobox'))
