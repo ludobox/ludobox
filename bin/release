@@ -37,7 +37,7 @@ are_you_sure
 git add public/js
 
 # bump version number
-bumpversion patch
+bumpversion patch --allow-dirty
 
 # push to remote git
 git push origin master --tags
