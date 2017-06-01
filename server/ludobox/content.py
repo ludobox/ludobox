@@ -21,6 +21,21 @@ config = read_config()
 with open(os.path.join(os.getcwd(), "model/schema.json")) as f :
     schema = json.load(f)
 
+def get_resource_slug(data):
+    """Get the slugified name of the game based on the data set"""
+    try:
+        slug = slugify(data["title"])
+        # add language
+        language = data["audience"]["language"]
+        return "%s-%s"%(slug,language)
+    except KeyError as e:
+        # TODO more explicit error message
+        message = "KeyError occured while "\
+                  "writing game info file to path '{path}'. "\
+                  "Impossible to access data['title'].".format(
+                    path=data)
+        raise LudoboxError(message)
+
 def validate_game_data(data):
     """Validate game data based on existing data VS a JSON Schema"""
     return validate(data, schema)
@@ -82,22 +97,9 @@ def read_game_info(path):
     # TODO Add some attachment info
 
     # Add permalink
-    data["slug"] = slugify(data["title"])
+    data["slug"] = get_resource_slug(data)
 
     return data
-
-def get_resource_slug(data):
-    """Get the slugified name of the game based on the data set"""
-    try:
-        # TODO: support for any language !
-        return slugify(data["title"])
-    except KeyError as e:
-        # TODO more explicit error message
-        message = "KeyError occured while "\
-                  "writing game info file to path '{path}'. "\
-                  "Impossible to access data['title']['fr'].".format(
-                    path=data)
-        raise LudoboxError(message)
 
 def create_game_path(game_path) :
     """Create the dir to store the game"""

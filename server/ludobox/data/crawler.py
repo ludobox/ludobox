@@ -5,7 +5,6 @@ import os
 import json
 import urllib
 import requests
-from slugify import slugify
 from flask_socketio import emit
 
 from ludobox.config import read_config

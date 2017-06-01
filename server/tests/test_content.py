@@ -12,7 +12,7 @@ from StringIO import StringIO
 from jsonschema import ValidationError
 
 from ludobox.config import read_config
-from ludobox.content import read_game_info, validate_game_data, allowed_file, clean_game
+from ludobox.content import read_game_info, validate_game_data, allowed_file, clean_game, get_resource_slug
 from ludobox.content import write_game, write_info_json, write_attachments
 
 
@@ -33,6 +33,15 @@ class TestLudoboxContent(unittest.TestCase):
         print borgia_game_path
         borgia_info = read_game_info(borgia_game_path)
         self.assertEquals(validate_game_data(borgia_info), None)
+
+    def test_get_resource_slug(self):
+        """Make sure the slug contains name of the game + language"""
+        borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain')
+        print borgia_game_path
+        borgia_info = read_game_info(borgia_game_path)
+        slug = get_resource_slug(borgia_info)
+        print slug
+        self.assertEquals("borgia-le-jeu-malsain-fr", slug)
 
     def test_validate_game_data(self):
         """Make sure an info file is parsed properly"""

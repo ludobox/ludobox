@@ -4,7 +4,6 @@
 import re
 import os
 import yaml
-from slugify import slugify
 
 from ludobox.utils import validate_url
 
