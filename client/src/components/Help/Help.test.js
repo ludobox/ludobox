@@ -3,27 +3,27 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { assert } from 'chai'
 
-import Home from './Home.jsx'
+import Help from './Help.jsx'
 
 const config = {
   name : "My Test Box"
 }
 
-describe('<Home />', () => {
+describe('<Help />', () => {
   it('should say Hello', () => {
-    const home = shallow(<Home config={config}/>);
+    const home = shallow(<Help config={config}/>);
     const title = home.find('h3');
     assert.match(title.text(), /^Welcome/)
   })
 
   it('should display the name of the box', () => {
-    const home = shallow(<Home config={config}/>);
+    const home = shallow(<Help config={config}/>);
     const welcome = home.find('.welcome');
     assert.include(welcome.text(), config.name)
   })
 
   it('should show `download` when web_server_url is not null', () => {
-    const home = shallow(<Home config={
+    const home = shallow(<Help config={
       {
         config : {
           ...config,
@@ -36,7 +36,7 @@ describe('<Home />', () => {
   })
 
   it('should hide `download` when web_server_url is null', () => {
-    const home = shallow(<Home config={
+    const home = shallow(<Help config={
       {
         config : {
           ...config,
