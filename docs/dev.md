@@ -70,7 +70,7 @@ You can use `ludobox test --trace` to show the complete trace logs.
 
 If you want to collect information about test coverage, run the following command
 
-    coverage  run --source ludobox -m ludobox test
+    coverage run --source ludobox -m ludobox.main test 
 
 ### Generate (fake) data
 
