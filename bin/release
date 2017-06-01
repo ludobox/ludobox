@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# A CLI tool to release a new version of Ludobox
+#
+
+echo "Ludobox - releasing a new version..."
+
+# check for uncommited changes
+# if [[ `git status --porcelain` ]]; then
+#   echo
+#   echo "There is uncommited changes. "
+#   echo "Please commit everything before bumping a new version."
+#   exit
+# fi
+
+# ask for confirmation
+function are_you_sure() {
+  read -p "Are you sure you want to continue (y/n)? " answer
+  case ${answer:0:1} in
+      y|Y )
+        echo "Alright..."
+      ;;
+      * )
+          echo "Bye ! "
+          exit
+      ;;
+  esac
+}
+
+# validate
+are_you_sure
+
+# build client-side code
+(cd client; npm run build)
+
+bumpversion patch
+
+git push origin master --tags
