@@ -274,7 +274,8 @@ def get_games_index():
 
                 info_files.append({ k : info[k] for k in wanted_keys if k in info.keys() })
 
-    return info_files
+    sorted_info_files = sorted(info_files, key=lambda k: k['title'])
+    return sorted_info_files
 
 def update_game_info(game_path, new_game_info):
     """
