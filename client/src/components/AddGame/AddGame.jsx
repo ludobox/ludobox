@@ -73,11 +73,8 @@ export default class AddGame extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    console.log("create new game");
-
     // data validation
     this.validate(this.state.game);
-    console.log(this.validate.errors);
 
     if (this.validate.errors) {
       this.msg.error(this.validate.errors.length + " errors.")
@@ -115,7 +112,10 @@ export default class AddGame extends React.Component {
     }
 
     return (
-      <form onSubmit={ resp => this.handleSubmit(resp)} className="addGame">
+      <form
+        onSubmit={ e => this.handleSubmit(e)}
+        className="addGame"
+        >
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <GameForm
           game={game}

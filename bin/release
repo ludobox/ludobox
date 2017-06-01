@@ -6,12 +6,12 @@
 echo "Ludobox - releasing a new version..."
 
 # check for uncommited changes
-# if [[ `git status --porcelain` ]]; then
-#   echo
-#   echo "There is uncommited changes. "
-#   echo "Please commit everything before bumping a new version."
-#   exit
-# fi
+if [[ `git status --porcelain` ]]; then
+  echo
+  echo "There is uncommited changes."
+  echo "Please commit everything before releasing a new version."
+  exit
+fi
 
 # ask for confirmation
 function are_you_sure() {
@@ -33,6 +33,11 @@ are_you_sure
 # build client-side code
 (cd client; npm run build)
 
+# add build to commit
+git add public/js
+
+# bump version number
 bumpversion patch
 
+# push to remote git
 git push origin master --tags
