@@ -81,7 +81,7 @@ class TestLudoboxWebServer(unittest.TestCase):
         self.assertEquals(data, [])
 
     def test_files_api_with_no_files(self):
-        result = self.app.get('/api/files/borgia-le-jeu-malsain')
+        result = self.app.get('/api/files/borgia-le-jeu-malsain-fr')
         data = json.loads(result.data)
         self.assertEquals(data, ["README.md"])
 
@@ -159,7 +159,7 @@ class TestLudoboxWebServer(unittest.TestCase):
     #     # redirect
     #     self.assertEqual(result.status_code, 302)
     #
-    #     path = '/tmp/data/borgia-le-jeu-malsain'
+    #     path = '/tmp/data/borgia-le-jeu-malsain-fr'
     #
     #     # load JSON info data
     #     with open(os.path.join(path, 'info.json'), 'r' )as  f:
@@ -171,7 +171,7 @@ class TestLudoboxWebServer(unittest.TestCase):
     #     self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
     #
     #     # HTML page created
-    #     html_game_path = os.path.join(OUTPUT_DIR, os.path.join("games", 'borgia-le-jeu-malsain'))
+    #     html_game_path = os.path.join(OUTPUT_DIR, os.path.join("games", 'borgia-le-jeu-malsain-fr'))
     #     print html_game_path
     #     self.assertTrue(os.path.exists(html_game_path))
     #     self.assertTrue(os.path.isdir(html_game_path))
