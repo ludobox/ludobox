@@ -91,6 +91,4 @@ Docs are stored in the `/docs` folder. They are automatically built at [ludobox.
 
 We use [bumpversion](https://pypi.python.org/pypi/bumpversion) to release new versions of the app. The following sequence will release a patch to github :   
 
-    pip install bumpversion==0.5.3
-    bumpversion patch
-    git push origin master --tags
+    ./bin/release
