@@ -11,7 +11,7 @@ data_dir = os.path.join(os.getcwd(),'data')
 print "Backing up data from %s..."%data_dir
 
 now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-output_filename = os.path.join(backup_dir, "backup-ludobox-%s.zip"%now)
+output_filename = os.path.join(backup_dir, "backup-ludobox-%s"%now)
 
 # create backups dir
 if not os.path.exists(backup_dir):
