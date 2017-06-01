@@ -123,7 +123,7 @@ export default class GamesTable extends React.Component {
                 {languagesOptions}
               </select>
           </div>
-          <div className="two columns">
+          <div className="four columns">
             <label>Age</label>
             <select
               id="languageSelector"
