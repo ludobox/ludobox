@@ -118,7 +118,8 @@ export default class GameForm extends React.Component {
             options={years}
             handleChange={ d => {
               let game  = this.props.game
-              game.credentials.publication_year = d
+              let year = parseInt(d)
+              game.credentials.publication_year = year
               this.updateGame( game );
             }}
           />
