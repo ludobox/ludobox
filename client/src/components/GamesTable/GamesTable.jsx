@@ -271,7 +271,7 @@ export default class GamesTable extends React.Component {
             { showLookup ?
             "X"
             :
-            "Search"
+            "More Options"
             // <i className="icono-eye"></i>
           }
         </a>
