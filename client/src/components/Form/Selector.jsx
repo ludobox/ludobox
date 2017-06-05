@@ -40,6 +40,7 @@ export default class Selector extends React.Component {
           value={value}
           onChange={ e => this.handleChange(e)}
           >
+          <option value={null}></option>
           {optionsTags}
         </select>
         {error}
