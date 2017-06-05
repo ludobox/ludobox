@@ -200,8 +200,7 @@
           "uniqueItems": false,
           "items": {
             "type": "string",
-            "minLength": 0,
-            "default": "imprimante"
+            "enum": ["nothing", "print", "wood", "fablab"]
           },
           "id": "requirements",
           "title": "Requirements",

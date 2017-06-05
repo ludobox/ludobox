@@ -220,9 +220,17 @@ export default class GameForm extends React.Component {
               />
               </p>
             }
+            <h5>Requirements</h5>
             <MultiSelect
-              options={["ha"]}
               value={fabrication.requirements}
+              error={errors["fabrication.requirements"]}
+              options={["nothing", "print", "wood", "fablab"]}
+              editing={editMode}
+              handleChange={ d => {
+                let game  = this.props.game
+                game.fabrication.requirements = d
+                this.updateGame( game );
+              }}
             />
           </div>
           <div className="six columns">
