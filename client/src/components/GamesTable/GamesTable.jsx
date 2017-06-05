@@ -38,6 +38,7 @@ export default class GamesTable extends React.Component {
       selectedLanguage : 'any',
       selectedAges : ["Children", "Teenagers", "Adults"],
       showLookup : false,
+      timeRange : 60,
       selectedRequirements : selectedRequirements
     }
   }
@@ -52,6 +53,10 @@ export default class GamesTable extends React.Component {
 
   selectLanguage(selectedLanguage){
     this.setState({ selectedLanguage })
+  }
+
+  changeTimeRange(e) {
+    this.setState({ timeRange : e.target.value})
   }
 
   selectAge(e){
@@ -74,6 +79,7 @@ export default class GamesTable extends React.Component {
       filterStr,
       selectedLanguage,
       selectedAges,
+      timeRange,
       selectedRequirements
     } = this.state
 
@@ -157,6 +163,12 @@ export default class GamesTable extends React.Component {
           .filter( req => reqs.has(req) )
           .length
       })
+      .filter( g =>
+          timeRange == 0 ?
+            true
+            :
+            g.fabrication.fab_time <= timeRange
+      )
       .map( game => (
         <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
           key={game.slug}>
@@ -196,6 +208,23 @@ export default class GamesTable extends React.Component {
         <div className="row">
           <label>What do you have at hand?</label>
           {requirementsOptions}
+        </div>
+        <div className="row">
+          <label>How much time do you have?
+          </label>
+            {
+              timeRange == 120 ?
+              "2+ hours"
+              :
+              `${timeRange} minutes`
+            }
+            <input
+              type="range"
+              min="0"
+              max="120"
+              step="10"
+              onChange={ e => this.changeTimeRange(e)}
+            />
         </div>
         {
           showLookup ?
