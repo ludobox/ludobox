@@ -9,12 +9,48 @@ import FilesList from '../Form/FilesList.jsx'
 
 import ISO6391 from 'iso-639-1'
 
-const licenses = [null, "CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"]
+const requirements = [
+  {
+    name : "Nothing.",
+    value : "nothing"
+  },
+  {
+    name : "Office (printer, stationery...)",
+    value : "print"
+  },
+  {
+    name : "Wood Workshop (saw, hammer, wood...)",
+    value : "wood"
+  },
+  {
+    name : "Fab Lab (3D printer, laser cutter...)",
+    value : "fablab"
+  }
+]
 
-const years = [null, ...Array(50).fill(0).map( (d,i) => new Date().getFullYear() - i )] // 50 last years
+const ages = [
+  { name : "Children", value : "Children"},
+  { name : "Teenagers", value : "Teenagers"},
+  { name : "Adults", value : "Adults"},
+]
 
-const ages = ["Children", "Teenagers", "Adults"]
-const languages = [null, ...ISO6391.getAllCodes()]
+// 50 last years
+const years = [
+  ...Array(50)
+    .fill(0)
+    .map( (d,i) => {
+      let y = new Date().getFullYear() - i
+      return { name : y, value : y }
+    } )
+]
+
+// languages code
+const languages = ISO6391.getLanguages(ISO6391.getAllCodes())
+    .map(d => ({ name : d.name, value : d.code}))
+
+// licences
+const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"].map(d => ({name : d, value : d}))
+
 
 export default class GameForm extends React.Component {
 
@@ -224,7 +260,7 @@ export default class GameForm extends React.Component {
             <MultiSelect
               value={fabrication.requirements}
               error={errors["fabrication.requirements"]}
-              options={["nothing", "print", "wood", "fablab"]}
+              options={requirements}
               editing={editMode}
               handleChange={ d => {
                 let game  = this.props.game

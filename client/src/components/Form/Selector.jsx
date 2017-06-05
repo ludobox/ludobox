@@ -2,6 +2,14 @@ import React from 'react'
 
 export default class Selector extends React.Component {
 
+  constructor(props) {
+    super(props)
+
+    // parse display name
+    this.opts =  {}
+    this.props.options.map( d => this.opts[d.value] = d.name )
+  }
+
   handleChange(e) {
     this.props.handleChange(e.target.value)
   }
@@ -15,7 +23,7 @@ export default class Selector extends React.Component {
     } = this.props
 
     let optionsTags = this.props.options.map( (o,i) =>
-      <option key={i} value={o}>{o}</option>
+      <option key={i} value={o.value}>{o.name}</option>
     )
     const error = this.props.error ?
       <span style={{fontSize:'10pt', color : 'red'}}>
@@ -38,7 +46,7 @@ export default class Selector extends React.Component {
       </span>
       :
       <span>
-        {value}
+        {this.opts[value]}
       </span>
     )
   }

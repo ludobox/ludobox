@@ -14,6 +14,13 @@ styleUl = { listStyle : "none"}
 
 export default class MultiSelect extends React.Component {
 
+  constructor(props) {
+    super(props)
+    // parse display name
+    this.opts =  {}
+    this.props.options.map( d => this.opts[d.value] = d.name )
+  }
+
   handleChange(e) {
      const items = [...e.target.options]
       .filter(o => o.selected)
@@ -29,14 +36,14 @@ export default class MultiSelect extends React.Component {
         <li key={i}
           style={styleLi}
           >
-          {item}
+          {this.opts[item]}
         </li>
       )
       :
       null
 
     const options = this.props.options.map( (item,i) =>
-      <option key={i} value={item}>{item}</option>
+      <option key={i} value={item.value}>{item.name}</option>
     )
 
     return (
