@@ -1,6 +1,8 @@
 import React from 'react';
 import DownloadButton from '../RemoteGames/DownloadButton.jsx'
 
+import ISO6391 from 'iso-639-1'
+
 export default class GamesTable extends React.Component {
 
   constructor(props) {
@@ -34,13 +36,20 @@ export default class GamesTable extends React.Component {
       selectedAges
     } = this.state
 
-    let languages = games.map(g => g.audience.language)
+    // get unique language codes
+    let lgg = new Set(games.map(g => g.audience.language))
 
-    let languagesOptions = ['any', ...new Set(languages)] // get unique languages
+    // get screen names
+    let languages = ISO6391.getLanguages(Array.from(lgg))
+
+    let languagesOptions = [
+      { name: 'Any', code : 'any'},
+      ...languages
+    ]
       .map( lg => {
         return (
-          <option key={lg} value={lg}>
-            {lg}
+          <option key={lg.code} value={lg.code}>
+            {lg.name}
           </option>
           )
         }
