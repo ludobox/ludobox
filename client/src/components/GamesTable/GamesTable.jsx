@@ -3,14 +3,41 @@ import DownloadButton from '../RemoteGames/DownloadButton.jsx'
 
 import ISO6391 from 'iso-639-1'
 
+
+const requirements = [
+  {
+    name : "Nothing.",
+    value : "nothing"
+  },
+  {
+    name : "Office (printer)",
+    value : "print"
+  },
+  {
+    name : "Wood Workshop (saw, hammer...)",
+    value : "wood"
+  },
+  {
+    name : "Fab Lab (3D printer, lasercutter...)",
+    value : "fablab"
+  }
+]
+
 export default class GamesTable extends React.Component {
 
   constructor(props) {
     super(props)
+
+    let selectedRequirements = {}
+    requirements.forEach(d =>
+      selectedRequirements[d.value] = true
+    )
+
     this.state = {
       filterStr : '',
       selectedLanguage : 'any',
-      selectedAges : ["Children", "Teenagers", "Adults"]
+      selectedAges : ["Children", "Teenagers", "Adults"],
+      selectedRequirements : selectedRequirements
     }
   }
 
@@ -29,11 +56,18 @@ export default class GamesTable extends React.Component {
     this.setState({ selectedAges })
   }
 
+  handleCheckbox(e) {
+    let { selectedRequirements } = this.state
+    selectedRequirements[e.target.name] = e.target.checked
+    this.setState({ selectedRequirements })
+  }
+
   render() {
     let { games } = this.props
     let { filterStr,
       selectedLanguage,
-      selectedAges
+      selectedAges,
+      selectedRequirements
     } = this.state
 
     // get unique language codes
@@ -65,6 +99,32 @@ export default class GamesTable extends React.Component {
         }
       )
 
+    let requirementsOptions = requirements
+      .map( option => {
+        return (
+          <label
+            key={option.value}
+            style={{
+              display: "block",
+              float: "left",
+              paddingRight: "10px",
+              whiteSpace: "nowrap"
+            }}
+            >
+            <input
+              onClick={(e) => this.handleCheckbox(e)}
+              type='checkbox'
+              name={option.value}
+              defaultChecked={this.state.selectedRequirements[option.value]}
+            />
+            <span className="label-body">
+              {option.name}
+            </span>
+          </label>
+          )
+        }
+      )
+
     let rows = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
       .filter(g =>
@@ -78,6 +138,18 @@ export default class GamesTable extends React.Component {
          new Set([""])
         return selectedAges
           .filter( age => ages.has(age) )
+          .length
+      })
+      .filter(g => {
+        let reqs = g.fabrication && g.fabrication.requirements ?
+          new Set(g.fabrication.requirements)
+          :
+          new Set([""])
+
+        console.log(selectedRequirements)
+        return Object.keys(selectedRequirements)
+          .filter( d => selectedRequirements[d] )
+          .filter( req => reqs.has(req) )
           .length
       })
       .map( game => (
@@ -143,6 +215,10 @@ export default class GamesTable extends React.Component {
                 {ageOptions}
               </select>
           </div>
+        </div>
+        <div className="row">
+          <label>What do you have at hand?</label>
+          {requirementsOptions}
         </div>
         <table className="twelve columns" style={{tableLayout:"fixed"}}>
             <thead>

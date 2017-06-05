@@ -271,7 +271,8 @@ def get_games_index():
                     "description",
                     "slug",
                     "audience",
-                    "content_type"
+                    "content_type",
+                    "fabrication"
                     ]
 
                 info_files.append({ k : info[k] for k in wanted_keys if k in info.keys() })

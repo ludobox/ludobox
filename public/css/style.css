@@ -57,8 +57,13 @@
 .addGameForm .form-group {
   width: 100%
 }
+
 textarea, input, select  {
   width : 100%;
+}
+
+input[type="checkbox"] {
+  width: auto
 }
 
 .form-group:nth-child(2n) {
