@@ -14,8 +14,14 @@ styleUl = { listStyle : "none"}
 
 export default class FreeTagging extends React.Component {
 
+  static defaultProps = {
+    ...React.Component.defaultProps,
+    items: [],
+  }
+
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
+      console.log("enter pressed");
       let items = [...this.props.items, e.target.value]
       this.handleChange( items )
       this.refs.newItemInput = ""
