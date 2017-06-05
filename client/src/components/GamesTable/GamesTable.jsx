@@ -37,8 +37,13 @@ export default class GamesTable extends React.Component {
       filterStr : '',
       selectedLanguage : 'any',
       selectedAges : ["Children", "Teenagers", "Adults"],
+      showLookup : false,
       selectedRequirements : selectedRequirements
     }
+  }
+
+  toggleLookup(e) {
+    this.setState({ showLookup : ! this.state.showLookup })
   }
 
   changeFilterStr(filterStr) {
@@ -64,7 +69,9 @@ export default class GamesTable extends React.Component {
 
   render() {
     let { games } = this.props
-    let { filterStr,
+    let {
+      showLookup,
+      filterStr,
       selectedLanguage,
       selectedAges,
       selectedRequirements
@@ -143,10 +150,8 @@ export default class GamesTable extends React.Component {
       .filter(g => {
         let reqs = g.fabrication && g.fabrication.requirements ?
           new Set(g.fabrication.requirements)
-          :
-          new Set([""])
+          : new Set([""])
 
-        console.log(selectedRequirements)
         return Object.keys(selectedRequirements)
           .filter( d => selectedRequirements[d] )
           .filter( req => reqs.has(req) )
@@ -158,13 +163,18 @@ export default class GamesTable extends React.Component {
           <td>
             <a
               href={"/games/"+game.slug}
-              // target="_blank"
+              title={game.description.summary}
               >
               {game.title}
             </a>
           </td>
-          {/* <td>{game.fabrication ? game.fabrication.fab_time : null}</td> */}
-          <td>{game.audience ? game.audience.language : null }</td>
+
+          <td>{
+            game.audience ?
+              ISO6391.getName(game.audience.language)  //
+              : null
+            }
+          </td>
           {
             ! game.existsLocally && this.props.remoteApi && this.props.localApi ?
             <td>
@@ -184,42 +194,58 @@ export default class GamesTable extends React.Component {
     return (
       <div>
         <div className="row">
-          <div className="six columns">
-            <label>Search</label>
-            <input
-              type="text"
-              id="filterStrField"
-              value={ filterStr }
-              onChange={ e => this.changeFilterStr(e.target.value) }
-              placeholder="Lookup a game"
-            />
-          </div>
-          <div className="two columns">
-            <label>Language</label>
-            <select
-              id="languageSelector"
-              value={ selectedLanguage }
-              onChange={e => this.selectLanguage(e.target.value)}
-              >
-                {languagesOptions}
-              </select>
-          </div>
-          <div className="four columns">
-            <label>Age</label>
-            <select
-              id="languageSelector"
-              value={ selectedAges }
-              onChange={e => this.selectAge(e)}
-              multiple
-              >
-                {ageOptions}
-              </select>
-          </div>
-        </div>
-        <div className="row">
           <label>What do you have at hand?</label>
           {requirementsOptions}
         </div>
+        {
+          showLookup ?
+          <div className="row">
+            <div className="six columns">
+              <label>Search</label>
+              <input
+                type="text"
+                id="filterStrField"
+                value={ filterStr }
+                onChange={ e => this.changeFilterStr(e.target.value) }
+                placeholder="Lookup a game"
+              />
+            </div>
+            <div className="two columns">
+              <label>Language</label>
+              <select
+                id="languageSelector"
+                value={ selectedLanguage }
+                onChange={e => this.selectLanguage(e.target.value)}
+                >
+                  {languagesOptions}
+                </select>
+            </div>
+            <div className="four columns">
+              <label>Age</label>
+              <select
+                id="languageSelector"
+                value={ selectedAges }
+                onChange={e => this.selectAge(e)}
+                multiple
+                >
+                  {ageOptions}
+                </select>
+            </div>
+          </div>
+          :
+          null
+        }
+        <a
+          className="button"
+          onClick={e => this.toggleLookup(e)}
+          >
+            { showLookup ?
+            "X"
+            :
+            "Search"
+            // <i className="icono-eye"></i>
+          }
+        </a>
         <table className="twelve columns" style={{tableLayout:"fixed"}}>
             <thead>
                 <tr>
