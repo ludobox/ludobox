@@ -36,7 +36,7 @@ export default class GameForm extends React.Component {
     } = this.props.game
 
     const { editMode, errors } = this.props
-    
+
     return (
       <div>
         <h1>
@@ -55,7 +55,9 @@ export default class GameForm extends React.Component {
         </h1>
 
         <ThumbnailForm
-          handleFileUpload={this.props.handleFileUpload}
+          handleAddFiles={ files =>
+             this.props.handleAddFiles(files)
+          }
           />
 
           {/*

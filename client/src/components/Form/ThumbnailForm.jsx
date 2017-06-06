@@ -13,12 +13,6 @@ export default class ThumbnailForm extends Component {
     };
   }
 
-  crop(){
-    // image in dataUrl
-    console.log("cropped")
-    // console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
-  }
-
   preview(e) {
     e.preventDefault();
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
@@ -32,10 +26,13 @@ export default class ThumbnailForm extends Component {
 
   saveImage(e) {
     e.preventDefault();
-    console.log(this.props);
-    // this.props.handleFileUpload()
-  }
+    // convert URI to File using Blob
+    let blob = dataURItoBlob(this.state.cropResult)
+    let f = new File([blob], "thumbnail.png");
 
+    // send files to server
+    this.props.handleAddFiles([f])
+  }
 
   onChange(e) {
     e.preventDefault();
@@ -72,7 +69,6 @@ export default class ThumbnailForm extends Component {
           Preview
         </a>
         <img style={{ width: '100%' }}
-
           src={this.state.cropResult}
           alt="cropped image"
           />
@@ -84,4 +80,24 @@ export default class ThumbnailForm extends Component {
       </div>
     );
   }
+}
+
+function dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
 }
