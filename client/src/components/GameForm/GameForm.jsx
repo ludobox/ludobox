@@ -6,6 +6,7 @@ import MultiSelect from '../Form/MultiSelect.jsx'
 import Selector from '../Form/Selector.jsx'
 import Number from '../Form/Number.jsx'
 import FilesList from '../Form/FilesList.jsx'
+import ThumbnailForm from '../Form/ThumbnailForm.jsx'
 
 import ISO6391 from 'iso-639-1'
 
@@ -35,6 +36,7 @@ export default class GameForm extends React.Component {
     } = this.props.game
 
     const { editMode, errors } = this.props
+    
     return (
       <div>
         <h1>
@@ -51,6 +53,10 @@ export default class GameForm extends React.Component {
             }}
             />
         </h1>
+
+        <ThumbnailForm
+          handleFileUpload={this.props.handleFileUpload}
+          />
 
           {/*
             // TODO : themes and genres
