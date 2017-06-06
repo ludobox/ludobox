@@ -35,7 +35,20 @@ export default class GameForm extends React.Component {
       content_type ,
     } = this.props.game
 
-    const { editMode, errors } = this.props
+    const {
+      editMode,
+      errors
+    } = this.props
+
+    // get thumbnail URL
+    const thumbnailIndex = this.props.files
+      .map(n => n.filename)
+      .indexOf("thumbnail.png")
+
+    const thumbnailUrl = (thumbnailIndex !== -1) ?
+      this.props.files[thumbnailIndex].url
+      :
+      null
 
     return (
       <div>
@@ -54,11 +67,17 @@ export default class GameForm extends React.Component {
             />
         </h1>
 
-        <ThumbnailForm
-          handleAddFiles={ files =>
-             this.props.handleAddFiles(files)
+        {
+          editMode ?
+            <ThumbnailForm
+              handleAddFiles={ files =>
+                this.props.handleAddFiles(files)
+              }
+              thumbnailUrl={thumbnailUrl}
+            />
+            :
+            <img src={thumbnailUrl}/>
           }
-          />
 
           {/*
             // TODO : themes and genres

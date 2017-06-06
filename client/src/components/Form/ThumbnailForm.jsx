@@ -10,7 +10,13 @@ export default class ThumbnailForm extends Component {
     this.state = {
       src,
       cropResult: null,
+      editThumbnail : false
     };
+  }
+
+  toggleEditThumbnail() {
+    let {editThumbnail} = this.state
+    this.setState({ editThumbnail : !editThumbnail})
   }
 
   preview(e) {
@@ -49,8 +55,11 @@ export default class ThumbnailForm extends Component {
     reader.readAsDataURL(files[0]);
   }
 
+
+
   render() {
-    return (
+
+    let thumbForm = (
       <div>
         <label>Select an image
           <input type="file" onChange={e => this.onChange(e)} />
@@ -79,6 +88,26 @@ export default class ThumbnailForm extends Component {
         </a>
       </div>
     );
+
+
+    return (
+      <div>
+        {
+          this.props.thumbnailUrl && !this.state.editThumbnail  ?
+            <span>
+              <img src={this.props.thumbnailUrl}/>
+              <a className="button"
+                onClick={ () => this.toggleEditThumbnail()}
+                >
+                Change Thumbnail
+              </a>
+            </span>
+            :
+            thumbForm
+        }
+      </div>
+    )
+
   }
 }
 
