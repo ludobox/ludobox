@@ -13,7 +13,10 @@ User Interface for the [Ludobox](http://ludobox.net) project.
     ./bin/install
     ludobox start
 
-Read the docs at [ludobox.readthedocs.io](http://ludobox.readthedocs.io/)
+Launch with `--debug` flagto get more logs and info.
 
+    ludobox start --debug
+
+Read the docs at [ludobox.readthedocs.io](http://ludobox.readthedocs.io/)
 
 [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html) License
