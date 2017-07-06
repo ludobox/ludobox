@@ -231,7 +231,7 @@ def write_attachments(attachments, game_path):
         if not allowed_file(file_clean_name):
             message = "<{error}> occured while "\
                       "writing. Impossible to save file"\
-                      "'{file_clean_name}' because exstension is not allowed".format(
+                      "'{file_clean_name}' because extension is not allowed".format(
                         error="FileNotAllowed", # TODO create ValidationError
                         file_clean_name=file_clean_name)
 
