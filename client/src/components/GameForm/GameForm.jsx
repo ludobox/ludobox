@@ -6,6 +6,7 @@ import MultiSelect from '../Form/MultiSelect.jsx'
 import Selector from '../Form/Selector.jsx'
 import Number from '../Form/Number.jsx'
 import FilesList from '../Form/FilesList.jsx'
+import ThumbnailForm from '../Form/ThumbnailForm.jsx'
 
 import ISO6391 from 'iso-639-1'
 
@@ -34,7 +35,21 @@ export default class GameForm extends React.Component {
       content_type ,
     } = this.props.game
 
-    const { editMode, errors } = this.props
+    const {
+      editMode,
+      errors
+    } = this.props
+
+    // get thumbnail URL
+    const thumbnailIndex = this.props.files
+      .map(n => n.filename)
+      .indexOf("thumbnail.png")
+
+    const thumbnailUrl = (thumbnailIndex !== -1) ?
+      this.props.files[thumbnailIndex].url
+      :
+      null
+
     return (
       <div>
         <h1>
@@ -51,6 +66,18 @@ export default class GameForm extends React.Component {
             }}
             />
         </h1>
+
+        {
+          editMode ?
+            <ThumbnailForm
+              handleAddFiles={ files =>
+                this.props.handleAddFiles(files)
+              }
+              thumbnailUrl={thumbnailUrl}
+            />
+            :
+            <img src={thumbnailUrl}/>
+          }
 
           {/*
             // TODO : themes and genres
