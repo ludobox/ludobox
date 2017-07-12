@@ -7,6 +7,7 @@ from ludobox.webserver import app
 from ludobox.config import read_config
 from ludobox.socketio import socket
 import ludobox.users
+import ludobox.admin
 
 # parse config
 config = read_config()

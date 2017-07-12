@@ -29,6 +29,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
+    def __str__(self):
+        return self.name
+
 class User(db.Model, UserMixin):
     """An admin user capable of viewing reports.
 
@@ -50,6 +53,9 @@ class User(db.Model, UserMixin):
 
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
+
+    def __str__(self):
+        return self.email
 
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
