@@ -1,17 +1,29 @@
 <!doctype html>
 <title>Ludobox</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+<style media="screen">
+  .page {
+    text-align: center
+  }
+</style>
 <div class="page">
-  <h1>Flaskr</h1>
+  <img
+    src="/images/ludobox-logo-color2.png"
+    alt="Logo Ludobox"
+    width=150>
   <div class="metanav">
+
+  <a href="/"> << Back to Ludobox website</a>
+
+  {% block body %}{% endblock %}
+
   {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
+    <a href="{{ url_for('login') }}">Log In</a>
   {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
+    <a href="{{ url_for('logout') }}">Log Out</a>
   {% endif %}
   </div>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
-  {% block body %}{% endblock %}
 </div>

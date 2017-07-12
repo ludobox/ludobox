@@ -96,7 +96,7 @@ fi
 mv tmpfile config.yml
 rm "$tmpfile"
 
-# init the DB properly 
+# init the user DB properly 
 echo -e "Preparing database..."
 python ./bin/migrations/init_db.py
 echo -e "Database ready !"
