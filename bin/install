@@ -96,6 +96,11 @@ fi
 mv tmpfile config.yml
 rm "$tmpfile"
 
+# init the DB properly 
+echo -e "Preparing database..."
+python ./bin/migrations/init_db.py
+echo -e "Database ready !"
+
 echo
 echo -e "${GREEN}Congrats, Installation successful ! ${NC}"
 echo -e "Your config file has been saved at 'config.yml'"
