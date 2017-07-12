@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import time
-
+from functools import wraps
 import os
 import sys
 import json
-from flask import Flask, jsonify, send_from_directory, request, render_template, url_for, redirect
+
+from flask import Flask, jsonify, send_from_directory, request, render_template, url_for, redirect, g
+
+from flask_login import current_user
 
 from datetime import datetime
 from functools import update_wrapper
@@ -48,6 +51,17 @@ def serve_images(path):
     return send_from_directory('public/images', path)
 
 # API Calls
+
+# login decorator for API
+def api_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated is False:
+            return jsonify({"message" : "You need to log in to do that"}), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route('/api')
 def show_hand():
     return jsonify(
@@ -133,6 +147,7 @@ def clone_resource():
     return jsonify({"path" : game_path}), 201
 
 @app.route('/api/create', methods=["POST"])
+@api_login_required
 def create_resource():
     """
     This function allow to post 2 things :
@@ -159,6 +174,7 @@ def create_resource():
 
     return jsonify({"path" : data_path, "slug" : slugified_name}), 201
 
+@api_login_required
 @app.route('/api/update', methods=["POST"])
 def update_resource():
     """
@@ -185,6 +201,7 @@ def get_file_list(game_path):
         file_list = []
     return file_list
 
+@api_login_required
 @app.route('/api/postFiles', methods=["POST"])
 def post_files():
     """
@@ -207,6 +224,7 @@ def post_files():
     file_list =get_file_list(game_path)
     return jsonify({"message" : "files added", "files" : file_list }), 201
 
+@api_login_required
 @app.route('/api/deleteFile', methods=["POST"])
 def delete_files():
 

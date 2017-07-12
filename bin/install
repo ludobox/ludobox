@@ -13,7 +13,6 @@ NC='\033[0m' # No Color
 
 echo -e "${GREEN}Welcome to the Ludobox Installer \n ${NC}"
 
-
 # ask for confirmation
 function are_you_sure() {
   read -p "Are you sure you want to continue (y/n)? " answer

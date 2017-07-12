@@ -5,10 +5,8 @@ from webserver import app
 
 from models import User, db, bcrypt
 
-from flask import Flask, Response, redirect, url_for, request, session, render_template, flash
+from flask import Flask, Response, redirect, url_for, request, session, render_template, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
-
-
 
 # flask-login
 login_manager = LoginManager()
@@ -57,28 +55,12 @@ def login():
     flash('Logged in successfully')
     return redirect(url_for('test'))
 
-@app.route('/test',methods=['GET'])
-@login_required
-def test() :
-    return Response('<p>Test</p>')
-
-# some protected url
-@app.route('/')
-@login_required
-def home():
-    return Response("Hello World!")
-
 # somewhere to logout
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return Response('<p>Logged out</p>')
-
-# # handle login failed
-# @app.errorhandler(401)
-# def page_not_found(e):
-#     return Response('<p>Login failed</p>')
 
 # callback to reload the user object
 @login_manager.user_loader
@@ -89,3 +71,8 @@ def user_loader(user_id):
     """
     print user_id
     return User.query.get(user_id)
+
+@app.route('/test',methods=['GET'])
+@login_required
+def test() :
+    return Response('<p>Test</p>')
