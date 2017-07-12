@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+
+{% block body %}
+  {% include "security/_messages.html" %}
+  <form action="{{ url_for_security('login') }}" method=post>
+    {{ login_user_form.hidden_tag() }}
+    {{ render_field(login_user_form.next) }}
+
+    <br>
+    <div class="control-group">
+        <div class="controls">
+          {{ render_field_with_errors(login_user_form.email, placeholder="Email") }}
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+          {{ render_field_with_errors(login_user_form.password, placeholder="Password") }}
+        </div>
+    </div>
+
+    <div id="remember" class="control-group">
+        <div class="controls">
+          {{ render_field_with_errors(login_user_form.remember) }}
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+          {{ render_field(login_user_form.submit) }}
+        </div>
+    </div>
+  </form>
+  <a href="{{ url_for_security('register') }}">Register</a>
+{% endblock %}

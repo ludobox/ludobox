@@ -5,6 +5,13 @@
   .page {
     text-align: center
   }
+  label {
+    font-weight: normal;
+    display: none
+  }
+  #remember label {
+    display: inline-block;
+  }
 </style>
 <div class="page">
   <img
@@ -18,9 +25,9 @@
   {% block body %}{% endblock %}
 
   {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">Log In</a>
+    <a href="{{ url_for_security('login') }}">Log In</a>
   {% else %}
-    <a href="{{ url_for('logout') }}">Log Out</a>
+    <a href="{{ url_for_security('logout') }}">Log Out</a>
   {% endif %}
   </div>
   {% for message in get_flashed_messages() %}
