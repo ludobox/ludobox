@@ -9,7 +9,6 @@ from ludobox.utils import validate_url
 
 def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwargs):
     """Validate and apply settings as defined in config file"""
-    print args,kwargs
 
     # default values
     data_dir = os.path.join(os.getcwd(),"data")

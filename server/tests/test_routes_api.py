@@ -13,30 +13,38 @@ from flask_testing import TestCase
 
 from jsonschema import validate, ValidationError
 
-from flask_security import login_user
+# from flask_security import login_user
 
-from ludobox.app import create_app
+from ludobox import create_app
 from ludobox.run import get_server_port
 from ludobox.config import read_config
 from ludobox.content import read_content
 from ludobox.models import User, db
+import ludobox.users
+
+from ludobox.routes.api import rest_api
 
 class TestLudoboxWebServer(TestCase):
 
-    DATA_DIR = '/tmp/data'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/testing.db'
-    TESTING = True
-    LOGIN_DISABLED = False
-    WTF_CSRF_ENABLED = False
-
+    # DATA_DIR = '/tmp/data'
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/testing.db'
+    # TESTING = True
+    # LOGIN_DISABLED = False
+    # WTF_CSRF_ENABLED = False
 
     def create_app(self):
         # pass in test configuration
-        return create_app(self)
+        test_dir = os.path.join(os.getcwd(),"server/tests")
+        config_path = os.path.join(test_dir,"config.test.yml")
+
+        return create_app(self, config_path=config_path)
 
     def setUp(self):
 
         self.config = read_config()
+
+        # register routes
+        self.app.register_blueprint(rest_api)
 
         # test data
         self.user_email = "tester@test.com"
@@ -47,13 +55,6 @@ class TestLudoboxWebServer(TestCase):
             shutil.rmtree('/tmp/data')
         os.makedirs('/tmp/data')
 
-
-        # creates a test client
-        # self.client = app.test_client()
-        #
-        # # propagate the exceptions to the test client
-        # self.client.testing = True
-
         # setup db
         db.create_all()
 
@@ -62,8 +63,17 @@ class TestLudoboxWebServer(TestCase):
         db.session.add(user)
         db.session.commit()
 
-        # login
-        check = self.login()
+        # this works
+        assert user in db.session
+
+        # creates a test client
+        self.client = self.app.test_client()
+
+        # propagate the exceptions to the test client
+        self.client.testing = True
+
+        # log in
+        print self.login()
 
     def tearDown(self):
         db.session.remove()
@@ -79,7 +89,8 @@ class TestLudoboxWebServer(TestCase):
 
     def test_login_logout(self):
         rv = self.login()
-        assert 'You were logged in' in rv.data
+        print current_user
+        # assert 'You were logged in' in rv.data
         # rv = self.logout()
         # assert 'You were logged out' in rv.data
         # rv = self.login('adminx', 'default')
@@ -143,9 +154,9 @@ class TestLudoboxWebServer(TestCase):
         self.assertTrue(type(data[0]), dict)
 
     def test_upload_allowed(self):
-        app.config["UPLOAD_ALLOWED"] = False
+        self.app.config["UPLOAD_ALLOWED"] = False
 
-        test_app = app.test_client()
+        test_app = self.app.test_client()
         test_app.testing = True
 
         result = test_app.post('/api/create',

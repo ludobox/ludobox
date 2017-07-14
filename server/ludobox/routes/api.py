@@ -7,7 +7,9 @@ import os
 import sys
 import json
 
-from flask import Flask, jsonify, send_from_directory, request, render_template, url_for, redirect, g
+from flask import Blueprint
+
+from flask import jsonify, send_from_directory, request, render_template, url_for, redirect, g, current_app
 
 from flask_login import current_user
 
@@ -16,8 +18,6 @@ from functools import update_wrapper
 
 from ludobox import __version__
 
-from ludobox.app import create_app
-
 from ludobox.content import write_info_json, create_content, get_content_index, get_resource_slug, update_content_info
 
 from ludobox.attachments import store_files, delete_file, get_attachements_list
@@ -25,36 +25,17 @@ from ludobox.attachments import store_files, delete_file, get_attachements_list
 from ludobox.errors import LudoboxError
 from ludobox.flat_files import create_resource_folder
 from ludobox.data.crawler import download_from_server
-from ludobox.socketio import socket
 
 from ludobox.config import read_config
 
 # parse config
 config = read_config()
 
-# create a web server instance
-app = create_app()
-
-# add socketIO support
-socket.init_app(app)
-
-# STATIC FILES
-@app.route('/js/<path:path>')
-def serve_js(path):
-    return send_from_directory('public/js', path)
-
-@app.route('/css/<path:path>')
-def serve_css(path):
-    return send_from_directory('public/css', path)
-
-@app.route('/images/<path:path>')
-def serve_images(path):
-    return send_from_directory('public/images', path)
-
-# API Calls
+# JSON API blueprint
+rest_api = Blueprint('api', __name__)
 
 # login decorator for API
-def api_login_required(f):
+def rest_api_login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated is False:
@@ -62,38 +43,37 @@ def api_login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
-@app.route('/api')
+@rest_api.route('/api')
 def show_hand():
     return jsonify(
-        name= app.config["LOGGER_NAME"],
+        name= config["ludobox_name"],
         version =  __version__,
         env = { "python" :  sys.version },
         config = config
     )
 
-@app.route('/api/schema/game')
+@rest_api.route('/api/schema/game')
 def serve_schema():
     return send_from_directory('model', "game.json")
 
-@app.route('/api/games')
+@rest_api.route('/api/games')
 def serve_games_json_index():
     games_index = get_content_index()
     return jsonify(games_index)
 
-@app.route('/api/games/<path:path>')
-def serve_api(path):
+@rest_api.route('/api/games/<path:path>')
+def serve_rest_api(path):
     if path[-4:] == "json" :
         return send_from_directory('data', path, mimetype='application/json')
     else :
         return send_from_directory('data', path)
 
-@app.route('/api/files/<path:path>')
+@rest_api.route('/api/files/<path:path>')
 def serve_files_list(path):
     file_list = get_attachements_list(path)
     return jsonify(file_list)
 
-@app.route('/api/clone', methods=["POST"])
+@rest_api.route('/api/clone', methods=["POST"])
 def clone_resource():
     """
     This function clone a resource
@@ -143,8 +123,8 @@ def clone_resource():
     # return original JSON
     return jsonify({"path" : game_path}), 201
 
-@app.route('/api/create', methods=["POST"])
-@api_login_required
+@rest_api.route('/api/create', methods=["POST"])
+@rest_api_login_required
 def create_resource():
     """
     This function allow to post 2 things :
@@ -171,8 +151,8 @@ def create_resource():
 
     return jsonify({"path" : data_path, "slug" : slugified_name}), 201
 
-@api_login_required
-@app.route('/api/update', methods=["POST"])
+@rest_api_login_required
+@rest_api.route('/api/update', methods=["POST"])
 def update_resource():
     """
     This function allow to post 2 things :
@@ -198,8 +178,8 @@ def get_file_list(game_path):
         file_list = []
     return file_list
 
-@api_login_required
-@app.route('/api/postFiles', methods=["POST"])
+@rest_api_login_required
+@rest_api.route('/api/postFiles', methods=["POST"])
 def post_files():
     """
     This function allow to post 2 things :
@@ -221,8 +201,8 @@ def post_files():
     file_list =get_file_list(game_path)
     return jsonify({"message" : "files added", "files" : file_list }), 201
 
-@api_login_required
-@app.route('/api/deleteFile', methods=["POST"])
+@rest_api_login_required
+@rest_api.route('/api/deleteFile', methods=["POST"])
 def delete_files():
 
     to_delete = json.loads(request.form["toDelete"])
@@ -238,14 +218,14 @@ def delete_files():
 
     return jsonify({"message" : "files added", "files" : file_list }), 203
 
-@app.route('/', defaults={'path': ''}, methods=['GET'])
-@app.route('/<path:path>', methods=['GET'])
+@rest_api.route('/', defaults={'path': ''}, methods=['GET'])
+@rest_api.route('/<path:path>', methods=['GET'])
 def catch_all(path):
     """Serve the main page."""
     return render_template('index.html')
 
 # add unlimited CORS access
-@app.after_request
+@rest_api.after_request
 def add_cors(resp):
     """ Ensure all responses have the CORS headers. This ensures any failures are also ccessible
          by the client. """
@@ -255,13 +235,12 @@ def add_cors(resp):
     resp.headers['Access-Control-Allow-Headers'] = request.headers.get(
     'Access-Control-Request-Headers', 'Authorization' )
     # set low for debugging
-    if app.debug:
+    if current_app.debug:
         resp.headers['Access-Control-Max-Age'] = '1'
     return resp
 
-
 # register error handler
-@app.errorhandler(LudoboxError)
+@rest_api.errorhandler(LudoboxError)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code

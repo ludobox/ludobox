@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask_security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
-
 from datetime import datetime
-from webserver import app
-from app import db
+from flask_security import UserMixin, RoleMixin
+from flask_sqlalchemy import SQLAlchemy
 
+# init db
+db = SQLAlchemy()
 
 # Define models
 roles_users = db.Table('roles_users',
@@ -46,7 +45,3 @@ class User(db.Model, UserMixin):
 
     def __str__(self):
         return self.email
-
-# Setup Flask-Security
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)

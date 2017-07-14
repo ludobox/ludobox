@@ -1,16 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
 from flask import url_for
-import flask_admin
+from flask_admin import Admin
 from flask_admin.contrib import sqla
 from flask_admin import helpers as admin_helpers
 from flask_security import login_required, current_user, url_for_security
 
-from models import User, Role, db, security
+from models import User, Role, db
 
-from webserver import app
+from security import security
 
 # Create admin
-admin = flask_admin.Admin(
-    app,
+admin = Admin(
     'Example: Auth',
     base_template='my_master.html',
     template_mode='bootstrap3',
