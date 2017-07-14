@@ -6,7 +6,7 @@ import GameForm from "../GameForm/GameForm.jsx"
 import History from "./History.jsx"
 
 import validator from 'is-my-json-valid'
-import model from '../../../../model/schema.json'
+import model from '../../../../model/game.json'
 
 const alertOptions = {
   offset: 14,

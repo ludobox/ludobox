@@ -91,20 +91,24 @@ def make_create_event(content, user=None):
         return None
 
     # create a new event and add it to history
-    event = new_event("create", content, user)
+    event = new_event("create", content.copy(), user)
     return event
 
 def make_update_event(new_content, old_content, user=None):
 
-    # make sure content has no history
-    if "history" in new_content.keys() and len(new_content["history"]) !=0:
-        raise ValueError("To update, please pass the content only - without the 'history'.")
+    # make things immutable
+    new = new_content.copy()
+    old = old_content.copy()
 
-    if "history" in old_content.keys() and len(old_content["history"]) !=0:
-        raise ValueError("To update, please pass the content only - without the 'history'.")
+    # make sure content has no history
+    if "history" in new.keys() and len(new["history"]) !=0:
+        new.pop('history', None)
+
+    if "history" in old.keys() and len(old["history"]) !=0:
+        old.pop('history', None)
 
     # create json diff
-    patch = make_patch(new_content, old_content)
+    patch = make_patch(new, old)
 
     # check if there is actual changes
     if not len(list(patch)) :

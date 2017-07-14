@@ -48,5 +48,6 @@
     "Mary Christides"
   ],
   "timestamp_add": "10/10/2015 14:52:35",
-  "players_max": 6
+  "players_max": 6,
+  "content_type" : "game"
 }

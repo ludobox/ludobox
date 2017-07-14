@@ -12,14 +12,30 @@ from ludobox.errors import LudoboxError
 
 ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip", "pdf"]
 
-# TODO: improve security check for files !
-def allowed_file(filename):
+# check if extension is allowed
+def allowed_extension(filename):
     """Check for valid file extensions"""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# TODO: improve security check for files !
+def check_attachments(attachments):
+    """Make sure we can upload only safe files"""
+    for f in attachments:
+        if not allowed_extension(f.filename):
+            message = "<{error}> occured while "\
+                      "writing. Impossible to save file"\
+                      "'{file_clean_name}' because exstension is not allowed".format(
+                        error="FileNotAllowed", # TODO create ValidationError
+                        file_clean_name=f.filename)
+            raise LudoboxError(message)
+
+
 def write_attachments(attachments, game_path):
     """Write all files contains in attachements into game directory"""
+
+    # Check files
+    check_attachments(attachments)
 
     # Create a directory to store the uploaded files
     attachments_path = os.path.join(game_path, "files")
@@ -40,20 +56,8 @@ def write_attachments(attachments, game_path):
     # Write all the files
     for f in attachments:
         file_clean_name = secure_filename(f.filename)
-
-        # check if extension is allowed
-        # TODO: check for more security issues ?
-        if not allowed_file(file_clean_name):
-            message = "<{error}> occured while "\
-                      "writing. Impossible to save file"\
-                      "'{file_clean_name}' because exstension is not allowed".format(
-                        error="FileNotAllowed", # TODO create ValidationError
-                        file_clean_name=file_clean_name)
-
-            raise LudoboxError(message)
-
         file_path = os.path.join(attachments_path, file_clean_name)
-        print file_path
+        # print file_path
         try:
             f.save(file_path)
         except Exception as e:
