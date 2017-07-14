@@ -1,9 +1,0 @@
-# config file for your Ludobox
-
-ludobox_name : "My LudoBox"
-port: 4000 # the port to serve the interface (default to 8080)
-
-
-# Update settings
-web_server_url : http://localhost:8080 # if you have chosen 'web', this is where the update will come from
-data_dir : ./server/tests/test-data # default to ./data

@@ -37,18 +37,16 @@ class TestLudoboxConfig(unittest.TestCase):
 
     def test_read_config_custom_values(self):
         """Config should parse value from the config file"""
-        test_config_file = os.path.join(os.getcwd(),"server/tests/test_config.yml")
+        test_config_file = os.path.join(os.getcwd(),"server/tests/config.test.yml")
         config = read_config(config_path=test_config_file)
 
         self.assertEquals(config["port"], 4000)
-        self.assertEquals(config["ludobox_name"], "My LudoBox")
+        self.assertEquals(config["ludobox_name"], "My Testing LudoBox")
         self.assertEquals(config["web_server_url"], "http://localhost:8080")
 
         # tests file and dir paths
         data_dir = os.path.join(os.getcwd(), "server/tests/test-data")
-        index_path = os.path.join(data_dir, 'index.json')
         self.assertEquals(config["data_dir"], data_dir)
-        self.assertEquals(config["index_path"], index_path)
 
     def test_read_config_wrong_values(self):
         """Config should identify wrong values"""
