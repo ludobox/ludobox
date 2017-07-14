@@ -6,7 +6,6 @@ import json
 import shutil
 from datetime import datetime
 
-from jsonpatch import make_patch
 from ludobox.utils import json_serial # convert datetime
 
 from werkzeug import secure_filename
@@ -291,24 +290,10 @@ def update_game_info(game_path, new_game_info):
     original_info = read_game_info(game_path)
 
     # create patch
-    patch = make_patch(new_game_info,original_info)
+    update = history_update(new_game_info,original_info)
 
-    if not len(list(patch)) :
+    if update is None :
         return original_info
-
-    # if patch
-    # parse an event
-    event = {
-        "patch" : patch,
-        "ts" : datetime.now().isoformat()
-    }
-
-    # init history if empty
-    if "history" not in new_game_info.keys():
-        new_game_info["history"] = []
-
-    # add event to history
-    new_game_info["history"].append(event)
 
     # write updated game to file
     write_info_json(new_game_info, game_path )
