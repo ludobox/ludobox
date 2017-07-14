@@ -11,7 +11,7 @@ from flask import Blueprint
 
 from flask import jsonify, send_from_directory, request, render_template, url_for, redirect, g, current_app
 
-from flask_login import current_user
+from flask_security import current_user
 
 from datetime import datetime
 from functools import update_wrapper
@@ -217,6 +217,10 @@ def delete_files():
     file_list =get_file_list(game_path)
 
     return jsonify({"message" : "files added", "files" : file_list }), 203
+
+# @rest_api.route('/test', methods=['GET'])
+# def test_doute():
+#     return jsonify({"bla":"ok"})
 
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
 @rest_api.route('/<path:path>', methods=['GET'])

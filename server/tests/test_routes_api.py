@@ -13,24 +13,19 @@ from flask_testing import TestCase
 
 from jsonschema import validate, ValidationError
 
-# from flask_security import login_user
+from flask_security import current_user, url_for_security
 
 from ludobox import create_app
 from ludobox.run import get_server_port
 from ludobox.config import read_config
 from ludobox.content import read_content
-from ludobox.models import User, db
-import ludobox.users
+from ludobox.models import User, Role, db
+from ludobox.security import user_datastore
 
 from ludobox.routes.api import rest_api
 
 class TestLudoboxWebServer(TestCase):
 
-    # DATA_DIR = '/tmp/data'
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/testing.db'
-    # TESTING = True
-    # LOGIN_DISABLED = False
-    # WTF_CSRF_ENABLED = False
 
     def create_app(self):
         # pass in test configuration
@@ -43,12 +38,13 @@ class TestLudoboxWebServer(TestCase):
 
         self.config = read_config()
 
+        self.app.config["WTF_CSRF_ENABLED"] = False
+        self.app.config["LOGIN_DISABLED"] = False
+
         # register routes
         self.app.register_blueprint(rest_api)
 
-        # test data
-        self.user_email = "tester@test.com"
-        self.user_password = "password"
+        # self.app.config['SECURITY_POST_LOGIN_VIEW'] = '/test'
 
         # change data dir
         if os.path.exists('/tmp/data'):
@@ -56,47 +52,69 @@ class TestLudoboxWebServer(TestCase):
         os.makedirs('/tmp/data')
 
         # setup db
+        db.drop_all()
         db.create_all()
 
-        # add a user
-        user = User(active=True)
-        db.session.add(user)
+        # create default roles
+        user_role = Role(name='contributor')
+        super_user_role = Role(name='superuser')
+        db.session.add(user_role)
+        db.session.add(super_user_role)
         db.session.commit()
 
-        # this works
-        assert user in db.session
+        # add a role
+        # default_role = user_datastore.find_role("contributor")
+        # user_datastore.add_role_to_user(self.user, default_role)
+        # db.session.commit()
 
+        # add a user
+        self.user_email = "tester@test.com"
+        self.user_password = "password"
+        rv = self.register(
+            email=self.user_email, password=self.user_password
+            )
         # creates a test client
         self.client = self.app.test_client()
 
         # propagate the exceptions to the test client
         self.client.testing = True
 
-        # log in
-        print self.login()
-
     def tearDown(self):
         db.session.remove()
-        db.drop_all()
+    #     # db.drop_all()
+
+    def register(self, email=None, password=None):
+        print email, password
+        return self.client.post(
+            url_for_security('register'),
+            data={
+                'email': email,
+                'password': password,
+                'password_confirm': password
+                },
+            content_type= 'application/x-www-form-urlencoded',
+            follow_redirects=True
+        )
 
     def login(self, email=None, password=None):
-        email = email or self.user_email
-        password = password or 'password'
-        return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
+        print email, password
+        return self.client.post(
+            url_for_security('login'),
+            data={'email': email, 'password': password},
+            follow_redirects=True
+        )
 
     def logout(self):
-        return self.app.get('/logout', follow_redirects=True)
+        return self.client.get('/logout', follow_redirects=True)
 
     def test_login_logout(self):
         rv = self.login()
-        print current_user
-        # assert 'You were logged in' in rv.data
-        # rv = self.logout()
-        # assert 'You were logged out' in rv.data
-        # rv = self.login('adminx', 'default')
-        # assert 'Invalid username' in rv.data
-        # rv = self.login('admin', 'defaultx')
-        # assert 'Invalid password' in rv.data
+        self.assertFalse(current_user.is_authenticated)
+        rv = self.logout()
+        self.assertFalse(current_user.is_authenticated)
+        rv = self.login(email=self.user_email, password=self.user_password)
+        print rv.data
+        self.assertTrue(current_user.is_authenticated)
 
     def test_get_server_port(self):
         """Test default and custom port for server"""
@@ -154,6 +172,7 @@ class TestLudoboxWebServer(TestCase):
         self.assertTrue(type(data[0]), dict)
 
     def test_upload_allowed(self):
+        # self.login(email=self.user_email, password=self.user_password)
         self.app.config["UPLOAD_ALLOWED"] = False
 
         test_app = self.app.test_client()
@@ -165,6 +184,25 @@ class TestLudoboxWebServer(TestCase):
                                 )
 
         self.assertEqual(result.status_code, 401)
+
+    def test_add_game_forbidden(self):
+        valid_info = read_content(os.path.join(os.getcwd(), 'server/tests/test-data/test-game'))
+
+        data = {
+            'files': [
+                (StringIO('my readme'), 'test-README.txt'),
+                (StringIO('my rules'), 'test-RULES.txt'),
+                (io.BytesIO(b"abcdef"), 'test.jpg')
+            ],
+            'info': json.dumps(valid_info)
+        }
+
+        result = self.client.post('/api/create',
+                                data=data,
+                                content_type='multipart/form-data'
+                                )
+
+        self.assertEqual(result.status_code, 403)
 
     def test_api_add_game(self):
 

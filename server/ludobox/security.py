@@ -6,5 +6,4 @@ from ludobox.models import db, User, Role
 
 # Setup users for Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-
 security = Security(datastore=user_datastore)

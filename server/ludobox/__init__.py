@@ -11,9 +11,10 @@ import logging
 from flask import Flask
 
 from ludobox.config import read_config
-from ludobox.security import security
 from ludobox.models import db
+from ludobox.security import security, user_datastore
 # from ludobox.admin import admin
+
 
 DEFAULT_CONFIG_PATH = os.path.join(os.getcwd(),"config.yml")
 
@@ -52,7 +53,8 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
     db.init_app(app)
 
     # users rights etc
-    security.init_app(app)
+    security.init_app(app, datastore=user_datastore)
+    app.config["SECURITY_SEND_REGISTER_EMAIL"] = False
 
     # add admin dashboard
     # admin.init_app(app)
