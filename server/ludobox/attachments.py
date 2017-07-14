@@ -93,3 +93,11 @@ def delete_file(file_path):
     except OSError:
         pass
     return file_path
+
+def get_attachements_list(resource_path):
+    files_path = os.path.join("data", os.path.join(resource_path,"files"))
+    if os.path.exists(files_path):
+        file_list = os.listdir(files_path)
+    else :
+        file_list = []
+    return file_list

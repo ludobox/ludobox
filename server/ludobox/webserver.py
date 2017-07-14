@@ -18,7 +18,7 @@ from ludobox import __version__
 
 from ludobox.config import read_config
 from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index, get_resource_slug, update_game_info
-from ludobox.attachments import store_files, delete_file
+from ludobox.attachments import store_files, delete_file, get_attachements_list
 from ludobox.errors import LudoboxError
 from ludobox.data.crawler import download_from_server
 from ludobox.socketio import socket
@@ -90,11 +90,7 @@ def serve_api(path):
 
 @app.route('/api/files/<path:path>')
 def serve_files_list(path):
-    files_path = os.path.join("data", os.path.join(path,"files"))
-    if os.path.exists(files_path):
-        file_list = os.listdir(files_path)
-    else :
-        file_list = []
+    file_list = get_attachements_list(path)
     return jsonify(file_list)
 
 @app.route('/api/clone', methods=["POST"])
