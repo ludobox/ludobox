@@ -13,8 +13,9 @@ For each event, a unique SHA id is created (like git https://stackoverflow.com/q
 import hashlib
 from datetime import datetime
 
-from jsonpatch import make_patch
+from jsonpatch import make_patch, JsonPatch
 
+# TODO :  implement state changes (draft -> reviewed, etc.)
 event_types = ["create", "update", "delete"]
 
 # hashing changes to create an id
@@ -53,20 +54,33 @@ def is_valid_event(event):
     assert event["type"] in event_types
     return True
 
-def add_event_to_history(game_info, event):
-    """Create history thread if needed and add current event to it"""
+def add_event_to_history(content_previous_version, event):
+    """
+    Does 3 things :
+    - create threaded history of events if empty
+    - add current event to history
+    - replace old content by the new
+    """
     assert is_valid_event(event)
 
+    # immutable: clone original reference
+    content_with_updated_history = content_previous_version.copy()
+
+    # re-apply changes and store last version
+    if event["type"] == "update":
+        content_with_updated_history = apply_update_patch(content_with_updated_history, event
+        )
+
     # init history if empty
-    if "history" not in game_info.keys():
-        game_info["history"] = []
+    if "history" not in content_with_updated_history.keys():
+        content_with_updated_history["history"] = []
 
     # add event to history
-    game_info["history"].append(event)
+    content_with_updated_history["history"].append(event)
 
-    return game_info
+    return content_with_updated_history
 
-def event_create(content, user=None):
+def make_create_event(content, user=None):
 
     # make sure there is no prior history
     if "history" in content.keys() and len(content["history"]) !=0:
@@ -80,7 +94,7 @@ def event_create(content, user=None):
     event = new_event("create", content, user)
     return event
 
-def event_update(new_content, old_content, user=None):
+def make_update_event(new_content, old_content, user=None):
 
     # make sure content has no history
     if "history" in new_content.keys() and len(new_content["history"]) !=0:
@@ -99,3 +113,39 @@ def event_update(new_content, old_content, user=None):
     # create a new event and add it to history
     event = new_event("update", { "changes" : list(patch) }, user)
     return event
+
+def apply_update_patch(content, event):
+    """Apply JSON diff patches to content"""
+    patch = JsonPatch(event["content"]["changes"])
+    final_content = patch.apply(content)
+    return final_content
+
+def apply_history(history, selected_id):
+    """
+    Re-apply the chain of events from the history until selected id
+
+    returns the content *without* the history
+    """
+
+    # check the hash format
+    assert type(selected_id) is str
+    assert len(selected_id) is 40
+
+    # filter history
+
+    final_content = {}
+
+    # run again the course of events
+    for event in history:
+        if not is_valid_event(event) :
+            raise ValueError("Event does not follow a proper format.")
+
+        # check event type
+        if event["type"] == "create": # init with full content
+            final_content = event["content"]
+        elif event["type"] == "update":
+            final_content = apply_update_patch(final_content, event)
+
+        # run until last is
+        if event["id"] == selected_id :
+            return final_content
