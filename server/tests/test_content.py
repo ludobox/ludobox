@@ -34,15 +34,6 @@ class TestLudoboxContent(unittest.TestCase):
         borgia_info = read_game_info(borgia_game_path)
         self.assertEquals(validate_game_data(borgia_info), None)
 
-    def test_get_resource_slug(self):
-        """Make sure the slug contains name of the game + language"""
-        borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain-fr')
-        print borgia_game_path
-        borgia_info = read_game_info(borgia_game_path)
-        slug = get_resource_slug(borgia_info)
-        print slug
-        self.assertEquals("borgia-le-jeu-malsain-fr", slug)
-
     def test_validate_game_data(self):
         """Make sure an info file is parsed properly"""
         info = read_game_info(self.game_path)

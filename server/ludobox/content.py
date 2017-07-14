@@ -3,18 +3,16 @@
 
 import os
 import json
-import shutil
-from datetime import datetime
 
 from ludobox.utils import json_serial # convert datetime
 
-from werkzeug import secure_filename
-from slugify import slugify
 from jsonschema import validate, ValidationError
 
-from ludobox.attachments import write_attachments
-from ludobox.errors import LudoboxError
 from ludobox.config import read_config
+from ludobox.attachments import write_attachments
+from ludobox.flat_files import create_resource_folder, write_info_json, delete_resource_folder, read_info_json
+from ludobox.errors import LudoboxError
+from ludobox.utils import get_resource_slug
 from ludobox.history import make_create_event, make_update_event, add_event_to_history
 
 config = read_config()
@@ -22,28 +20,11 @@ config = read_config()
 with open(os.path.join(os.getcwd(), "model/schema.json")) as f :
     schema = json.load(f)
 
-def get_resource_slug(data):
-    """Get the slugified name of the game based on the data set"""
-    try:
-        slug = slugify(data["title"])
-        # add language
-        language = data["audience"]["language"]
-        return "%s-%s"%(slug,language)
-    except KeyError as e:
-        # TODO more explicit error message
-        message = "KeyError occured while "\
-                  "writing game info file to path '{path}'. "\
-                  "Impossible to access data['title'].".format(
-                    path=data)
-        raise LudoboxError(message)
-
 def validate_game_data(data):
     """Validate game data based on existing data VS a JSON Schema"""
     return validate(data, schema)
 
-# TODO test this function with different scenari: existant/inexistant/not
-#   readable dir, info.json present/absent/not readable, with/without attached
-#   file
+# TODO test this function with different scenari: existant/inexistant/not readable dir, info.json present/absent/not readable, with/without attached file
 def read_game_info(path):
     """
     Read all the info available about the game stored at the provided path.
@@ -76,21 +57,7 @@ def read_game_info(path):
     *   somme are also computed from other data like a cleaned name suitable
         for url generation (slugified name)
     """
-    # Load JSON from the description file of the game
-    json_path = os.path.join(path, "info.json")
-    try:
-        with open(json_path, "r") as json_file:
-            data = json.load(json_file)
-    except IOError as e:
-        # TODO Handle more precisely the error and provide an advice for
-        #   solving the problem
-        # Create a very explicit message to explain the problem
-        message = "<{error}> occured while "\
-                  "reading game '{game}' info file '{json}'".format(
-                    error=e.strerror,
-                    game=os.path.basename(path),
-                    json=e.filename)
-        raise LudoboxError(message)
+    data = read_info_json(path)
 
     # validate data
     validate_game_data(data)
@@ -101,21 +68,6 @@ def read_game_info(path):
     data["slug"] = get_resource_slug(data)
 
     return data
-
-def create_game_path(game_path) :
-    """Create the dir to store the game"""
-    try:
-        os.makedirs(game_path)
-    except Exception as e:
-        message = "<{error}> occured while "\
-                  "writing game info file to path '{path}'."\
-                  "Impossible to create "\
-                  "directory '{game_path}'.".format(
-                    error=e.strerror,
-                    path=config['data_dir'],
-                    game_path=os.path.abspath(game_path))
-        raise LudoboxError(message)
-    print "path created : %s"%game_path
 
 def write_game(info, attachments, data_dir):
     """
@@ -160,12 +112,7 @@ def write_game(info, attachments, data_dir):
 
     return game_path
 
-def clean_game(game_path):
-    """Delete an existing rep containing data of a game"""
-    if os.path.exists(game_path):
-        shutil.rmtree(game_path, ignore_errors=True)
-
-def write_info_json(info, game_path):
+def write_game_info(info, game_path):
     """Write a JSON file based on valid resource data"""
 
     # validate game data
@@ -177,25 +124,7 @@ def write_info_json(info, game_path):
         clean_game(game_path)
         raise ValidationError(e)
 
-    # Convert the data to JSON into file
-    content = json.dumps(info, sort_keys=True, indent=4, default=json_serial)
-    json_path = os.path.join(game_path, "info.json")
-
-    try:
-        with open(json_path, "w") as json_file:
-            json_file.write(content.encode('utf-8'))
-    except IOError as e:
-        # Cleanup anything previously created
-        clean_game(game_path)
-
-        # TODO Handle more explicit message
-        message = "<{error}> occured while "\
-                  "writing game info file to path '{path}'"\
-                  "Impossible to write JSON file '{json}'.".format(
-                    error=e.strerror,
-                    path=game_path,
-                    json=json_path)
-        raise LudoboxError(message)
+    write_info_json(info, game_path)
 
 def get_games_index():
     """Loop through all and parse an index of available games"""
@@ -243,3 +172,7 @@ def update_game_info(game_path, new_game_info):
     # write updated game to file
     write_info_json(new_game_info, game_path )
     return new_game_info
+
+def clean_game(game_path):
+    """Remove useless elements from the game folder."""
+    delete_resource_folder(game_path)

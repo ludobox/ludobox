@@ -7,8 +7,10 @@ import unittest
 from ludobox.attachments import write_attachments
 
 
-class TestLudoboxAttachements(unittest.TestCase):
-    """Functions to write/delete attachments"""
+# class TestLudoboxAttachements(unittest.TestCase):
+#     """Functions to write/delete attachments"""
+#
+
 
     # TODO : find a way to test without Flask (tested in test_webserver.py anyway)
     # def test_write_attachments(self):
