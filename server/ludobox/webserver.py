@@ -16,26 +16,26 @@ from functools import update_wrapper
 
 from ludobox import __version__
 
-from ludobox.config import read_config
-from ludobox.content import create_game_path, write_info_json, write_game, validate_game_data, get_games_index, get_resource_slug, update_game_info
+from ludobox.app import create_app
+
+from ludobox.content import write_info_json, create_content, get_content_index, get_resource_slug, update_content_info
+
 from ludobox.attachments import store_files, delete_file, get_attachements_list
+
 from ludobox.errors import LudoboxError
+from ludobox.flat_files import create_resource_folder
 from ludobox.data.crawler import download_from_server
 from ludobox.socketio import socket
+
+from ludobox.config import read_config
 
 # parse config
 config = read_config()
 
-tmpl_dir = os.path.join(os.path.join(os.getcwd(), 'server'), 'templates')
-app = Flask("LUDOSERVER", template_folder=tmpl_dir)  # web server instance used to defines routes
+# create a web server instance
+app = create_app()
 
-# config
-app.config["DATA_DIR"] = config["data_dir"] # used for testing
-print "Data will be stored at %s"%app.config["DATA_DIR"]
-
-app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
-print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
-
+# add socketIO support
 socket.init_app(app)
 
 # STATIC FILES
@@ -66,19 +66,19 @@ def api_login_required(f):
 @app.route('/api')
 def show_hand():
     return jsonify(
-        name= config["ludobox_name"],
+        name= app.config["LOGGER_NAME"],
         version =  __version__,
         env = { "python" :  sys.version },
         config = config
     )
 
-@app.route('/api/schema')
+@app.route('/api/schema/game')
 def serve_schema():
-    return send_from_directory('model', "schema.json")
+    return send_from_directory('model', "game.json")
 
 @app.route('/api/games')
 def serve_games_json_index():
-    games_index = get_games_index()
+    games_index = get_content_index()
     return jsonify(games_index)
 
 @app.route('/api/games/<path:path>')
@@ -113,19 +113,19 @@ def clone_resource():
     files_list = data["files"]
     slug = data["slug"]
 
-    game_path = os.path.join(app.config["DATA_DIR"], slug)
-    if not os.path.exists(game_path):
-        create_game_path(game_path)
+    resource_path = os.path.join(app.config["DATA_DIR"], slug)
+    if not os.path.exists(resource_path):
+        create_resource_folder(resource_path)
 
     socket.emit("downloadEvent", {"slug" : slug, "message" : "Game path created." })
 
     # clone the JSON info
-    write_info_json(info, game_path)
+    write_info_json(info, resource_path)
 
     socket.emit("downloadEvent", {"slug" : slug, "message" : "Game info copied." })
 
     # make sub-rep to store files
-    files_path = os.path.join(game_path, "files")
+    files_path = os.path.join(resource_path, "files")
     if not os.path.exists(files_path):
         os.makedirs(files_path)
 
@@ -165,7 +165,7 @@ def create_resource():
     info = json.loads(request.form["info"])
 
     # Save the game description as pure JSON file
-    data_path = write_game(info, files, app.config["DATA_DIR"])
+    data_path = create_content(info, files, app.config["DATA_DIR"])
 
     slugified_name = get_resource_slug(info)
 
@@ -186,7 +186,7 @@ def update_resource():
     game_slug = json.loads(request.form["slug"])
     game_path = os.path.join(app.config["DATA_DIR"], game_slug)
 
-    update_game_info(game_path, new_game_info)
+    update_content_info(game_path, new_game_info)
 
     return jsonify({"message" : "ok! updated"}), 201
 
@@ -237,7 +237,6 @@ def delete_files():
     file_list =get_file_list(game_path)
 
     return jsonify({"message" : "files added", "files" : file_list }), 203
-
 
 @app.route('/', defaults={'path': ''}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])

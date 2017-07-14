@@ -1,23 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-from flask_sqlalchemy import SQLAlchemy
+
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required
 
 from datetime import datetime
 from webserver import app
+from app import db
 
-# db options
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# security
-app.config['SECURITY_REGISTERABLE'] = True
-app.config['SECURITY_PASSWORD_SALT'] = "dsdskjdksjdksjd&é"
-
-# setup DB
-db = SQLAlchemy(app)
 
 # Define models
 roles_users = db.Table('roles_users',
