@@ -13,4 +13,4 @@ data_dir : ./server/tests/test-data
 upload_allowed : true
 
 # where users will be stored
-database_uri : "sqlite:////tmp/test.db"
+database_uri : "sqlite:////tmp/test-for-testing.db"

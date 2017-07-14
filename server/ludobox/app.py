@@ -8,21 +8,19 @@ from flask_sqlalchemy import SQLAlchemy
 from ludobox.config import read_config
 
 # parse config
-config = read_config()
 db = SQLAlchemy()
 
-# TODO : move to config
-DB_URI = 'sqlite:////tmp/test.db'
-
-def create_app(debug=False):
+def create_app(debug=False, config_path=os.path.join(os.getcwd(),"config.yml")):
     """Create the Flask application with proper options"""
+
+    config = read_config(config_path=config_path)
 
     tmpl_dir = os.path.join(os.path.join(os.getcwd(), 'server'), 'templates')
 
     app = Flask(config["ludobox_name"], template_folder=tmpl_dir)
 
     # db options
-    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
+    app.config['SQLALCHEMY_DATABASE_URI'] = config["database_uri"]
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # security

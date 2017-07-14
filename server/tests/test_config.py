@@ -21,7 +21,8 @@ class TestLudoboxConfig(unittest.TestCase):
             "data_dir" : data_dir,
             "index_path" :index_path,
             "ludobox_name" : "My LudoBox",
-            "upload_allowed" : True
+            "upload_allowed" : True,
+             "database_uri" : "sqlite:////tmp/ludobox.db"
         }
 
     def test_read_config_default(self):
@@ -43,6 +44,7 @@ class TestLudoboxConfig(unittest.TestCase):
         self.assertEquals(config["port"], 4000)
         self.assertEquals(config["ludobox_name"], "My Testing LudoBox")
         self.assertEquals(config["web_server_url"], "http://localhost:8080")
+        self.assertEquals(config["database_uri"], "sqlite:////tmp/test-for-testing.db")
 
         # tests file and dir paths
         data_dir = os.path.join(os.getcwd(), "server/tests/test-data")

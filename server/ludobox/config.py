@@ -7,16 +7,16 @@ import yaml
 
 from ludobox.utils import validate_url
 
-# defaults
-GAMES_LIST_FILE =os.path.join(os.getcwd(),"games.yml")
-
-def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
+def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwargs):
     """Validate and apply settings as defined in config file"""
+    print args,kwargs
 
     # default values
     data_dir = os.path.join(os.getcwd(),"data")
     web_server_url = "http://box.ludobox.net"
     upload_allowed = True
+    database_uri = "sqlite:////tmp/ludobox.db"
+
 
     # Read the YAML config file
     with open(config_path, "r") as config_file:
@@ -44,6 +44,9 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
     if "web_server_url" in config.keys():
         web_server_url = config["web_server_url"]
 
+    if "database_uri" in config.keys():
+        database_uri = config["database_uri"]
+
     index_path = os.path.join(data_dir, 'index.json')
 
     return validate_config(
@@ -53,7 +56,8 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml")):
             "index_path" : index_path,
             "port" : port,
             "ludobox_name" : ludobox_name,
-            "upload_allowed" : upload_allowed
+            "upload_allowed" : upload_allowed,
+            "database_uri" : database_uri
         }
     )
 
