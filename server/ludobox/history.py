@@ -48,7 +48,7 @@ def new_event(event_type, content, user=None):
 
 def is_valid_event(event):
     assert type(event) is dict
-    assert type(event["id"]) is str
+    assert type(event["id"]) is str or unicode
     assert len(event["id"]) is 40
     assert type(event["content"]) is dict
     assert event["type"] in event_types
