@@ -4,6 +4,7 @@
 import re
 from datetime import datetime
 from jsonpatch import JsonPatch
+from slugify import slugify
 
 regex_url = re.compile(
     r'^(?:http|ftp)s?://' # http:// or https://
@@ -27,3 +28,18 @@ def json_serial(obj):
         serial = list(obj)
         return serial
     # raise TypeError ("Type not serializable")
+
+def get_resource_slug(data):
+    """Get the slugified name of the game based on the data set"""
+    try:
+        slug = slugify(data["title"])
+        # add language
+        language = data["audience"]["language"]
+        return "%s-%s"%(slug,language)
+    except KeyError as e:
+        # TODO more explicit error message
+        message = "KeyError occured while "\
+                  "writing game info file to path '{path}'. "\
+                  "Impossible to access data['title'].".format(
+                    path=data)
+        raise LudoboxError(message)
