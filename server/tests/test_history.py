@@ -5,7 +5,7 @@ import unittest
 
 from ludobox.history import new_event, is_valid_event, add_event_to_history, make_create_event, make_update_event, apply_history
 
-class TestLudoboxContent(unittest.TestCase):
+class TestLudoboxHistory(unittest.TestCase):
     """Functions to index, sort and search content"""
 
     def setUp(self):
@@ -84,9 +84,6 @@ class TestLudoboxContent(unittest.TestCase):
 
         creation = make_create_event(game_content)
         created_game = add_event_to_history({}, creation)
-
-        # make sure we pass the content *without* the history
-        self.assertRaises(ValueError, lambda : make_update_event(new_game_content, created_game))
 
         # update the game
         event = make_update_event(game_content, new_game_content)

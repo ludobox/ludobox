@@ -47,8 +47,7 @@ class TestLudoboxConfig(unittest.TestCase):
         self.assertEquals(config["database_uri"], "sqlite:////tmp/test-for-testing.db")
 
         # tests file and dir paths
-        data_dir = os.path.join(os.getcwd(), "server/tests/test-data")
-        self.assertEquals(config["data_dir"], data_dir)
+        self.assertEquals(config["data_dir"], '/tmp/test-data')
 
     def test_read_config_wrong_values(self):
         """Config should identify wrong values"""
