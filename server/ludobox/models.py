@@ -46,6 +46,14 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return "<User : %s>"%self.email
 
+    def to_json(self):
+       return {
+        c.name: getattr(self, c.name)
+            for c in self.__table__.columns
+            if c.name != "password" # avoid showing password :)
+        }
+
+
 def create_default_roles():
     """
     Function to name default roles

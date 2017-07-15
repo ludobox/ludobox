@@ -7,11 +7,12 @@ import os
 import sys
 import json
 
-from flask import Blueprint
+from flask import Blueprint, abort
 
 from flask import jsonify, send_from_directory, request, render_template, url_for, redirect, g, current_app
 
 from flask_security import current_user
+from ludobox.security import user_datastore
 
 from datetime import datetime
 from functools import update_wrapper
@@ -218,9 +219,19 @@ def delete_files():
 
     return jsonify({"message" : "files added", "files" : file_list }), 203
 
-# @rest_api.route('/test', methods=['GET'])
-# def test_doute():
-#     return jsonify({"bla":"ok"})
+@rest_api.route('/api/profile', methods=['GET'])
+def get_current_user_profile():
+    user = current_user.to_json()
+    return jsonify(user)
+
+@rest_api.route('/api/profile/<int:user_id>', methods=['GET'])
+def get_user_profile(user_id):
+    user = user_datastore.get_user(user_id)
+    if user is None:
+        return abort(404)
+    else :
+        return jsonify(user.to_json())
+
 
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
 @rest_api.route('/<path:path>', methods=['GET'])

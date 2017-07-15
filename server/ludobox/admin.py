@@ -12,7 +12,7 @@ from security import security
 
 # Create admin
 admin = Admin(
-    name='Example: Auth',
+    name='Ludobox Admin Panel',
     base_template='my_master.html',
     template_mode='bootstrap3',
 )
