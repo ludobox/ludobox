@@ -35,7 +35,6 @@ class TestLudoboxAttachements(unittest.TestCase):
         self.assertEquals(len(file_list), 1)
         self.assertEquals(file_list[0], "file1.txt")
 
-
     # def test_check_attachments(self):
     #     """Make sure we can upload only secure files"""
     #
