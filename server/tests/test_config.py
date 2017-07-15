@@ -3,8 +3,11 @@
 
 import os
 import unittest
+import shutil
 
 from ludobox.config import read_config, validate_config
+
+TEST_DATA_DIR = '/tmp/test-data'
 
 class TestLudoboxConfig(unittest.TestCase):
     """Testing the load/write config for the Ludobox"""
@@ -14,6 +17,10 @@ class TestLudoboxConfig(unittest.TestCase):
 
         data_dir = os.path.join(os.getcwd(),"data")
         index_path = os.path.join(data_dir, 'index.json')
+
+        if os.path.exists(TEST_DATA_DIR):
+            shutil.rmtree(TEST_DATA_DIR)
+        os.makedirs(TEST_DATA_DIR)
 
         self.default_values = {
             "web_server_url" : "http://box.ludobox.net",
