@@ -5,6 +5,7 @@ python:
 install:
   - "cd server"
   - "python setup.py install"
+  - "pip install -r dev_requirements.txt"
   - "cd .."
   - "cd data"
   - "git clone https://github.com/ludobox/borgia-le-jeu-malsain-fr"
