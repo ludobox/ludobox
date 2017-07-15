@@ -53,7 +53,6 @@ class User(db.Model, UserMixin):
             if c.name != "password" # avoid showing password :)
         }
 
-
 def create_default_roles():
     """
     Function to name default roles

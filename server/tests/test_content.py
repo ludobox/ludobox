@@ -14,19 +14,35 @@ from ludobox.errors import LudoboxError
 
 from ludobox.config import read_config
 
+from ludobox.flat_files import write_info_json
+
+from helpers import delete_data_path, create_empty_data_path, add_samples_to_data_dir
+
 from ludobox.content import get_content_type, validate_content, read_content, create_content, update_content_info, get_content_index, delete_content
 
+TEST_DATA_DIR = '/tmp/test-data'
 
 class TestLudoboxContent(unittest.TestCase):
     """Functions to index, sort and search content"""
 
     def setUp(self):
-        self.config = read_config()
-        self.game_path = os.path.join(os.getcwd(), 'server/tests/test-data/test-game')
-        self.wrong_game_path = os.path.join(os.getcwd(), 'server/tests/test-data/wrong-game')
 
-        self.tmp_path = "/tmp/borgia-le-jeu-malsain-en"
-        delete_content(self.tmp_path)
+        # self.config = read_config()
+        #  os.path.join(os.getcwd(), 'server/tests/test-data/test-game')
+        # self.wrong_game_path = os.path.join(os.getcwd(), 'server/tests/test-data/wrong-game')
+
+        self.tmp_path = TEST_DATA_DIR
+
+        # reset and populate with samples
+        add_samples_to_data_dir(self.tmp_path)
+
+        self.game_path = os.path.join(TEST_DATA_DIR,"test-game")
+
+        delete_data_path('/tmp/borgia-le-jeu-malsain-fr')
+
+        # load info without history
+        with open(os.path.join(self.tmp_path, "borgia-no-history.json"), 'r') as f:
+            self.borgia_info_content = json.load(f)
 
     def test_get_content_type(self):
         data = {"content_type" : "game"}
@@ -43,7 +59,7 @@ class TestLudoboxContent(unittest.TestCase):
 
     def test_borgia_game_data(self):
         """Make sure the borgias are okay with the model"""
-        borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain-fr')
+        borgia_game_path = os.path.join(self.tmp_path, 'borgia-le-jeu-malsain-fr')
         borgia_info = read_content(borgia_game_path)
         self.assertEquals(validate_content(borgia_info), None)
 
@@ -65,15 +81,27 @@ class TestLudoboxContent(unittest.TestCase):
         self.assertTrue("title" in info.keys())
         self.assertTrue("files" in info.keys())
         self.assertEquals(len(info["files"]),1)
-        self.assertEquals(info["slug"], "borgia-le-jeu-malsain-en")
+        self.assertEquals(info["slug"], "borgia-le-jeu-malsain-fr")
 
-        # Wrong game should raises validation error
-        self.assertRaises(ValidationError, lambda:read_content(self.wrong_game_path))
+
+    def test_read_content_validation(self):
+        """Wrong game should raises validation error"""
+
+
+        wrong_content = self.borgia_info_content.copy()
+        wrong_content["title"] = 345
+
+        # create a bad record if needed
+        wrong_game_path = os.path.join(TEST_DATA_DIR,"wrong-game")
+        os.makedirs(wrong_game_path)
+        write_info_json(wrong_content, wrong_game_path)
+
+        self.assertRaises(ValidationError, lambda:read_content(wrong_game_path))
 
     def test_create_content_without_attachements(self):
         """ Make sure that content is written properly"""
         tmp = "/tmp"
-        info = read_content(self.game_path)
+        info = self.borgia_info_content
 
         new_game = create_content(info, None, tmp)
 
@@ -95,27 +123,26 @@ class TestLudoboxContent(unittest.TestCase):
 
     def test_create_content_invalid(self):
         """Make sure an error is raised before writing invalid data"""
-        info = read_content(self.game_path)
+        info = self.borgia_info_content
         info_wrong = info.copy()
         info_wrong["description"] = 72
-        self.assertRaises(ValidationError, lambda:create_content(info_wrong, None,self.tmp_path))
+        self.assertRaises(ValidationError, lambda:create_content(info_wrong, None, self.tmp_path))
 
     def test_create_content_already_existing(self):
         tmp = "/tmp"
-        info = read_content(self.game_path)
+        info = self.borgia_info_content
 
         new_game = create_content(info, None, tmp)
         self.assertRaises(LudoboxError, lambda : create_content(info, None, tmp))
 
     def test_delete_content(self):
         """Make sure the directory is erased properly"""
-        os.makedirs(self.tmp_path) # create game path
         delete_content(self.tmp_path)
         self.assertFalse(os.path.exists(self.tmp_path))
 
     def test_update_content_info(self):
         tmp = "/tmp"
-        info = read_content(self.game_path)
+        info = self.borgia_info_content
 
         game_path = create_content(info, None, tmp)
         game_info = read_content(game_path)
@@ -129,8 +156,7 @@ class TestLudoboxContent(unittest.TestCase):
         self.assertEqual(event["type"], "update")
 
     # TODO : better config parameter to make this testable
-    def test_get_content_index(self):
-
-        print get_content_index()
-        pass
+    # def test_get_content_index(self):
+        # print get_content_index()
+        # pass
         # self.assertTrue(False)

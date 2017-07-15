@@ -25,6 +25,8 @@ from ludobox.security import user_datastore
 
 from ludobox.routes.api import rest_api
 
+from helpers import delete_data_path, create_empty_data_path, add_samples_to_data_dir
+
 TEST_DATA_DIR = '/tmp/test-data'
 
 class TestLudoboxWebServer(TestCase):
@@ -36,9 +38,8 @@ class TestLudoboxWebServer(TestCase):
         config_path = os.path.join(test_dir,"config.test.yml")
 
         # create empy path for data
-        if os.path.exists(TEST_DATA_DIR):
-            shutil.rmtree(TEST_DATA_DIR)
-        os.makedirs(TEST_DATA_DIR)
+        delete_data_path(TEST_DATA_DIR)
+        create_empty_data_path(TEST_DATA_DIR)
 
         return create_app(self, config_path=config_path)
 
@@ -50,7 +51,7 @@ class TestLudoboxWebServer(TestCase):
         self.app.config["LOGIN_DISABLED"] = False
 
         # create games
-        self.make_data_dir()
+        add_samples_to_data_dir(self.app.config["DATA_DIR"])
 
         # register routes
         self.app.register_blueprint(rest_api)
@@ -86,14 +87,6 @@ class TestLudoboxWebServer(TestCase):
 
     def tearDown(self):
         db.session.remove()
-
-    def make_data_dir(self):
-        """ Make a temporary data dir with sample games """
-        if os.path.exists(self.app.config["DATA_DIR"]):
-            shutil.rmtree(self.app.config["DATA_DIR"])
-
-        sample_folder = os.path.join(os.getcwd(),"server/tests/test-data")
-        shutil.copytree(sample_folder, self.app.config["DATA_DIR"])
 
     def register(self, email=None, password=None):
         """Register a user"""
@@ -217,9 +210,15 @@ class TestLudoboxWebServer(TestCase):
 
         self.assertEqual(result.status_code, 403)
 
-    def test_api_add_game(self):
+    def test_api_create_content(self):
 
-        valid_info = read_content(os.path.join(os.getcwd(), 'server/tests/test-data/test-game'))
+        # create empy path for data
+        delete_data_path(TEST_DATA_DIR)
+        create_empty_data_path(TEST_DATA_DIR)
+
+        # load info without history
+        with open(os.path.join(os.getcwd(), "server/tests/test-data/borgia-no-history.json"), 'r') as f:
+            valid_info = json.load(f)
 
         data = {
             'files': [
@@ -235,7 +234,7 @@ class TestLudoboxWebServer(TestCase):
                                     data=data,
                                     content_type='multipart/form-data'
                                     )
-
+            print result.data
             self.assertEqual(result.status_code, 201)
 
             res = json.loads(result.data)

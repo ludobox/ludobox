@@ -13,6 +13,7 @@ There are three kinds of content :
 import os
 import json
 
+from flask import current_app
 from ludobox.utils import json_serial # convert datetime
 
 from jsonschema import validate, ValidationError
@@ -163,13 +164,23 @@ def update_content_info(resource_path, new_info):
     write_info_json(new_info_with_history, resource_path)
     return new_info_with_history
 
-def get_content_index():
+def get_content_index(short=True):
     """Loop through all and parse an index of available content"""
     info_files = []
 
+    # get an abbreged version of the index
+    if short :
+        wanted_keys = [
+            "title",
+            "description",
+            "slug",
+            "audience",
+            "content_type"
+            ]
+
     # loop through all folders
-    for item in os.listdir(config["data_dir"]) :
-        path = os.path.join(config["data_dir"],item)
+    for item in os.listdir(current_app.config["DATA_DIR"]) :
+        path = os.path.join(current_app.config["DATA_DIR"],item)
 
         # get only folders
         if os.path.isdir(path):
@@ -178,15 +189,10 @@ def get_content_index():
             # check if folder contains a info.json file
             if os.path.exists(info_file):
                 info = read_content(path)
-                wanted_keys = [
-                    "title",
-                    "description",
-                    "slug",
-                    "audience",
-                    "content_type"
-                    ]
-
-                info_files.append({ k : info[k] for k in wanted_keys if k in info.keys() })
+                if short :
+                    info_files.append({ k : info[k] for k in wanted_keys if k in info.keys() })
+                else :
+                    info_files.append(info)
 
     sorted_info_files = sorted(info_files, key=lambda k: k['title'])
     return sorted_info_files
