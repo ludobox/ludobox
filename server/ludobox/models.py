@@ -44,4 +44,17 @@ class User(db.Model, UserMixin):
                             backref=db.backref('users', lazy='dynamic'))
 
     def __str__(self):
-        return self.email
+        return "<User : %s>"%self.email
+
+def create_default_roles():
+    """
+    Function to name default roles
+    - called during db init by external script './bin/migrations/init_db.py'
+    """
+    user_role = Role(name='contributor')
+    editor_role = Role(name='editor')
+    super_user_role = Role(name='superuser')
+    db.session.add(user_role)
+    db.session.add(editor_role)
+    db.session.add(super_user_role)
+    db.session.commit()

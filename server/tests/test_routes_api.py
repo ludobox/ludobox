@@ -14,7 +14,7 @@ from flask_testing import TestCase
 from jsonschema import validate, ValidationError
 
 from flask import session
-from flask_security import current_user, url_for_security, login_user
+from flask_security import current_user, url_for_security
 
 from ludobox import create_app
 from ludobox.run import get_server_port
@@ -77,6 +77,7 @@ class TestLudoboxWebServer(TestCase):
         rv = self.register(
             email=self.user_email, password=self.user_password
             )
+
         # creates a test client
         self.client = self.app.test_client()
 

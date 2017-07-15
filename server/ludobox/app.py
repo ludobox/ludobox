@@ -7,6 +7,7 @@ from ludobox.routes.api import rest_api
 from ludobox.socketio import socket
 from ludobox.security import security
 from ludobox.admin import admin
+from ludobox.models import db, create_default_roles
 
 # create a web server instance
 app = create_app()
@@ -18,12 +19,10 @@ socket.init_app(app)
 app.register_blueprint(statics)
 app.register_blueprint(rest_api)
 
-# define a context processor for merging flask-admin's template context into the flask-security views.
-# @security.context_processor
-def security_context_processor():
-    return dict(
-        admin_base_template=admin.base_template,
-        admin_view=admin.index_view,
-        h=admin_helpers,
-        get_url=url_for
-    )
+@app.before_first_request
+def handle_start():
+    """Everything that needs a proper init goes there"""
+    db.create_all()
+    tables = [t.name for t in db.metadata.sorted_tables]
+    if "role" not in tables :
+        create_default_roles()
