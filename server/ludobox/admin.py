@@ -8,12 +8,11 @@ from flask_admin import helpers as admin_helpers
 from flask_security import login_required, current_user, url_for_security
 
 from models import User, Role, db
-
 from security import security
 
 # Create admin
 admin = Admin(
-    'Example: Auth',
+    name='Example: Auth',
     base_template='my_master.html',
     template_mode='bootstrap3',
 )
@@ -48,9 +47,8 @@ admin.add_view(MyModelView(Role, db.session))
 admin.add_view(MyModelView(User, db.session))
 
 
-# define a context processor for merging flask-admin's template context into the
-# flask-security views.
-@security.context_processor
+# define a context processor for merging flask-admin's template context into the flask-security views.
+# @security.context_processor
 def security_context_processor():
     return dict(
         admin_base_template=admin.base_template,
