@@ -7,7 +7,7 @@ port: 4000 # the port to serve the interface (default to 8080)
 web_server_url : http://localhost:8080
 
 # Directory to store all downloaded data -- default to ./data
-data_dir : ./server/tests/test-data
+data_dir : /tmp/test-data
 
 # enable/disable creation of new games on the box
 upload_allowed : true

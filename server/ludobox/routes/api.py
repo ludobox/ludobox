@@ -82,7 +82,7 @@ def clone_resource():
     """
     # TODO : convert to decorator
     # make sure unauthorized boxes can not create new games
-    if app.config["UPLOAD_ALLOWED"] is False:
+    if current_app.config["UPLOAD_ALLOWED"] is False:
         response = jsonify({'message':'Upload not allowed'})
         return response, 401
 
@@ -135,7 +135,7 @@ def create_resource():
     """
 
     # make sure unauthorized boxes can not create new games
-    if app.config["UPLOAD_ALLOWED"] is False:
+    if current_app.config["UPLOAD_ALLOWED"] is False:
         response = jsonify({'message':'Upload not allowed'})
         return response, 401
 
@@ -145,7 +145,7 @@ def create_resource():
     info = json.loads(request.form["info"])
 
     # Save the game description as pure JSON file
-    data_path = create_content(info, files, app.config["DATA_DIR"])
+    data_path = create_content(info, files, current_app.config["DATA_DIR"])
 
     slugified_name = get_resource_slug(info)
 

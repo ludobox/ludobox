@@ -13,7 +13,8 @@ from flask_testing import TestCase
 
 from jsonschema import validate, ValidationError
 
-from flask_security import current_user, url_for_security
+from flask import session
+from flask_security import current_user, url_for_security, login_user
 
 from ludobox import create_app
 from ludobox.run import get_server_port
@@ -24,6 +25,8 @@ from ludobox.security import user_datastore
 
 from ludobox.routes.api import rest_api
 
+TEST_DATA_DIR = '/tmp/test-data'
+
 class TestLudoboxWebServer(TestCase):
 
 
@@ -32,24 +35,25 @@ class TestLudoboxWebServer(TestCase):
         test_dir = os.path.join(os.getcwd(),"server/tests")
         config_path = os.path.join(test_dir,"config.test.yml")
 
+        # create empy path for data
+        if os.path.exists(TEST_DATA_DIR):
+            shutil.rmtree(TEST_DATA_DIR)
+        os.makedirs(TEST_DATA_DIR)
+
         return create_app(self, config_path=config_path)
 
     def setUp(self):
 
         self.config = read_config()
-
+        self.app.config['SECRET_KEY'] = 'sekrit!'
         self.app.config["WTF_CSRF_ENABLED"] = False
         self.app.config["LOGIN_DISABLED"] = False
 
+        # create games
+        self.make_data_dir()
+
         # register routes
         self.app.register_blueprint(rest_api)
-
-        # self.app.config['SECURITY_POST_LOGIN_VIEW'] = '/test'
-
-        # change data dir
-        if os.path.exists('/tmp/data'):
-            shutil.rmtree('/tmp/data')
-        os.makedirs('/tmp/data')
 
         # setup db
         db.drop_all()
@@ -81,9 +85,17 @@ class TestLudoboxWebServer(TestCase):
 
     def tearDown(self):
         db.session.remove()
-    #     # db.drop_all()
+
+    def make_data_dir(self):
+        """ Make a temporary data dir with sample games """
+        if os.path.exists(self.app.config["DATA_DIR"]):
+            shutil.rmtree(self.app.config["DATA_DIR"])
+
+        sample_folder = os.path.join(os.getcwd(),"server/tests/test-data")
+        shutil.copytree(sample_folder, self.app.config["DATA_DIR"])
 
     def register(self, email=None, password=None):
+        """Register a user"""
         print email, password
         return self.client.post(
             url_for_security('register'),
@@ -97,7 +109,8 @@ class TestLudoboxWebServer(TestCase):
         )
 
     def login(self, email=None, password=None):
-        print email, password
+        email = email or self.user_email
+        password = password or self.user_password
         return self.client.post(
             url_for_security('login'),
             data={'email': email, 'password': password},
@@ -108,13 +121,13 @@ class TestLudoboxWebServer(TestCase):
         return self.client.get('/logout', follow_redirects=True)
 
     def test_login_logout(self):
-        rv = self.login()
+        rv = self.login(email=None, password=None)
         self.assertFalse(current_user.is_authenticated)
         rv = self.logout()
         self.assertFalse(current_user.is_authenticated)
-        rv = self.login(email=self.user_email, password=self.user_password)
-        print rv.data
-        self.assertTrue(current_user.is_authenticated)
+        with self.client:
+            self.login()
+            self.assertTrue(current_user.is_authenticated)
 
     def test_get_server_port(self):
         """Test default and custom port for server"""
@@ -175,15 +188,14 @@ class TestLudoboxWebServer(TestCase):
         # self.login(email=self.user_email, password=self.user_password)
         self.app.config["UPLOAD_ALLOWED"] = False
 
-        test_app = self.app.test_client()
-        test_app.testing = True
+        with self.client:
+            self.login()
+            result = self.client.post('/api/create',
+                                    data={},
+                                    content_type='multipart/form-data'
+                                    )
 
-        result = test_app.post('/api/create',
-                                data={},
-                                content_type='multipart/form-data'
-                                )
-
-        self.assertEqual(result.status_code, 401)
+            self.assertEqual(result.status_code, 401)
 
     def test_add_game_forbidden(self):
         valid_info = read_content(os.path.join(os.getcwd(), 'server/tests/test-data/test-game'))
@@ -216,24 +228,26 @@ class TestLudoboxWebServer(TestCase):
             ],
             'info': json.dumps(valid_info)
         }
+        with self.client:
+            self.login()
+            result = self.client.post('/api/create',
+                                    data=data,
+                                    content_type='multipart/form-data'
+                                    )
 
-        result = self.client.post('/api/create',
-                                data=data,
-                                content_type='multipart/form-data'
-                                )
+            self.assertEqual(result.status_code, 201)
 
-        self.assertEqual(result.status_code, 201)
-        res = json.loads(result.data)
-        self.assertIn("path", res.keys())
+            res = json.loads(result.data)
+            self.assertIn("path", res.keys())
 
-        # load JSON info data
-        with open(os.path.join(res["path"], 'info.json'), 'r' )as  f:
-            stored_info = json.load(f)
-        self.assertEqual(stored_info, valid_info)
+            # load JSON info data
+            with open(os.path.join(res["path"], 'info.json'), 'r' )as  f:
+                stored_info = json.load(f)
+            self.assertEquals(stored_info["title"], valid_info["title"])
 
-        # check for files
-        written_filenames = os.listdir(os.path.join(res["path"], 'files'))
-        self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
+            # check for files
+            written_filenames = os.listdir(os.path.join(res["path"], 'files'))
+            self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
 
     # def test_form_add_game(self):
     #     """Posting data and files using form should create a new game"""

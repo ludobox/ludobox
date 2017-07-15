@@ -18,7 +18,7 @@ from ludobox.utils import json_serial # convert datetime
 from jsonschema import validate, ValidationError
 
 from ludobox.config import read_config
-from ludobox.attachments import write_attachments, get_attachements_list
+from ludobox.attachments import write_attachments, get_attachements_list, check_attachments
 
 from ludobox.flat_files import create_resource_folder, write_info_json, delete_resource_folder, read_info_json
 from ludobox.errors import LudoboxError
@@ -136,10 +136,7 @@ def create_content(info, attachments, data_dir):
 
     # Write the attached files
     if attachments:
-        try :
-            write_attachments(attachments, game_path)
-        except LudoboxError as e:
-            raise LudoboxError(str(e))
+        write_attachments(attachments, content_path)
 
     return content_path
 
