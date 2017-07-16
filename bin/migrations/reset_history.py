@@ -60,6 +60,7 @@ def confirm_user():
 needs_update = []
 
 with app.app_context():
+
     games = get_content_index()
 
     # read all json file and check for errors
@@ -82,38 +83,38 @@ with app.app_context():
             # files with no history
             needs_update.append(game_path)
 
-print "%s/%s games history need to be updated."%(len(needs_update), len(games))
+    print "%s/%s games history need to be updated."%(len(needs_update), len(games))
 
-if not len(needs_update):
-    print "No updates needed."
-    exit()
+    if not len(needs_update):
+        print "No updates needed."
+        exit()
 
-if not confirm_user():
-    exit()
+    if not confirm_user():
+        exit()
 
-if confirm_choice():
+    if confirm_choice():
 
-    # update the actual data
-    for game_path in needs_update:
-        print game_path
-        info = read_content(game_path)
+        # update the actual data
+        for game_path in needs_update:
+            print game_path
+            info = read_content(game_path)
 
-        print "-"*10
-        print "%s..."%info["title"]
+            print "-"*10
+            print "%s..."%info["title"]
 
-        # remove history
-        info.pop('history', None)
+            # remove history
+            info.pop('history', None)
 
-        # make a 'create'
-        event = make_create_event(info.copy())
+            # make a 'create'
+            event = make_create_event(info.copy())
 
-        # add it to history
-        info["history"] = [ event]
+            # add it to history
+            info["history"] = [ event]
 
-        validate_content(info)
+            validate_content(info)
 
-        write_info_json(info, game_path)
-        print "updated."
-        print
+            write_info_json(info, game_path)
+            print "updated."
+            print
 
-print "OK ! done."
+    print "OK ! done."
