@@ -66,6 +66,61 @@ def rest_api_login_required(f):
 def api_show_home():
     return jsonify(get_global_config())
 
+@rest_api.route('/api/create', methods=["POST"])
+@rest_api_login_required
+def api_create_resource():
+    """
+    This function allow to post 2 things :
+
+    * info : a dict containing a (valid) description of the game
+    * files : a bunch of files of the game itself
+
+    """
+
+    # make sure unauthorized boxes can not create new games
+    if current_app.config["UPLOAD_ALLOWED"] is False:
+        response = jsonify({'message':'Upload not allowed'})
+        return response, 401
+
+    files = request.files.getlist('files')
+    print("UPLOADED FILES:", [f.filename for f in files])
+
+    info = json.loads(request.form["info"])
+
+    # Save the game description as pure JSON file
+    data_path = create_content(info, files, current_app.config["DATA_DIR"])
+
+    slugified_name = get_resource_slug(info)
+
+    return jsonify({"path" : data_path, "slug" : slugified_name}), 201
+
+@rest_api.route('/api/update', methods=["POST"])
+@rest_api_login_required
+def api_update_resource():
+    """
+    This function allow to post 2 things :
+
+    * info : the dict containing the (valid) updated description of the game
+    * slug : path/slug of the game
+
+    """
+
+    new_game_info = json.loads(request.form["info"])
+    game_slug = json.loads(request.form["slug"])
+    content_path = os.path.join(current_app.config["DATA_DIR"], game_slug)
+
+    # make sure the game actually exists
+    if not os.path.isdir(content_path):
+        abort(404)
+
+    new_info_with_history = update_content_info(content_path, new_game_info)
+
+    return jsonify({
+        "path" : content_path,
+        "message" : "ok! Game %s has been updated."%new_game_info["title"],
+        "updated_content" : new_info_with_history
+        }), 201
+
 @rest_api.route('/api/clone', methods=["POST"])
 def api_clone_resource():
     """
@@ -115,56 +170,6 @@ def api_clone_resource():
         })
     # return original JSON
     return jsonify({"path" : content_path}), 201
-
-@rest_api.route('/api/create', methods=["POST"])
-@rest_api_login_required
-def api_create_resource():
-    """
-    This function allow to post 2 things :
-
-    * info : a dict containing a (valid) description of the game
-    * files : a bunch of files of the game itself
-
-    """
-
-    # make sure unauthorized boxes can not create new games
-    if current_app.config["UPLOAD_ALLOWED"] is False:
-        response = jsonify({'message':'Upload not allowed'})
-        return response, 401
-
-    files = request.files.getlist('files')
-    print("UPLOADED FILES:", [f.filename for f in files])
-
-    info = json.loads(request.form["info"])
-
-    # Save the game description as pure JSON file
-    data_path = create_content(info, files, current_app.config["DATA_DIR"])
-
-    slugified_name = get_resource_slug(info)
-
-    return jsonify({"path" : data_path, "slug" : slugified_name}), 201
-
-@rest_api.route('/api/update', methods=["POST"])
-@rest_api_login_required
-def api_update_resource():
-    """
-    This function allow to post 2 things :
-
-    * info : the dict containing the (valid) updated description of the game
-    * slug : path/slug of the game
-
-    """
-
-    new_game_info = json.loads(request.form["info"])
-    game_slug = json.loads(request.form["slug"])
-    content_path = os.path.join(current_app.config["DATA_DIR"], game_slug)
-
-    update_content_info(content_path, new_game_info)
-
-    return jsonify({
-        "path" : content_path,
-        "message" : "ok! Game %s has been updated."%new_game_info["title"]
-        }), 201
 
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
 @rest_api.route('/<path:path>', methods=['GET'])

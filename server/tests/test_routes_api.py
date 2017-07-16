@@ -36,7 +36,7 @@ class TestLudoboxWebServer(LudoboxTestCase):
         self.assertEqual(result.status_code, 200)
         # self.assertEqual(json.loads(result.data), {"name" : self.config["ludobox_name"]})
 
-    def test_upload_allowed(self):
+    def test_config_upload_allowed(self):
         # self.login(email=self.user_email, password=self.user_password)
         self.app.config["UPLOAD_ALLOWED"] = False
 
@@ -105,6 +105,62 @@ class TestLudoboxWebServer(LudoboxTestCase):
             # check for files
             written_filenames = os.listdir(os.path.join(res["path"], 'files'))
             self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
+
+    def test_api_update_content(self):
+
+        # create empy path for data
+        delete_data_path(self.tmp_path)
+        create_empty_data_path(self.tmp_path)
+
+        # load info without history
+        valid_info = self.borgia_info_content
+
+        data = {
+            'files': self.files,
+            'info': json.dumps(valid_info)
+        }
+        with self.client:
+            self.login()
+            result = self.client.post('/api/create',
+                                    data=data,
+                                    content_type='multipart/form-data'
+                                    )
+            print result.data
+            self.assertEqual(result.status_code, 201)
+
+            # make some changes
+            new_info = self.borgia_info_content.copy()
+            new_info["fab_time"] = 200
+            new_data = {
+                'info': json.dumps(new_info),
+                'slug': json.dumps(new_info["slug"])
+            }
+
+            # push changes to API
+            result = self.client.post('/api/update',
+                                    data=new_data,
+                                    content_type='multipart/form-data'
+                                    )
+
+            new_content = result.json["updated_content"]
+
+            self.assertEqual(result.status_code, 201)
+            self.assertEquals(new_content["fab_time"], 200 )
+
+    def test_api_update_content_non_existing_game(self):
+        with self.client:
+            self.login()
+
+            new_data = {
+                'info': json.dumps(self.borgia_info_content),
+                'slug': json.dumps("some-wrong-slug-")
+            }
+
+            result = self.client.post('/api/update',
+                                    data=new_data,
+                                    content_type='multipart/form-data'
+                                    )
+            self.assertEqual(result.status_code, 404)
 
     def test_save_history_with_user(self):
         """Make sure the reference to user is correctly saved in history"""
