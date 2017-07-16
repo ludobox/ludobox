@@ -50,6 +50,9 @@ def confirm_choice():
     elif confirm == 'n' :
         return False
 
+if not len(renames):
+    print "No updates needed."
+    exit()
 
 if confirm_choice():
     for r in renames:

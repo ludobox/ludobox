@@ -23,7 +23,9 @@ Here, to "reset history" means :
 import os
 import json
 
-from ludobox.content import get_games_index, read_game_info, validate_game_data, write_info_json
+from ludobox import create_app
+from ludobox.content import get_content_index, read_content, validate_content
+from ludobox.flat_files import write_info_json
 from ludobox.config import read_config
 from ludobox.history import is_valid_event, make_create_event, add_event_to_history
 
@@ -31,10 +33,12 @@ from ludobox.utils import json_serial # convert datetime
 
 config = read_config()
 
+app = create_app()
+
 USER_EMAIL = "admin@ludobox.net"
 
 def confirm_choice():
-    confirm = raw_input("history for this game will be reset to zero : Yes or No [y/n] ?")
+    confirm = raw_input("history for these games will be reset to zero : Yes or No [y/n] ?")
     if confirm != 'y' and confirm != 'n':
         print("\n Invalid Option. Please Enter a Valid Option.")
         return confirm_choice()
@@ -55,24 +59,28 @@ def confirm_user():
 
 needs_update = []
 
-games = get_games_index()
+with app.app_context():
+    games = get_content_index()
 
-# read all json file and check for errors
-for game in games:
+    # read all json file and check for errors
+    for game in games:
 
-    game_path = os.path.join(config["data_dir"], game['slug'])
-    info = read_game_info(game_path)
-    try :
-        flagged = False
-        history = info["history"]
-        for event in history:
-            if not is_valid_event(event):
-                flagged = True
-        if flagged :
+        game_path = os.path.join(config["data_dir"], game['slug'])
+        info = read_content(game_path)
+        try :
+            flagged = False
+            history = info["history"]
+            for event in history:
+                try :
+                    if not is_valid_event(event):
+                        flagged = True
+                except AssertionError:
+                    flagged = True
+            if flagged :
+                needs_update.append(game_path)
+        except KeyError:
+            # files with no history
             needs_update.append(game_path)
-    except KeyError:
-        # files with no history
-        needs_update.append(game_path)
 
 print "%s/%s games history need to be updated."%(len(needs_update), len(games))
 
@@ -83,26 +91,29 @@ if not len(needs_update):
 if not confirm_user():
     exit()
 
-# update the actual data
-for game_path in needs_update:
-    print game_path
-    info = read_game_info(game_path)
+if confirm_choice():
 
-    print "-"*10
-    print info["title"]
+    # update the actual data
+    for game_path in needs_update:
+        print game_path
+        info = read_content(game_path)
 
-    # remove history
-    info.pop('history', None)
+        print "-"*10
+        print "%s..."%info["title"]
 
-    # make a 'create'
-    event = make_create_event(info.copy())
+        # remove history
+        info.pop('history', None)
 
-    # add it to history
-    info["history"] = [ event]
+        # make a 'create'
+        event = make_create_event(info.copy())
 
-    validate_game_data(info)
+        # add it to history
+        info["history"] = [ event]
 
-    if confirm_choice():
+        validate_content(info)
+
         write_info_json(info, game_path)
+        print "updated."
+        print
 
 print "OK ! done."
