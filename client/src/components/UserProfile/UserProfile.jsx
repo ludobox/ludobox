@@ -8,8 +8,7 @@ export default class UserProfile extends React.Component {
     super(props)
     this.api = new APIClient()
     this.state = {
-      userProfile: {},
-      errors : null
+      userProfile: {}
     };
   }
 
@@ -17,8 +16,7 @@ export default class UserProfile extends React.Component {
     let userId = this.props.userId;
     this.api.getUserProfile(
       userId,
-      userProfile => this.setState({ userProfile }),
-      errors => errors ? this.setState({ errors }) : null
+      userProfile => this.setState({ userProfile })
     );
   }
 
@@ -27,13 +25,25 @@ export default class UserProfile extends React.Component {
   }
 
   render() {
-    let { userProfile, errors } = this.state
-    // console.log(userProfile, errors)
+    let { userProfile } = this.state
+    console.log(userProfile)
+
+    if (userProfile.recent_changes)
+      userProfile.recent_changes.map( event =>{
+        console.log(event)}
+        // <li>
+        //
+        // </li>
+      )
 
     return (
-      <p>
-        Profile
-      </p>
+      <div>
+
+        <h5>Welcome to your page</h5>
+        <p><b>Email </b>: {userProfile.email}</p>
+        <h4>Recent changes</h4>
+
+      </div>
     )
   }
 }

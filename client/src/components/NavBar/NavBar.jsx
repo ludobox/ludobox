@@ -42,7 +42,7 @@ export default class NavBar extends React.Component {
 
             {
               is_auth ?
-              <div class="logged_in">
+              <div className="logged_in">
                 <li className="navbar-item"><a className="navbar-link" href="/profile">Profile</a></li>
                 <li className="navbar-item"><a className="navbar-link" href="/logout">Logout</a></li>
               </div>
