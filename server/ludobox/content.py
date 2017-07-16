@@ -85,8 +85,12 @@ def read_content(path):
 
     data = read_info_json(path)
 
-    # validate data
-    validate_content(data)
+    # validate data and catch errors to flag content
+    try :
+        validate_content(data)
+    except ValidationError as e:
+        data["has_errors"] = True
+        data["errors"] = [ str(e) ]
 
     # add files attachments list
     data["files"] = get_attachements_list(path)

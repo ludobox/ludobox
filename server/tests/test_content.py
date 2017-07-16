@@ -58,6 +58,7 @@ class TestLudoboxContent(LudoboxTestCase):
         # make sure error is raised with a basic mistake
         info_wrong = info.copy()
         info_wrong["description"] = 72
+
         self.assertRaises(ValidationError, lambda:validate_content(info_wrong))
 
     # TODO test this function with different scenari: existant/inexistant/not readable dir, info.json present/absent/not readable, with/without attached file
@@ -82,7 +83,12 @@ class TestLudoboxContent(LudoboxTestCase):
         os.makedirs(wrong_game_path)
         write_info_json(wrong_content, wrong_game_path)
 
-        self.assertRaises(ValidationError, lambda:read_content(wrong_game_path))
+        with_errors = read_content(wrong_game_path)
+        self.assertTrue(with_errors["has_errors"])
+        self.assertIs(type(with_errors["errors"]), list)
+        self.assertIs(len(with_errors["errors"]), 1)
+        self.assertIs(type(with_errors["errors"][0]), str)
+        self.assertIn("title" ,with_errors["errors"][0])
 
     def test_create_content_without_attachements(self):
         """ Make sure that content is written properly"""
