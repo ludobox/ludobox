@@ -43,7 +43,6 @@ class TestLudoboxGamesServer(LudoboxTestCase):
         result = self.client.get('/api/games/some-slug"')
         self.assertEqual(result.status_code, 404)
 
-
     def test_delete_game(self):
         """Make sure the game is deleted properly"""
         info = self.borgia_info_content

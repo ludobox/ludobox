@@ -4,6 +4,8 @@
 import os
 from flask import Blueprint, abort, jsonify, send_from_directory, current_app
 
+from flask_security.decorators import roles_accepted
+
 from ludobox.content import get_content_index, read_content, delete_content
 from api import login_required
 
@@ -25,6 +27,7 @@ def api_single_game(path):
 
 @games_api.route('/api/games/<path:path>', methods=["DELETE"])
 @login_required
+@roles_accepted("editor","superuser")
 def api_delete_game(path):
     game_path = os.path.join(current_app.config["DATA_DIR"], path)
     content = delete_content(game_path)

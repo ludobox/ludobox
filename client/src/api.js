@@ -88,6 +88,19 @@ export default class APIClient {
     this.get(gameUrl, game => callback(game))
   }
 
+  deleteGame(slug, callback, callbackError) {
+
+    console.log("haha");
+    let gameUrl = this.getURL(`games/${slug}`);
+    console.log(gameUrl);
+
+    // DELETE file
+    this.delete(gameUrl,
+      resp => callback(resp),
+      error => callbackError(error)
+    )
+  }
+
   getGameFilesList(slug, callback) {
     let gameUrl = this.getURL(`files/${slug}`);
 
