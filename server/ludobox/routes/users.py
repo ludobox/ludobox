@@ -6,7 +6,7 @@ from flask import request, abort, jsonify
 from flask_security import current_user
 
 from ludobox.security import user_datastore
-from ludobox.user import get_latest_changes
+from ludobox.user import get_latest_changes, get_profile
 
 # JSON API blueprint
 users_api = Blueprint('users', __name__)
@@ -14,8 +14,7 @@ users_api = Blueprint('users', __name__)
 @users_api.route('/api/profile', methods=['GET'])
 def get_current_user_profile():
     if current_user.is_authenticated:
-        user = current_user.to_json()
-        user["recent_changes"]  = get_latest_changes(user=user["email"])
+        user = get_profile(current_user)
         return jsonify(user)
     else :
         abort(403)
@@ -26,8 +25,7 @@ def get_user_profile(user_id):
     if user is None:
         return abort(404)
     else :
-        user = current_user.to_json()
-        user["recent_changes"]  = get_latest_changes(user=user["email"])
+        user = get_profile(current_user)
         return jsonify(user)
 
 @users_api.route('/api/recent_changes', methods=['GET'])

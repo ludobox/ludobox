@@ -68,3 +68,15 @@ def get_latest_changes(user=None, before_time=None):
                 )
 
     return lastest_changes
+
+def get_profile(user):
+    """
+    args :
+    - `user` : an actual user instance
+
+    Returns an object containing user profile
+    """
+    user_dict = user.to_json()
+    user_dict["recent_changes"]  = get_latest_changes(user=user_dict["email"])
+    user_dict['roles'] =  [role.name for role in user.roles]
+    return user_dict

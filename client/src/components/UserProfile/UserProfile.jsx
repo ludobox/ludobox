@@ -28,18 +28,21 @@ export default class UserProfile extends React.Component {
 
   render() {
     let { userProfile } = this.state
-    console.log(userProfile)
 
-    let history = []
-    if (userProfile.recent_changes)
+    let roles, history;
+
+    let profileReady = Object.keys(userProfile).length;
+
+    if (profileReady) {
+      console.log(userProfile)
+      roles = userProfile.roles.join(", ")
       history = userProfile.recent_changes.map( event =>{
-
         // parse date
         let d = moment
           .utc(1234567890000)
           .local()
           .format('MMMM Do YYYY, h:mm:ss a');
-        
+
         return (
           <li key={event.event.id}>
             <b>{event.event.type}</b> : <a href={`/games/${event.slug}`}>{event.title}</a> : {d}
@@ -47,15 +50,25 @@ export default class UserProfile extends React.Component {
         )
       }
       )
+    }
 
     return (
       <div>
 
-        <h5>Welcome to your page</h5>
-        <p><b>Email </b>: {userProfile.email}</p>
-        <h4>Recent changes</h4>
+        <h3>Welcome to your page</h3>
         {
-          history.length ?
+          profileReady ?
+          <p>
+            <b>Email </b>: {userProfile.email}
+            <br />
+            <b>Roles </b>: {roles}
+          </p>
+          :
+          null
+        }
+        <h5>Recent changes</h5>
+        {
+          history ?
             history
           :
             "No history to show."

@@ -44,6 +44,7 @@ def get_global_config():
     if current_user.is_authenticated:
         user['email'] =  current_user.email
         user['username'] =  current_user.username
+        user['roles'] =  [role.name for role in current_user.roles]
 
     return dict(
         name= config["ludobox_name"],
