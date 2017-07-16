@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, abort, jsonify
+from flask import Blueprint, abort, jsonify, send_from_directory
 
 from ludobox.content import get_content_index
 
