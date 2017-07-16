@@ -53,10 +53,6 @@ def show_hand():
         config = config
     )
 
-@rest_api.route('/api/schema/game')
-def serve_schema():
-    return send_from_directory('model', "game.json")
-
 @rest_api.route('/api/games')
 def serve_games_json_index():
     games_index = get_content_index()
@@ -135,6 +131,8 @@ def create_resource():
 
     """
 
+    print current_user
+
     # make sure unauthorized boxes can not create new games
     if current_app.config["UPLOAD_ALLOWED"] is False:
         response = jsonify({'message':'Upload not allowed'})
@@ -152,8 +150,8 @@ def create_resource():
 
     return jsonify({"path" : data_path, "slug" : slugified_name}), 201
 
-@rest_api_login_required
 @rest_api.route('/api/update', methods=["POST"])
+@rest_api_login_required
 def update_resource():
     """
     This function allow to post 2 things :

@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
+
 from flask_testing import TestCase
+
+from jsonschema import validate, ValidationError
 
 from ludobox import create_app
 from ludobox.routes.static import statics
@@ -30,3 +34,12 @@ class TestLudoboxWebServerStatic(TestCase):
     def test_images(self):
         result = self.client.get('/images/favicon.png')
         self.assertEqual(result.status_code, 200)
+
+    def test_game_schema(self):
+        result = self.client.get('/api/schema/game')
+        self.assertEqual(result.status_code, 200)
+
+        schema = json.loads(result.data)
+        self.assertIs(type(schema), dict)
+
+        self.assertRaises(ValidationError, lambda : validate({ "test" : [1,3,2,4]}, schema))

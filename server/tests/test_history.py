@@ -11,6 +11,33 @@ class TestLudoboxHistory(unittest.TestCase):
     def setUp(self):
         self.content = { "bla" : "bla" }
 
+    # helpers
+    def register(self, email=None, password=None):
+        """Register a user"""
+        print email, password
+        return self.client.post(
+            url_for_security('register'),
+            data={
+                'email': email,
+                'password': password,
+                'password_confirm': password
+                },
+            content_type= 'application/x-www-form-urlencoded',
+            follow_redirects=True
+        )
+
+    def login(self, email=None, password=None):
+        email = email or self.user_email
+        password = password or self.user_password
+        return self.client.post(
+            url_for_security('login'),
+            data={'email': email, 'password': password},
+            follow_redirects=True
+        )
+
+    def logout(self):
+        return self.client.get('/logout', follow_redirects=True)
+
     def test_new_event_type(self):
         """A new event should have a validated type"""
 
@@ -146,3 +173,8 @@ class TestLudoboxHistory(unittest.TestCase):
         self.assertDictEqual(new_game_content_2, step_two)
         step_three = apply_history(updated_game["history"], ids[3])
         self.assertDictEqual(new_game_content_3, step_three)
+
+    def test_event_save_user(self):
+
+        register()
+        login()

@@ -17,3 +17,7 @@ def serve_css(path):
 @statics.route('/images/<path:path>')
 def serve_images(path):
     return send_from_directory('public/images', path)
+
+@statics.route('/api/schema/game')
+def serve_schema():
+    return send_from_directory('model', "game.json")
