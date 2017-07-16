@@ -153,22 +153,22 @@ export default class GamesTable extends React.Component {
           .filter( age => ages.has(age) )
           .length
       })
-      .filter(g => {
-        let reqs = g.fabrication && g.fabrication.requirements ?
-          new Set(g.fabrication.requirements)
-          : new Set([""])
-
-        return Object.keys(selectedRequirements)
-          .filter( d => selectedRequirements[d] )
-          .filter( req => reqs.has(req) )
-          .length
-      })
-      .filter( g =>
-          timeRange == 0 ?
-            true
-            :
-            g.fabrication.fab_time <= timeRange
-      )
+      // .filter(g => {
+      //   let reqs = g.fabrication && g.fabrication.requirements ?
+      //     new Set(g.fabrication.requirements)
+      //     : new Set([""])
+      //
+      //   return Object.keys(selectedRequirements)
+      //     .filter( d => selectedRequirements[d] )
+      //     .filter( req => reqs.has(req) )
+      //     .length
+      // })
+      // .filter( g =>
+      //     timeRange == 0 ?
+      //       true
+      //       :
+      //       g.fabrication.fab_time <= timeRange
+      // )
       .map( game => (
         <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
           key={game.slug}>
@@ -184,6 +184,12 @@ export default class GamesTable extends React.Component {
           <td>{
             game.audience ?
               ISO6391.getName(game.audience.language)  //
+              : null
+            }
+          </td>
+          <td>{
+            game.has_errors ?
+              "Needs fix"
               : null
             }
           </td>
@@ -281,6 +287,7 @@ export default class GamesTable extends React.Component {
                     <td>Title</td>
                     {/* <td>Fab Time</td> */}
                     <td>Language</td>
+                    <td>Status</td>
                     {
                       this.props.remoteApi ?
                       <td>Download</td>

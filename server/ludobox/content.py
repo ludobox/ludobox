@@ -190,7 +190,8 @@ def get_content_index(short=True):
             "description",
             "slug",
             "audience",
-            "content_type"
+            "content_type",
+            "has_errors"
             ]
 
     # loop through all folders
