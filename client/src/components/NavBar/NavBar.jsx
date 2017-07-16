@@ -11,6 +11,9 @@ export default class NavBar extends React.Component {
     let hasRemote = Object.keys(this.props.config).length ?
     this.props.config.config.web_server_url : true ;
 
+    let is_auth = Object.keys(this.props.config).length ?
+    this.props.config.user.is_auth : false ;
+
     return (
       <nav className="navbar" style={style}>
         <div className="container">
@@ -31,6 +34,13 @@ export default class NavBar extends React.Component {
             <li className="navbar-item"><a className="navbar-link" href="/about">About</a></li>
             <li className="navbar-item"><a className="navbar-link" href="/help">Help</a></li>
             <li className="navbar-item"><a disabled className="navbar-link" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a></li>
+
+            {
+              is_auth ?
+              <li className="navbar-item"><a className="navbar-link" href="/logout">Logout</a></li>
+              :
+              <li className="navbar-item"><a className="navbar-link" href="/login">Login</a></li>
+            }
           </ul>
         </div>
       </nav>
