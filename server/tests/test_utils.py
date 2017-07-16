@@ -7,7 +7,9 @@ import unittest
 from ludobox.utils import validate_url, get_resource_slug
 from ludobox.flat_files import read_info_json
 
-class TestLudoboxUtils(unittest.TestCase):
+from LudoboxTestCase import LudoboxTestCase
+
+class TestLudoboxUtils(LudoboxTestCase):
     """Testing utils function"""
 
     def test_validate_url(self):
@@ -21,7 +23,6 @@ class TestLudoboxUtils(unittest.TestCase):
 
     def test_get_resource_slug(self):
         """Make sure the slug contains name of the game + language"""
-        borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain-fr')
-        borgia_info = read_info_json(borgia_game_path)
+        borgia_info = self.borgia_info_content
         slug = get_resource_slug(borgia_info)
         self.assertEquals("game-borgia-le-jeu-malsain-fr", slug)
