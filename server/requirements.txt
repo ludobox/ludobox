@@ -20,7 +20,6 @@ Jinja2==2.9.6
 jsonpatch==1.15
 jsonpointer==1.10
 jsonschema==2.5.1
--e git+git@github.com:ludobox/ludobox.git@4d8173bb45669abe97fb6ddb4ddbff5124879f0c#egg=ludobox&subdirectory=server
 MarkupSafe==1.0
 passlib==1.7.1
 py==1.4.34
