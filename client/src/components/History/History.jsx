@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 
 export default class History extends React.Component {
 
@@ -16,9 +17,20 @@ export default class History extends React.Component {
   render() {
     const history = this.props.history ? this.props.history : []
 
-    const lis = history.map( event =>
-      <li key={event.ts}>{event.ts}</li>
-    )
+    const events = history.map( event => {
+      // parse date
+      let d = moment
+        .utc(event.ts*1000)
+        .local()
+        .format('MMMM Do YYYY, h:mm:ss a');
+      return (
+        <li key={event.id}>
+          <a href={`#${event.id}`}>
+            {event.type}d
+          </a> by {event.user} on {d}
+        </li>
+      )
+    })
     const { showDetails } = this.state
 
     return (
@@ -37,7 +49,7 @@ export default class History extends React.Component {
         {
           showDetails ?
           <ul>
-            {lis}
+            {events}
           </ul>
           :
           null

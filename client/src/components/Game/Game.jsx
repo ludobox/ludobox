@@ -4,7 +4,7 @@ import APIClient from "../../api.js"
 import GameForm from "../GameForm/GameForm.jsx"
 import ActionButtons from "../ActionButtons/ActionButtons.jsx"
 
-// import History from "../History/History.jsx"
+import History from "../History/History.jsx"
 
 import validator from 'is-my-json-valid'
 import model from '../../../../model/game.json'
@@ -56,6 +56,9 @@ export default class Game extends React.Component {
             files={files}
             errors={{}} // defaultProps to empty object
           />
+          <History
+            history={game.history}
+            />
           <ActionButtons
             slug={game.slug}
             user={this.props.user}
