@@ -235,8 +235,11 @@ def get_user_profile(user_id):
         user["recent_changes"]  = get_latest_changes(user["email"])
         return jsonify(user)
 
-@rest_api.route('/api/recent_changes/<int:user_id>', methods=['GET'])
+@rest_api.route('/api/recent_changes', methods=['GET'])
 def get_recent_changes(user_id):
+    username = request.args.get('username')
+    password = request.args.get('password')
+
     user = user_datastore.get_user(user_id)
     if user is None:
         return abort(404)
