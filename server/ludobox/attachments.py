@@ -6,6 +6,7 @@ Manipulate attachement files in the ludobox
 """
 
 import os
+from flask import current_app
 from werkzeug import secure_filename
 
 from ludobox.errors import LudoboxError
@@ -29,7 +30,6 @@ def check_attachments(attachments):
                         error="FileNotAllowed", # TODO create ValidationError
                         file_clean_name=f.filename)
             raise LudoboxError(message)
-
 
 def write_attachments(attachments, game_path):
     """Write all files contains in attachements into game directory"""
@@ -98,8 +98,9 @@ def delete_file(file_path):
         pass
     return file_path
 
-def get_attachements_list(resource_path):
-    files_path = os.path.join("data", os.path.join(resource_path,"files"))
+def get_attachements_list(slug):
+    content_path = os.path.join(current_app.config["DATA_DIR"], slug)
+    files_path = os.path.join(content_path,"files")
     if os.path.exists(files_path):
         file_list = os.listdir(files_path)
     else :

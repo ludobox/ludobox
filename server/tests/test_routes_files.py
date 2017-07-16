@@ -34,10 +34,12 @@ class TestLudoboxFilesServer(LudoboxTestCase):
 
     def test_api_serve_files_list_with_actual_files(self):
         """API shoud returns a list of files located in the /files folder"""
-        result = self.client.get('/api/files/game-borgia-le-jeu-malsain-fr')
-        data = json.loads(result.data)
-        self.assertEquals(len(data), 1)
-        self.assertEquals(data, ["README.md"])
+        with self.client as c:
+            result = c.get('/api/files/test-game')
+            data = result.json
+            print data
+            self.assertEquals(len(data), 1)
+            self.assertEquals(data, ["file1.txt"])
 
     def test_post_multiple_files(self):
         """Make sure we can post multiple files at once"""
