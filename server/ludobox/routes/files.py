@@ -5,8 +5,9 @@ import os
 import json
 
 from flask import Blueprint, abort, jsonify, request, current_app
-
 from ludobox.attachments import store_files, delete_file, get_attachements_list
+
+from api import login_required
 
 # JSON API blueprint
 files_api = Blueprint('files', __name__)
@@ -18,6 +19,7 @@ def api_serve_files_list(path):
 
 # @files_api_login_required
 @files_api.route('/api/files', methods=["POST"])
+@login_required
 def api_post_files():
     """
     This function allow to post 2 things :
@@ -43,6 +45,7 @@ def api_post_files():
 
 # @files_api_login_required
 @files_api.route('/api/files/<string:slug>/<path:path>', methods=["DELETE"])
+@login_required
 def api_delete_files(slug,path):
 
     content_path = os.path.join(current_app.config["DATA_DIR"], slug)

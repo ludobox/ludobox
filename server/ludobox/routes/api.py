@@ -55,7 +55,7 @@ def get_global_config():
     )
 
 # login decorator for API
-def rest_api_login_required(f):
+def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated is False:
@@ -68,7 +68,7 @@ def api_show_home():
     return jsonify(get_global_config())
 
 @rest_api.route('/api/create', methods=["POST"])
-@rest_api_login_required
+@login_required
 def api_create_resource():
     """
     This function allow to post 2 things :
@@ -96,7 +96,7 @@ def api_create_resource():
     return jsonify({"path" : data_path, "slug" : slugified_name}), 201
 
 @rest_api.route('/api/update', methods=["POST"])
-@rest_api_login_required
+@login_required
 def api_update_resource():
     """
     This function allow to post 2 things :

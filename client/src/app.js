@@ -4,6 +4,7 @@ import { IndexRedirect, Router, Route, Link, browserHistory } from 'react-router
 
 import App from './components/App.jsx'
 import Game from './components/Game/Game.jsx'
+import GameEdit from './components/GameEdit/GameEdit.jsx'
 import Games from './components/Games/Games.jsx'
 import AboutPage from './components/About/About.jsx'
 import Help from './components/Help/Help.jsx'
@@ -22,6 +23,7 @@ render((
       <Route path="download" component={RemoteGames}/>
       <Route path="games" component={Games} />
       <Route path="games/:gameSlug" component={Game}/>
+      <Route path="games/:gameSlug/edit" component={GameEdit}/>
       <Route path="profile" component={UserProfile} />
       <Route path="unauthorized" component={Page403}/>
       <Route path="*" component={Page404}/>
