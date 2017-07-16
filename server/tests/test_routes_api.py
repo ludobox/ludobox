@@ -230,6 +230,25 @@ class TestLudoboxWebServer(LudoboxTestCase):
             self.assertEqual(event["type"], "update")
             self.assertEqual(event["user"], self.user_email)
 
+    def test_current_user_profile(self):
+        """Check if current user get its profile properly"""
+        with self.client:
+            self.login()
+            result = self.client.get('/api/profile')
+            self.assertEqual(result.status_code, 200)
+            profile = result.json
+            self.assertEqual(profile["email"], self.user_email)
+            self.assertEqual(type(profile["recent_changes"]), list)
+
+    def test_user_profile(self):
+        """Check if we get profile for any user properly"""
+        with self.client:
+            self.login()
+            result = self.client.get('/api/profile/1')
+            self.assertEqual(result.status_code, 200)
+            profile = result.json
+            self.assertEqual(profile["email"], self.user_email)
+            self.assertEqual(type(profile["recent_changes"]), list)
     # def test_form_add_game(self):
     #     """Posting data and files using form should create a new game"""
     #

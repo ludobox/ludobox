@@ -28,6 +28,7 @@ from ludobox.flat_files import create_resource_folder
 from ludobox.data.crawler import download_from_server
 
 from ludobox.config import read_config
+from ludobox.user import get_latest_changes
 
 # parse config
 config = read_config()
@@ -221,6 +222,7 @@ def delete_files():
 @rest_api.route('/api/profile', methods=['GET'])
 def get_current_user_profile():
     user = current_user.to_json()
+    user["recent_changes"]  = get_latest_changes(user["email"])
     return jsonify(user)
 
 @rest_api.route('/api/profile/<int:user_id>', methods=['GET'])
@@ -229,7 +231,18 @@ def get_user_profile(user_id):
     if user is None:
         return abort(404)
     else :
-        return jsonify(user.to_json())
+        user = current_user.to_json()
+        user["recent_changes"]  = get_latest_changes(user["email"])
+        return jsonify(user)
+
+@rest_api.route('/api/recent_changes/<int:user_id>', methods=['GET'])
+def get_recent_changes(user_id):
+    user = user_datastore.get_user(user_id)
+    if user is None:
+        return abort(404)
+    else :
+        recent_changes  = get_latest_changes(user.email)
+        return jsonify(recent_changes)
 
 
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
