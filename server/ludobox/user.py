@@ -8,17 +8,25 @@ Everything related to user logics : latest_changes, profile, etc.
 from ludobox.content import get_content_index
 from ludobox.utils import get_resource_slug
 
-def get_latest_changes(user=None, time=None):
+from datetime import datetime
+
+def get_latest_changes(user=None, before_time=None):
     """
     Return all latest changes made on files.
     Filter is based on 2 params :
-    - user
-    - time
+    - user : email of the user
+    - time : int in epoch time
     """
 
-    if time is not None:
-        raise NotImplementedError("Filtering by time is not supported yet.")
+    # used for time comparison
+    time_limit = None
+
+    # get index with all content
     contents = get_content_index(short=False)
+
+    if before_time is not None:
+        assert type(before_time) is int
+        time_limit = datetime.fromtimestamp(before_time)
 
     histories = []
     for content in contents:
@@ -35,7 +43,22 @@ def get_latest_changes(user=None, time=None):
         history = thread[1]
         slug = thread[2]
         for event in history:
-            if event["user"] == user:
+
+            # send all events by default
+            keep_event = True
+
+            # check if user as specified a time limit
+            if time_limit :
+                time_event = datetime.fromtimestamp(event["ts"])
+                # check if the event should be included
+                if time_event > time_limit   :
+                    keep_event = False
+
+            if user and event["user"] != user :
+                keep_event = False
+
+            # store events
+            if keep_event:
                 lastest_changes.append(
                     {
                         "title" : title,

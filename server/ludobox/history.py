@@ -11,7 +11,7 @@ For each event, a unique SHA id is created (like git https://stackoverflow.com/q
 """
 
 import hashlib
-from datetime import datetime
+import time
 
 from jsonpatch import make_patch, JsonPatch
 
@@ -32,7 +32,7 @@ def new_event(event_type, content, user=None):
             "Event content should be a JSON-compatible object.")
 
     # timestamp
-    ts = datetime.now().isoformat()
+    ts = int(time.time())
 
     # generate unique ID using the whole content
     sha_1.update("%s - %s - %s - %s"%(event_type, content, user, ts) )
@@ -51,6 +51,7 @@ def is_valid_event(event):
     assert type(event["id"]) is str or unicode
     assert len(event["id"]) is 40
     assert type(event["content"]) is dict
+    assert type(event["ts"]) is int
     assert event["type"] in event_types
     return True
 
