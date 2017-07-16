@@ -10,117 +10,165 @@ import io
 from StringIO import StringIO
 
 from jsonschema import ValidationError
+from ludobox.errors import LudoboxError
 
 from ludobox.config import read_config
-from ludobox.content import read_game_info, validate_game_data, allowed_file, clean_game, get_resource_slug
-from ludobox.content import write_game, write_info_json, write_attachments
 
+from ludobox.flat_files import write_info_json
 
-class TestLudoboxContent(unittest.TestCase):
+from helpers import delete_data_path, create_empty_data_path, add_samples_to_data_dir
+
+from LudoboxTestCase import LudoboxTestCase
+
+from ludobox.content import get_content_type, validate_content, read_content, create_content, update_content_info, get_content_index, delete_content
+
+TEST_DATA_DIR = '/tmp/test-data'
+
+class TestLudoboxContent(LudoboxTestCase):
     """Functions to index, sort and search content"""
 
     def setUp(self):
-        self.config = read_config()
-        self.game_path = os.path.join(os.getcwd(), 'server/tests/test-data/test-game')
-        self.wrong_game_path = os.path.join(os.getcwd(), 'server/tests/test-data/wrong-game')
+        self.game_path = os.path.join(self.tmp_path,"test-game")
+        delete_data_path('/tmp/game-borgia-le-jeu-malsain-fr')
 
-        self.tmp_path = "/tmp/test-le-jeu-coquin"
-        clean_game(self.tmp_path)
+    def test_get_content_type(self):
+        data = {"content_type" : "game"}
+        self.assertEquals(get_content_type(data), "game")
+
+        # raise Error without content_type
+        self.assertRaises(LudoboxError, lambda : get_content_type({}))
+
+        data = {"content_type" : "dfsdfsd"}
+        self.assertRaises(AssertionError, lambda : get_content_type(data))
+
+        data = {"content_type" : "workshop"}
+        self.assertRaises(NotImplementedError, lambda : get_content_type(data))
 
     def test_borgia_game_data(self):
         """Make sure the borgias are okay with the model"""
-        borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain-fr')
-        print borgia_game_path
-        borgia_info = read_game_info(borgia_game_path)
-        self.assertEquals(validate_game_data(borgia_info), None)
+        borgia_game_path = os.path.join(self.tmp_path, 'game-borgia-le-jeu-malsain-fr')
+        borgia_info = read_content(borgia_game_path)
+        self.assertEquals(validate_content(borgia_info), None)
 
-    def test_get_resource_slug(self):
-        """Make sure the slug contains name of the game + language"""
-        borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain-fr')
-        print borgia_game_path
-        borgia_info = read_game_info(borgia_game_path)
-        slug = get_resource_slug(borgia_info)
-        print slug
-        self.assertEquals("borgia-le-jeu-malsain-fr", slug)
-
-    def test_validate_game_data(self):
+    def test_validate_content(self):
         """Make sure an info file is parsed properly"""
-        info = read_game_info(self.game_path)
-        self.assertEquals(validate_game_data(info), None)
+        info = read_content(self.game_path)
+        self.assertEquals(validate_content(info), None)
 
         # make sure error is raised with a basic mistake
         info_wrong = info.copy()
         info_wrong["description"] = 72
-        self.assertRaises(ValidationError, lambda:validate_game_data(info_wrong))
+        self.assertRaises(ValidationError, lambda:validate_content(info_wrong))
 
-    def test_read_game_info(self):
+    # TODO test this function with different scenari: existant/inexistant/not readable dir, info.json present/absent/not readable, with/without attached file
+    def test_read_content(self):
         """Make sure an info file is read properly"""
 
-        info = read_game_info(self.game_path)
-        with open(os.path.join(self.game_path, 'info.json'), 'r') as f:
-            json_data = json.load(f)
+        info = read_content(self.game_path)
+        self.assertTrue("title" in info.keys())
+        self.assertTrue("files" in info.keys())
+        self.assertEquals(len(info["files"]),1)
+        self.assertEquals(info["slug"], "borgia-le-jeu-malsain-fr")
 
-        json_data["slug"] = "2" # add slug
+    def test_read_content_validation(self):
+        """Wrong game should raises validation error"""
 
-        self.assertEquals(len(info.keys()), len(json_data.keys()) )
-        self.assertEquals(sorted(info.keys()), sorted(json_data.keys()))
 
-        # wrong game raises error
-        self.assertRaises(ValidationError, lambda:read_game_info(self.wrong_game_path))
+        wrong_content = self.borgia_info_content.copy()
+        wrong_content["title"] = 345
 
-    def test_allowed_files(self):
-        """Check if filenames are allowed"""
+        # create a bad record if needed
+        wrong_game_path = os.path.join(TEST_DATA_DIR,"wrong-game")
+        os.makedirs(wrong_game_path)
+        write_info_json(wrong_content, wrong_game_path)
 
-        self.assertTrue(allowed_file("bla.txt"))
-        self.assertTrue(allowed_file("bla.png"))
-        self.assertTrue(allowed_file("bla.jpg"))
-        self.assertTrue(allowed_file("bla.gif"))
-        self.assertTrue(allowed_file("bla.stl"))
-        self.assertTrue(allowed_file("bla.zip"))
-        self.assertFalse(allowed_file("bla.xxx"))
-        self.assertFalse(allowed_file("bla.123"))
+        self.assertRaises(ValidationError, lambda:read_content(wrong_game_path))
 
-    def test_writing_invalid_data(self):
+    def test_create_content_without_attachements(self):
+        """ Make sure that content is written properly"""
+        tmp = "/tmp"
+        info = self.borgia_info_content
+
+        new_game = create_content(info, None, tmp)
+
+        # dir and files are written properly
+        self.assertTrue(os.path.isdir(new_game))
+        json_path = os.path.join(new_game, "info.json")
+        self.assertTrue(os.path.exists(json_path))
+
+        new_game_info = read_content(new_game)
+
+        # basic check for simlarity
+        self.assertTrue(info["title"], new_game_info["title"])
+
+        # make sure history has been written
+        self.assertIn("history", new_game_info.keys())
+        self.assertTrue(len(new_game_info["history"]), 1)
+        event = new_game_info["history"][0]
+        self.assertTrue(event["type"], "create")
+
+    def test_create_content_invalid(self):
         """Make sure an error is raised before writing invalid data"""
-        info = read_game_info(self.game_path)
+        info = self.borgia_info_content
         info_wrong = info.copy()
         info_wrong["description"] = 72
-        self.assertRaises(ValidationError, lambda:write_info_json(info_wrong, self.tmp_path))
+        self.assertRaises(ValidationError, lambda:create_content(info_wrong, None, self.tmp_path))
 
-    def test_clean_game(self):
+    def test_create_content_already_existing(self):
+        tmp = "/tmp"
+        info = self.borgia_info_content
+
+        new_game = create_content(info, None, tmp)
+        self.assertRaises(LudoboxError, lambda : create_content(info, None, tmp))
+
+    def test_delete_content(self):
         """Make sure the directory is erased properly"""
-        os.makedirs(self.tmp_path) # create game path
-        clean_game(self.tmp_path)
+        delete_content(self.tmp_path)
         self.assertFalse(os.path.exists(self.tmp_path))
 
-    def test_write_info_json(self):
-        """Make sure the JSON info file is written properly"""
+    def test_update_content_info(self):
+        tmp = "/tmp"
+        info = self.borgia_info_content
 
-        # load data
-        info = read_game_info(self.game_path)
+        game_path = create_content(info, None, tmp)
+        game_info = read_content(game_path)
 
-        # create game path and write info file
-        os.makedirs(self.tmp_path)
-        write_info_json(info, self.tmp_path)
+        new_game_info = game_info.copy()
+        new_game_info["title"] = "bla bla bla"
 
-        # check if data has been written correctly
-        info_path = os.path.join(self.tmp_path, 'info.json')
-        self.assertTrue(os.path.exists(info_path))
-        with open(info_path, "r") as f :
-            data = json.load(f)
-        self.assertEquals(info, data)
+        updated_content = update_content_info(game_path, new_game_info)
+        self.assertEqual(len(updated_content["history"]), 2)
+        event = updated_content["history"][1]
+        self.assertEqual(event["type"], "update")
 
-    # TODO : find a way to test without Flask (tested in test_webserver.py anyway)
-    # def test_write_attachments(self):
-    #     """Make sure attachments are saved properly"""
-    #
-    #     test_files = [
-    #         (StringIO('my readme'), 'test-README.txt'),
-    #         (StringIO('my rules'), 'test-RULES.txt'),
-    #         (io.BytesIO(b"abcdef"), 'test.jpg')
-    #     ]
-    #
-    #     # create game path
-    #     os.makedirs(self.tmp_path)
-    #
-    #     write_attachements(test_files, self.tmp_path)
+    def test_create_slug_once_and_for_all(self):
+
+        tmp = "/tmp"
+        slug = "game-bla-bla-bla-fr"
+
+        # clean
+        delete_data_path(os.path.join(tmp, slug))
+
+        info = self.borgia_info_content.copy()
+        info["title"] = "bla bla bla"
+        info.pop('slug', None) # remove slug
+
+        self.assertRaises(KeyError, lambda : info["slug"])
+
+        game_path = create_content(info, None, tmp)
+
+        game_info = read_content(game_path)
+        self.assertEqual(game_info["slug"], "game-bla-bla-bla-fr")
+
+        new_game_info = info.copy()
+        new_game_info["title"] = "bla bla bla 2"
+
+        updated_content = update_content_info(game_path, new_game_info)
+        self.assertEqual(slug,updated_content["slug"])
+        self.assertEqual(game_info["slug"],updated_content["slug"])
+
+    # TODO : better config parameter to make this testable
+    # def test_get_content_index(self):
+        # print get_content_index()
+        # pass
+        # self.assertTrue(False)

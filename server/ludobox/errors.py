@@ -13,7 +13,7 @@ class LudoboxError(Exception):
 
     def __init__(self, message, status_code=None, payload=None):
         """Set the message for the exception."""
-        Exception.__init__(self)
+        Exception.__init__(self, message)
         self.message = message
         if status_code is not None:
             self.status_code = status_code

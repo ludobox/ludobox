@@ -4,10 +4,10 @@ export default class Page404 extends React.Component {
 
   render() {
     return (
-      <p>
+      <div>
         <h1>Ludobox</h1>
         <p>Wooops... nothing here !</p>
-      </p>
+      </div>
     )
   }
 }

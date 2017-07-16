@@ -1,49 +1,75 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This file regoups all operations related to content manipulation (create, update, read, validate, delete)
+
+There are three kinds of content :
+- game
+- workshop
+- page
+
+"""
 
 import os
 import json
-import shutil
-from datetime import datetime
 
-from jsonpatch import make_patch
+from flask import current_app
+from flask_security import current_user
+
 from ludobox.utils import json_serial # convert datetime
 
-from werkzeug import secure_filename
-from slugify import slugify
 from jsonschema import validate, ValidationError
 
-from ludobox.errors import LudoboxError
 from ludobox.config import read_config
+from ludobox.attachments import write_attachments, get_attachements_list, check_attachments
+
+from ludobox.flat_files import create_resource_folder, write_info_json, delete_resource_folder, read_info_json
+from ludobox.errors import LudoboxError
+from ludobox.utils import get_resource_slug
+from ludobox.history import make_create_event, make_update_event, add_event_to_history
 
 config = read_config()
 
-with open(os.path.join(os.getcwd(), "model/schema.json")) as f :
-    schema = json.load(f)
+# define contents
+VALID_CONTENT_TYPES = ["game", "workshop", "page"]
 
-def get_resource_slug(data):
-    """Get the slugified name of the game based on the data set"""
-    try:
-        slug = slugify(data["title"])
-        # add language
-        language = data["audience"]["language"]
-        return "%s-%s"%(slug,language)
-    except KeyError as e:
-        # TODO more explicit error message
-        message = "KeyError occured while "\
-                  "writing game info file to path '{path}'. "\
-                  "Impossible to access data['title'].".format(
-                    path=data)
+# load models
+schemas = {}
+with open(os.path.join(os.getcwd(), "model/game.json")) as game_schema_file :
+    schemas["game"] = json.load(game_schema_file)
+
+def get_content_type(data):
+
+    # try to guess the content type
+    try :
+        content_type = data["content_type"]
+    except KeyError:
+        message = "<Missing Content Type> You need to explicitely "\
+        "define a 'content_type' property to read this content. "\
+        "Authorized content types are : {allowed}".format(
+            allowed=" ,".join(VALID_CONTENT_TYPES)
+            )
         raise LudoboxError(message)
 
-def validate_game_data(data):
-    """Validate game data based on existing data VS a JSON Schema"""
-    return validate(data, schema)
+    assert content_type in VALID_CONTENT_TYPES
 
-# TODO test this function with different scenari: existant/inexistant/not
-#   readable dir, info.json present/absent/not readable, with/without attached
-#   file
-def read_game_info(path):
+    # TODO : implement those guys
+    if content_type in ["page", "workshop"] :
+        raise NotImplementedError("Page and workshop... coming soon !")
+
+    return content_type
+
+def validate_content(data):
+    """
+    Validate game data VS a JSON Schema
+
+    returns a list of errors or None if valid
+    """
+    content_type = get_content_type(data)
+    errors = validate(data, schemas[content_type])
+    return errors
+
+def read_content(path):
     """
     Read all the info available about the game stored at the provided path.
 
@@ -52,290 +78,136 @@ def read_game_info(path):
 
     Returns a dictionary containing the game data.
 
-    >>> data = read_game_info("tests/functional/data/hackathon/borgia-le-jeu-malsain")
-    >>> print(', '.join(data['audience']))
-    adults
-    >>> print(', '.join(data['authors']))
-    René
-    >>> print(', '.join(data['themes']['fr']))
-    Médiéval, Salopard
-
-    If anythin goes wrong raise a LudoboxError containing description of the
-    error and advice for fixing it.
-
-    >>> try:
-    ...     data = read_game_info("stupid_path/no_game")
-    ... except LudoboxError as e:
-    ...     print(e.message)
-    <No such file or directory> occured while reading game 'no_game' info file 'stupid_path/no_game/info.json'
-
-    The game data can come from:
+    The game data contains:
     *   the info.json file
-    *   the attached files found in the dir
-    *   somme are also computed from other data like a cleaned name suitable
-        for url generation (slugified name)
+    *   a list of attached files found in the '/files' dir
     """
-    # Load JSON from the description file of the game
-    json_path = os.path.join(path, "info.json")
-    try:
-        with open(json_path, "r") as json_file:
-            data = json.load(json_file)
-    except IOError as e:
-        # TODO Handle more precisely the error and provide an advice for
-        #   solving the problem
-        # Create a very explicit message to explain the problem
-        message = "<{error}> occured while "\
-                  "reading game '{game}' info file '{json}'".format(
-                    error=e.strerror,
-                    game=os.path.basename(path),
-                    json=e.filename)
-        raise LudoboxError(message)
+
+    data = read_info_json(path)
 
     # validate data
-    validate_game_data(data)
+    validate_content(data)
 
-    # TODO Add some attachment info
-
-    # Add permalink
-    data["slug"] = get_resource_slug(data)
+    # add files attachments list
+    data["files"] = get_attachements_list(path)
 
     return data
 
-def create_game_path(game_path) :
-    """Create the dir to store the game"""
-    try:
-        os.makedirs(game_path)
-    except Exception as e:
-        message = "<{error}> occured while "\
-                  "writing game info file to path '{path}'."\
-                  "Impossible to create "\
-                  "directory '{game_path}'.".format(
-                    error=e.strerror,
-                    path=config['data_dir'],
-                    game_path=os.path.abspath(game_path))
-        raise LudoboxError(message)
-    print "path created : %s"%game_path
-
-def write_game(info, attachments, data_dir):
+def create_content(info, attachments, data_dir):
     """
     Write a JSON file description of a game according to the provided data and
     attachment files in a dedicated directory named after the game.
 
     Arguments:
-    info -- a dictionnary storing all the information about the game. It
+    info -- a dictionnary storing all the information about the content. It
             exactly mimic the structure of the disired JSON file. The
             data["title"] must exist, no other verification is made to
             check it contains coherent structure or data.
-    attachments -- list of files attached to the game (rules, images...).
+    attachments -- list of files attached to the content (images, PDF...). All files will be stored in a '/files' folder
     data_dir -- directory where all the game directories are stored i.e. where
-                a directory named after the game will be created to store the
+                a directory named after the content will be created to store the
                 JSON file. It must exist.
 
-    Returns the path to the directory created to store the JSON file (it
-    should be named after the game!).
-
-    Raises a LudoboxError if anything goes wrong.
-
-    the :func:`write_game_info()` and :func:`read_game_info()` function should
-    work nicely together. Any file writen with the first should be readable by
-    the second:
+    Returns the path to the directory created after the name of the slugified title of the content.
     """
 
+    # get slug and add name
     slugified_name = get_resource_slug(info)
+    info["slug"] = slugified_name
 
-    # Create a directory after the cleaned name of the game
-    game_path = os.path.join(data_dir, slugified_name)
-    create_game_path(game_path)
+    # if info about files, remove it
+    info.pop('files', None)
 
-    # create JSON resource
-    write_info_json(info, game_path)
+    # validate game data
+    validate_content(info)
+
+    # check attachments
+    if attachments:
+        check_attachments(attachments)
+
+    # Create a directory after the cleaned name of the content
+    content_path = os.path.join(data_dir, slugified_name)
+    create_resource_folder(content_path)
+
+    # get current user
+    user = None
+    if current_user.is_authenticated :
+        user = current_user.email
+
+    # create event and add to history record
+    event = make_create_event(info, user=user)
+    info_with_updated_history = add_event_to_history(info, event)
+
+    # create the JSON file
+    write_info_json(info_with_updated_history, content_path)
 
     # Write the attached files
     if attachments:
-        try :
-            write_attachments(attachments, game_path)
-        except LudoboxError as e:
-            raise LudoboxError(str(e))
+        write_attachments(attachments, content_path)
 
-    return game_path
+    return content_path
 
-def clean_game(game_path):
-    """Delete an existing rep containing data of a game"""
-    if os.path.exists(game_path):
-        shutil.rmtree(game_path, ignore_errors=True)
-
-def write_info_json(info, game_path):
-    """Write a JSON file based on valid resource data"""
-
-    # validate game data
-    try:
-        validate_game_data(info)
-    except ValidationError as e:
-        print e
-        # Cleanup anything previously created
-        clean_game(game_path)
-        raise ValidationError(e)
-
-    # Convert the data to JSON into file
-    content = json.dumps(info, sort_keys=True, indent=4, default=json_serial)
-    json_path = os.path.join(game_path, "info.json")
-
-    try:
-        with open(json_path, "w") as json_file:
-            json_file.write(content.encode('utf-8'))
-    except IOError as e:
-        # Cleanup anything previously created
-        clean_game(game_path)
-
-        # TODO Handle more explicit message
-        message = "<{error}> occured while "\
-                  "writing game info file to path '{path}'"\
-                  "Impossible to write JSON file '{json}'.".format(
-                    error=e.strerror,
-                    path=game_path,
-                    json=json_path)
-        raise LudoboxError(message)
-
-ALLOWED_EXTENSIONS = ["txt", "png", "jpg", "gif", "stl", "zip", "pdf"]
-
-def allowed_file(filename):
-    """Check for valid file extensions"""
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def write_attachments(attachments, game_path):
-    """Write all files contains in attachements into game directory"""
-
-    # Create a directory to store the uploaded files
-    attachments_path = os.path.join(game_path, "files")
-    try:
-        if not os.path.exists(attachments_path):
-            os.makedirs(attachments_path)
-    except Exception as e:
-        message = "<Error> occured while "\
-                  "writing game info to path '{path}'. "\
-                  "Impossible to create "\
-                  "directory '{attachments_path}' to store the attached "\
-                  "files.".format(
-                    path=game_path,
-                    attachments_path=os.path.abspath(attachments_path))
-        print message
-        raise LudoboxError(message)
-
-    # Write all the files
-    for f in attachments:
-        file_clean_name = secure_filename(f.filename)
-
-        # check if extension is allowed
-        # TODO: check for more security issues ?
-        if not allowed_file(file_clean_name):
-            message = "<{error}> occured while "\
-                      "writing. Impossible to save file"\
-                      "'{file_clean_name}' because exstension is not allowed".format(
-                        error="FileNotAllowed", # TODO create ValidationError
-                        file_clean_name=file_clean_name)
-
-            raise LudoboxError(message)
-
-        file_path = os.path.join(attachments_path, file_clean_name)
-        print file_path
-        try:
-            f.save(file_path)
-        except Exception as e:
-            message = "<{error}> occured while "\
-                      "writing game info to path '{path}'."\
-                      "Impossible to save file"\
-                      "'{file_path}' in the attachment directory "\
-                      "'{attachments_path}'.".format(
-                        error=e.strerror,
-                        path=data_dir,
-                        file_path=os.path.abspath(file_path),
-                        attachments_path=os.path.abspath(attachments_path))
-            raise LudoboxError(message)
-
-def get_games_index():
-    """Loop through all and parse an index of available games"""
-    info_files = []
-
-    # loop through all folders
-    for item in os.listdir(config["data_dir"]) :
-        path = os.path.join(config["data_dir"],item)
-        # get only folders
-        if os.path.isdir(path):
-            info_file = os.path.join(path, "info.json")
-            # check if folder contains a info.json file
-            if os.path.exists(info_file):
-                info = read_game_info(path)
-                wanted_keys = [
-                    "title",
-                    "description",
-                    "slug",
-                    "audience",
-                    "content_type",
-                    "fabrication"
-                    ]
-
-                info_files.append({ k : info[k] for k in wanted_keys if k in info.keys() })
-
-    sorted_info_files = sorted(info_files, key=lambda k: k['title'])
-    return sorted_info_files
-
-def update_game_info(game_path, new_game_info):
+def update_content_info(resource_path, new_info):
     """
     Update game info based on changes
 
     - create patch changes using JSON patch (RFC 6902)
     - store patch in an history array within the JSON file
-    - replace info original content with updated content
+    - replace original info content with updated content
     """
 
-    original_info = read_game_info(game_path)
+    original_info = read_content(resource_path)
+
+    # get current user
+    user = None
+    if current_user.is_authenticated :
+        user = current_user.email
 
     # create patch
-    patch = make_patch(new_game_info,original_info)
+    event = make_update_event(new_info, original_info, user=user)
 
-    if not len(list(patch)) :
+    if event is None :
         return original_info
 
-    # if patch
-    # parse an event
-    event = {
-        "patch" : patch,
-        "ts" : datetime.now().isoformat()
-    }
-
-    # init history if empty
-    if "history" not in new_game_info.keys():
-        new_game_info["history"] = []
-
-    # add event to history
-    new_game_info["history"].append(event)
+    new_info_with_history = add_event_to_history(original_info, event)
 
     # write updated game to file
-    write_info_json(new_game_info, game_path )
-    return new_game_info
+    write_info_json(new_info_with_history, resource_path)
+    return new_info_with_history
 
-def store_files(game_path, attachments):
-    """
-    Write files
+def get_content_index(short=True):
+    """Loop through all and parse an index of available content"""
+    info_files = []
 
-    - attachments: files to be uploaded to the game folder
-    - path
-    """
-    print attachments
+    # get an abbreged version of the index
+    if short :
+        wanted_keys = [
+            "title",
+            "description",
+            "slug",
+            "audience",
+            "content_type"
+            ]
 
-    # Write the attached files
-    if attachments:
-        try :
-            write_attachments(attachments, game_path)
-        except LudoboxError as e:
-            raise LudoboxError(str(e))
+    # loop through all folders
+    for item in os.listdir(current_app.config["DATA_DIR"]) :
+        path = os.path.join(current_app.config["DATA_DIR"],item)
 
-    return game_path
+        # get only folders
+        if os.path.isdir(path):
+            info_file = os.path.join(path, "info.json")
 
-def delete_file(file_path):
-    try:
-        os.remove(file_path)
-    except OSError:
-        pass
-    return file_path
+            # check if folder contains a info.json file
+            if os.path.exists(info_file):
+                info = read_content(path)
+                if short :
+                    info_files.append({ k : info[k] for k in wanted_keys if k in info.keys() })
+                else :
+                    info_files.append(info)
+
+    sorted_info_files = sorted(info_files, key=lambda k: k['title'])
+    return sorted_info_files
+
+def delete_content(game_path):
+    """Remove useless elements from the game folder."""
+    delete_resource_folder(game_path)

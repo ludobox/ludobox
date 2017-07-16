@@ -71,6 +71,8 @@ export default class GameForm extends React.Component {
     } = this.props.game
 
     const { editMode, errors } = this.props
+
+    // TODO : make title editable
     return (
       <div>
         <h1>

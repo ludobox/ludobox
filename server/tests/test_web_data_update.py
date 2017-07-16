@@ -11,7 +11,7 @@ class TestLudoboxWebDataUpdate(unittest.TestCase):
     """Testing utils function"""
 
     def setUp(self):
-        test_config_file = os.path.join(os.getcwd(),"server/tests/test_config.yml")
+        test_config_file = os.path.join(os.getcwd(),"server/tests/config.test.yml")
         self.config = read_config(config_path=test_config_file)
         print self.config
 
