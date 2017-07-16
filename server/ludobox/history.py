@@ -13,6 +13,8 @@ For each event, a unique SHA id is created (like git https://stackoverflow.com/q
 import hashlib
 import time
 
+import json
+
 from jsonpatch import make_patch, JsonPatch
 
 # TODO :  implement state changes (draft -> reviewed, etc.)
@@ -67,10 +69,12 @@ def add_event_to_history(content_previous_version, event):
     # immutable: clone original reference
     content_with_updated_history = content_previous_version.copy()
 
+    print content_previous_version
+    print event
+
     # re-apply changes and store last version
     if event["type"] == "update":
-        content_with_updated_history = apply_update_patch(content_with_updated_history, event
-        )
+        content_with_updated_history = apply_update_patch(content_with_updated_history, event)
 
     # init history if empty
     if "history" not in content_with_updated_history.keys():
@@ -95,21 +99,27 @@ def make_create_event(content, user=None):
     event = new_event("create", content.copy(), user)
     return event
 
-def make_update_event(new_content, old_content, user=None):
+def make_update_event(old_content, new_content, user=None):
 
     # make things immutable
     new = new_content.copy()
     old = old_content.copy()
 
-    # make sure content has no history
-    if "history" in new.keys() and len(new["history"]) !=0:
-        new.pop('history', None)
-
-    if "history" in old.keys() and len(old["history"]) !=0:
-        old.pop('history', None)
+    # make sure ro remove history and files
+    new.pop('history', None)
+    new.pop('files', None)
+    old.pop('history', None)
+    old.pop('files', None)
 
     # create json diff
     patch = make_patch(new, old)
+
+    print json.dumps(new, indent=4, sort_keys=True)
+    print "-"*10
+    print json.dumps(old, indent=4, sort_keys=True)
+    print "-"*10
+    print patch
+    print
 
     # check if there is actual changes
     if not len(list(patch)) :

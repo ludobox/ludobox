@@ -88,7 +88,7 @@ class TestLudoboxHistory(LudoboxTestCase):
         created_game = add_event_to_history({}, creation)
 
         # update the game
-        event = make_update_event(game_content, new_game_content)
+        event = make_update_event(new_game_content, game_content)
         self.assertEquals(is_valid_event(event), True)
         self.assertEquals(event["type"], "update")
         self.assertEquals(type(event["content"]["changes"]), list)
@@ -108,7 +108,7 @@ class TestLudoboxHistory(LudoboxTestCase):
         created_game = add_event_to_history(game_content, creation)
 
         new_game_content_1 = { "title" : "My test game"}
-        update1 = make_update_event(game_content, new_game_content_1)
+        update1 = make_update_event(new_game_content_1, game_content)
         updated_game = add_event_to_history(created_game, update1)
 
         self.assertEquals(updated_game["title"], new_game_content_1["title"])
@@ -117,7 +117,7 @@ class TestLudoboxHistory(LudoboxTestCase):
             "title" : "My test game",
             "description" : "An awesome game"
         }
-        update2 = make_update_event(game_content, new_game_content_2)
+        update2 = make_update_event(new_game_content_2, game_content)
         updated_game = add_event_to_history(updated_game, update2)
 
         self.assertTrue("description" in updated_game.keys())
@@ -127,7 +127,7 @@ class TestLudoboxHistory(LudoboxTestCase):
             "description" : "A very awesome game",
             "fab_time" : 120
             }
-        update3 = make_update_event(game_content, new_game_content_3)
+        update3 = make_update_event(new_game_content_3, game_content)
         updated_game = add_event_to_history(updated_game, update3)
 
         self.assertTrue("fab_time" in updated_game.keys())
