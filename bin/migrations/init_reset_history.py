@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 """
 A script to reset history with events that are not valid
 
@@ -51,7 +52,6 @@ def confirm_user():
         return True
     elif confirm == 'n' :
         return False
-
 
 needs_update = []
 
