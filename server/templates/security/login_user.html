@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "login_layout.html" %}
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 
 {% block body %}
@@ -32,5 +32,5 @@
         </div>
     </div>
   </form>
-  <a href="{{ url_for_security('register') }}">Register</a>
+  <a href="{{ url_for_security('register') }}">Not a user ? Register now</a>
 {% endblock %}

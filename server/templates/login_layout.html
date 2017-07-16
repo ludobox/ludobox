@@ -24,11 +24,6 @@
 
   {% block body %}{% endblock %}
 
-  {% if not session.logged_in %}
-    <a href="{{ url_for_security('login') }}">Log In</a>
-  {% else %}
-    <a href="{{ url_for_security('logout') }}">Log Out</a>
-  {% endif %}
   </div>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
