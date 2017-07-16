@@ -6,6 +6,7 @@ install:
   - "cd server"
   - "python setup.py install"
   - "pip install -r dev-requirements.txt"
+  - "cd .."
   - "cp config.yml.sample config.yml"
   - "python ./bin/migrations/init_db.py"
 # command to run tests
