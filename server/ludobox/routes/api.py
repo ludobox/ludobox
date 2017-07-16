@@ -63,28 +63,16 @@ def rest_api_login_required(f):
     return decorated_function
 
 @rest_api.route('/api')
-def show_hand():
+def api_show_home():
     return jsonify(get_global_config())
 
-@rest_api.route('/api/games')
-def serve_games_json_index():
-    games_index = get_content_index()
-    return jsonify(games_index)
-
-@rest_api.route('/api/games/<path:path>')
-def serve_rest_api(path):
-    if path[-4:] == "json" :
-        return send_from_directory('data', path, mimetype='application/json')
-    else :
-        return send_from_directory('data', path)
-
 @rest_api.route('/api/files/<path:path>')
-def serve_files_list(path):
+def api_serve_files_list(path):
     file_list = get_attachements_list(path)
     return jsonify(file_list)
 
 @rest_api.route('/api/clone', methods=["POST"])
-def clone_resource():
+def api_clone_resource():
     """
     This function clone a resource
     it takes a valid JSON description of the game
@@ -135,7 +123,7 @@ def clone_resource():
 
 @rest_api.route('/api/create', methods=["POST"])
 @rest_api_login_required
-def create_resource():
+def api_create_resource():
     """
     This function allow to post 2 things :
 
@@ -163,7 +151,7 @@ def create_resource():
 
 @rest_api.route('/api/update', methods=["POST"])
 @rest_api_login_required
-def update_resource():
+def api_update_resource():
     """
     This function allow to post 2 things :
 
@@ -185,7 +173,7 @@ def update_resource():
 
 @rest_api_login_required
 @rest_api.route('/api/postFiles', methods=["POST"])
-def post_files():
+def api_post_files():
     """
     This function allow to post 2 things :
 
@@ -208,7 +196,7 @@ def post_files():
 
 @rest_api_login_required
 @rest_api.route('/api/deleteFile', methods=["POST"])
-def delete_files():
+def api_delete_files():
 
     to_delete = json.loads(request.form["toDelete"])
     print to_delete
@@ -223,54 +211,15 @@ def delete_files():
 
     return jsonify({"message" : "files added", "files" : file_list }), 203
 
-@rest_api.route('/api/profile', methods=['GET'])
-def get_current_user_profile():
-    if current_user.is_authenticated:
-        user = current_user.to_json()
-        user["recent_changes"]  = get_latest_changes(user=user["email"])
-        return jsonify(user)
-    else :
-        abort(403)
-
-@rest_api.route('/api/profile/<int:user_id>', methods=['GET'])
-def get_user_profile(user_id):
-    user = user_datastore.get_user(user_id)
-    if user is None:
-        return abort(404)
-    else :
-        user = current_user.to_json()
-        user["recent_changes"]  = get_latest_changes(user=user["email"])
-        return jsonify(user)
-
-@rest_api.route('/api/recent_changes', methods=['GET'])
-def get_recent_changes():
-
-    # get user email
-    user_id = request.args.get('user_id')
-    user_email = None
-    user = user_datastore.get_user(user_id)
-    print user
-    if user is not None :
-        user_email = user.to_json()["email"]
-
-    # get time
-    before_time = request.args.get('before_time')
-    if before_time:
-        before_time = int(before_time)
-
-    recent_changes  = get_latest_changes(user=user_email, before_time=before_time)
-
-    return jsonify(recent_changes)
-
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
 @rest_api.route('/<path:path>', methods=['GET'])
-def catch_all(path):
+def api_catch_all(path):
     """Serve the main page."""
     return render_template('index.html', initial_data=get_global_config())
 
 # add unlimited CORS access
 @rest_api.after_request
-def add_cors(resp):
+def api_add_cors(resp):
     """ Ensure all responses have the CORS headers. This ensures any failures are also ccessible
          by the client. """
     resp.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin','*')
@@ -285,7 +234,7 @@ def add_cors(resp):
 
 # register error handler
 @rest_api.errorhandler(LudoboxError)
-def handle_invalid_usage(error):
+def api_handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
