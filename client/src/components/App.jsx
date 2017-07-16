@@ -34,8 +34,6 @@ export default class App extends React.Component {
   }
 
   render() {
-
-
     // pass API children
     const childrenWithProps = React.Children.map(this.props.children,
      (child) => React.cloneElement(child, {
