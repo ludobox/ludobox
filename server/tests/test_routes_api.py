@@ -3,31 +3,13 @@
 
 import os
 import json
-import unittest
-import shutil
 
-import io
-from StringIO import StringIO
-
-from flask_testing import TestCase
-
-from jsonschema import validate, ValidationError
-
-from flask import session
-from flask_security import current_user, url_for_security
-
-from ludobox.run import get_server_port
 from ludobox.content import read_content
-from ludobox.models import User, Role, db
-from ludobox.security import user_datastore
-
 from ludobox.routes.api import rest_api
 
 # test helpers
 from LudoboxTestCase import LudoboxTestCase
 from helpers import delete_data_path, create_empty_data_path, add_samples_to_data_dir
-
-TEST_DATA_DIR = '/tmp/test-data'
 
 class TestLudoboxWebServer(LudoboxTestCase):
 
@@ -42,41 +24,17 @@ class TestLudoboxWebServer(LudoboxTestCase):
             password=self.user_password
             )
 
-    def test_login_logout(self):
-        rv = self.login(email=None, password=None)
-        self.assertFalse(current_user.is_authenticated)
-        rv = self.logout()
-        self.assertFalse(current_user.is_authenticated)
-        with self.client:
-            self.login()
-            self.assertTrue(current_user.is_authenticated)
-
-    def test_get_server_port(self):
-        """Test default and custom port for server"""
-        self.assertEquals(get_server_port(None), 8080)
-        self.assertEquals(get_server_port(4040), 4040)
-
     def test_home_status_code(self):
         result = self.client.get('/')
 
         # assert the status code of the response (redirected)
         self.assertEqual(result.status_code, 200)
 
-    def test_handshake_page(self):
-        result = self.client.get('/api')
+    def test_api_show_home(self):
 
+        result = self.client.get('/api')
         self.assertEqual(result.status_code, 200)
         # self.assertEqual(json.loads(result.data), {"name" : self.config["ludobox_name"]})
-
-    def test_files_api_with_no_files(self):
-        result = self.client.get('/api/files/dsdqdqs')
-        data = json.loads(result.data)
-        self.assertEquals(data, [])
-
-    def test_files_api_with_no_files(self):
-        result = self.client.get('/api/files/borgia-le-jeu-malsain-fr')
-        data = json.loads(result.data)
-        self.assertEquals(data, ["README.md"])
 
     def test_upload_allowed(self):
         # self.login(email=self.user_email, password=self.user_password)
@@ -100,17 +58,11 @@ class TestLudoboxWebServer(LudoboxTestCase):
         create_empty_data_path(self.app.config["DATA_DIR"])
 
         data = {
-            'files': [
-                (StringIO('my readme'), 'test-README.txt'),
-                (StringIO('my rules'), 'test-RULES.txt'),
-                (io.BytesIO(b"abcdef"), 'test.jpg')
-            ],
+            'files': self.files,
             'info': json.dumps(valid_info)
         }
 
         with self.app.test_client() as c:
-
-            print current_user
 
             result = c.post('/api/create',
                                     data=data,
@@ -123,18 +75,14 @@ class TestLudoboxWebServer(LudoboxTestCase):
     def test_api_create_content(self):
 
         # create empy path for data
-        delete_data_path(TEST_DATA_DIR)
-        create_empty_data_path(TEST_DATA_DIR)
+        delete_data_path(self.tmp_path)
+        create_empty_data_path(self.tmp_path)
 
         # load info without history
         valid_info = self.borgia_info_content
 
         data = {
-            'files': [
-                (StringIO('my readme'), 'test-README.txt'),
-                (StringIO('my rules'), 'test-RULES.txt'),
-                (io.BytesIO(b"abcdef"), 'test.jpg')
-            ],
+            'files': self.files,
             'info': json.dumps(valid_info)
         }
         with self.client:
@@ -162,18 +110,14 @@ class TestLudoboxWebServer(LudoboxTestCase):
         """Make sure the reference to user is correctly saved in history"""
 
         # create empy path for data
-        delete_data_path(TEST_DATA_DIR)
-        create_empty_data_path(TEST_DATA_DIR)
+        delete_data_path(self.tmp_path)
+        create_empty_data_path(self.tmp_path)
 
         # load info without history
         valid_info = self.borgia_info_content
 
         data = {
-            'files': [
-                (StringIO('my readme'), 'test-README.txt'),
-                (StringIO('my rules'), 'test-RULES.txt'),
-                (io.BytesIO(b"abcdef"), 'test.jpg')
-            ],
+            'files': self.files,
             'info': json.dumps(valid_info)
         }
 
@@ -232,11 +176,7 @@ class TestLudoboxWebServer(LudoboxTestCase):
     #
     #     valid_info = read_content(os.path.join(os.getcwd(), 'server/tests/test-data/test-game'))
     #     data = {
-    #         'files': [
-    #             (StringIO('my readme'), 'test-README.txt'),
-    #             (StringIO('my rules'), 'test-RULES.txt'),
-    #             (io.BytesIO(b"abcdef"), 'test.jpg')
-    #         ],
+    #         'files': self.files,
     #         'info': json.dumps(valid_info)
     #     }
     #

@@ -21,7 +21,7 @@ from ludobox import __version__
 
 from ludobox.content import write_info_json, create_content, get_content_index, get_resource_slug, update_content_info
 
-from ludobox.attachments import store_files, delete_file, get_attachements_list
+from ludobox.attachments import get_attachements_list
 
 from ludobox.errors import LudoboxError
 from ludobox.flat_files import create_resource_folder
@@ -65,11 +65,6 @@ def rest_api_login_required(f):
 @rest_api.route('/api')
 def api_show_home():
     return jsonify(get_global_config())
-
-@rest_api.route('/api/files/<path:path>')
-def api_serve_files_list(path):
-    file_list = get_attachements_list(path)
-    return jsonify(file_list)
 
 @rest_api.route('/api/clone', methods=["POST"])
 def api_clone_resource():
@@ -170,46 +165,6 @@ def api_update_resource():
         "path" : content_path,
         "message" : "ok! Game %s has been updated."%new_game_info["title"]
         }), 201
-
-@rest_api_login_required
-@rest_api.route('/api/postFiles', methods=["POST"])
-def api_post_files():
-    """
-    This function allow to post 2 things :
-
-    * files : an array of files
-    * slug : path/slug of the game
-
-    """
-
-    files = request.files.getlist('files')
-    print("UPLOADED FILES:", [f.filename for f in files])
-
-
-    game_slug = json.loads(request.form["slug"])
-    content_path = os.path.join(app.config["DATA_DIR"], game_slug)
-
-    store_files(content_path, files)
-
-    file_list =get_attachements_list(content_path)
-    return jsonify({"message" : "files added", "files" : file_list }), 201
-
-@rest_api_login_required
-@rest_api.route('/api/deleteFile', methods=["POST"])
-def api_delete_files():
-
-    to_delete = json.loads(request.form["toDelete"])
-    print to_delete
-
-    content_path = os.path.join(app.config["DATA_DIR"], to_delete["slug"])
-    to_delete_path = os.path.join(os.path.join(content_path, "files"), to_delete["fileName"])
-    print to_delete_path
-
-    delete_file(to_delete_path)
-
-    file_list =get_attachements_list(content_path)
-
-    return jsonify({"message" : "files added", "files" : file_list }), 203
 
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
 @rest_api.route('/<path:path>', methods=['GET'])

@@ -5,6 +5,9 @@ import os
 import json
 import shutil
 
+import io
+from StringIO import StringIO
+
 import unittest
 from flask_testing import TestCase
 from flask_security import current_user, url_for_security
@@ -94,6 +97,13 @@ class LudoboxTestCase(TestCase):
 
         # propagate the exceptions to the test client
         self.client.testing = True
+
+        # create random files
+        self.files = [
+            (StringIO('my readme'), 'test-README.txt'),
+            (StringIO('my rules'), 'test-RULES.txt'),
+            (io.BytesIO(b"abcdef"), 'test.jpg')
+        ]
 
     def tearDown(self):
         self.logout()

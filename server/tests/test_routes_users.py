@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from flask_security import current_user, url_for_security
+
 from ludobox.routes.api import rest_api
 from ludobox.routes.users import users_api
 
@@ -21,6 +23,15 @@ class TestLudoboxUsersServer(LudoboxTestCase):
             email=self.user_email,
             password=self.user_password
             )
+
+    def test_login_logout(self):
+        rv = self.login(email=None, password=None)
+        self.assertFalse(current_user.is_authenticated)
+        rv = self.logout()
+        self.assertFalse(current_user.is_authenticated)
+        with self.client:
+            self.login()
+            self.assertTrue(current_user.is_authenticated)
 
     def test_user_profile(self):
         """Check if we get profile for any user properly"""
