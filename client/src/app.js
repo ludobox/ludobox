@@ -8,8 +8,10 @@ import Games from './components/Games/Games.jsx'
 import AboutPage from './components/About/About.jsx'
 import Help from './components/Help/Help.jsx'
 import AddGame from './components/AddGame/AddGame.jsx'
-import Page404 from './components/404/404.jsx'
 import RemoteGames from './components/RemoteGames/RemoteGames.jsx'
+import UserProfile from './components/UserProfile/UserProfile.jsx'
+import Page404 from './components/404/404.jsx'
+import Page403 from './components/403/403.jsx'
 
 render((
   <Router history={browserHistory}>
@@ -20,6 +22,8 @@ render((
       <Route path="download" component={RemoteGames}/>
       <Route path="games" component={Games} />
       <Route path="games/:gameSlug" component={Game}/>
+      <Route path="profile" component={UserProfile} />
+      <Route path="unauthorized" component={Page403}/>
       <Route path="*" component={Page404}/>
       <IndexRedirect to="/games" />
     </Route>

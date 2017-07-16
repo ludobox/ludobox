@@ -20,9 +20,14 @@ export default class NavBar extends React.Component {
           <ul className="navbar-list">
             <li className="navbar-item ludobox-nav-header"><a className="navbar-link" href="/">Ludobox</a></li>
             <li className="navbar-item"><a className="navbar-link" href="/games">Games</a></li>
-            <li className="navbar-item">
-              <a className="navbar-link" href="/create">Add game</a>
-            </li>
+            {
+              is_auth ?
+              <li className="navbar-item">
+                <a className="navbar-link" href="/create">Add game</a>
+              </li>
+              :
+              null
+            }
             {
               hasRemote ?
               <li className="navbar-item">
@@ -37,7 +42,10 @@ export default class NavBar extends React.Component {
 
             {
               is_auth ?
-              <li className="navbar-item"><a className="navbar-link" href="/logout">Logout</a></li>
+              <div class="logged_in">
+                <li className="navbar-item"><a className="navbar-link" href="/profile">Profile</a></li>
+                <li className="navbar-item"><a className="navbar-link" href="/logout">Logout</a></li>
+              </div>
               :
               <li className="navbar-item"><a className="navbar-link" href="/login">Login</a></li>
             }

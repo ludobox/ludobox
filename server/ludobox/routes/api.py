@@ -225,9 +225,12 @@ def delete_files():
 
 @rest_api.route('/api/profile', methods=['GET'])
 def get_current_user_profile():
-    user = current_user.to_json()
-    user["recent_changes"]  = get_latest_changes(user=user["email"])
-    return jsonify(user)
+    if current_user.is_authenticated:
+        user = current_user.to_json()
+        user["recent_changes"]  = get_latest_changes(user=user["email"])
+        return jsonify(user)
+    else :
+        abort(403)
 
 @rest_api.route('/api/profile/<int:user_id>', methods=['GET'])
 def get_user_profile(user_id):

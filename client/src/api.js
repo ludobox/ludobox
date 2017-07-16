@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { browserHistory } from 'react-router'
 
 export default class APIClient {
 
@@ -8,8 +9,13 @@ export default class APIClient {
   }
 
   handleError(error, errorCallback) {
-    // console.log("ERROR : " + error)
-    if (errorCallback && error.response) errorCallback(error.response.data)
+    // console.log("ERROR : " + error.response.status)
+    if(error.response.status == 403)
+      //redirect to not authorized page
+      browserHistory.push("unauthorized")
+
+    if (errorCallback && error.response)
+      errorCallback(error.response.data)
     else throw error
   }
 
@@ -49,6 +55,20 @@ export default class APIClient {
     let infoUrl = `/api`;
     console.log(infoUrl)
     this.get(infoUrl, info => callback(info))
+  }
+
+  getUserProfile(userId, callback, errorCallback) {
+    let userProfileUrl = userId ?
+      this.getURL(`profile/${userId}`)
+      :
+      this.getURL("profile")
+      ;
+
+    this.get(
+      userProfileUrl,
+      userProfile => callback(userProfile),
+      error => errorCallback(error)
+    )
   }
 
   getGame(slug, callback) {
