@@ -44,6 +44,7 @@ class LudoboxTestCase(TestCase):
                 LudoboxTestCase.setUp(self)
                 return orig_setUp(self, *args, **kwargs)
             cls.setUp = setUpOverride
+
     def create_app(self):
         # pass in test configuration
         test_dir = os.path.join(os.getcwd(),"server/tests")

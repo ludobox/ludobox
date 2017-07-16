@@ -30,8 +30,7 @@ class TestLudoboxGamesServer(LudoboxTestCase):
 
     def test_single_game(self):
         info = self.borgia_info_content
-
-
+        print self.app.config["DATA_DIR"]
         result = self.client.get('/api/games/%s'%info["slug"])
         data = result.json
         print data
@@ -39,3 +38,24 @@ class TestLudoboxGamesServer(LudoboxTestCase):
         self.assertIn("Content-Type: application/json", str(result.headers))
         self.assertIs(type(data), dict)
         self.assertEqual(data["slug"], info["slug"])
+
+    def test_get_game_that_does_not_exist(self):
+        result = self.client.get('/api/games/some-slug"')
+        self.assertEqual(result.status_code, 404)
+
+
+    def test_delete_game(self):
+        """Make sure the game is deleted properly"""
+        info = self.borgia_info_content
+        print self.app.config["DATA_DIR"]
+
+        result = self.client.get('/api/games/%s'%info["slug"])
+        self.assertEqual(result.status_code, 200)
+
+        result = self.client.delete('/api/games/%s'%info["slug"])
+        print result.data
+        self.assertEqual(result.status_code, 203)
+        self.assertIn("deleted", result.json["message"])
+
+        result = self.client.get('/api/games/%s'%info["slug"])
+        self.assertEqual(result.status_code, 404)
