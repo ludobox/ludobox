@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router'
 
 import GameForm from "../GameForm/GameForm.jsx"
 import APIClient from "../../api.js"
-import model from '../../../../model/schema.json'
+import model from '../../../../model/game.json'
 
 const emptyGame = {
   audience : {

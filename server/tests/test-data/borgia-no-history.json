@@ -1,0 +1,54 @@
+{
+    "audience": {
+        "age": [
+            "Adults"
+        ],
+        "duration": 60,
+        "language": "fr",
+        "number_of_players": {
+            "players_max": 3,
+            "players_min": 6
+        }
+    },
+    "content_type": "game",
+    "credentials": {
+        "ISBN": [],
+        "authors": [
+            "Julien Maudet",
+            "Mary Christides"
+        ],
+        "illustrators": [
+            "Aur\u00e9lien Biard",
+            "Mary Christides"
+        ],
+        "license": "CC BY-NC-SA 4.0",
+        "publication_year": 2012,
+        "publishers": [
+            "Les Chiens de l'Enfer"
+        ]
+    },
+    "description": {
+        "genres": [
+            "social",
+            "strat\u00e9gie"
+        ],
+        "summary": "Gr\u00e2ce \u00e0 ce jeu de carte fabuleusement illustr\u00e9 et immoralement con\u00e7u, vous allez, si tant est que vous soyez majeur, partager le sort de l\u2019une des personnalit\u00e9s qui v\u00e9cue en 1492, au c\u00f4t\u00e9 du Pape Alexandre VI, dans la Rome des Borgia.",
+        "themes": [
+            "M\u00e9di\u00e9val",
+            "Salopard",
+            "Religion"
+        ]
+    },
+    "fabrication": {
+        "fab_time": 120,
+        "requirements": [
+            "print"
+        ]
+    },
+    "source": {
+        "url": "http://leschiensdelenfer.org/editions-chiens-de-lenfer/borgia-le-jeu-malsain/"
+    },
+    "slug": "game-borgia-le-jeu-malsain-fr",
+    "timestamp_add": "10/10/2015 14:52:35",
+    "title": "Borgia, le jeu malsain"
+}

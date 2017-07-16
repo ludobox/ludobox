@@ -48,6 +48,9 @@
  .navbar-link.active {
    color: #33C3F0; }
 
+.navbar-list> li:last-child {
+  float:right;
+}
 
 /*Hide the useless title */
 [id^="root__"] {

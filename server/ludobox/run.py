@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import socket as ip_socket
-
-from ludobox.webserver import app
 from ludobox.config import read_config
+
+from ludobox.app import app
 from ludobox.socketio import socket
 
 # parse config

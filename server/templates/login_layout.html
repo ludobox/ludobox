@@ -1,0 +1,31 @@
+<!doctype html>
+<title>Ludobox</title>
+<link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+<style media="screen">
+  .page {
+    text-align: center
+  }
+  label {
+    font-weight: normal;
+    display: none
+  }
+  #remember label {
+    display: inline-block;
+  }
+</style>
+<div class="page">
+  <img
+    src="/images/ludobox-logo-color2.png"
+    alt="Logo Ludobox"
+    width=150>
+  <div class="metanav">
+
+  <a href="/"> << Back to Ludobox website</a>
+
+  {% block body %}{% endblock %}
+
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+</div>

@@ -11,3 +11,6 @@ web_server_url : http://box.ludobox.net
 
 # enable/disable creation of new games on the box
 upload_allowed : true
+
+# where users will be stored
+database_uri : "sqlite:////tmp/ludobox.db"

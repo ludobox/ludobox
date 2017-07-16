@@ -1,0 +1,16 @@
+# config file for your Ludobox
+
+ludobox_name : "My Testing LudoBox"
+port: 4000 # the port to serve the interface (default to 8080)
+
+# The source of your games
+web_server_url : http://localhost:8080
+
+# Directory to store all downloaded data -- default to ./data
+data_dir : /tmp/test-data
+
+# enable/disable creation of new games on the box
+upload_allowed : true
+
+# where users will be stored
+database_uri : "sqlite:////tmp/test-for-testing.db"

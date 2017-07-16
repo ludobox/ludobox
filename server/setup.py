@@ -22,8 +22,9 @@ import sys
 
 try:
     from setuptools import setup, find_packages
+    from setuptools.command.install import install
 except ImportError:
-    from distutils.core import setup, find_packages
+    from distutils.core import setup, find_packages, install
 
 # Leave the following line to match the regexp [0-9]*\.[0-9]*\.[0-9]*
 version = "0.9.10"  # [major].[minor].[release]
@@ -37,31 +38,31 @@ with open('requirements.txt') as f:
     required = [x for x in f.read().splitlines()]
 
 setup(
-      name="ludobox",
-      packages=find_packages(exclude=['client','tests', 'model', 'data', 'docs', 'templates']),
-      version=version,
-      description="Ludobox",
-      long_description=long_description,
-      author="DCALK",
-      author_email="info@ludobox.net",
-      url="http://ludobox.net",
-      download_url="http://github.com/ludobox/ludobox-ui",
-      include_package_data=True,
-      keywords=["game", "public domain"],
-      entry_points={
+    name="ludobox",
+    packages=find_packages(exclude=['client','tests', 'model', 'data', 'docs', 'templates']),
+    version=version,
+    description="Ludobox",
+    long_description=long_description,
+    author="DCALK",
+    author_email="info@ludobox.net",
+    url="http://ludobox.net",
+    download_url="http://github.com/ludobox/ludobox-ui",
+    include_package_data=True,
+    keywords=["game", "public domain"],
+    entry_points={
         'console_scripts': [
             'ludobox = ludobox.main:main'
         ],
-      },
-      license='GPL',
-      classifiers=[
+    },
+    license='GPL',
+    classifiers=[
         "Programming Language :: Python",
         "Environment :: Other Environment",
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
-      ],
-      install_requires=required,
-      test_suite='tests'
-      )
+    ],
+    install_requires=required,
+    test_suite='tests'
+    )

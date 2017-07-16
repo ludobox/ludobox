@@ -3,8 +3,11 @@
 
 import os
 import unittest
+import shutil
 
 from ludobox.config import read_config, validate_config
+
+TEST_DATA_DIR = '/tmp/test-data'
 
 class TestLudoboxConfig(unittest.TestCase):
     """Testing the load/write config for the Ludobox"""
@@ -15,13 +18,18 @@ class TestLudoboxConfig(unittest.TestCase):
         data_dir = os.path.join(os.getcwd(),"data")
         index_path = os.path.join(data_dir, 'index.json')
 
+        if os.path.exists(TEST_DATA_DIR):
+            shutil.rmtree(TEST_DATA_DIR)
+        os.makedirs(TEST_DATA_DIR)
+
         self.default_values = {
             "web_server_url" : "http://box.ludobox.net",
             "port" : 8080,
             "data_dir" : data_dir,
             "index_path" :index_path,
             "ludobox_name" : "My LudoBox",
-            "upload_allowed" : True
+            "upload_allowed" : True,
+             "database_uri" : "sqlite:////tmp/ludobox.db"
         }
 
     def test_read_config_default(self):
@@ -37,18 +45,16 @@ class TestLudoboxConfig(unittest.TestCase):
 
     def test_read_config_custom_values(self):
         """Config should parse value from the config file"""
-        test_config_file = os.path.join(os.getcwd(),"server/tests/test_config.yml")
+        test_config_file = os.path.join(os.getcwd(),"server/tests/config.test.yml")
         config = read_config(config_path=test_config_file)
 
         self.assertEquals(config["port"], 4000)
-        self.assertEquals(config["ludobox_name"], "My LudoBox")
+        self.assertEquals(config["ludobox_name"], "My Testing LudoBox")
         self.assertEquals(config["web_server_url"], "http://localhost:8080")
+        self.assertEquals(config["database_uri"], "sqlite:////tmp/test-for-testing.db")
 
         # tests file and dir paths
-        data_dir = os.path.join(os.getcwd(), "server/tests/test-data")
-        index_path = os.path.join(data_dir, 'index.json')
-        self.assertEquals(config["data_dir"], data_dir)
-        self.assertEquals(config["index_path"], index_path)
+        self.assertEquals(config["data_dir"], '/tmp/test-data')
 
     def test_read_config_wrong_values(self):
         """Config should identify wrong values"""

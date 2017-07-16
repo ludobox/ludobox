@@ -16,26 +16,30 @@ export default class App extends React.Component {
     super(props)
     this.api = new APIClient()
     this.state = {
-      config: {}
+      config: {},
+      user : {}
     };
     this.socket = io.connect(url);
   }
 
   componentDidMount() {
-    this.api.getInfo( config => this.setState({ config }));
+    // this.api.getInfo( config => );
+    let { user } = window.initialData
+    this.setState({ user })
+    this.setState({ config : window.initialData })
+
     this.socket.on('connect', function() {
         console.log("Socket.io connected. App mounted.")
     });
   }
 
   render() {
-    console.log(this.state.config);
-
     // pass API children
     const childrenWithProps = React.Children.map(this.props.children,
      (child) => React.cloneElement(child, {
        api: this.api,
        config : this.state.config,
+       user : this.state.user,
        socket : this.socket
      })
     );

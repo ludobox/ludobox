@@ -5,11 +5,10 @@ python:
 install:
   - "cd server"
   - "python setup.py install"
-  - "cd .."
-  - "cd data"
-  - "git clone https://github.com/ludobox/borgia-le-jeu-malsain-fr"
+  - "pip install -r dev-requirements.txt"
   - "cd .."
   - "cp config.yml.sample config.yml"
+  - "python ./bin/migrations/init_db.py"
 # command to run tests
 script:
   - "ludobox start &" # lauch a ludobox server in the background
