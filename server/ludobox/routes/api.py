@@ -222,7 +222,7 @@ def delete_files():
 @rest_api.route('/api/profile', methods=['GET'])
 def get_current_user_profile():
     user = current_user.to_json()
-    user["recent_changes"]  = get_latest_changes(user["email"])
+    user["recent_changes"]  = get_latest_changes(user=user["email"])
     return jsonify(user)
 
 @rest_api.route('/api/profile/<int:user_id>', methods=['GET'])
@@ -232,20 +232,28 @@ def get_user_profile(user_id):
         return abort(404)
     else :
         user = current_user.to_json()
-        user["recent_changes"]  = get_latest_changes(user["email"])
+        user["recent_changes"]  = get_latest_changes(user=user["email"])
         return jsonify(user)
 
 @rest_api.route('/api/recent_changes', methods=['GET'])
-def get_recent_changes(user_id):
-    username = request.args.get('username')
-    password = request.args.get('password')
+def get_recent_changes():
 
+    # get user email
+    user_id = request.args.get('user_id')
+    user_email = None
     user = user_datastore.get_user(user_id)
-    if user is None:
-        return abort(404)
-    else :
-        recent_changes  = get_latest_changes(user.email)
-        return jsonify(recent_changes)
+    print user
+    if user is not None :
+        user_email = user.to_json()["email"]
+
+    # get time
+    before_time = request.args.get('before_time')
+    if before_time:
+        before_time = int(before_time)
+
+    recent_changes  = get_latest_changes(user=user_email, before_time=before_time)
+
+    return jsonify(recent_changes)
 
 
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
