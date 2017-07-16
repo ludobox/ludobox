@@ -141,6 +141,20 @@ class TestLudoboxContent(LudoboxTestCase):
         event = updated_content["history"][1]
         self.assertEqual(event["type"], "update")
 
+    def test_update_content_does_not_change_slug(self):
+
+        tmp = "/tmp"
+        info = self.borgia_info_content
+
+        game_path = create_content(info, None, tmp)
+        game_info = read_content(game_path)
+
+        new_game_info = game_info.copy()
+        new_game_info["title"] = "bla bla bla"
+
+        updated_content = update_content_info(game_path, new_game_info)
+        self.assertEqual(game_info["slug"],updated_content["slug"])
+
     # TODO : better config parameter to make this testable
     # def test_get_content_index(self):
         # print get_content_index()

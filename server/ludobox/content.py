@@ -91,9 +91,6 @@ def read_content(path):
     # add files attachments list
     data["files"] = get_attachements_list(path)
 
-    # Add permalink
-    data["slug"] = get_resource_slug(data)
-
     return data
 
 def create_content(info, attachments, data_dir):
