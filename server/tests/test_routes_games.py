@@ -30,7 +30,7 @@ class TestLudoboxGamesServer(LudoboxTestCase):
     def test_single_game(self):
         info = self.borgia_info_content
 
-        result = self.client.get('/api/games/%s/info.json'%info["slug"])
+        result = self.client.get('/api/games/%s'%info["slug"])
         data = result.json
 
         self.assertIn("Content-Type: application/json", str(result.headers))

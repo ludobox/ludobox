@@ -43,7 +43,7 @@ export default class Game extends React.Component {
     let slug = document.location.pathname.split("/").pop()
     console.log(slug);
 
-    this.api.deleteFile({ fileName, slug },
+    this.api.deleteFile(slug, fileName, 
       resp => { // SUCCESS : File deleted
         console.log(resp.files);
         // show feedback
@@ -97,16 +97,24 @@ export default class Game extends React.Component {
   }
 
   fetchGame(slug) {
-    this.api.getGame(slug, game => this.setState({ game }));
+    this.api.getGame(slug, game => {
+      let { files } = game
+      files = files.map( f => ({
+        url : this.api.getURL(`games/${slug}/files/${f}`),
+        filename : f
+      }))
+
+      this.setState({ game, files })
+    });
   }
 
-  fetchFiles(slug) {
-    this.api.getGameFilesList(slug, files => this.setState({ files }));
-  }
+  // fetchFiles(slug) {
+  //   this.api.getGameFilesList(slug, files => this.setState({ files }));
+  // }
 
   componentDidMount() {
     this.fetchGame(this.props.params.gameSlug)
-    this.fetchFiles(this.props.params.gameSlug)
+    // this.fetchFiles(this.props.params.gameSlug)
   }
 
   sendChanges() {
