@@ -35,7 +35,9 @@ def get_resource_slug(data):
         slug = slugify(data["title"])
         # add language
         language = data["audience"]["language"]
-        return "%s-%s"%(slug,language)
+        # content_type
+        content_type = data["content_type"]
+        return "%s-%s-%s"%(content_type,slug,language)
     except KeyError as e:
         # TODO more explicit error message
         message = "KeyError occured while "\

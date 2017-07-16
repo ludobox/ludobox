@@ -29,7 +29,7 @@ class TestLudoboxContent(LudoboxTestCase):
 
     def setUp(self):
         self.game_path = os.path.join(self.tmp_path,"test-game")
-        delete_data_path('/tmp/borgia-le-jeu-malsain-fr')
+        delete_data_path('/tmp/game-borgia-le-jeu-malsain-fr')
 
     def test_get_content_type(self):
         data = {"content_type" : "game"}
@@ -46,7 +46,7 @@ class TestLudoboxContent(LudoboxTestCase):
 
     def test_borgia_game_data(self):
         """Make sure the borgias are okay with the model"""
-        borgia_game_path = os.path.join(self.tmp_path, 'borgia-le-jeu-malsain-fr')
+        borgia_game_path = os.path.join(self.tmp_path, 'game-borgia-le-jeu-malsain-fr')
         borgia_info = read_content(borgia_game_path)
         self.assertEquals(validate_content(borgia_info), None)
 
@@ -141,18 +141,30 @@ class TestLudoboxContent(LudoboxTestCase):
         event = updated_content["history"][1]
         self.assertEqual(event["type"], "update")
 
-    def test_update_content_does_not_change_slug(self):
+    def test_create_slug_once_and_for_all(self):
 
         tmp = "/tmp"
-        info = self.borgia_info_content
+        slug = "game-bla-bla-bla-fr"
+
+        # clean
+        delete_data_path(os.path.join(tmp, slug))
+
+        info = self.borgia_info_content.copy()
+        info["title"] = "bla bla bla"
+        info.pop('slug', None) # remove slug
+
+        self.assertRaises(KeyError, lambda : info["slug"])
 
         game_path = create_content(info, None, tmp)
-        game_info = read_content(game_path)
 
-        new_game_info = game_info.copy()
-        new_game_info["title"] = "bla bla bla"
+        game_info = read_content(game_path)
+        self.assertEqual(game_info["slug"], "game-bla-bla-bla-fr")
+
+        new_game_info = info.copy()
+        new_game_info["title"] = "bla bla bla 2"
 
         updated_content = update_content_info(game_path, new_game_info)
+        self.assertEqual(slug,updated_content["slug"])
         self.assertEqual(game_info["slug"],updated_content["slug"])
 
     # TODO : better config parameter to make this testable

@@ -24,4 +24,4 @@ class TestLudoboxUtils(unittest.TestCase):
         borgia_game_path = os.path.join(os.getcwd(), 'data/borgia-le-jeu-malsain-fr')
         borgia_info = read_info_json(borgia_game_path)
         slug = get_resource_slug(borgia_info)
-        self.assertEquals("borgia-le-jeu-malsain-fr", slug)
+        self.assertEquals("game-borgia-le-jeu-malsain-fr", slug)

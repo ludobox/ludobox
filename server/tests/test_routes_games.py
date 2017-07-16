@@ -26,12 +26,15 @@ class TestLudoboxGamesServer(LudoboxTestCase):
         data = result.json
         self.assertIs(type(data), list)
         self.assertTrue(type(data[0]), dict)
+        self.assertEqual(len(data), 2)
 
     def test_single_game(self):
         info = self.borgia_info_content
 
+
         result = self.client.get('/api/games/%s'%info["slug"])
         data = result.json
+        print data
 
         self.assertIn("Content-Type: application/json", str(result.headers))
         self.assertIs(type(data), dict)

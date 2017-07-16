@@ -111,7 +111,9 @@ def create_content(info, attachments, data_dir):
     Returns the path to the directory created after the name of the slugified title of the content.
     """
 
+    # get slug and add name
     slugified_name = get_resource_slug(info)
+    info["slug"] = slugified_name
 
     # if info about files, remove it
     info.pop('files', None)
