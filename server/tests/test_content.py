@@ -18,31 +18,18 @@ from ludobox.flat_files import write_info_json
 
 from helpers import delete_data_path, create_empty_data_path, add_samples_to_data_dir
 
+from LudoboxTestCase import LudoboxTestCase
+
 from ludobox.content import get_content_type, validate_content, read_content, create_content, update_content_info, get_content_index, delete_content
 
 TEST_DATA_DIR = '/tmp/test-data'
 
-class TestLudoboxContent(unittest.TestCase):
+class TestLudoboxContent(LudoboxTestCase):
     """Functions to index, sort and search content"""
 
     def setUp(self):
-
-        # self.config = read_config()
-        #  os.path.join(os.getcwd(), 'server/tests/test-data/test-game')
-        # self.wrong_game_path = os.path.join(os.getcwd(), 'server/tests/test-data/wrong-game')
-
-        self.tmp_path = TEST_DATA_DIR
-
-        # reset and populate with samples
-        add_samples_to_data_dir(self.tmp_path)
-
-        self.game_path = os.path.join(TEST_DATA_DIR,"test-game")
-
+        self.game_path = os.path.join(self.tmp_path,"test-game")
         delete_data_path('/tmp/borgia-le-jeu-malsain-fr')
-
-        # load info without history
-        with open(os.path.join(self.tmp_path, "borgia-no-history.json"), 'r') as f:
-            self.borgia_info_content = json.load(f)
 
     def test_get_content_type(self):
         data = {"content_type" : "game"}
@@ -82,7 +69,6 @@ class TestLudoboxContent(unittest.TestCase):
         self.assertTrue("files" in info.keys())
         self.assertEquals(len(info["files"]),1)
         self.assertEquals(info["slug"], "borgia-le-jeu-malsain-fr")
-
 
     def test_read_content_validation(self):
         """Wrong game should raises validation error"""

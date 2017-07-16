@@ -3,40 +3,15 @@
 
 import unittest
 
+from LudoboxTestCase import LudoboxTestCase
+
 from ludobox.history import new_event, is_valid_event, add_event_to_history, make_create_event, make_update_event, apply_history
 
-class TestLudoboxHistory(unittest.TestCase):
+class TestLudoboxHistory(LudoboxTestCase):
     """Functions to index, sort and search content"""
 
     def setUp(self):
         self.content = { "bla" : "bla" }
-
-    # helpers
-    def register(self, email=None, password=None):
-        """Register a user"""
-        print email, password
-        return self.client.post(
-            url_for_security('register'),
-            data={
-                'email': email,
-                'password': password,
-                'password_confirm': password
-                },
-            content_type= 'application/x-www-form-urlencoded',
-            follow_redirects=True
-        )
-
-    def login(self, email=None, password=None):
-        email = email or self.user_email
-        password = password or self.user_password
-        return self.client.post(
-            url_for_security('login'),
-            data={'email': email, 'password': password},
-            follow_redirects=True
-        )
-
-    def logout(self):
-        return self.client.get('/logout', follow_redirects=True)
 
     def test_new_event_type(self):
         """A new event should have a validated type"""
@@ -175,6 +150,15 @@ class TestLudoboxHistory(unittest.TestCase):
         self.assertDictEqual(new_game_content_3, step_three)
 
     def test_event_save_user(self):
+        """User name should be saved"""
 
-        register()
-        login()
+        game_content = { "title" : "test game"}
+        event = make_create_event(game_content, user=self.user_email)
+        self.assertEquals( is_valid_event(event), True)
+        self.assertEquals( event["user"], self.user_email)
+
+        new_game_content = { "title" : "My test game"}
+        event = make_update_event(game_content, new_game_content, user=self.user_email)
+        self.assertEquals(event["type"], "update")
+        self.assertEquals( is_valid_event(event), True)
+        self.assertEquals( event["user"], self.user_email)

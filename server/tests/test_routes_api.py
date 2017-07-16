@@ -133,8 +133,7 @@ class TestLudoboxWebServer(LudoboxTestCase):
         create_empty_data_path(TEST_DATA_DIR)
 
         # load info without history
-        with open(os.path.join(os.getcwd(), "server/tests/test-data/borgia-no-history.json"), 'r') as f:
-            valid_info = json.load(f)
+        valid_info = self.borgia_info_content
 
         data = {
             'files': [
@@ -164,6 +163,72 @@ class TestLudoboxWebServer(LudoboxTestCase):
             # check for files
             written_filenames = os.listdir(os.path.join(res["path"], 'files'))
             self.assertEqual(written_filenames.sort(), [f[1] for f in data["files"]].sort())
+
+    def test_save_history_with_user(self):
+        """Make sure the reference to user is correctly saved in history"""
+
+        # create empy path for data
+        delete_data_path(TEST_DATA_DIR)
+        create_empty_data_path(TEST_DATA_DIR)
+
+        # load info without history
+        valid_info = self.borgia_info_content
+
+        data = {
+            'files': [
+                (StringIO('my readme'), 'test-README.txt'),
+                (StringIO('my rules'), 'test-RULES.txt'),
+                (io.BytesIO(b"abcdef"), 'test.jpg')
+            ],
+            'info': json.dumps(valid_info)
+        }
+
+        with self.client:
+            self.login()
+
+            # create the game through API
+            result = self.client.post('/api/create',
+                                    data=data,
+                                    content_type='multipart/form-data'
+                                    )
+            self.assertEqual(result.status_code, 201)
+            game_path = result.json["path"]
+
+            # get the game content
+            game_info = read_content(game_path)
+
+            # check history event content
+            self.assertEqual(len(game_info["history"]), 1)
+            event = game_info["history"][0]
+            self.assertEqual(event["type"], "create")
+            self.assertEqual(event["user"], self.user_email)
+
+            # make some changes to the data
+            new_info = valid_info.copy()
+            new_info["title"] = "bla bla bla"
+
+            # post the update
+            new_data = {
+                'info' : json.dumps(new_info),
+                'slug' : json.dumps(new_info["slug"])
+            }
+            result = self.client.post('/api/update',
+                                    data=new_data,
+                                    content_type='multipart/form-data'
+                                    )
+
+            self.assertEqual(result.status_code, 201)
+
+            # read updated game
+            game_path = result.json["path"]
+            new_game_info = read_content(game_path)
+            new_game_info["title"] = "bla bla bla"
+
+            # check history event content
+            self.assertEqual(len(new_game_info["history"]), 2)
+            event = new_game_info["history"][1]
+            self.assertEqual(event["type"], "update")
+            self.assertEqual(event["user"], self.user_email)
 
     # def test_form_add_game(self):
     #     """Posting data and files using form should create a new game"""

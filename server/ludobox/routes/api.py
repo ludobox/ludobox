@@ -131,8 +131,6 @@ def create_resource():
 
     """
 
-    print current_user
-
     # make sure unauthorized boxes can not create new games
     if current_app.config["UPLOAD_ALLOWED"] is False:
         response = jsonify({'message':'Upload not allowed'})
@@ -163,11 +161,14 @@ def update_resource():
 
     new_game_info = json.loads(request.form["info"])
     game_slug = json.loads(request.form["slug"])
-    game_path = os.path.join(app.config["DATA_DIR"], game_slug)
+    game_path = os.path.join(current_app.config["DATA_DIR"], game_slug)
 
     update_content_info(game_path, new_game_info)
 
-    return jsonify({"message" : "ok! updated"}), 201
+    return jsonify({
+        "path" : game_path,
+        "message" : "ok! Game %s has been updated."%new_game_info["title"]
+        }), 201
 
 def get_file_list(game_path):
     files_path = os.path.join(game_path,"files")

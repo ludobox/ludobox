@@ -14,6 +14,8 @@ import os
 import json
 
 from flask import current_app
+from flask_security import current_user
+
 from ludobox.utils import json_serial # convert datetime
 
 from jsonschema import validate, ValidationError
@@ -128,8 +130,13 @@ def create_content(info, attachments, data_dir):
     content_path = os.path.join(data_dir, slugified_name)
     create_resource_folder(content_path)
 
+    # get current user
+    user = None
+    if current_user.is_authenticated :
+        user = current_user.email
+
     # create event and add to history record
-    event = make_create_event(info)
+    event = make_create_event(info, user=user)
     info_with_updated_history = add_event_to_history(info, event)
 
     # create the JSON file
@@ -152,8 +159,13 @@ def update_content_info(resource_path, new_info):
 
     original_info = read_content(resource_path)
 
+    # get current user
+    user = None
+    if current_user.is_authenticated :
+        user = current_user.email
+
     # create patch
-    event = make_update_event(new_info, original_info)
+    event = make_update_event(new_info, original_info, user=user)
 
     if event is None :
         return original_info
