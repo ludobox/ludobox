@@ -43,7 +43,7 @@ class MyModelView(sqla.ModelView):
 
 
 # Add model views
-admin.add_view(MyModelView(Role, db.session))
+# admin.add_view(MyModelView(Role, db.session))
 admin.add_view(MyModelView(User, db.session))
 
 

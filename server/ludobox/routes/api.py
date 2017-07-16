@@ -36,6 +36,23 @@ config = read_config()
 # JSON API blueprint
 rest_api = Blueprint('api', __name__)
 
+def get_global_config():
+    # get user info
+    user = {
+        'is_auth' : current_user.is_authenticated
+    }
+    if current_user.is_authenticated:
+        user['email'] =  current_user.email
+        user['username'] =  current_user.username
+
+    return dict(
+        name= config["ludobox_name"],
+        version =  __version__,
+        env = { "python" :  sys.version },
+        config = config,
+        user = user
+    )
+
 # login decorator for API
 def rest_api_login_required(f):
     @wraps(f)
@@ -47,12 +64,7 @@ def rest_api_login_required(f):
 
 @rest_api.route('/api')
 def show_hand():
-    return jsonify(
-        name= config["ludobox_name"],
-        version =  __version__,
-        env = { "python" :  sys.version },
-        config = config
-    )
+    return jsonify(get_global_config())
 
 @rest_api.route('/api/games')
 def serve_games_json_index():
@@ -247,12 +259,11 @@ def get_recent_changes():
 
     return jsonify(recent_changes)
 
-
 @rest_api.route('/', defaults={'path': ''}, methods=['GET'])
 @rest_api.route('/<path:path>', methods=['GET'])
 def catch_all(path):
     """Serve the main page."""
-    return render_template('index.html')
+    return render_template('index.html', initial_data=get_global_config())
 
 # add unlimited CORS access
 @rest_api.after_request
