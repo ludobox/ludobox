@@ -36,12 +36,11 @@ export default class GameForm extends React.Component {
 
     const { editMode, errors } = this.props
 
-    // TODO : make title editable 
+    // TODO : make title editable
     return (
       <div>
         <h1>
-          {title}
-          {/* <EditableText
+          <EditableText
             type="input"
             text={title}
             error={errors["title"]}
@@ -52,7 +51,7 @@ export default class GameForm extends React.Component {
               game.title = d
               this.updateGame( game );
             }}
-            /> */}
+            />
         </h1>
 
           {/*
