@@ -114,13 +114,6 @@ def make_update_event(old_content, new_content, user=None):
     # create json diff
     patch = make_patch(new, old)
 
-    print json.dumps(new, indent=4, sort_keys=True)
-    print "-"*10
-    print json.dumps(old, indent=4, sort_keys=True)
-    print "-"*10
-    print patch
-    print
-
     # check if there is actual changes
     if not len(list(patch)) :
         return None

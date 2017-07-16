@@ -9,13 +9,15 @@ export default class APIClient {
   }
 
   handleError(error, errorCallback) {
-    // console.log("ERROR : " + error.response.status)
-    if(error.response.status == 403)
+
+    if (errorCallback && error.response) {
+      console.log("ERROR : " + error.response.status)
+      if(error.response.status == 403)
       //redirect to not authorized page
       browserHistory.push("unauthorized")
 
-    if (errorCallback && error.response)
       errorCallback(error.response.data)
+    }
     else throw error
   }
 

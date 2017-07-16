@@ -1,5 +1,7 @@
 import React from 'react'
 
+import moment from 'moment'
+
 import APIClient from "../../api.js"
 
 export default class UserProfile extends React.Component {
@@ -28,12 +30,22 @@ export default class UserProfile extends React.Component {
     let { userProfile } = this.state
     console.log(userProfile)
 
+    let history = []
     if (userProfile.recent_changes)
-      userProfile.recent_changes.map( event =>{
-        console.log(event)}
-        // <li>
-        //
-        // </li>
+      history = userProfile.recent_changes.map( event =>{
+
+        // parse date
+        let d = moment
+          .utc(1234567890000)
+          .local()
+          .format('MMMM Do YYYY, h:mm:ss a');
+        
+        return (
+          <li key={event.event.id}>
+            <b>{event.event.type}</b> : <a href={`/games/${event.slug}`}>{event.title}</a> : {d}
+          </li>
+        )
+      }
       )
 
     return (
@@ -42,6 +54,12 @@ export default class UserProfile extends React.Component {
         <h5>Welcome to your page</h5>
         <p><b>Email </b>: {userProfile.email}</p>
         <h4>Recent changes</h4>
+        {
+          history.length ?
+            history
+          :
+            "No history to show."
+        }
 
       </div>
     )
