@@ -14,7 +14,7 @@ Flask-SocketIO==2.8.6
 Flask-SQLAlchemy==2.2
 Flask-Testing==0.6.2
 Flask-WTF==0.14.2
-functools32==3.2.3.post2
+functools32==3.2.3-2
 itsdangerous==0.24
 Jinja2==2.9.6
 jsonpatch==1.15
