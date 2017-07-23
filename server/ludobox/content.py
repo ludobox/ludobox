@@ -18,7 +18,7 @@ from flask_security import current_user
 
 from ludobox.utils import json_serial # convert datetime
 
-from jsonschema import validate, ValidationError
+from jsonschema import validate, ValidationError, Draft4Validator
 
 from ludobox.config import read_config
 from ludobox.attachments import write_attachments, get_attachements_list, check_attachments
@@ -34,9 +34,10 @@ config = read_config()
 VALID_CONTENT_TYPES = ["game", "workshop", "page"]
 
 # load models
-schemas = {}
+validators = {}
 with open(os.path.join(os.getcwd(), "model/game.json")) as game_schema_file :
-    schemas["game"] = json.load(game_schema_file)
+    schema = json.load(game_schema_file)
+    validators["game"] = Draft4Validator(schema)
 
 def get_content_type(data):
 
@@ -59,14 +60,23 @@ def get_content_type(data):
 
     return content_type
 
-def validate_content(data):
+def validate_content(data, get_all_errors=False):
     """
     Validate game data VS a JSON Schema
 
     returns a list of errors or None if valid
     """
     content_type = get_content_type(data)
-    errors = validate(data, schemas[content_type])
+
+    validator = validators[content_type]
+
+    if get_all_errors:
+        errors = []
+        for error in sorted(validator.iter_errors(data), key=str):
+            errors.append(error.message)
+        return errors
+
+    errors = validator.validate(data)
     return errors
 
 def read_content(path):
