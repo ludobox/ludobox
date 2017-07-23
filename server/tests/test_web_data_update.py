@@ -24,7 +24,7 @@ class TestLudoboxWebDataUpdate(unittest.TestCase):
         """Should shake hands with the distant server and get its name."""
         base_url = self.config["web_server_url"]
         res = handshake()
-        self.assertEquals(res["name"], "LudoBox Mothership")
+        self.assertEquals(res["name"], "My LudoBox")
 
     def test_get_game_index_file(self):
         """Should retrieve an index containing all games"""

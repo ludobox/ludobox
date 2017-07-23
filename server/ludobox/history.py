@@ -15,10 +15,12 @@ import time
 
 import json
 
+from flask import current_app
+
 from jsonpatch import make_patch, JsonPatch
 
 # TODO :  implement state changes (draft -> reviewed, etc.)
-event_types = ["create", "update", "delete"]
+event_types = ["create", "update", "delete", "change_state"]
 
 # hashing changes to create an id
 sha_1 = hashlib.sha1()
@@ -69,20 +71,21 @@ def add_event_to_history(content_previous_version, event):
     # immutable: clone original reference
     content_with_updated_history = content_previous_version.copy()
 
-    print content_previous_version
-    print event
-
-    # re-apply changes and store last version
-    if event["type"] == "update":
-        content_with_updated_history = apply_update_patch(content_with_updated_history, event)
-
     # init history if empty
     if "history" not in content_with_updated_history.keys():
         content_with_updated_history["history"] = []
 
+    # re-apply changes and store last version
+    if event["type"] == "update":
+        content_with_updated_history = apply_update_patch(content_with_updated_history, event)
+    elif event["type"] == "change_state":
+        new_state = event["content"]["to"]
+        content_with_updated_history["state"] = new_state
+
     # add event to history
     content_with_updated_history["history"].append(event)
 
+    current_app.logger.debug("Event : %s - %s"%(event["type"], content_with_updated_history))
     return content_with_updated_history
 
 def make_create_event(content, user=None):
@@ -105,11 +108,11 @@ def make_update_event(old_content, new_content, user=None):
     new = new_content.copy()
     old = old_content.copy()
 
-    # make sure ro remove history and files
-    new.pop('history', None)
-    new.pop('files', None)
-    old.pop('history', None)
-    old.pop('files', None)
+    # ignore keys we don't want to track in the history events
+    ignored_keys = ["history", "files", "errors", "has_errors"]
+    for k in ignored_keys:
+        new.pop(k, None)
+        old.pop(k, None)
 
     # create json diff
     patch = make_patch(new, old)
@@ -120,6 +123,17 @@ def make_update_event(old_content, new_content, user=None):
 
     # create a new event and add it to history
     event = new_event("update", { "changes" : list(patch) }, user)
+    return event
+
+def make_update_state_event(old_content, updated_content_state, user=None):
+    """Store an event reflecting content update"""
+
+    original_state = old_content["state"]
+
+    state_change = { "from" : original_state, "to" : updated_content_state}
+
+    # create a new event and add it to history
+    event = new_event("change_state", state_change, user)
     return event
 
 def apply_update_patch(content, event):
@@ -140,7 +154,6 @@ def apply_history(history, selected_id):
     assert len(selected_id) is 40
 
     # filter history
-
     final_content = {}
 
     # run again the course of events
@@ -153,6 +166,8 @@ def apply_history(history, selected_id):
             final_content = event["content"]
         elif event["type"] == "update":
             final_content = apply_update_patch(final_content, event)
+        elif event["type"] == "change_state":
+            new_state = event["content"]["to"]
 
         # run until last is
         if event["id"] == selected_id :

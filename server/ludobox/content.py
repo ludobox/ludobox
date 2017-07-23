@@ -11,6 +11,7 @@ There are three kinds of content :
 """
 
 import os
+import sys
 import json
 
 from flask import current_app
@@ -18,7 +19,8 @@ from flask_security import current_user
 
 from ludobox.utils import json_serial # convert datetime
 
-from jsonschema import validate, ValidationError
+from jsonschema import validate, ValidationError, Draft4Validator
+from jsonschema.validators import ErrorTree
 
 from ludobox.config import read_config
 from ludobox.attachments import write_attachments, get_attachements_list, check_attachments
@@ -26,7 +28,7 @@ from ludobox.attachments import write_attachments, get_attachements_list, check_
 from ludobox.flat_files import create_resource_folder, write_info_json, delete_resource_folder, read_info_json
 from ludobox.errors import LudoboxError
 from ludobox.utils import get_resource_slug
-from ludobox.history import make_create_event, make_update_event, add_event_to_history
+from ludobox.history import make_create_event, make_update_event, make_update_state_event, add_event_to_history
 
 config = read_config()
 
@@ -34,9 +36,10 @@ config = read_config()
 VALID_CONTENT_TYPES = ["game", "workshop", "page"]
 
 # load models
-schemas = {}
+validators = {}
 with open(os.path.join(os.getcwd(), "model/game.json")) as game_schema_file :
-    schemas["game"] = json.load(game_schema_file)
+    schema = json.load(game_schema_file)
+    validators["game"] = Draft4Validator(schema)
 
 def get_content_type(data):
 
@@ -59,14 +62,24 @@ def get_content_type(data):
 
     return content_type
 
-def validate_content(data):
+def validate_content(data, get_all_errors=False):
     """
     Validate game data VS a JSON Schema
 
     returns a list of errors or None if valid
     """
     content_type = get_content_type(data)
-    errors = validate(data, schemas[content_type])
+
+    validator = validators[content_type]
+
+    if get_all_errors:
+        errors = []
+
+        for error in sorted(validator.iter_errors(data), key=str):
+            errors.append({ "path" : list(error.path), "message" : error.message})
+        return errors
+
+    errors = validator.validate(data)
     return errors
 
 def read_content(path):
@@ -85,8 +98,11 @@ def read_content(path):
 
     data = read_info_json(path)
 
-    # validate data
-    validate_content(data)
+    # validate data and catch errors to flag content
+    try :
+        validate_content(data)
+    except ValidationError as e:
+        data["errors"] = validate_content(data, get_all_errors=True)
 
     # add files attachments list
     data["files"] = get_attachements_list(path)
@@ -121,6 +137,9 @@ def create_content(info, attachments, data_dir):
     # validate game data
     validate_content(info)
 
+    # add default state
+    info["state"] = "needs_review"
+
     # check attachments
     if attachments:
         check_attachments(attachments)
@@ -147,7 +166,7 @@ def create_content(info, attachments, data_dir):
 
     return content_path
 
-def update_content_info(resource_path, new_info):
+def update_content_info(resource_path, new_info, state=None):
     """
     Update game info based on changes
 
@@ -164,7 +183,10 @@ def update_content_info(resource_path, new_info):
         user = current_user.email
 
     # create patch
-    event = make_update_event(new_info, original_info, user=user)
+    if state:
+        event = make_update_state_event(original_info, state, user=user)
+    else :
+        event = make_update_event(new_info, original_info, user=user)
 
     if event is None :
         return original_info
@@ -186,7 +208,11 @@ def get_content_index(short=True):
             "description",
             "slug",
             "audience",
-            "content_type"
+            "content_type",
+            "fabrication",
+            "has_errors",
+            "state",
+            "errors"
             ]
 
     # loop through all folders

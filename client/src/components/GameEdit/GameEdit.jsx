@@ -127,12 +127,22 @@ export default class GameEdit extends React.Component {
     console.log(this.validate.errors);
 
     if (this.validate.errors) {
-      this.msg.error(this.validate.errors.length + " errors.")
 
       const errors = {}
-      this.validate.errors.map( error =>
-        errors[error.field.slice(5)] = error.message
-      )
+      let errorMsg = ""
+      this.validate.errors.map( error => {
+
+        let fieldName = error.field.split(".").length == 4 ?
+          error.field.split(".").slice(1, -1).join(".") // handle multiselect errors
+          :
+          error.field.slice(5)
+
+        errorMsg += `${fieldName} \n`
+        return errors[fieldName] = error.message
+      })
+
+      this.msg.error(`${this.validate.errors.length} errors.\n\n ${errorMsg} `)
+
       this.setState({ errors })
     } else {
       this.setState({errors : {}})
@@ -196,13 +206,14 @@ export default class GameEdit extends React.Component {
          onClick={() => this.sendChanges()}
          style={editButtonStyle}
          >
-         <i className="icono-check"></i>
+           Update
        </a>
        <a className="button"
          onClick={() => this.cancelChanges()}
          style={editButtonStyle}
          >
-         <i className="icono-cross"></i>
+           Cancel
+
        </a>
      </span>
       <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />

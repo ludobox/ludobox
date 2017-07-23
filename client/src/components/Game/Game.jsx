@@ -39,6 +39,10 @@ export default class Game extends React.Component {
     });
   }
 
+  updateContent() {
+    this.fetchGame(this.props.params.gameSlug)
+  }
+
   componentDidMount() {
     this.fetchGame(this.props.params.gameSlug)
   }
@@ -61,7 +65,9 @@ export default class Game extends React.Component {
             />
           <ActionButtons
             slug={game.slug}
+            state={game.state}
             user={this.props.user}
+            updateContent={() => this.updateContent()}
             />
         </span>
         :

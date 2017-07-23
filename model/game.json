@@ -22,28 +22,89 @@
           "title": "Summary",
           "description": "Desribe the content of the game"
         },
-        "themes": {
+        "tags": {
           "type": "array",
           "uniqueItems": true,
           "items": {
             "type": "string",
             "minLength": 1,
-            "default": "A theme"
+            "default": "Game"
           },
-          "id": "themes",
-          "title": "Themes",
-          "description": "Thematics of the game"
+          "id": "tags",
+          "title": "Tags",
+          "description": "Free-tagging to describe the game content"
         },
-        "genres": {
+        "intention": {
+          "type": "string",
+          "minLength": 1,
+          "enum" : [
+            "Loisir",
+            "Militant",
+            "Pédagogique",
+            "Publicitaire",
+            "Institutionel",
+            "Experimental"
+          ],
+          "id": "intention",
+          "title": "Intention",
+          "description": "The intention that created the game"
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "enum" : [
+            "Indoor game",
+            "Toys",
+            "Outdoor game",
+            "Construction",
+            "Design Kit"
+          ],
+          "id": "intention",
+          "title": "Intention",
+          "description": "The intention that created the game"
+        },
+        "gameplay": {
+          "type": "string",
+          "minLength": 1,
+          "enum" : [
+            "Individuel",
+            "En équipe",
+            "Cooperatif"
+          ],
+          "id": "gameplay",
+          "title": "Gameplay",
+          "description": "The game play"
+        },
+        "mechanics": {
           "type": "array",
-          "uniqueItems": false,
-          "items": {
-            "type": "string",
-            "minLength": 1
+          "minLength": 1,
+          "maxLength": 3,
+          "items" : {
+            "enum" : [
+            "Jeux de rôle",
+            "Identité secrete",
+            "Bluff",
+            "Stop ou encore",
+            "Gestion",
+            "Enchères",
+            "Programmation",
+            "Abstrait",
+            "Parcours",
+            "Hasard",
+            "Construction",
+            "Dexterité",
+            "Narratif",
+            "Rapidite",
+            "Enquetes",
+            "Enigme",
+            "Traditionel",
+            "Wargame",
+            "Placement"
+            ]
           },
-          "id": "genres",
-          "title": "Genre",
-          "description": "Type of gameplay (adventure, role, etc.)"
+          "id": "mechanics",
+          "title": "Mechanics",
+          "description": "The mechanics that organize the way to play this game"
         }
       }
     },
@@ -55,7 +116,14 @@
           "type": "string",
           "minLength": 1,
           "default": "Unknown",
-          "enum" : ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"],
+          "enum" : [
+            "Commercial use allowed",
+            "Modifications allowed",
+            "Commercial use & mods allowed",
+            "No known copyright restrictions",
+            "Public Domain",
+            "No License"
+          ],
           "id": "license",
           "title": "License",
           "description": "The license"
@@ -197,15 +265,63 @@
         },
         "requirements": {
           "type": "array",
-          "uniqueItems": false,
+          "uniqueItems": true,
           "items": {
             "type": "string",
-            "minLength": 0,
-            "default": "imprimante"
+            "enum": [
+              "Nothing",
+              "Printers B&W",
+              "Printers Colour",
+              "Cissors",
+              "Pens",
+              "Stickers",
+              "Ruler",
+              "Paper Glue",
+              "Cutter",
+              "Mechanical saw",
+              "Hand saw",
+              "Wood glue",
+              "Hammer",
+              "All purpose plier",
+              "Welder",
+              "Sewing machine",
+              "Drill",
+              "Other tools",
+              "3D printers",
+              "Laser cutter",
+              "Micro chip computer"
+            ]
           },
           "id": "requirements",
           "title": "Requirements",
           "description": "What do you need to fabricate this game?"
+        },
+        "components" : {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type" : "object",
+            "properties": {
+              "componentName": {
+                "type": "string",
+                "enum": [
+                  "Dé classique",
+                  "Dés speciaux",
+                  "Jeu de carte classique",
+                  "Jeu existant",
+                  "Pions",
+                  "Jetons",
+                  "Contenant",
+                  "Chronomètre ",
+                  "Materiel exotique",
+                  "Balloon"
+                ]
+              },
+              "count": {
+                "type" : "number"
+              }
+            }
+          }
         }
       }
     },

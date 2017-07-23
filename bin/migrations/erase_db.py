@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 from ludobox.models import db
 from ludobox import create_app
 

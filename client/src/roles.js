@@ -13,14 +13,14 @@ let acl = {
 export function isAuthorized(action, user) {
 
   // unlogged user has no rights
-  console.log(user);
   if (!user.is_auth)
     return false
 
-  let roles = user.roles
+  let { roles } = user
 
   // superuser have all rights
-  if (roles.indexOf("superuser") > -1) return true
+  if ( roles.includes("superuser") )
+    return true
   else {
     if (roles.indexOf("editor") > -1)
       return acl["editor"][action]

@@ -7,6 +7,8 @@ from flask import Blueprint, abort, jsonify, send_from_directory, current_app
 from flask_security.decorators import roles_accepted
 
 from ludobox.content import get_content_index, read_content, delete_content
+from ludobox.content_states import validates, back_to_review, rejects
+
 from api import login_required
 
 # JSON API blueprint
@@ -31,6 +33,36 @@ def api_single_game(path):
 def api_delete_game(path):
     game_path = os.path.join(current_app.config["DATA_DIR"], path)
     content = delete_content(game_path)
+    return jsonify({
+        "message" : "Success : file %s deleted"%game_path
+    }), 203
+
+@games_api.route('/api/validates/<path:path>', methods=["POST"])
+@login_required
+@roles_accepted("editor","superuser")
+def api_validates_game(path):
+    game_path = os.path.join(current_app.config["DATA_DIR"], path)
+    content = validates(game_path)
+    return jsonify({
+        "message" : "Success : file %s deleted"%game_path
+    }), 203
+
+@games_api.route('/api/back_to_review/<path:path>', methods=["POST"])
+@login_required
+@roles_accepted("editor","superuser")
+def api_back_to_review_game(path):
+    game_path = os.path.join(current_app.config["DATA_DIR"], path)
+    content = back_to_review(game_path)
+    return jsonify({
+        "message" : "Success : file %s deleted"%game_path
+    }), 203
+
+@games_api.route('/api/rejects/<path:path>', methods=["POST"])
+@login_required
+@roles_accepted("editor","superuser")
+def api_rejects_game(path):
+    game_path = os.path.join(current_app.config["DATA_DIR"], path)
+    content = rejects(game_path)
     return jsonify({
         "message" : "Success : file %s deleted"%game_path
     }), 203

@@ -1,5 +1,7 @@
 # Ludobox specific stuff #######################################################
 
+ludobox.log.*
+
 config.yml
 backups
 

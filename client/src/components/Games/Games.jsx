@@ -23,6 +23,8 @@ export default class Games extends React.Component {
   }
 
   render() {
+
+    const {games} = this.state
     return (
       <span>
         <header style={{paddingBottom : "4em", textAlign: "center"}}>
@@ -33,7 +35,7 @@ export default class Games extends React.Component {
         {
           this.state.games.length ?
           <GamesTable
-            games={this.state.games}
+            games={games}
           />
           :
           "No games available."

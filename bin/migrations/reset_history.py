@@ -18,6 +18,8 @@ Here, to "reset history" means :
 2. erase all existing events in history
 3. add a single "create" event with latest state that will now stands as history
 
+The script will also reset all content state to "needs_review"
+
 """
 
 import os
@@ -111,7 +113,10 @@ with app.app_context():
             # add it to history
             info["history"] = [ event]
 
-            validate_content(info)
+            # reset state
+            info["state"] = "needs_review"
+
+            # validate_content(info)
 
             write_info_json(info, game_path)
             print "updated."

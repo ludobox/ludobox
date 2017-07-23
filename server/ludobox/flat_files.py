@@ -22,6 +22,8 @@ import os
 import json
 import shutil
 
+from flask import current_app
+
 from ludobox.errors import LudoboxError
 from ludobox.utils import json_serial # convert datetime
 
@@ -35,7 +37,7 @@ def create_resource_folder(resource_folder_path) :
                     error=e.strerror,
                     resource_folder_path=os.path.abspath(resource_folder_path))
         raise LudoboxError(message)
-    print "path created : %s"%resource_folder_path
+    # current_app.logger.debug("path created : %s"%resource_folder_path)
 
 def delete_resource_folder(resource_folder_path):
     """Delete an existing rep containing data of a game"""
@@ -44,6 +46,11 @@ def delete_resource_folder(resource_folder_path):
 
 def write_info_json(info, resource_folder_path):
     """Write a JSON file based on valid resource data"""
+
+    # remove stuff we don't need
+    info.pop('files', None)
+    info.pop('errors', None)
+    info.pop('has_errors', None)
 
     # Convert the data to JSON into file
     content = json.dumps(info, sort_keys=True, indent=4, default=json_serial)
