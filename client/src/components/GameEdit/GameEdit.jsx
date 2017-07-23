@@ -206,13 +206,14 @@ export default class GameEdit extends React.Component {
          onClick={() => this.sendChanges()}
          style={editButtonStyle}
          >
-         <i className="icono-check"></i>
+           Update
        </a>
        <a className="button"
          onClick={() => this.cancelChanges()}
          style={editButtonStyle}
          >
-         <i className="icono-cross"></i>
+           Cancel
+
        </a>
      </span>
       <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />

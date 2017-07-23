@@ -88,6 +88,33 @@ export default class APIClient {
     this.get(gameUrl, game => callback(game))
   }
 
+  validateGame(slug, callback, callbackError) {
+    let validateGameUrl = this.getURL(`validates/${slug}`);
+    this.post(validateGameUrl,
+      new FormData(),
+      path => callback(path),
+      error => callbackError(error)
+    )
+  }
+
+  backToReviewGame(slug, callback, callbackError) {
+    let validateGameUrl = this.getURL(`back_to_review/${slug}`);
+    this.post(validateGameUrl,
+      new FormData(),
+      path => callback(path),
+      error => callbackError(error)
+    )
+  }
+
+  rejectGame(slug, callback, callbackError) {
+    let validateGameUrl = this.getURL(`rejects/${slug}`);
+    this.post(validateGameUrl,
+      new FormData(),
+      path => callback(path),
+      error => callbackError(error)
+    )
+  }
+
   deleteGame(slug, callback, callbackError) {
 
     console.log("haha");

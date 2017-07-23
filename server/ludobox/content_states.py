@@ -29,9 +29,13 @@ def validates(resource_path):
     new_info = update_content_state(resource_path, "validated")
     return  new_info
 
-def rejects(info):
+def back_to_review(resource_path):
+    new_info = update_content_state(resource_path, "needs_review")
+    return new_info
+
+def rejects(resource_path):
     new_info = update_content_state(resource_path, "rejected")
-    return  new_info
+    return new_info
 
 def update_content_state(resource_path, new_state):
 
