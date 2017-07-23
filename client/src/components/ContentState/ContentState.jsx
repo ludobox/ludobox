@@ -28,6 +28,7 @@ export default class ContentState extends React.Component {
 
     let {state, errors} = this.props;
 
+    if (!state) state = "needs_review"
     if (!errors) errors = []
 
     let text = errors.length ?
