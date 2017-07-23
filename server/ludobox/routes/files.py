@@ -4,7 +4,7 @@
 import os
 import json
 
-from flask import Blueprint, abort, jsonify, request, current_app
+from flask import Blueprint, abort, jsonify, request, current_app, send_from_directory
 from ludobox.attachments import store_files, delete_file, get_attachements_list
 
 from api import login_required
@@ -42,6 +42,13 @@ def api_post_files():
         "message" : "Success : %s files added."%len(files),
         "files" : file_list
         }), 201
+
+@files_api.route('/api/files/<string:slug>/<path:path>', methods=["GET"])
+def api_get_single_file(slug,path):
+    content_path = os.path.join(current_app.config["DATA_DIR"], slug)
+    files_path = os.path.join(content_path, "files")
+
+    return send_from_directory(files_path, path)
 
 # @files_api_login_required
 @files_api.route('/api/files/<string:slug>/<path:path>', methods=["DELETE"])

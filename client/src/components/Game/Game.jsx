@@ -32,7 +32,7 @@ export default class Game extends React.Component {
     this.api.getGame(slug, game => {
       let { files } = game
       files = files.map( f => ({
-        url : this.api.getURL(`games/${slug}/files/${f}`),
+        url : this.api.getURL(`files/${slug}/${f}`),
         filename : f
       }))
       this.setState({ game, files })

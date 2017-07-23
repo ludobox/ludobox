@@ -134,7 +134,7 @@ export default class APIClient {
     this.get(gameUrl, files =>
       callback(files.map( f => (
         {
-          url : this.getURL(`games/${slug}/files/${f}`),
+          url : this.getURL(`files/${slug}/${f}`),
           filename : f
         }
       )))
