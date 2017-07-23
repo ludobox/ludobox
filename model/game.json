@@ -79,7 +79,8 @@
           "type": "array",
           "minLength": 1,
           "maxLength": 3,
-          "enum" : [
+          "items" : {
+            "enum" : [
             "Jeux de rôle",
             "Identité secrete",
             "Bluff",
@@ -99,7 +100,8 @@
             "Traditionel",
             "Wargame",
             "Placement"
-            ],
+            ]
+          },
           "id": "mechanics",
           "title": "Mechanics",
           "description": "The mechanics that organize the way to play this game"

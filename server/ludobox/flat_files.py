@@ -47,6 +47,11 @@ def delete_resource_folder(resource_folder_path):
 def write_info_json(info, resource_folder_path):
     """Write a JSON file based on valid resource data"""
 
+    # remove stuff we don't need
+    info.pop('files', None)
+    info.pop('errors', None)
+    info.pop('has_errors', None)
+
     # Convert the data to JSON into file
     content = json.dumps(info, sort_keys=True, indent=4, default=json_serial)
     json_path = os.path.join(resource_folder_path, "info.json")

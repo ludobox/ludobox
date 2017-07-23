@@ -25,6 +25,7 @@ export default class Selector extends React.Component {
     let optionsTags = this.props.options.map( (o,i) =>
       <option key={i} value={o.value}>{o.name}</option>
     )
+
     const error = this.props.error ?
       <span style={{fontSize:'10pt', color : 'red'}}>
         { this.props.error }

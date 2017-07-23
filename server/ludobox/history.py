@@ -108,11 +108,11 @@ def make_update_event(old_content, new_content, user=None):
     new = new_content.copy()
     old = old_content.copy()
 
-    # make sure ro remove history and files
-    new.pop('history', None)
-    new.pop('files', None)
-    old.pop('history', None)
-    old.pop('files', None)
+    # ignore keys we don't want to track in the history events
+    ignored_keys = ["history", "files", "errors", "has_errors"]
+    for k in ignored_keys:
+        new.pop(k, None)
+        old.pop(k, None)
 
     # create json diff
     patch = make_patch(new, old)

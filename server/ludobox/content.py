@@ -102,7 +102,6 @@ def read_content(path):
     try :
         validate_content(data)
     except ValidationError as e:
-        data["has_errors"] = True
         data["errors"] = validate_content(data, get_all_errors=True)
 
     # add files attachments list

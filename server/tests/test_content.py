@@ -95,11 +95,11 @@ class TestLudoboxContent(LudoboxTestCase):
         write_info_json(wrong_content, wrong_game_path)
 
         with_errors = read_content(wrong_game_path)
-        self.assertTrue(with_errors["has_errors"])
         self.assertIs(type(with_errors["errors"]), list)
         self.assertIs(len(with_errors["errors"]), 1)
-        self.assertIs(type(with_errors["errors"][0]), str)
-        self.assertIn("title" ,with_errors["errors"][0])
+        self.assertIs(type(with_errors["errors"][0]), dict)
+        self.assertIn("title" , with_errors["errors"][0]["path"])
+        self.assertIn("345" , with_errors["errors"][0]["message"])
 
     def test_create_content_without_attachements(self):
         """ Make sure that content is written properly"""

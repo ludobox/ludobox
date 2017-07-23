@@ -1,5 +1,6 @@
 import React from 'react';
 import DownloadButton from '../RemoteGames/DownloadButton.jsx'
+import ContentState from '../ContentState/ContentState.jsx'
 
 import ISO6391 from 'iso-639-1'
 
@@ -187,12 +188,11 @@ export default class GamesTable extends React.Component {
               : null
             }
           </td>
-          <td>{
-            game.has_errors && game.errors.length ?
-              `${game.errors.length} errors `
-              :
-              game.state
-            }
+          <td>
+            <a style={{textDecoration: "none"}}
+              href={"/games/"+game.slug}>
+                <ContentState state={game.state} errors={game.errors} />
+            </a>
           </td>
           {
             ! game.existsLocally && this.props.remoteApi && this.props.localApi ?

@@ -9,30 +9,29 @@ import FilesList from '../Form/FilesList.jsx'
 
 import ISO6391 from 'iso-639-1'
 
-const requirements = [
-  {
-    name : "Nothing.",
-    value : "nothing"
-  },
-  {
-    name : "Office (printer, stationery...)",
-    value : "print"
-  },
-  {
-    name : "Wood Workshop (saw, hammer, wood...)",
-    value : "wood"
-  },
-  {
-    name : "Fab Lab (3D printer, laser cutter...)",
-    value : "fablab"
-  }
-]
+import ContentState from '../ContentState/ContentState.jsx'
+import model from '../../../../model/game.json'
 
-const ages = [
-  { name : "Children", value : "Children"},
-  { name : "Teenagers", value : "Teenagers"},
-  { name : "Adults", value : "Adults"},
-]
+const requirements = model.properties.fabrication.properties.requirements.items.enum
+  .map(d => ({ value : d, name: d }))
+
+const licenses = model.properties.credentials.properties.license.enum
+  .map(d => ({name : d, value : d}))
+
+const intentions = model.properties.description.properties.intention.enum
+  .map(d => ({name : d, value : d}))
+
+const gameplays = model.properties.description.properties.gameplay.enum
+  .map(d => ({name : d, value : d}))
+
+const gametypes = model.properties.description.properties.type.enum
+  .map(d => ({name : d, value : d}))
+
+const mechanics = model.properties.description.properties.mechanics.items.enum
+  .map(d => ({name : d, value : d}))
+
+const ages = model.properties.audience.properties.age.items.enum
+  .map(d => ({name : d, value : d}))
 
 // 50 last years
 const years = [
@@ -48,10 +47,6 @@ const years = [
 const languages = ISO6391.getLanguages(ISO6391.getAllCodes())
     .map(d => ({ name : d.name, value : d.code}))
 
-// licences
-const licenses = ["CC0", "CC BY-NC-SA 4.0", "Public Domain", "No License", "Unknown"].map(d => ({name : d, value : d}))
-
-
 export default class GameForm extends React.Component {
 
   updateGame(game) {
@@ -62,12 +57,13 @@ export default class GameForm extends React.Component {
     const {
       audience,
       credentials,
-      description ,
-      fabrication ,
-      source ,
+      description,
+      fabrication,
+      source,
+      state,
       timestamp_add,
-      title ,
-      content_type ,
+      title,
+      content_type
     } = this.props.game
 
     const { editMode, errors } = this.props
@@ -89,31 +85,24 @@ export default class GameForm extends React.Component {
             }}
             />
         </h1>
-
-          {/*
-            // TODO : themes and genres
-            <FreeTagging
-            items={ description.themes.concat(description.genres)}
-            editing={editMode}
-            handleChange={ d => {
-              let game  = this.props.game
-              game.description.themes = d.items
-              this.updateGame( game );
-            }}
-          /> */}
-
-          <EditableText
-            type="textarea"
-            text={description.summary}
-            placeholder="Add a description..."
-            error={errors["description.summary"]}
-            editing={editMode}
-            handleChange={ d => {
-              let game  = this.props.game
-              game.description.summary = d
-              this.updateGame( game );
-            }}
-            />
+        <p>
+          <ContentState
+            state={state}
+            errors={this.props.game.errors}
+          />
+        </p>
+        <EditableText
+          type="textarea"
+          text={description.summary}
+          placeholder="Add a description..."
+          error={errors["description.summary"]}
+          editing={editMode}
+          handleChange={ d => {
+            let game  = this.props.game
+            game.description.summary = d
+            this.updateGame( game );
+          }}
+          />
         <p>
             Webpage:
             { !editMode ?
@@ -161,10 +150,74 @@ export default class GameForm extends React.Component {
               this.updateGame( game );
             }}
           />
-
         </p>
         <hr/>
-
+        <p>
+          <br/>
+          Intention
+          <Selector
+            editing={editMode}
+            value={description.intention}
+            error={errors["description.intention"]}
+            options={intentions}
+            handleChange={ d => {
+              let game  = this.props.game
+              game.description.intention = d
+              this.updateGame( game );
+            }}
+          />
+          <br/>
+          Gameplay
+          <Selector
+            editing={editMode}
+            value={description.gameplay}
+            error={errors["description.gameplay"]}
+            options={gameplays}
+            handleChange={ d => {
+              let game  = this.props.game
+              game.description.gameplay = d
+              this.updateGame( game );
+            }}
+          />
+          Type
+          <Selector
+            editing={editMode}
+            value={description.type}
+            error={errors["description.type"]}
+            options={gametypes}
+            handleChange={ d => {
+              let game  = this.props.game
+              game.description.gameplay = d
+              this.updateGame( game );
+            }}
+          />
+          <br/>
+          Mechanics
+          <MultiSelect
+            editing={editMode}
+            value={description.mechanics}
+            error={errors["description.mechanics"]}
+            options={mechanics}
+            handleChange={ d => {
+              let game  = this.props.game
+              game.description.mechanics = d
+              this.updateGame( game );
+            }}
+          />
+          <br />
+          Tags
+          <FreeTagging
+            items={description.tags}
+            editing={editMode}
+            error={errors["description.tags"]}
+            handleChange={ d => {
+              let game  = this.props.game
+              game.description.tags = d
+              this.updateGame( game );
+            }}
+          />
+        </p>
+        <hr/>
         <div className="row">
           <div className="six columns">
             <p>
