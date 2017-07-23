@@ -58,12 +58,12 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
     admin.init_app(app)
 
     # logs
-    formatter = logging.Formatter(
-        "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
-    logfile = RotatingFileHandler('ludobox.log', maxBytes=100000, backupCount=5)
-    logfile.setLevel(logging.DEBUG)
-    logfile.setFormatter(formatter)
-    app.logger.addHandler(logfile)
+    # formatter = logging.Formatter(
+    #     "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
+    # logfile = RotatingFileHandler('ludobox.log', maxBytes=100000, backupCount=5)
+    # logfile.setLevel(logging.DEBUG)
+    # logfile.setFormatter(formatter)
+    # app.logger.addHandler(logfile)
 
     formatter = logging.Formatter('%(levelname)s :: %(message)s')
     terminal = logging.StreamHandler(sys.stdout)
