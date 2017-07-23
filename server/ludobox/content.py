@@ -11,6 +11,7 @@ There are three kinds of content :
 """
 
 import os
+import sys
 import json
 
 from flask import current_app
@@ -19,6 +20,7 @@ from flask_security import current_user
 from ludobox.utils import json_serial # convert datetime
 
 from jsonschema import validate, ValidationError, Draft4Validator
+from jsonschema.validators import ErrorTree
 
 from ludobox.config import read_config
 from ludobox.attachments import write_attachments, get_attachements_list, check_attachments
@@ -72,8 +74,9 @@ def validate_content(data, get_all_errors=False):
 
     if get_all_errors:
         errors = []
+
         for error in sorted(validator.iter_errors(data), key=str):
-            errors.append(error.message)
+            errors.append({ "path" : list(error.path), "message" : error.message})
         return errors
 
     errors = validator.validate(data)

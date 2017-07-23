@@ -12,10 +12,28 @@ import py
 import sys
 
 from ludobox.run import serve
+from ludobox import create_app
+from ludobox.content import validate_content, read_content, ValidationError
 
 # TODO: move this to config file
 INPUT_DIR = os.path.join(os.getcwd(),"data")
 OUTPUT_DIR = os.path.join(os.getcwd(),"static")
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def red(txt):
+    print(bcolors.FAIL + txt + bcolors.ENDC)
+
+def green(txt):
+    print(bcolors.OKGREEN + txt + bcolors.ENDC)
 
 def clean(**kwargs):
     """Delete tmp files
@@ -66,9 +84,50 @@ def test(fulltrace, **kwargs):
     else:
         print("TESTS : SUCCESS")
 
+def games(**kwargs):
+    data_dir = os.path.join(os.getcwd(), 'data')
 
-# TODO add an info action that list the default dirs, all actual games
-#   installed
+    app=create_app()
+    with app.app_context():
+        for game_folder_name in os.listdir(data_dir) :
+            errors = []
+            path = os.path.join(data_dir,game_folder_name)
+
+            # get only folders
+            if os.path.isdir(path):
+                info_file = os.path.join(path, "info.json")
+                if os.path.exists(info_file):
+                    info = read_content(path)
+                    errors = validate_content(info, get_all_errors=True)
+                    if len(errors):
+                        print(info["title"] + bcolors.FAIL + "  %s ERRORS."%len(errors) + bcolors.ENDC)
+                    else :
+                        print(bcolors.OKGREEN + info["title"] + " " + u"\u2713" + bcolors.ENDC)
+
+def validate(game, **kwargs):
+    if os.path.exists(game):
+        app=create_app()
+        with app.app_context():
+            info = read_content(game)
+            errors = validate_content(info, get_all_errors=True)
+            if len(errors):
+                for i, err in enumerate(errors):
+                    print( "Error %s"%i , "--"*50)
+                    print(err["path"])
+                    red(err["message"])
+                    print()
+                print()
+                print(info["title"])
+                red("%s ERRORS"%len(errors))
+                print()
+
+            else :
+                print(bcolors.OKGREEN + info["title"] + ". No errors " + u"\u2713" + bcolors.ENDC)
+
+    else :
+        print('ERROR : %s does not exist. Please specify a valid game path'%game)
+
+
 def parse_args(args):
     """Configure the argument parser and returns it."""
     # Initialise the parsers
@@ -91,10 +150,27 @@ def parse_args(args):
         help="Show the complete test log")
     parser_test.set_defaults(func=test)
 
+    # List games command ################################################
+    parser_games = subparsers.add_parser(
+        "games",
+        help="List all games and trace existing errors in data.")
+    parser_games.set_defaults(func=games)
+
+    # Validate single games command ######################################
+    parser_validate = subparsers.add_parser(
+        "validate",
+        help="Show errors in games' data.")
+    parser_validate.add_argument(
+        "game",
+        action='store',
+        help="Path of game",
+        type=str)
+    parser_validate.set_defaults(func=validate)
+
     # Clean command ###########################################################
     parser_clean = subparsers.add_parser(
         "clean",
-        help="Remove usuless and temp files from the folder.")
+        help="Remove temp files from the folder.")
     parser_clean.set_defaults(func=clean)
 
     # Serve command ###########################################################
@@ -116,7 +192,6 @@ def parse_args(args):
 
     # Returns the, now configured, parser
     return parser.parse_args(args)
-
 
 def main(commands=None):
     """
