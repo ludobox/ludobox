@@ -26,9 +26,11 @@ app.register_blueprint(users_api)
 app.register_blueprint(games_api)
 app.register_blueprint(files_api)
 
+
 @app.before_first_request
 def handle_start():
     """Everything that needs a proper init goes there"""
+
     db.create_all()
     tables = [t.name for t in db.metadata.sorted_tables]
     if "role" not in tables :

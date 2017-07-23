@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+import logging
+
 import socket as ip_socket
 from ludobox.config import read_config
 
@@ -41,8 +44,16 @@ def serve(debug, port, **kwargs):
 
     _port = get_server_port(port)
     ip = get_server_ip()
-    print """
-    ------
-    Connected to local IP address : %s:%s
-    """%(ip, _port)
+
+    app.logger.setLevel(logging.INFO)
+    app.logger.info("APP: %s launched !"%app.name)
+    app.logger.info("Data will be stored at %s"%app.config["DATA_DIR"])
+    app.logger.info("Upload allowed : %s"%app.config["UPLOAD_ALLOWED"])
+    app.logger.info("Connect to local IP address : %s:%s"%(ip, _port))
+
+    # debug
+    if debug is True:
+        app.logger.setLevel(logging.DEBUG)
+        app.logger.debug("Debug mode : ON")
+
     socket.run(app, host='0.0.0.0', port=_port, debug=debug)

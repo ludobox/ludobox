@@ -6,7 +6,10 @@ from pkg_resources import get_distribution
 __version__ = get_distribution('ludobox').version
 
 import os
+import sys
+
 import logging
+from logging.handlers import RotatingFileHandler
 
 from flask import Flask
 
@@ -17,17 +20,11 @@ from ludobox.admin import admin, security_context_processor
 
 DEFAULT_CONFIG_PATH = os.path.join(os.getcwd(),"config.yml")
 
-# print admin
-
-# logs
-logging.basicConfig(format='%(asctime)s:%(levelname)s:%(name)s:%(message)s')
-logging.getLogger().setLevel(logging.DEBUG)
 
 def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
     """Create the Flask application with proper options"""
 
     config = read_config(config_path=config_path)
-
     tmpl_dir = os.path.join(os.path.join(os.getcwd(), 'server'), 'templates')
 
     app = Flask(config["ludobox_name"], template_folder=tmpl_dir)
@@ -44,10 +41,8 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
 
     # data options (used for testing)
     app.config["DATA_DIR"] = config["data_dir"]
-    print "Data will be stored at %s"%app.config["DATA_DIR"]
 
     app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
-    print "Upload allowed : %s"%app.config["UPLOAD_ALLOWED"]
 
     # setup DB
     db.init_app(app)
@@ -62,6 +57,17 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
     # add admin dashboard
     admin.init_app(app)
 
-    app.debug=debug
+    # logs
+    formatter = logging.Formatter(
+        "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
+    logfile = RotatingFileHandler('ludobox.log', maxBytes=100000, backupCount=5)
+    logfile.setLevel(logging.DEBUG)
+    logfile.setFormatter(formatter)
+    app.logger.addHandler(logfile)
+
+    formatter = logging.Formatter('%(levelname)s :: %(message)s')
+    terminal = logging.StreamHandler(sys.stdout)
+    terminal.setFormatter(formatter)
+    app.logger.addHandler(terminal)
 
     return app

@@ -5,6 +5,7 @@ import os
 import json
 import urllib
 import requests
+from flask import current_app
 from flask_socketio import emit
 
 from ludobox.config import read_config
@@ -44,5 +45,7 @@ def download_from_server(url, dest_dir, filename) :
     # direct download
     testfile = urllib.URLopener()
     testfile.retrieve(url, file_path)
-    print "Data from %s saved in %s "%(url,filename)
+
+    current_app.logger.debug("Data from %s saved in %s "%(url,filename))
+
     socket.emit("downloadEnded", {"url" : url, "filename" : filename }, namespace='/')

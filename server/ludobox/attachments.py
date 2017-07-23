@@ -79,7 +79,7 @@ def store_files(game_path, attachments):
     - attachments: files to be uploaded to the game folder
     - path
     """
-    print attachments
+    current_app.logger.debug("attached files : %s"%attachments)
 
     # Write the attached files
     if attachments:
