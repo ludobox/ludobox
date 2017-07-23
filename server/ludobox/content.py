@@ -103,7 +103,7 @@ def read_content(path):
         validate_content(data)
     except ValidationError as e:
         data["has_errors"] = True
-        data["errors"] = [ str(e) ]
+        data["errors"] = validate_content(data, get_all_errors=True)
 
     # add files attachments list
     data["files"] = get_attachements_list(path)
@@ -210,7 +210,9 @@ def get_content_index(short=True):
             "slug",
             "audience",
             "content_type",
-            "has_errors"
+            "has_errors",
+            "state",
+            "errors"
             ]
 
     # loop through all folders

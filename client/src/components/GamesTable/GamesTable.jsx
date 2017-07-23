@@ -188,9 +188,10 @@ export default class GamesTable extends React.Component {
             }
           </td>
           <td>{
-            game.has_errors ?
-              "Needs fix"
-              : null
+            game.has_errors && game.errors.length ?
+              `${game.errors.length} errors `
+              :
+              game.state
             }
           </td>
           {
