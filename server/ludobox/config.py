@@ -8,7 +8,6 @@ import yaml
 import logging
 from ludobox.utils import validate_url
 
-logger = logging.getLogger()
 
 def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwargs):
     """Validate and apply settings as defined in config file"""
@@ -19,7 +18,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwa
     upload_allowed = True
     database_uri = "sqlite:////tmp/ludobox.db"
 
-    logger.info("Loading config from : %s"%config_path)
+    # current_app.logger.info("Loading config from : %s"%config_path)
 
     # Read the YAML config file
     with open(config_path, "r") as config_file:
@@ -62,7 +61,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwa
             "database_uri" : database_uri
         }
 
-    logger.info("Config : %s"%ok_config)
+    # logger.info("Config : %s"%ok_config)
     return validate_config(ok_config)
 
 def validate_config(config):

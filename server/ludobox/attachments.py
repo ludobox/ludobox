@@ -50,14 +50,13 @@ def write_attachments(attachments, game_path):
                   "files.".format(
                     path=game_path,
                     attachments_path=os.path.abspath(attachments_path))
-        print message
         raise LudoboxError(message)
 
     # Write all the files
     for f in attachments:
         file_clean_name = secure_filename(f.filename)
         file_path = os.path.join(attachments_path, file_clean_name)
-        # print file_path
+        current_app.logger.debug("saving  %s"%file_path)
         try:
             f.save(file_path)
         except Exception as e:

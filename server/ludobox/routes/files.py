@@ -30,7 +30,7 @@ def api_post_files():
     """
 
     files = request.files.getlist('files')
-    # print("UPLOADED FILES:", [f.filename for f in files])
+    # ("UPLOADED FILES:", [f.filename for f in files])
 
     game_slug = json.loads(request.form["slug"])
     content_path = os.path.join(current_app.config["DATA_DIR"], game_slug)
@@ -51,13 +51,13 @@ def api_delete_files(slug,path):
     content_path = os.path.join(current_app.config["DATA_DIR"], slug)
     files_path = os.path.join(content_path, "files")
     to_delete_path = os.path.join(files_path, path)
-    print to_delete_path
 
     # make sure the file actually exists
     if not os.path.isfile(to_delete_path):
         abort(404)
 
     delete_file(to_delete_path)
+    current_app.logger.debug("Deleted file : %s"%to_delete_path)
 
     file_list = get_attachements_list(content_path)
 

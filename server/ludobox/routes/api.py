@@ -84,7 +84,7 @@ def api_create_resource():
         return response, 401
 
     files = request.files.getlist('files')
-    print("UPLOADED FILES:", [f.filename for f in files])
+    current_app.logger.debug("UPLOADED FILES:", [f.filename for f in files])
 
     info = json.loads(request.form["info"])
 
@@ -136,7 +136,6 @@ def api_clone_resource():
         return response, 401
 
     data = request.get_json()
-    print data
 
     info = data["info"]
     files_list = data["files"]

@@ -83,6 +83,7 @@ def add_event_to_history(content_previous_version, event):
     # add event to history
     content_with_updated_history["history"].append(event)
 
+    current_app.logger.debug("Event : %s - %s"%(event["type"], content_with_updated_history))
     return content_with_updated_history
 
 def make_create_event(content, user=None):
@@ -165,8 +166,6 @@ def apply_history(history, selected_id):
             final_content = apply_update_patch(final_content, event)
         elif event["type"] == "change_state":
             new_state = event["content"]["to"]
-            print new_state, "hoho"
-            # final_content["state"]
 
         # run until last is
         if event["id"] == selected_id :

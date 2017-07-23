@@ -29,6 +29,7 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
 
     app = Flask(config["ludobox_name"], template_folder=tmpl_dir)
 
+    app.logger.debug(config_path)
     # db options
     app.config['SQLALCHEMY_DATABASE_URI'] = config["database_uri"]
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -41,7 +42,6 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
 
     # data options (used for testing)
     app.config["DATA_DIR"] = config["data_dir"]
-
     app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
 
     # setup DB

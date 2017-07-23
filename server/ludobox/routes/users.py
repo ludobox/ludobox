@@ -35,7 +35,6 @@ def get_recent_changes():
     user_id = request.args.get('user_id')
     user_email = None
     user = user_datastore.get_user(user_id)
-    print user
     if user is not None :
         user_email = user.to_json()["email"]
 
