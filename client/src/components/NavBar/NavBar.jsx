@@ -20,6 +20,7 @@ export default class NavBar extends React.Component {
           <ul className="navbar-list">
             <li className="navbar-item ludobox-nav-header"><a className="navbar-link" href="/">Ludobox</a></li>
             <li className="navbar-item"><a className="navbar-link" href="/games">Games</a></li>
+            <li className="navbar-item"><a className="navbar-link" href="/recent">Recent</a></li>
             {
               is_auth ?
               <li className="navbar-item">

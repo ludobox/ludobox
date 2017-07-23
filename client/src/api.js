@@ -83,6 +83,11 @@ export default class APIClient {
     )
   }
 
+  getRecentChanges(callback) {
+    let recentUrl = this.getURL(`recent_changes`);
+    this.get(recentUrl, recentChanges => callback(recentChanges))
+  }
+
   getGame(slug, callback) {
     let gameUrl = this.getURL(`games/${slug}`);
     this.get(gameUrl, game => callback(game))
