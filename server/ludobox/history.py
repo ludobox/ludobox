@@ -18,7 +18,7 @@ import json
 from jsonpatch import make_patch, JsonPatch
 
 # TODO :  implement state changes (draft -> reviewed, etc.)
-event_types = ["create", "update", "delete"]
+event_types = ["create", "update", "delete", "change_state"]
 
 # hashing changes to create an id
 sha_1 = hashlib.sha1()
@@ -69,16 +69,16 @@ def add_event_to_history(content_previous_version, event):
     # immutable: clone original reference
     content_with_updated_history = content_previous_version.copy()
 
-    print content_previous_version
-    print event
+    # init history if empty
+    if "history" not in content_with_updated_history.keys():
+        content_with_updated_history["history"] = []
 
     # re-apply changes and store last version
     if event["type"] == "update":
         content_with_updated_history = apply_update_patch(content_with_updated_history, event)
-
-    # init history if empty
-    if "history" not in content_with_updated_history.keys():
-        content_with_updated_history["history"] = []
+    elif event["type"] == "change_state":
+        new_state = event["content"]["to"]
+        content_with_updated_history["state"] = new_state
 
     # add event to history
     content_with_updated_history["history"].append(event)
@@ -122,6 +122,17 @@ def make_update_event(old_content, new_content, user=None):
     event = new_event("update", { "changes" : list(patch) }, user)
     return event
 
+def make_update_state_event(old_content, updated_content_state, user=None):
+    """Store an event reflecting content update"""
+
+    original_state = old_content["state"]
+
+    state_change = { "from" : original_state, "to" : updated_content_state}
+
+    # create a new event and add it to history
+    event = new_event("change_state", state_change, user)
+    return event
+
 def apply_update_patch(content, event):
     """Apply JSON diff patches to content"""
     patch = JsonPatch(event["content"]["changes"])
@@ -140,7 +151,6 @@ def apply_history(history, selected_id):
     assert len(selected_id) is 40
 
     # filter history
-
     final_content = {}
 
     # run again the course of events
@@ -153,6 +163,10 @@ def apply_history(history, selected_id):
             final_content = event["content"]
         elif event["type"] == "update":
             final_content = apply_update_patch(final_content, event)
+        elif event["type"] == "change_state":
+            new_state = event["content"]["to"]
+            print new_state, "hoho"
+            # final_content["state"]
 
         # run until last is
         if event["id"] == selected_id :

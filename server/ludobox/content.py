@@ -26,7 +26,7 @@ from ludobox.attachments import write_attachments, get_attachements_list, check_
 from ludobox.flat_files import create_resource_folder, write_info_json, delete_resource_folder, read_info_json
 from ludobox.errors import LudoboxError
 from ludobox.utils import get_resource_slug
-from ludobox.history import make_create_event, make_update_event, add_event_to_history
+from ludobox.history import make_create_event, make_update_event, make_update_state_event, add_event_to_history
 
 config = read_config()
 
@@ -125,6 +125,9 @@ def create_content(info, attachments, data_dir):
     # validate game data
     validate_content(info)
 
+    # add default state
+    info["state"] = "needs_review"
+
     # check attachments
     if attachments:
         check_attachments(attachments)
@@ -151,7 +154,7 @@ def create_content(info, attachments, data_dir):
 
     return content_path
 
-def update_content_info(resource_path, new_info):
+def update_content_info(resource_path, new_info, state=None):
     """
     Update game info based on changes
 
@@ -168,7 +171,10 @@ def update_content_info(resource_path, new_info):
         user = current_user.email
 
     # create patch
-    event = make_update_event(new_info, original_info, user=user)
+    if state:
+        event = make_update_state_event(original_info, state, user=user)
+    else :
+        event = make_update_event(new_info, original_info, user=user)
 
     if event is None :
         return original_info
