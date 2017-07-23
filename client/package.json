@@ -1,6 +1,6 @@
 {
   "name": "ludobox-client",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "Client Browser and Downloader for Ludobox",
   "main": "src/app.js",
   "repository": {
