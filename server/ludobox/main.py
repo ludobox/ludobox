@@ -87,6 +87,7 @@ def test(fulltrace, **kwargs):
 def games(**kwargs):
     data_dir = os.path.join(os.getcwd(), 'data')
 
+    errors_count = 0
     app=create_app()
     with app.app_context():
         for game_folder_name in os.listdir(data_dir) :
@@ -100,9 +101,19 @@ def games(**kwargs):
                     info = read_content(path)
                     errors = validate_content(info, get_all_errors=True)
                     if len(errors):
-                        print(info["title"] + bcolors.FAIL + "  %s ERRORS."%len(errors) + bcolors.ENDC)
+                        print(info["title"] + bcolors.FAIL + "  %s"%len(errors) + bcolors.ENDC)
+                        errors_count = errors_count + len(errors)
                     else :
                         print(bcolors.OKGREEN + info["title"] + " " + u"\u2713" + bcolors.ENDC)
+
+    print()
+    print("Done.")
+
+    if errors_count :
+        red("%s JSON formatting errors."%errors_count)
+    else :
+        green("No errors detected.")
+    print()
 
 def validate(game, **kwargs):
     if os.path.exists(game):
