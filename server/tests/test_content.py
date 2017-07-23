@@ -61,6 +61,17 @@ class TestLudoboxContent(LudoboxTestCase):
 
         self.assertRaises(ValidationError, lambda:validate_content(info_wrong))
 
+    def test_validate_content_multiple_errors(self):
+        info = read_content(self.game_path)
+
+        info_wrong = info.copy()
+        info_wrong["description"] = 72
+        info_wrong["title"] = 12
+        info_wrong["credentials"]["license"] = ["hahaah"]
+
+        errors = validate_content(info_wrong, get_all_errors=True)
+        self.assertEquals(len(errors), 4)
+
     # TODO test this function with different scenari: existant/inexistant/not readable dir, info.json present/absent/not readable, with/without attached file
     def test_read_content(self):
         """Make sure an info file is read properly"""
