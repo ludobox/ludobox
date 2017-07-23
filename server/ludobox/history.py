@@ -15,6 +15,8 @@ import time
 
 import json
 
+from flask import current_app
+
 from jsonpatch import make_patch, JsonPatch
 
 # TODO :  implement state changes (draft -> reviewed, etc.)

@@ -37,7 +37,7 @@ def create_resource_folder(resource_folder_path) :
                     error=e.strerror,
                     resource_folder_path=os.path.abspath(resource_folder_path))
         raise LudoboxError(message)
-    current_app.logger.debug("path created : %s"%resource_folder_path)
+    # current_app.logger.debug("path created : %s"%resource_folder_path)
 
 def delete_resource_folder(resource_folder_path):
     """Delete an existing rep containing data of a game"""
