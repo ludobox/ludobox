@@ -209,6 +209,7 @@ def get_content_index(short=True):
             "slug",
             "audience",
             "content_type",
+            "fabrication",
             "has_errors",
             "state",
             "errors"

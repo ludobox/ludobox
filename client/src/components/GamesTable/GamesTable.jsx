@@ -4,25 +4,35 @@ import ContentState from '../ContentState/ContentState.jsx'
 
 import ISO6391 from 'iso-639-1'
 
-
-const requirements = [
-  {
-    name : "Nothing.",
-    value : "nothing"
-  },
-  {
-    name : "Office (printer)",
-    value : "print"
-  },
-  {
-    name : "Wood Workshop (saw, hammer...)",
-    value : "wood"
-  },
-  {
-    name : "Fab Lab (3D printer, lasercutter...)",
-    value : "fablab"
+const style = {
+  label : {
+    display: "block",
+    float: "left",
+    paddingRight: "10px",
+    whiteSpace: "nowrap"
   }
-]
+}
+
+const requirements = {
+  "dunno" : {
+    name : "I don't know."
+  },
+  "nothing" : {
+    name : "Nothing."
+  },
+  "office" : {
+    name : "Office",
+    items : [ "Printers B&W", "Printers Colour", "Cissors", "Pens", "Stickers", "Ruler", "Paper Glue"]
+  },
+  "workshop": {
+    name : "Wood/Workshop",
+    items : ["Cutter", "Mechanical saw", "Hand saw", "Wood glue", "Hammer", "All purpose plier", "Welder", "Sewing machine", "Drill", "Other tools"]
+  },
+  "fablab" : {
+    name : "Fab Lab",
+    items : ["3D printers", "Laser cutter", "Micro chip computer"]
+  }
+}
 
 export default class GamesTable extends React.Component {
 
@@ -30,8 +40,8 @@ export default class GamesTable extends React.Component {
     super(props)
 
     let selectedRequirements = {}
-    requirements.forEach(d =>
-      selectedRequirements[d.value] = true
+    Object.keys(requirements).forEach(d =>
+      selectedRequirements[d] = true
     )
 
     this.state = {
@@ -40,7 +50,8 @@ export default class GamesTable extends React.Component {
       selectedAges : ["Children", "Teenagers", "Adults"],
       showLookup : false,
       timeRange : 60,
-      selectedRequirements : selectedRequirements
+      showErrors : false,
+      selectedRequirements : ["dunno"] //all checked by default
     }
   }
 
@@ -57,7 +68,7 @@ export default class GamesTable extends React.Component {
   }
 
   changeTimeRange(e) {
-    this.setState({ timeRange : e.target.value})
+    this.setState({ timeRange : parseInt(e.target.value)})
   }
 
   selectAge(e){
@@ -69,13 +80,30 @@ export default class GamesTable extends React.Component {
 
   handleCheckbox(e) {
     let { selectedRequirements } = this.state
-    selectedRequirements[e.target.name] = e.target.checked
+    let elt = e.target.name
+    let state = e.target.checked
+
+    // check if the thing is inside and remove it
+    let i = selectedRequirements.indexOf(elt)
+    if(i > -1) {
+      selectedRequirements.splice(i, 1);
+    }
+    else {
+      selectedRequirements.push(elt);
+    }
     this.setState({ selectedRequirements })
+
+  }
+
+  changeFilterError() {
+    let showErrors = ! this.state.showErrors
+    this.setState({ showErrors })
   }
 
   render() {
     let { games } = this.props
     let {
+      showErrors,
       showLookup,
       filterStr,
       selectedLanguage,
@@ -113,23 +141,28 @@ export default class GamesTable extends React.Component {
         }
       )
 
-    let requirementsOptions = requirements
-      .map( option => {
+    let requirementsOptions = Object.keys(requirements)
+      .map( value => {
+        let option = requirements[value]
         return (
           <label
-            key={option.value}
+            key={value}
             style={{
               display: "block",
               float: "left",
               paddingRight: "10px",
               whiteSpace: "nowrap"
             }}
+            title={option.items ? option.items.join("\n"): option.name}
+            htmlFor={value}
             >
             <input
               onClick={(e) => this.handleCheckbox(e)}
+              title={option.items ? option.items.join("\n"): option.name}
               type='checkbox'
-              name={option.value}
-              defaultChecked={this.state.selectedRequirements[option.value]}
+              name={value}
+              id={value}
+              defaultChecked={this.state.selectedRequirements.includes(value)}
             />
             <span className="label-body">
               {option.name}
@@ -139,12 +172,30 @@ export default class GamesTable extends React.Component {
         }
       )
 
+    // parse an array of items for fab requirements to make checks easier
+    let selectedItems = [];
+    selectedRequirements
+      .forEach( selectedValue =>
+        selectedValue !== 'nothing' ?
+          selectedItems = selectedItems.concat(requirements[selectedValue].items)
+        :
+          selectedItems.push('Nothing')
+      )
+    // console.log(selectedItems);
+
+
     let rows = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
       .filter(g =>
         selectedLanguage !== 'any' ?
           g.audience.language === selectedLanguage
         : true // show all games by default
+      )
+      .filter(g =>
+        ! showErrors ?
+          typeof g.errors === 'undefined'
+          :
+          true
       )
       .filter(g => {
         let ages = g.audience.age ?
@@ -154,22 +205,29 @@ export default class GamesTable extends React.Component {
           .filter( age => ages.has(age) )
           .length
       })
-      // .filter(g => {
-      //   let reqs = g.fabrication && g.fabrication.requirements ?
-      //     new Set(g.fabrication.requirements)
-      //     : new Set([""])
-      //
-      //   return Object.keys(selectedRequirements)
-      //     .filter( d => selectedRequirements[d] )
-      //     .filter( req => reqs.has(req) )
-      //     .length
-      // })
-      // .filter( g =>
-      //     timeRange == 0 ?
-      //       true
-      //       :
-      //       g.fabrication.fab_time <= timeRange
-      // )
+      .filter(g => {
+
+        let reqs = g.fabrication && g.fabrication.requirements ?
+          new Set(g.fabrication.requirements)
+          : new Set([""])
+
+        // if "don't know" is checked
+        if(selectedRequirements.includes("dunno"))
+          return true
+
+        // at least one element match
+        let isSelected = false;
+          reqs.forEach( r=>
+            selectedItems.includes(r) ? isSelected = true : false
+          )
+        return isSelected
+      })
+      .filter( g =>
+        g.fabrication ?
+            g.fabrication.fab_time <= timeRange
+            :
+            true
+      )
       .map( game => (
         <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
           key={game.slug}>
@@ -235,39 +293,53 @@ export default class GamesTable extends React.Component {
         </div>
         {
           showLookup ?
-          <div className="row">
-            <div className="six columns">
-              <label>Search</label>
-              <input
-                type="text"
-                id="filterStrField"
-                value={ filterStr }
-                onChange={ e => this.changeFilterStr(e.target.value) }
-                placeholder="Lookup a game"
-              />
+          <section>
+            <div className="row">
+              <div className="six columns">
+                <label>Search</label>
+                <input
+                  type="text"
+                  id="filterStrField"
+                  value={ filterStr }
+                  onChange={ e => this.changeFilterStr(e.target.value) }
+                  placeholder="Lookup a game"
+                />
+              </div>
+              <div className="two columns">
+                <label>Language</label>
+                <select
+                  id="languageSelector"
+                  value={ selectedLanguage }
+                  onChange={e => this.selectLanguage(e.target.value)}
+                  >
+                    {languagesOptions}
+                  </select>
+              </div>
+              <div className="four columns">
+                <label>Age</label>
+                <select
+                  id="languageSelector"
+                  value={ selectedAges }
+                  onChange={e => this.selectAge(e)}
+                  multiple
+                  >
+                    {ageOptions}
+                  </select>
+              </div>
             </div>
-            <div className="two columns">
-              <label>Language</label>
-              <select
-                id="languageSelector"
-                value={ selectedLanguage }
-                onChange={e => this.selectLanguage(e.target.value)}
-                >
-                  {languagesOptions}
-                </select>
+            <div className="row">
+              <label style={style.label}>
+                <input
+                type="checkbox"
+                checked={showErrors}
+                onChange={ e => this.changeFilterError() }
+                />
+                <span className="label-body">
+                  Show records with formatting errors
+                </span>
+              </label>
             </div>
-            <div className="four columns">
-              <label>Age</label>
-              <select
-                id="languageSelector"
-                value={ selectedAges }
-                onChange={e => this.selectAge(e)}
-                multiple
-                >
-                  {ageOptions}
-                </select>
-            </div>
-          </div>
+          </section>
           :
           null
         }
