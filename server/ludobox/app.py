@@ -5,7 +5,7 @@ from ludobox import create_app
 from ludobox.socketio import socket
 from ludobox.security import security
 from ludobox.admin import admin
-from ludobox.models import db, create_default_roles
+from ludobox.models import db, create_default_roles, Role
 
 from ludobox.routes.static import statics
 from ludobox.routes.api import rest_api
@@ -33,5 +33,7 @@ def handle_start():
 
     db.create_all()
     tables = [t.name for t in db.metadata.sorted_tables]
-    if "role" not in tables :
+
+    roles = Role.query.all()
+    if "role" not in tables or len(roles) == 0 :
         create_default_roles()
