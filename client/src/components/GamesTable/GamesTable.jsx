@@ -49,7 +49,7 @@ export default class GamesTable extends React.Component {
       selectedLanguage : 'any',
       selectedAges : ["Children", "Teenagers", "Adults"],
       showLookup : false,
-      timeRange : 60,
+      timeRange : 120,
       showErrors : false,
       selectedRequirements : ["dunno"] //all checked by default
     }
@@ -286,6 +286,7 @@ export default class GamesTable extends React.Component {
             <input
               type="range"
               min="0"
+              value={timeRange}
               max="120"
               step="10"
               onChange={ e => this.changeTimeRange(e)}
