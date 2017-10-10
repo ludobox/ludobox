@@ -187,7 +187,7 @@ export default class GameForm extends React.Component {
             options={gametypes}
             handleChange={ d => {
               let game  = this.props.game
-              game.description.gameplay = d
+              game.description.type = d
               this.updateGame( game );
             }}
           />

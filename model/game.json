@@ -59,9 +59,9 @@
             "Construction",
             "Design Kit"
           ],
-          "id": "intention",
-          "title": "Intention",
-          "description": "The intention that created the game"
+          "id": "type",
+          "title": "Type",
+          "description": "The type of game content"
         },
         "gameplay": {
           "type": "string",
