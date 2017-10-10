@@ -30,6 +30,7 @@ export default class GameEdit extends React.Component {
     super(props)
     this.api = new APIClient()
     this.validate = validator(model)
+
     this.state = {
       game: null,
       // prevGame : JSON.parse(JSON.stringify(this.state.game)),
@@ -57,15 +58,13 @@ export default class GameEdit extends React.Component {
   }
 
   handleAddFiles(files) {
-    console.log(files);
     this.setState({newFiles : files });
   }
 
   handleDeleteFile(fileName) {
 
     // get slug
-    let slug = this.state.game.slug
-    console.log(slug);
+    let {slug} = this.state.game
 
     this.api.deleteFile(slug, fileName,
       resp => { // SUCCESS : File deleted
@@ -89,8 +88,6 @@ export default class GameEdit extends React.Component {
   }
 
   handleFileUpload() {
-    console.log(this.state.newFiles);
-
     if (!this.state.newFiles.length) {
       this.msg.error("No files. Please add a file to upload.")
       return
@@ -156,12 +153,12 @@ export default class GameEdit extends React.Component {
         resp => { // SUCCESS : Game created
           // show feedback
           this.msg.success( "Bravo, your game has been updated!")
+          // Move to /games/switch to read mode
+          browserHistory.push(`/games/${slug}`)
         },
         error => this.msg.error( error.message )
       )
 
-      // Move to /games/switch to read mode
-      browserHistory.push(`/games/${slug}`)
     }
   }
 
@@ -179,6 +176,7 @@ export default class GameEdit extends React.Component {
   }
 
   render() {
+
     return (
       <div>
       {
@@ -212,7 +210,10 @@ export default class GameEdit extends React.Component {
 
        </a>
      </span>
-      <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+      <AlertContainer
+        ref={a => this.msg = a}
+        {...this.alertOptions}
+        />
     </div>
     )
   }

@@ -35,7 +35,6 @@ export default class AddGame extends React.Component {
 
   constructor(props) {
     super(props)
-
     this.api = new APIClient()
     this.validate = validator(model)
     this.state = {
