@@ -85,12 +85,16 @@ export default class GameForm extends React.Component {
             }}
             />
         </h1>
-        <p>
-          <ContentState
-            state={state}
-            errors={this.props.game.errors}
-          />
-        </p>
+        { ! editMode ?
+          <p>
+            <ContentState
+              state={state}
+              errors={this.props.game.errors}
+            />
+          </p>
+          :
+          null
+        }
         <EditableText
           type="textarea"
           text={description.summary}
@@ -104,7 +108,7 @@ export default class GameForm extends React.Component {
           }}
           />
         <p>
-            Webpage:
+            <span className="label">Webpage</span>
             { !editMode ?
               <a href={source.url} target="_blank">
                 {source.url}
@@ -124,7 +128,7 @@ export default class GameForm extends React.Component {
                />
               }
           <br/>
-          Under license :
+          <span className="label">Under license </span>
           <Selector
             editing={editMode}
             value={credentials.license}
@@ -137,7 +141,7 @@ export default class GameForm extends React.Component {
             }}
           />
           <br/>
-          Published in :
+          <span className="label">Published in </span>
           <Selector
             editing={editMode}
             value={credentials.publication_year}
@@ -154,7 +158,7 @@ export default class GameForm extends React.Component {
         <hr/>
         <p>
           <br/>
-          Intention
+          <span className="label">Intention</span>
           <Selector
             editing={editMode}
             value={description.intention}
@@ -167,7 +171,7 @@ export default class GameForm extends React.Component {
             }}
           />
           <br/>
-          Gameplay
+          <span className="label">Gameplay</span>
           <Selector
             editing={editMode}
             value={description.gameplay}
@@ -179,7 +183,8 @@ export default class GameForm extends React.Component {
               this.updateGame( game );
             }}
           />
-          Type
+          <br />
+          <span className="label">Type</span>
           <Selector
             editing={editMode}
             value={description.type}
@@ -191,8 +196,8 @@ export default class GameForm extends React.Component {
               this.updateGame( game );
             }}
           />
-          <br/>
-          Mechanics
+          <br />
+          <span className="label">Mechanics</span>
           <MultiSelect
             editing={editMode}
             value={description.mechanics}
@@ -205,7 +210,7 @@ export default class GameForm extends React.Component {
             }}
           />
           <br />
-          Tags
+          <span className="label">Tags</span>
           <FreeTagging
             items={description.tags}
             editing={editMode}
@@ -221,7 +226,7 @@ export default class GameForm extends React.Component {
         <div className="row">
           <div className="six columns">
             <p>
-              Language:
+              <span className="label">Language</span>
               <Selector
                 editing={editMode}
                 value={audience.language}
@@ -235,8 +240,10 @@ export default class GameForm extends React.Component {
               />
 
               <br/>
-              Number of players :
-              { editMode ? " (minimum)" : null}
+              <span className="label">
+                Number of players :
+                { editMode ? " (minimum)" : null}
+              </span>
               <Number
                 editing={editMode}
                 value={audience.number_of_players.players_min}
@@ -247,8 +254,13 @@ export default class GameForm extends React.Component {
                   this.updateGame( game );
                 }}
               />
-               -
-              { editMode ? "Number_of_players (maximum)" : null}
+
+                { editMode ?
+                  <span className="label">
+                      Number of players (maximum)
+                  </span>
+                 : null
+               }
               <Number
                 editing={editMode}
                 value={audience.number_of_players.players_max}
@@ -260,7 +272,7 @@ export default class GameForm extends React.Component {
                 }}
               />
               <br/>
-            Duration of each play (minutes):
+            <span className="label">Duration of each play (minutes):</span>
             <Number
               editing={editMode}
               value={audience.duration}
@@ -274,7 +286,14 @@ export default class GameForm extends React.Component {
             </p>
           </div>
           <div className="six columns">
-            {editMode ? "Audience Age" : null}
+            {
+              editMode ?
+                <span className="label">
+                  Audience Age
+                </span>
+              :
+              null
+            }
             <MultiSelect
               value={audience.age}
               error={errors["audience.age"]}
@@ -297,7 +316,9 @@ export default class GameForm extends React.Component {
               <h5>Fabrication time : {fabrication.fab_time} minutes </h5>
               :
               <p>
-                Fabrication time (minutes):
+                <span className="label">
+                  Fabrication time (minutes)
+                </span>
                 <Number
                   editing={editMode}
                   error={errors["fabrication.fab_time"]}
@@ -341,7 +362,7 @@ export default class GameForm extends React.Component {
 
         <div className="row">
           <div className="four columns">
-            <p>Authors</p>
+            <p className="label">Authors</p>
             <FreeTagging
               items={credentials.authors}
               editing={editMode}
@@ -354,7 +375,7 @@ export default class GameForm extends React.Component {
             />
           </div>
           <div className="four columns">
-            <p>Illustrators</p>
+            <p className="label">Illustrators</p>
             <FreeTagging
               items={credentials.illustrators}
               error={errors["credentials.illustrators"]}
@@ -367,7 +388,7 @@ export default class GameForm extends React.Component {
             />
           </div>
           <div className="four columns">
-            <p>Publishers</p>
+            <p className="label">Publishers</p>
             <FreeTagging
               items={credentials.publishers}
               error={errors["credentials.publishers"]}
