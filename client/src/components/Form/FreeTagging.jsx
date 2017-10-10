@@ -20,11 +20,10 @@ export default class FreeTagging extends React.Component {
   }
 
   handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      console.log("enter pressed");
+    if (e.key === 'Enter' && e.target.value != '') {
       let items = [...this.props.items, e.target.value]
       this.handleChange( items )
-      this.refs.newItemInput = ""
+      this.refs.newItemInput.value = ""
     }
   }
 
