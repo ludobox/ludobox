@@ -166,12 +166,8 @@ export default class GameEdit extends React.Component {
   }
 
   cancelChanges() {
-    console.log("changes cancelled")
-    this.setState({
-      game : Object.assign({}, this.state.prevGame),
-      prevGame : null,
-      editMode : false
-    })
+    let {slug} = this.state.game
+    browserHistory.push(`/games/${slug}`)
   }
 
   handleSendChanges() {
