@@ -64,6 +64,6 @@ if __name__ == '__main__':
 
                 write_info_json(info, game_path)
 
-            print "%s folder(s) renamed"%len(to_update)
+            print "%s content states added."%len(to_update)
         else :
             print 'Operation cancelled'
