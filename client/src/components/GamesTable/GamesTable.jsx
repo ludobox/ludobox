@@ -131,7 +131,7 @@ export default class GamesTable extends React.Component {
         }
       )
 
-    let ageOptions = ["Children", "Teenagers", "Adults", null]
+    let ageOptions = ["Children", "Teenagers", "Adults"]
       .map( age => {
         return (
           <option key={age} value={age}>
@@ -198,11 +198,13 @@ export default class GamesTable extends React.Component {
           true
       )
       .filter(g => {
+
         let ages = g.audience.age ?
          new Set(g.audience.age):
-         new Set([""])
+         new Set([])
+
         return selectedAges
-          .filter( age => ages.has(age) )
+          .filter( age => !!ages.size ? ages.has(age) : true )
           .length
       })
       .filter(g => {
