@@ -68,7 +68,8 @@ export default class GamesTable extends React.Component {
   }
 
   changeTimeRange(e) {
-    this.setState({ timeRange : parseInt(e.target.value)})
+    let timeRange = parseInt(e.target.value)
+    this.setState({ timeRange })
   }
 
   selectAge(e){
@@ -181,8 +182,6 @@ export default class GamesTable extends React.Component {
         :
           selectedItems.push('Nothing')
       )
-    // console.log(selectedItems);
-
 
     let rows = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
@@ -224,12 +223,14 @@ export default class GamesTable extends React.Component {
           )
         return isSelected
       })
-      .filter( g =>
-        g.fabrication ?
+      .filter( g => {
+        if(timeRange === 120) return true // threshold : at 2h+, show all
+
+        return g.fabrication ?
             g.fabrication.fab_time <= timeRange
             :
             true
-      )
+      })
       .map( game => (
         <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
           key={game.slug}>
