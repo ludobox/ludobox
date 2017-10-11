@@ -377,6 +377,7 @@ export default class GamesTable extends React.Component {
               {rows}
             </tbody>
         </table>
+        <p><small>{rows.length}/{games.length} Games</small>  </p>
       </div>
     )
   }
