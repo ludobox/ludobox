@@ -3,7 +3,7 @@ import io from 'socket.io-client'
 
 const url =
   (typeof window !== 'undefined') ? // for testing without a browser
-    location.port ? 'http://' + document.domain + ':' + location.port : 'http://' + document.domain
+    location.port ? '//' + document.domain + ':' + location.port : '//' + document.domain
   :
   null;
 
