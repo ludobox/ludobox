@@ -1,28 +1,33 @@
 /*@import url("Select.css");*/
 
+@font-face {
+  font-family: 'Calibre-LightWeb';
+  src: url('/fonts/calibreLight/Calibre-Light.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/calibreLight/Calibre-Light.otf')  format('opentype'),
+	     url('/fonts/calibreLight/Calibre-Light.woff') format('woff'),
+       url('/fonts/calibreLight/Calibre-Light.ttf')  format('truetype'), url('/fonts/calibreLight/Calibre-Light.svg#Calibre-Light') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'YanoneKaffeesatz';
+  src: url('/fonts/yanonekaffeesatz/YanoneKaffeesatz-Light.ttf')  format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 body {
-  top:0
+  top:0;
+  font-family: 'Calibre-LightWeb', sans;
+  font-size: 16px;
 }
 
 .external:after, a[href^="http"]:after {
      content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=);
 }
 
-.branding-header {
-  text-align: center;
-}
-
-.branding-header a {
-  padding : 2.5em 0 3.5em 0;
-  margin: 0 auto;
-  display: block;
-  max-height: 12em;
-}
-
-.branding-header img {
-  height: 80%;
-}
 
 .label {
   font-weight: 600;
@@ -30,54 +35,10 @@ body {
 }
 
 
-
 .navbar + .docs-section {
     border-top-width: 0;
 }
 
-
-
-/*
-.navbar {
-
-  position:fixed;
-  top : 0;
-  height: 6.5rem;
-  display: block;
-  width: 100%;
-  background: #fff;
-  z-index: 99;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-}
-
-.navbar > .container {
-   width: 100%;
-   margin: 0
- }
- .navbar-list {
-   list-style: none;
-   margin-bottom: 0; }
- .navbar-item {
-   position: relative;
-   float: left;
-   margin-bottom: 0; }
- .navbar-link {
-   text-transform: uppercase;
-   font-size: 11px;
-   font-weight: 600;
-   letter-spacing: .2rem;
-   margin-right: 35px;
-   text-decoration: none;
-   line-height: 6.5rem;
-   color: #222; }
- .navbar-link.active {
-   color: #33C3F0; }
-
-.navbar-list> li:last-child {
-  float:right;
-}
-*/
 
 /*Hide the useless title */
 [id^="root__"] {
@@ -148,28 +109,8 @@ input[type="checkbox"] {
   border-color : #333;
 }
 
-.ludobox-nav-header {
-  margin: 0 auto;
-
-  background: url("/images/ludobox-icon.png") no-repeat center center;
-  background-size: 60%;
-  display:block;
-
-  height:50px;
-  width:50px;
-
-  /* Hide the text. */
-  text-indent: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
 img {
   max-width: 100%
-}
-
-.addGame h1 {
-  font-size: 1em
 }
 
 
