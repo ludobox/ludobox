@@ -23,7 +23,7 @@ class TestLudoboxConfig(unittest.TestCase):
         os.makedirs(TEST_DATA_DIR)
 
         self.default_values = {
-            "web_server_url" : None,
+            "web_server_url" : "http://box.ludobox.net",
             "port" : 8080,
             "data_dir" : data_dir,
             "index_path" :index_path,
