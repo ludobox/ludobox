@@ -120,14 +120,19 @@ const GamePage = ({
       <div className="six columns infobox">
         <h5>Fabrication time : {fabrication.fab_time} minutes </h5>
 
-        <ul className="requirements">
-          <li><b>What you need</b></li>
-          {
-            fabrication.requirements.map(req =>
-              <li key={req}>&#10004; {req}</li>
-            )
-          }
-        </ul>
+        {
+          fabrication.requirements ?
+            <ul className="requirements">
+              <li><b>What you need</b></li>
+              {
+                fabrication.requirements.map(req =>
+                  <li key={req}>&#10004; {req}</li>
+                )
+              }
+            </ul>
+          :
+            null
+        }
 
         <ul className="files">
           <li><b>Download Files</b></li>
