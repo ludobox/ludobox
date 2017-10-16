@@ -1,0 +1,37 @@
+.filters {
+  text-align: center;
+
+  .reqs {
+    display: inline-block;
+    margin: 0 auto;
+    padding-bottom: 2em;
+    label {
+      padding-left: 1.5em;
+    }
+  }
+
+  .req-icon {
+    max-width: 3em;
+    max-height: 3em;
+  }
+
+  input[type='range'] {
+    width : 80%;
+  }
+
+}
+
+.games-list {
+  h5 {
+    text-align: center;
+    padding :2em 0;
+  }
+
+  .edit-button {
+    font-size: 1.5em;
+  }
+
+  thead {
+    font-weight: bold;
+  }
+}

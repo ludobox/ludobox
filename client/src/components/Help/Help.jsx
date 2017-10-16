@@ -8,7 +8,7 @@ export default class Help extends React.Component {
     this.props.config.config.web_server_url : true ;
 
     return (
-        <div className="row">
+        <div className="row" style={{paddingTop : '4em'}}>
           <div className="six columns">
             <img
               className="ludobox-logo"

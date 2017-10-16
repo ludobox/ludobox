@@ -1,10 +1,8 @@
 import React from 'react'
 
 import APIClient from "../../api.js"
-import GameForm from "../GameForm/GameForm.jsx"
-import ActionButtons from "../ActionButtons/ActionButtons.jsx"
+import GamePage from "./GamePage.jsx"
 
-import History from "../History/History.jsx"
 
 import validator from 'is-my-json-valid'
 import model from '../../../../model/game.json'
@@ -48,35 +46,29 @@ export default class Game extends React.Component {
   }
 
   render() {
-    let {files, game} = this.state
 
-    let author = game && game.history.length ? game.history[0].user : null
+    let {
+      files,
+      game
+    } = this.state
+
     return (
-      <div>
-      {
-        game && files ?
-        <span>
-          <GameForm
-            game={game}
-            editMode={false}
-            files={files}
-            errors={{}} // defaultProps to empty object
+      game && files ?
+        <GamePage
+          title={game.title}
+          audience={game.audience}
+          description={game.description}
+          history={game.history}
+          fabrication={game.fabrication}
+          credentials={game.credentials}
+          files={files}
+          slug={game.slug}
+          source={game.source}
+          contentState={game.state}
+          user={this.props.user}
           />
-          <History
-            history={game.history}
-            />
-          <ActionButtons
-            slug={game.slug}
-            author={author}
-            state={game.state}
-            user={this.props.user}
-            updateContent={() => this.updateContent()}
-            />
-        </span>
-        :
+      :
         null
-      }
-    </div>
     )
   }
 

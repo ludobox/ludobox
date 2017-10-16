@@ -1,36 +1,33 @@
 import React from 'react';
-import DownloadButton from '../RemoteGames/DownloadButton.jsx'
-import ContentState from '../ContentState/ContentState.jsx'
 
-import ISO6391 from 'iso-639-1'
+import GamesFilters from "./GamesFilters.jsx";
+import GamesList from "./GamesList.jsx";
+import  "./GamesTable.scss";
 
-const style = {
-  label : {
-    display: "block",
-    float: "left",
-    paddingRight: "10px",
-    whiteSpace: "nowrap"
-  }
-}
 
 const requirements = {
-  "dunno" : {
-    name : "I don't know."
-  },
   "nothing" : {
-    name : "Nothing."
+    name : "Hands",
+    icon: "/images/icons/hand.png"
   },
   "office" : {
     name : "Office",
+    icon: "/images/icons/scissors.png",
     items : [ "Printers B&W", "Printers Colour", "Cissors", "Pens", "Stickers", "Ruler", "Paper Glue"]
   },
   "workshop": {
-    name : "Wood/Workshop",
+    name : "Workshop",
+    icon : "/images/icons/tools.png",
     items : ["Cutter", "Mechanical saw", "Hand saw", "Wood glue", "Hammer", "All purpose plier", "Welder", "Sewing machine", "Drill", "Other tools"]
   },
   "fablab" : {
     name : "Fab Lab",
+    icon :"/images/icons/fablab.png",
     items : ["3D printers", "Laser cutter", "Micro chip computer"]
+  },
+  "dunno" : {
+    name : "Others",
+    icon: "/images/icons/question.png"
   }
 }
 
@@ -39,10 +36,10 @@ export default class GamesTable extends React.Component {
   constructor(props) {
     super(props)
 
-    let selectedRequirements = {}
-    Object.keys(requirements).forEach(d =>
-      selectedRequirements[d] = true
-    )
+    // let selectedRequirements = {}
+    // Object.keys(requirements).forEach(d =>
+    //   selectedRequirements[d] = true
+    // )
 
     this.state = {
       filterStr : '',
@@ -51,13 +48,10 @@ export default class GamesTable extends React.Component {
       showLookup : false,
       timeRange : 120,
       showErrors : false,
-      selectedRequirements : ["dunno"] //all checked by default
+      selectedRequirements : ["dunno", "nothing", "office", "workshop", "fablab"] //all checked by default
     }
   }
 
-  toggleLookup(e) {
-    this.setState({ showLookup : ! this.state.showLookup })
-  }
 
   changeFilterStr(filterStr) {
     this.setState({ filterStr : filterStr })
@@ -101,77 +95,19 @@ export default class GamesTable extends React.Component {
     this.setState({ showErrors })
   }
 
-  render() {
-    let { games } = this.props
-    let {
+  render = () => {
+    const { games, user } = this.props
+
+    const isEditor = user.roles && (user.roles.includes('editor') || user.roles.includes('superuser'))
+
+    const {
       showErrors,
-      showLookup,
       filterStr,
       selectedLanguage,
       selectedAges,
-      timeRange,
-      selectedRequirements
+      selectedRequirements,
+      timeRange
     } = this.state
-
-    // get unique language codes
-    let lgg = new Set(games.map(g => g.audience.language))
-
-    // get screen names
-    let languages = ISO6391.getLanguages(Array.from(lgg))
-
-    let languagesOptions = [
-      { name: 'Any', code : 'any'},
-      ...languages
-    ]
-      .map( lg => {
-        return (
-          <option key={lg.code} value={lg.code}>
-            {lg.name}
-          </option>
-          )
-        }
-      )
-
-    let ageOptions = ["Children", "Teenagers", "Adults"]
-      .map( age => {
-        return (
-          <option key={age} value={age}>
-            {age}
-          </option>
-          )
-        }
-      )
-
-    let requirementsOptions = Object.keys(requirements)
-      .map( value => {
-        let option = requirements[value]
-        return (
-          <label
-            key={value}
-            style={{
-              display: "block",
-              float: "left",
-              paddingRight: "10px",
-              whiteSpace: "nowrap"
-            }}
-            title={option.items ? option.items.join("\n"): option.name}
-            htmlFor={value}
-            >
-            <input
-              onClick={(e) => this.handleCheckbox(e)}
-              title={option.items ? option.items.join("\n"): option.name}
-              type='checkbox'
-              name={value}
-              id={value}
-              defaultChecked={this.state.selectedRequirements.includes(value)}
-            />
-            <span className="label-body">
-              {option.name}
-            </span>
-          </label>
-          )
-        }
-      )
 
     // parse an array of items for fab requirements to make checks easier
     let selectedItems = [];
@@ -183,7 +119,8 @@ export default class GamesTable extends React.Component {
           selectedItems.push('Nothing')
       )
 
-    let rows = games
+
+    let selectedGames = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
       .filter(g =>
         selectedLanguage !== 'any' ?
@@ -210,10 +147,10 @@ export default class GamesTable extends React.Component {
 
         let reqs = g.fabrication && g.fabrication.requirements ?
           new Set(g.fabrication.requirements)
-          : new Set([""])
+          : new Set([])
 
         // if "don't know" is checked
-        if(selectedRequirements.includes("dunno"))
+        if(selectedRequirements.includes("dunno") && reqs.size===0)
           return true
 
         // at least one element match
@@ -231,153 +168,45 @@ export default class GamesTable extends React.Component {
             :
             true
       })
-      .map( game => (
-        <tr style={ game.existsLocally ? { background : "yellow" } : {}  }
-          key={game.slug}>
-          <td>
-            <a
-              href={"/games/"+game.slug}
-              title={game.description.summary}
-              >
-              {game.title}
-            </a>
-          </td>
 
-          <td>{
-            game.audience ?
-              ISO6391.getName(game.audience.language)  //
-              : null
-            }
-          </td>
-          <td>
-            <a style={{textDecoration: "none"}}
-              href={"/games/"+game.slug}>
-                <ContentState state={game.state} errors={game.errors} />
-            </a>
-          </td>
-          {
-            ! game.existsLocally && this.props.remoteApi && this.props.localApi ?
-            <td>
-              <DownloadButton
-                socket={this.props.socket}
-                remoteApi={this.props.remoteApi}
-                localApi={this.props.localApi}
-                slug={game.slug}
-                />
-            </td>
-            :
-            null
-          }
-        </tr>
-      ))
-
-    return (
+    return(
       <div>
-        <div className="row">
-          <label>What do you have at hand?</label>
-          {requirementsOptions}
-        </div>
-        <div className="row">
-          <label>How much time do you have?
-          </label>
-            {
-              timeRange == 120 ?
-              "2+ hours"
-              :
-              `${timeRange} minutes`
-            }
-            <input
-              type="range"
-              min="0"
-              value={timeRange}
-              max="120"
-              step="10"
-              onChange={ e => this.changeTimeRange(e)}
-            />
-        </div>
-        {
-          showLookup ?
-          <section>
-            <div className="row">
-              <div className="six columns">
-                <label>Search</label>
-                <input
-                  type="text"
-                  id="filterStrField"
-                  value={ filterStr }
-                  onChange={ e => this.changeFilterStr(e.target.value) }
-                  placeholder="Lookup a game"
-                />
-              </div>
-              <div className="two columns">
-                <label>Language</label>
-                <select
-                  id="languageSelector"
-                  value={ selectedLanguage }
-                  onChange={e => this.selectLanguage(e.target.value)}
-                  >
-                    {languagesOptions}
-                  </select>
-              </div>
-              <div className="four columns">
-                <label>Age</label>
-                <select
-                  id="languageSelector"
-                  value={ selectedAges }
-                  onChange={e => this.selectAge(e)}
-                  multiple
-                  >
-                    {ageOptions}
-                  </select>
-              </div>
-            </div>
-            <div className="row">
-              <label style={style.label}>
-                <input
-                type="checkbox"
-                checked={showErrors}
-                onChange={ e => this.changeFilterError() }
-                />
-                <span className="label-body">
-                  Show records with formatting errors
-                </span>
-              </label>
-            </div>
-          </section>
-          :
-          null
-        }
-        <a
-          className="button"
-          onClick={e => this.toggleLookup(e)}
-          >
-            { showLookup ?
-            "X"
-            :
-            "More Options"
-            // <i className="icono-eye"></i>
-          }
-        </a>
-        <table className="twelve columns" style={{tableLayout:"fixed"}}>
-            <thead>
-                <tr>
-                    <td>Title</td>
-                    {/* <td>Fab Time</td> */}
-                    <td>Language</td>
-                    <td>Status</td>
-                    {
-                      this.props.remoteApi ?
-                      <td>Download</td>
-                      :
-                      null
-                    }
-                </tr>
-            </thead>
-            <tbody>
-              {rows}
-            </tbody>
-        </table>
-        <p><small>{rows.length}/{games.length} Games</small>  </p>
+        <GamesFilters
+          games={games}
+          isEditor={isEditor}
+
+          showErrors={showErrors}
+          filterStr={filterStr}
+          selectedLanguage={selectedLanguage}
+          selectedRequirements={selectedRequirements}
+          selectedAges={selectedAges}
+          timeRange={timeRange}
+          requirements={requirements}
+          showErrors={showErrors}
+
+
+          changeTimeRange={e=> this.changeTimeRange(e)}
+          changeFilterStr={e=> this.changeFilterStr(e)}
+          selectLanguage={e => this.selectLanguage(e)}
+          selectAge={e => this.selectAge(e)}
+          handleCheckbox={e => this.handleCheckbox(e)}
+          changeFilterError={e => this.changeFilterError(e)}
+
+          />
+        <GamesList
+          games={selectedGames}
+          isEditor={isEditor}
+
+          showErrors={showErrors}
+          filterStr={filterStr}
+          selectedLanguage={selectedLanguage}
+          selectedRequirements={selectedRequirements}
+          selectedAges={selectedAges}
+          timeRange={timeRange}
+          requirements={requirements}
+
+          />
+
       </div>
     )
   }

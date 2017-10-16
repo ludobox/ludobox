@@ -4,6 +4,7 @@ import AlertContainer from 'react-alert'
 
 import { browserHistory } from 'react-router'
 
+import PageTitle from '../PageTitle/PageTitle.jsx'
 import GameForm from "../GameForm/GameForm.jsx"
 import APIClient from "../../api.js"
 import model from '../../../../model/game.json'
@@ -118,6 +119,7 @@ export default class AddGame extends React.Component {
         onSubmit={ e => this.handleSubmit(e)}
         className="addGame"
         >
+        <PageTitle title="Add a New Game" />
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <GameForm
           game={game}

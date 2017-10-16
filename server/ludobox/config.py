@@ -14,7 +14,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwa
 
     # default values
     data_dir = os.path.join(os.getcwd(),"data")
-    web_server_url = "http://box.ludobox.net"
+    web_server_url = None
     upload_allowed = True
     database_uri = "sqlite:////tmp/ludobox.db"
     max_file_size = 10 # file size in mO

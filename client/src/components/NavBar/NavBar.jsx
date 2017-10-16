@@ -1,12 +1,14 @@
-import React from 'react'
+import "./navBar.scss";
 
-const style = {
-  marginBottom : "2em"
-}
+import React from 'react'
+import { slide as Menu } from 'react-burger-menu'
+
 
 export default class NavBar extends React.Component {
 
   render() {
+
+    console.log(this.props.config);
 
     let hasRemote = Object.keys(this.props.config).length ?
     this.props.config.config.web_server_url : true ;
@@ -15,44 +17,50 @@ export default class NavBar extends React.Component {
     this.props.config.user.is_auth : false ;
 
     return (
-      <nav className="navbar" style={style}>
-        <div className="container">
-          <ul className="navbar-list">
-            <li className="navbar-item ludobox-nav-header"><a className="navbar-link" href="/">Ludobox</a></li>
-            <li className="navbar-item"><a className="navbar-link" href="/games">Games</a></li>
-            <li className="navbar-item"><a className="navbar-link" href="/recent">Recent</a></li>
-            {
-              is_auth ?
-              <li className="navbar-item">
-                <a className="navbar-link" href="/create">Add game</a>
-              </li>
-              :
-              null
-            }
-            {
-              hasRemote ?
-              <li className="navbar-item">
-                <a className="navbar-link" href="/download">Download</a>
-              </li>
-              :
-              null
-            }
-            <li className="navbar-item"><a className="navbar-link" href="/about">About</a></li>
-            <li className="navbar-item"><a className="navbar-link" href="/help">Help</a></li>
-            <li className="navbar-item"><a disabled className="navbar-link" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a></li>
+      <Menu pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
+            <a className="logo-menu" href="/">
+              <img src="/images/ludobox-icon.png"/>
+            </a>
+
+            {/* <a href="/">Ludobox</a> */}
+
+            <a href="/games">Games</a>
+            <a href="/recent">Recent</a>
 
             {
               is_auth ?
-              <div className="logged_in">
-                <li className="navbar-item"><a className="navbar-link" href="/profile">Profile</a></li>
-                <li className="navbar-item"><a className="navbar-link" href="/logout">Logout</a></li>
-              </div>
+                <a href="/create">Add game</a>
               :
-              <li className="navbar-item"><a className="navbar-link" href="/login">Login</a></li>
+              null
             }
-          </ul>
-        </div>
-      </nav>
+
+            {
+              hasRemote ?
+                <a href="/download">Download</a>
+              :
+              null
+            }
+
+            <a href="/about">About</a>
+            <a href="/help">Help</a>
+
+            <div className="log-actions">
+              {
+                is_auth ?
+                <span>
+                  <a href="/profile">Profile</a>
+                  <a href="/logout">Logout</a>
+                </span>
+                :
+                <span>
+                  <a href="/login">Login</a>
+                  <a href="/register">Register</a>
+                </span>
+              }
+            </div>
+
+          <a disabled className="version" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a>
+      </Menu>
     )
   }
 }

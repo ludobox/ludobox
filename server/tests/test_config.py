@@ -29,8 +29,8 @@ class TestLudoboxConfig(unittest.TestCase):
             "index_path" :index_path,
             "ludobox_name" : "My LudoBox",
             "upload_allowed" : True,
-             "database_uri" : "sqlite:////tmp/ludobox.db",
-             "max_file_size" : 20
+            "database_uri" : "sqlite:////tmp/ludobox.db",
+            "max_file_size" : 20
         }
 
     def test_read_config_default(self):

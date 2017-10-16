@@ -2,6 +2,8 @@ import React from 'react'
 import {browserHistory} from 'react-router'
 import AlertContainer from 'react-alert'
 
+import PageTitle from '../PageTitle/PageTitle.jsx'
+
 import APIClient from "../../api.js"
 import GameForm from "../GameForm/GameForm.jsx"
 import ActionButtons from "../ActionButtons/ActionButtons.jsx"
@@ -179,6 +181,7 @@ export default class GameEdit extends React.Component {
 
     return (
       <div>
+        <PageTitle title="Edit Game" />
       {
         this.state.game && this.state.files ?
         <GameForm
