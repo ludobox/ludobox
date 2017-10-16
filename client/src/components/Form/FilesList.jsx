@@ -13,7 +13,10 @@ export default class FilesList extends React.Component {
 
   render() {
 
-    const {handleFileUpload} = this.props
+    const {
+      handleFileUpload,
+      editing
+    } = this.props
 
     let uploader = handleFileUpload ?
       <a className="button"
@@ -34,7 +37,7 @@ export default class FilesList extends React.Component {
           }
         </a>
 
-        { this.props.editing ?
+        { editing ?
           <a onClick={() => this.removeFile(file)}
             style={{cursor : "pointer"}}
             >

@@ -9,7 +9,6 @@ export default class APIClient {
   }
 
   handleError(error, errorCallback) {
-
     if (errorCallback && error.response) {
       console.log("ERROR : " + error.response.status)
       if(error.response.status == 403)

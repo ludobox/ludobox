@@ -21,7 +21,28 @@ export default class DropZone extends React.Component {
     this.props.handleAddFiles(filesList)
   }
 
+  handleRemoveFile(file) {
+    const newFiles = this.props.files
+      .filter(f => f.name !== file.name)
+    this.props.handleAddFiles(newFiles)
+  }
+
   render() {
+    const {files} = this.props;
+
+    const filesItems = files.map( file =>
+      <li key={file.name}>
+        {file.name}
+        <a onClick={() => this.handleRemoveFile(file)}
+          style={{cursor : "pointer"}}
+          >
+          <i className="icono-cross"></i>
+        </a>
+      </li>
+    )
+
+
+
     return (
       <div>
         <Dropzone
@@ -35,7 +56,7 @@ export default class DropZone extends React.Component {
           <div>
             <p>Added {this.props.files.length} files.</p>
             <ul>
-              {this.props.files.map( file =>  <li key={file.name}>{file.name}</li> )}
+              {filesItems}
             </ul>
           </div>
           :
