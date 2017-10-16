@@ -26,23 +26,33 @@
   background: #221F3C;
 
   a {
-    color: #F5DC00;
+    color: #b8b7ad;
     text-decoration: none;
 
     &:hover,
     &:focus {
-      color: #c94e50;
+      color: #F5DC00;
     }
+
   }
 }
 
 .bm-item-list a {
   padding: 0.8em;
 
-  // span {
-  //   margin-left: 10px;
-  //   font-weight: 700;
-  // }
+  text-transform: uppercase;
+  font-weight: bold;
+
+  &.version {
+    font-size: .8em;
+    bottom: 0;
+    position:absolute;
+  }
+
+  span {
+    margin-left: 10px;
+    font-weight: 700;
+  }
 }
 
 .bm-cross {
@@ -52,4 +62,18 @@
 .bm-menu {
   padding: 2.5em 1.5em 0;
   font-size: 1.15em;
+  text-align: center;
+
+  .log-actions {
+    margin-top: 2em;
+  }
+}
+
+.logo-menu {
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  background: #bdc3c7;
+  margin: 0 auto 2em auto;
+  /* width and height can be anything, as long as they're equal */
 }

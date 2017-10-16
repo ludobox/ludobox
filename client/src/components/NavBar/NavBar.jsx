@@ -8,6 +8,8 @@ export default class NavBar extends React.Component {
 
   render() {
 
+    console.log(this.props.config);
+
     let hasRemote = Object.keys(this.props.config).length ?
     this.props.config.config.web_server_url : true ;
 
@@ -16,35 +18,48 @@ export default class NavBar extends React.Component {
 
     return (
       <Menu pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
-            <a className="navbar-link" href="/">Ludobox</a>
-            <a className="navbar-link" href="/games">Games</a>
-            <a className="navbar-link" href="/recent">Recent</a>
+            <a className="logo-menu" href="/">
+              <img src="/images/ludobox-icon.png"/>
+            </a>
+
+            {/* <a href="/">Ludobox</a> */}
+
+            <a href="/games">Games</a>
+            <a href="/recent">Recent</a>
+
             {
               is_auth ?
-                <a className="navbar-link" href="/create">Add game</a>
+                <a href="/create">Add game</a>
               :
               null
             }
+
             {
               hasRemote ?
-                <a className="navbar-link" href="/download">Download</a>
+                <a href="/download">Download</a>
               :
               null
             }
 
-            <a className="navbar-link" href="/about">About</a>
-            <a className="navbar-link" href="/help">Help</a>
-            <a disabled className="navbar-link" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a>
+            <a href="/about">About</a>
+            <a href="/help">Help</a>
 
-            {/* {
-              is_auth ?
-              <span className="logged_in">
-                <a className="navbar-link" href="/profile">Profile</a>
-                <a className="navbar-link" href="/logout">Logout</a>
-              </span>
-              :
-              <a className="navbar-link" href="/login">Login</a>
-            } */}
+            <div className="log-actions">
+              {
+                is_auth ?
+                <span>
+                  <a href="/profile">Profile</a>
+                  <a href="/logout">Logout</a>
+                </span>
+                :
+                <span>
+                  <a href="/login">Login</a>
+                  <a href="/register">Register</a>
+                </span>
+              }
+            </div>
+
+          <a disabled className="version" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a>
       </Menu>
     )
   }
