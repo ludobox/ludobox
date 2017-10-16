@@ -2,25 +2,32 @@ import React from 'react';
 
 import GamesFilters from "./GamesFilters.jsx";
 import GamesList from "./GamesList.jsx";
+import  "./GamesTable.scss";
+
 
 const requirements = {
-  "dunno" : {
-    name : "I don't know."
-  },
   "nothing" : {
-    name : "Nothing."
+    name : "Hands",
+    icon: "/images/icons/hand.png"
   },
   "office" : {
     name : "Office",
+    icon: "/images/icons/scissors.png",
     items : [ "Printers B&W", "Printers Colour", "Cissors", "Pens", "Stickers", "Ruler", "Paper Glue"]
   },
   "workshop": {
-    name : "Wood/Workshop",
+    name : "Workshop",
+    icon : "/images/icons/tools.png",
     items : ["Cutter", "Mechanical saw", "Hand saw", "Wood glue", "Hammer", "All purpose plier", "Welder", "Sewing machine", "Drill", "Other tools"]
   },
   "fablab" : {
     name : "Fab Lab",
+    icon :"/images/icons/fablab.png",
     items : ["3D printers", "Laser cutter", "Micro chip computer"]
+  },
+  "dunno" : {
+    name : "Others",
+    icon: "/images/icons/question.png"
   }
 }
 
@@ -41,9 +48,10 @@ export default class GamesTable extends React.Component {
       showLookup : false,
       timeRange : 120,
       showErrors : false,
-      selectedRequirements : ["dunno"] //all checked by default
+      selectedRequirements : ["dunno", "nothing", "office", "workshop", "fablab"] //all checked by default
     }
   }
+
 
   changeFilterStr(filterStr) {
     this.setState({ filterStr : filterStr })
@@ -109,7 +117,7 @@ export default class GamesTable extends React.Component {
           selectedItems.push('Nothing')
       )
 
-    
+
     let selectedGames = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
       .filter(g =>
@@ -137,10 +145,10 @@ export default class GamesTable extends React.Component {
 
         let reqs = g.fabrication && g.fabrication.requirements ?
           new Set(g.fabrication.requirements)
-          : new Set([""])
+          : new Set([])
 
         // if "don't know" is checked
-        if(selectedRequirements.includes("dunno"))
+        if(selectedRequirements.includes("dunno") && reqs.size===0)
           return true
 
         // at least one element match

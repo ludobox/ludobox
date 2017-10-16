@@ -91,6 +91,13 @@ export default class GamesFilters extends React.Component {
               defaultChecked={selectedRequirements.includes(value)}
             />
             <span className="label-body">
+              {
+                option.icon ?
+                  <img className="req-icon" src={option.icon}/>
+                :
+                  null
+              }
+              <br />
               {option.name}
             </span>
           </label>
@@ -102,7 +109,9 @@ export default class GamesFilters extends React.Component {
       <div className="filters">
         <div className="row">
           <label>What do you have at hand?</label>
-          {requirementsOptions}
+          <div className="reqs">
+            {requirementsOptions}
+          </div>
         </div>
         <div className="row">
           <label>How much time do you have?
