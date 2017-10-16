@@ -17,6 +17,7 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwa
     web_server_url = "http://box.ludobox.net"
     upload_allowed = True
     database_uri = "sqlite:////tmp/ludobox.db"
+    max_file_size = 10 # file size in mO
 
     # current_app.logger.info("Loading config from : %s"%config_path)
 
@@ -49,6 +50,9 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwa
     if "database_uri" in config.keys():
         database_uri = config["database_uri"]
 
+    if "max_file_size" in config.keys():
+        max_file_size = config["max_file_size"]
+
     index_path = os.path.join(data_dir, 'index.json')
 
     ok_config = {
@@ -58,7 +62,8 @@ def read_config(config_path=os.path.join(os.getcwd(),"config.yml"), *args, **kwa
             "port" : port,
             "ludobox_name" : ludobox_name,
             "upload_allowed" : upload_allowed,
-            "database_uri" : database_uri
+            "database_uri" : database_uri,
+            "max_file_size" : max_file_size
         }
 
     # logger.info("Config : %s"%ok_config)

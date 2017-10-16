@@ -14,3 +14,6 @@ upload_allowed : true
 
 # where users will be stored
 database_uri : "sqlite:////tmp/ludobox.db"
+
+# max file size (en Mo)
+max_file_size : 20
