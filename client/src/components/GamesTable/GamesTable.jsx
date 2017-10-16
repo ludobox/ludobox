@@ -96,7 +96,7 @@ export default class GamesTable extends React.Component {
   }
 
   render = () => {
-    const {games} = this.props
+    const {games, user} = this.props
 
     const {
       showErrors,
@@ -171,6 +171,7 @@ export default class GamesTable extends React.Component {
       <div>
         <GamesFilters
           games={games}
+          user={user}
 
           showErrors={showErrors}
           filterStr={filterStr}
@@ -180,6 +181,7 @@ export default class GamesTable extends React.Component {
           timeRange={timeRange}
           requirements={requirements}
           showErrors={showErrors}
+
 
           changeTimeRange={e=> this.changeTimeRange(e)}
           changeFilterStr={e=> this.changeFilterStr(e)}

@@ -29,6 +29,7 @@ export default class GamesFilters extends React.Component {
 
     let {
       games,
+      user,
       showErrors,
       filterStr,
       selectedLanguage,
@@ -37,6 +38,8 @@ export default class GamesFilters extends React.Component {
       requirements,
       selectedRequirements
     } = this.props
+
+    const isEditor = user.roles && (user.roles.includes('editor') || user.roles.includes('superuser'))
 
     // get unique language codes
     let lgg = new Set(games.map(g => g.audience.language))
@@ -167,18 +170,23 @@ export default class GamesFilters extends React.Component {
                     </select>
                 </div>
               </div>
-              <div className="row">
-                <label style={styles.label}>
-                  <input
-                  type="checkbox"
-                  checked={showErrors}
-                  onChange={ e => this.props.changeFilterError(e) }
-                  />
-                  <span className="label-body">
-                    Show records with formatting errors
-                  </span>
-                </label>
-              </div>
+              {
+                isEditor ?
+                  <div className="row">
+                    <label style={styles.label}>
+                      <input
+                      type="checkbox"
+                      checked={showErrors}
+                      onChange={ e => this.props.changeFilterError(e) }
+                      />
+                      <span className="label-body">
+                        Show records with formatting errors
+                      </span>
+                    </label>
+                  </div>
+                :
+                null
+              }
             </section>
           :
           null
@@ -188,7 +196,7 @@ export default class GamesFilters extends React.Component {
           onClick={e => this.toggleLookup(e)}
           >
             { showLookup ?
-            "X"
+            "Hide Options X"
             :
             "More Options"
             // <i className="icono-eye"></i>

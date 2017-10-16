@@ -28,6 +28,7 @@ export default class Games extends React.Component {
   render() {
 
     const {games} = this.state
+
     return (
       <span>
         <PageTitle />
@@ -35,6 +36,7 @@ export default class Games extends React.Component {
           this.state.games.length ?
           <GamesTable
             games={games}
+            user={this.props.user}
           />
           :
           "No games available."
