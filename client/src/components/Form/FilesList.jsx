@@ -15,7 +15,8 @@ export default class FilesList extends React.Component {
 
     const {
       handleFileUpload,
-      editing
+      editing,
+      maxFileSize
     } = this.props
 
     let uploader = handleFileUpload ?
@@ -61,6 +62,7 @@ export default class FilesList extends React.Component {
             <DropZone
               files={newFiles} // pass new files to be added
               handleAddFiles={files => this.props.handleAddFiles(files)}
+              maxFileSize={maxFileSize}
             />
             {uploader}
           </span>
