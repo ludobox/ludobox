@@ -1,8 +1,8 @@
-import React from 'react'
+import "./navBar.scss";
 
-const style = {
-  marginBottom : "2em"
-}
+import React from 'react'
+import { slide as Menu } from 'react-burger-menu'
+
 
 export default class NavBar extends React.Component {
 
@@ -15,44 +15,37 @@ export default class NavBar extends React.Component {
     this.props.config.user.is_auth : false ;
 
     return (
-      <nav className="navbar" style={style}>
-        <div className="container">
-          <ul className="navbar-list">
-            <li className="navbar-item ludobox-nav-header"><a className="navbar-link" href="/">Ludobox</a></li>
-            <li className="navbar-item"><a className="navbar-link" href="/games">Games</a></li>
-            <li className="navbar-item"><a className="navbar-link" href="/recent">Recent</a></li>
+      <Menu pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
+            <a className="navbar-link" href="/">Ludobox</a>
+            <a className="navbar-link" href="/games">Games</a>
+            <a className="navbar-link" href="/recent">Recent</a>
             {
               is_auth ?
-              <li className="navbar-item">
                 <a className="navbar-link" href="/create">Add game</a>
-              </li>
               :
               null
             }
             {
               hasRemote ?
-              <li className="navbar-item">
                 <a className="navbar-link" href="/download">Download</a>
-              </li>
               :
               null
             }
-            <li className="navbar-item"><a className="navbar-link" href="/about">About</a></li>
-            <li className="navbar-item"><a className="navbar-link" href="/help">Help</a></li>
-            <li className="navbar-item"><a disabled className="navbar-link" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a></li>
 
-            {
+            <a className="navbar-link" href="/about">About</a>
+            <a className="navbar-link" href="/help">Help</a>
+            <a disabled className="navbar-link" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a>
+
+            {/* {
               is_auth ?
-              <div className="logged_in">
-                <li className="navbar-item"><a className="navbar-link" href="/profile">Profile</a></li>
-                <li className="navbar-item"><a className="navbar-link" href="/logout">Logout</a></li>
-              </div>
+              <span className="logged_in">
+                <a className="navbar-link" href="/profile">Profile</a>
+                <a className="navbar-link" href="/logout">Logout</a>
+              </span>
               :
-              <li className="navbar-item"><a className="navbar-link" href="/login">Login</a></li>
-            }
-          </ul>
-        </div>
-      </nav>
+              <a className="navbar-link" href="/login">Login</a>
+            } */}
+      </Menu>
     )
   }
 }

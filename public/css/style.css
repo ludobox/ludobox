@@ -10,14 +10,18 @@
 }
 
 .main{
-  margin-top: 8.5rem;
+  padding-top: 5.5rem;
 }
 
 .navbar + .docs-section {
     border-top-width: 0;
 }
 
+
+
+/*
 .navbar {
+
   position:fixed;
   top : 0;
   height: 6.5rem;
@@ -55,6 +59,7 @@
 .navbar-list> li:last-child {
   float:right;
 }
+*/
 
 /*Hide the useless title */
 [id^="root__"] {

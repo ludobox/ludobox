@@ -47,7 +47,7 @@ export default class App extends React.Component {
     return (
       <span>
         <NavBar config={this.state.config}/>
-        <div className="main">
+        <div className="main container">
           {childrenWithProps}
         </div>
       </span>
