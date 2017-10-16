@@ -259,12 +259,15 @@ export default class GameForm extends React.Component {
                 }}
               />
 
-                { editMode ?
+              {
+                editMode ?
                   <span className="label">
                       Number of players (maximum)
                   </span>
-                 : null
-               }
+                 :
+                  '-'
+              }
+
               <Number
                 editing={editMode}
                 value={audience.number_of_players.players_max}
