@@ -60,12 +60,12 @@ module.exports = {
         exclude: [node_modules_dir]
       },
       {
-        test: /\.css$/,
-        loader: 'style!css?modules'
+        test: /\.(scss|css)$/,
+        loaders: ['style', 'css', 'sass']
       },
       {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000'
       }
     ]
   },
