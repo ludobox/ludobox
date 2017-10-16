@@ -109,7 +109,7 @@ export default class GamesTable extends React.Component {
           selectedItems.push('Nothing')
       )
 
-
+    
     let selectedGames = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
       .filter(g =>
