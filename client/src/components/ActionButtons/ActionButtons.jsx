@@ -97,7 +97,7 @@ export default class ActionButtons extends React.Component {
               style={{color : "green"}}
               onClick={() => this.handleClickValidate()}
               >
-              Validate <i className="icono-check"></i>
+              Validate &#10004;
             </a>
           :
           null
@@ -107,7 +107,7 @@ export default class ActionButtons extends React.Component {
               style={{color : "red"}}
               onClick={() => this.handleClickReject()}
               >
-              Rejects <i className="icono-cross"></i>
+              Rejects &#10008;
             </a>
           :
           null
@@ -134,7 +134,7 @@ export default class ActionButtons extends React.Component {
       </span>
 
     return (
-      <div>
+      <div className="action-buttons">
       {
         this.props.user.is_auth ?
         actionButtons

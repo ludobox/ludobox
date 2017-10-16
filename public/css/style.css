@@ -148,3 +148,8 @@ img {
 .addGame h1 {
   font-size: 1em
 }
+
+
+.action-buttons .button {
+  margin-left: 5px;
+}
