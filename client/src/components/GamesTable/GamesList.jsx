@@ -11,14 +11,15 @@ const GamesList = ({
 }) => (
   <div className='games-list'>
     <h5>There is currently {games.length} games you can fabricate.</h5>
-    <table className="twelve columns" style={{tableLayout:"fixed"}}>
+    <table className="twelve columns" >
       <thead>
         <tr>
-          <td>Title</td>
-          <td>Language</td>
+          <td style={{width:"20%"}}>Title</td>
+          {/* <td>Language</td> */}
           <td>Gameplay</td>
           <td>Intention</td>
           <td>Status</td>
+          <td>{/*Fabricate*/}</td>
           {
             remoteApi ?
             <td>Download</td>

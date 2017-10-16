@@ -20,34 +20,28 @@ const GamesListItem = ({
         {game.title}
       </a>
     </td>
-
-    <td>
+    {/* <td>
       {
         game.audience ?
           ISO6391.getName(game.audience.language)  //
         : null
       }
+    </td> */}
+    <td>
+      {game.description.gameplay}
     </td>
     <td>
-      {
-      game.description.gameplay ?
-        game.description.gameplay
-        :
-        null
-      }
-    </td>
-    <td>
-      {
-      game.description.intention ?
-        game.description.intention
-        :
-        null
-      }
+      {game.description.intention}
     </td>
     <td>
       <a style={{textDecoration: "none"}}
         href={"/games/"+game.slug}>
           <ContentState state={game.state} errors={game.errors} />
+      </a>
+    </td>
+    <td>
+      <a className="button button-primary" href={"/games/"+game.slug}>
+          Print & Play
       </a>
     </td>
     {

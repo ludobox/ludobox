@@ -122,6 +122,7 @@ export default class GamesFilters extends React.Component {
               :
               `${timeRange} minutes`
             }
+            <br/>
             <input
               type="range"
               min="0"
