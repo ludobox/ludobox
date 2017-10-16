@@ -28,6 +28,16 @@
 .bm-menu {
   background: #221F3C;
 
+  font-family: 'YanoneKaffeesatz', sans;
+
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+  text-align: center;
+
+  .log-actions {
+    margin-top: 2em;
+  }
+
   a {
     color: #b8b7ad;
     text-decoration: none;
@@ -42,13 +52,13 @@
 
 .bm-item-list a {
   padding: 0.8em;
-
+  font-size: 1.4em;
+  line-height: .1em;
   text-transform: uppercase;
-  font-weight: bold;
 
   &.version {
     font-size: .8em;
-    bottom: 0;
+    bottom: 3px;
     position:absolute;
     text-transform: none;
     font-weight: normal;
@@ -65,15 +75,6 @@
   background: #bdc3c7;
 }
 
-.bm-menu {
-  padding: 2.5em 1.5em 0;
-  font-size: 1.15em;
-  text-align: center;
-
-  .log-actions {
-    margin-top: 2em;
-  }
-}
 
 .logo-menu {
   border-radius: 50%;

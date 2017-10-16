@@ -1,0 +1,23 @@
+.branding {
+
+  text-align: center;
+  padding: 2em 0;
+
+  a {
+    /*padding : .5em 0 3.5em 0;*/
+    margin: 0 auto 1em 0;
+    display: block;
+    max-height: 8em;
+  }
+
+  img {
+    height: 80%;
+  }
+
+  h1 {
+    font-family: 'YanoneKaffeesatz', sans;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+}

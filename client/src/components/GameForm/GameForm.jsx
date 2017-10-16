@@ -1,5 +1,7 @@
 import React from 'react'
 
+import PageTitle from '../PageTitle/PageTitle.jsx'
+
 import EditableText from '../Form/EditableText.jsx'
 import FreeTagging from '../Form/FreeTagging.jsx'
 import MultiSelect from '../Form/MultiSelect.jsx'
@@ -75,7 +77,9 @@ export default class GameForm extends React.Component {
     // TODO : make title editable
     return (
       <div>
-        <h1>
+        { ! editMode ?
+          <PageTitle title={title}/>
+          :
           <EditableText
             type="input"
             text={title}
@@ -88,7 +92,7 @@ export default class GameForm extends React.Component {
               this.updateGame( game );
             }}
             />
-        </h1>
+        }
         { ! editMode ?
           <p>
             <ContentState

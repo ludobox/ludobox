@@ -1,12 +1,14 @@
 import React from 'react'
 
+import PageTitle from '../PageTitle/PageTitle.jsx'
+
 export default class AboutPage extends React.Component {
 
   render() {
-    console.log("olala!");
+
     return (
       <div>
-        <h2>About</h2>
+        <PageTitle title="About"/>
         <p>DIGITAL TOY LIBRARY : an offline device to share games released under free licenses</p>
         <p><strong>In 2014, Dcalk started to develop the idea of a Digital Toy Library &#8211; following the PirateBox and LibraryBox successful initiatives allowing to share free digital content through an offline network – to gather free-licensed games&#8230; Yes it exists (!) and that&rsquo;s exactly to support this practice and give visibility to these creations that we wish to do so.</strong></p>
         <p>The LudoBox project has emerged from the nomadic mediation formula tested in the last 3 years : the Dark Toy Library (a pop-up collection of indie board games carrying critical content, some of them released under CC licence) and the Mobile Digital Fabrique (a foldable 3D printer allowing us to organize Print Parties to make on site 3D printed open source board games), the Digital Toy Library or LudoBox facilitates, through an autonomous wifi router, to gather and access:</p>

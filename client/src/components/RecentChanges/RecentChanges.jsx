@@ -3,6 +3,7 @@ import moment from 'moment'
 
 // import History from '../History/History.jsx'
 import APIClient from "../../api.js"
+import PageTitle from "../PageTitle/PageTitle.jsx"
 
 
 export default class RecentChanges extends React.Component {
@@ -58,7 +59,7 @@ export default class RecentChanges extends React.Component {
 
     return (
       <div>
-        <h3>Recent Changes</h3>
+        <PageTitle title='Recent Changes'/>
         <ul>
           {events}
         </ul>
