@@ -5,8 +5,8 @@
   position: fixed;
   width: 24px;
   height: 20px;
-  left: 16px;
-  top: 36px;
+  left: 26px;
+  top: 26px;
 }
 
 .right .bm-burger-button {
@@ -15,7 +15,10 @@
 }
 
 .bm-burger-bars {
-  background: #221F3C;
+  background: #b8b7ad;
+  &:hover {
+    background: #221F3C;
+  }
 }
 
 .bm-morph-shape {
@@ -47,6 +50,9 @@
     font-size: .8em;
     bottom: 0;
     position:absolute;
+    text-transform: none;
+    font-weight: normal;
+    text-align: right;
   }
 
   span {
