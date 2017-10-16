@@ -4,6 +4,7 @@
 import os
 from flask import Blueprint, abort, jsonify, send_from_directory, current_app
 
+from flask_security import current_user
 from flask_security.decorators import roles_accepted
 
 from ludobox.content import get_content_index, read_content, delete_content
@@ -29,13 +30,22 @@ def api_single_game(path):
 
 @games_api.route('/api/games/<path:path>', methods=["DELETE"])
 @login_required
-@roles_accepted("editor","superuser")
+# @roles_accepted("editor","superuser")
 def api_delete_game(path):
     game_path = os.path.join(current_app.config["DATA_DIR"], path)
-    content = delete_content(game_path)
-    return jsonify({
-        "message" : "Success : file %s deleted"%game_path
-    }), 203
+    content = read_content(game_path)
+
+    author_email = content["history"][0]["user"]
+    is_author = author_email == current_user.email
+
+    if is_author or current_user.has_role("superuser") :
+        game_path = os.path.join(current_app.config["DATA_DIR"], path)
+        content = delete_content(game_path)
+        return jsonify({
+            "message" : "Success : file %s deleted"%game_path
+        }), 203
+
+    abort(405)
 
 @games_api.route('/api/validates/<path:path>', methods=["POST"])
 @login_required

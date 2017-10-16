@@ -49,6 +49,8 @@ export default class Game extends React.Component {
 
   render() {
     let {files, game} = this.state
+
+    let author = game && game.history.length ? game.history[0].user : null
     return (
       <div>
       {
@@ -65,6 +67,7 @@ export default class Game extends React.Component {
             />
           <ActionButtons
             slug={game.slug}
+            author={author}
             state={game.state}
             user={this.props.user}
             updateContent={() => this.updateContent()}

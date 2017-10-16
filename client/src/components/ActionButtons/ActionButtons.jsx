@@ -82,7 +82,9 @@ export default class ActionButtons extends React.Component {
            :
            null
 
-    let deleteButton = isAuthorized("delete_game", this.props.user) ?
+    let deleteButton =
+      isAuthorized("delete_game", this.props.user) || this.props.user.email === this.props.author
+      ?
 
             <a className="button"
               onClick={() => this.handleClickDelete()}
