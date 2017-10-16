@@ -23,14 +23,14 @@ class TestLudoboxConfig(unittest.TestCase):
         os.makedirs(TEST_DATA_DIR)
 
         self.default_values = {
-            "web_server_url" : "http://box.ludobox.net",
+            "web_server_url" : None,
             "port" : 8080,
             "data_dir" : data_dir,
             "index_path" :index_path,
             "ludobox_name" : "My LudoBox",
             "upload_allowed" : True,
-             "database_uri" : "sqlite:////tmp/ludobox.db",
-             "max_file_size" : 20
+            "database_uri" : "sqlite:////tmp/ludobox.db",
+            "max_file_size" : 20
         }
 
     def test_read_config_default(self):
