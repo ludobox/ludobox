@@ -27,11 +27,6 @@ export default class Games extends React.Component {
     const {games} = this.state
     return (
       <span>
-        <header style={{paddingBottom : "4em", textAlign: "center"}}>
-          <img
-            src="/images/ludobox-logo-punchline-to-change.png"
-            />
-        </header>
         {
           this.state.games.length ?
           <GamesTable

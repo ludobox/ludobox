@@ -1,7 +1,27 @@
 /*@import url("Select.css");*/
 
+
+body {
+  top:0
+}
+
 .external:after, a[href^="http"]:after {
      content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=);
+}
+
+.branding-header {
+  text-align: center;
+}
+
+.branding-header a {
+  padding : 2.5em 0 3.5em 0;
+  margin: 0 auto;
+  display: block;
+  max-height: 12em;
+}
+
+.branding-header img {
+  height: 80%;
 }
 
 .label {
@@ -9,9 +29,7 @@
   padding-right: 1em
 }
 
-.main{
-  padding-top: 5.5rem;
-}
+
 
 .navbar + .docs-section {
     border-top-width: 0;

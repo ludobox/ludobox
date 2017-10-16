@@ -48,6 +48,11 @@ export default class App extends React.Component {
       <span>
         <NavBar config={this.state.config}/>
         <div className="main container">
+          <header className="branding-header">
+            <a href="/">
+              <img src="/images/ludobox-logo-color2.png"/>
+            </a>
+          </header>
           {childrenWithProps}
         </div>
       </span>
