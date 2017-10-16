@@ -1,7 +1,10 @@
 import React from 'react'
 
 import APIClient from "../../api.js"
+
 import History from "../History/History.jsx"
+import PageTitle from "../PageTitle/PageTitle.jsx"
+
 import moment from 'moment'
 
 export default class UserProfile extends React.Component {
@@ -53,8 +56,8 @@ export default class UserProfile extends React.Component {
 
     return (
       <div>
+        <PageTitle title="Welcome to your page"/>
 
-        <h3>Welcome to your page</h3>
         {
           profileReady ?
           <p>
