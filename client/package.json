@@ -38,6 +38,7 @@
     "css-loader": "^0.26.4",
     "enzyme": "^2.7.1",
     "gh-pages": "^0.11.0",
+    "ignore-styles": "^5.0.1",
     "jsdom": "^9.9.1",
     "json-loader": "^0.5.4",
     "mocha": "^3.2.0",
@@ -76,7 +77,7 @@
   "scripts": {
     "start": "NODE_ENV=development webpack --watch",
     "build": "NODE_ENV=production webpack",
-    "test": "mocha --compilers js:babel/register src/**/**",
+    "test": "mocha  --require ignore-styles --compilers js:babel/register src/**/**",
     "coverage": "nyc npm test",
     "report": "nyc report",
     "deploy": "npm run build && gh-pages -d build",
