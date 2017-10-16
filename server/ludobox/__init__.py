@@ -42,7 +42,10 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
 
     # data options (used for testing)
     app.config["DATA_DIR"] = config["data_dir"]
-    app.config["UPLOAD_ALLOWED"] = config["upload_allowed"] # used for testing
+    app.config["UPLOAD_ALLOWED"] = config["upload_allowed"]
+
+    # max file size (convert from Mo > Mb > Bytes)
+    app.config['MAX_CONTENT_LENGTH'] = config["max_file_size"] * 8 * 1024 * 1024
 
     # setup DB
     db.init_app(app)

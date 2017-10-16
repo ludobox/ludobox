@@ -105,6 +105,8 @@ export default class AddGame extends React.Component {
       errors
     } = this.state;
 
+    const {max_file_size} = this.props.config.config
+
     // edit button
     let editButtonStyle = {
       cursor : "pointer",
@@ -126,6 +128,7 @@ export default class AddGame extends React.Component {
           newFiles={newFiles}
           handleAddFiles={ files => this.handleAddFiles(files)}
           handleFileUpload={null}
+          maxFileSize={max_file_size}
         />
         <hr/>
         <input

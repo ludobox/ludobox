@@ -66,7 +66,11 @@ export default class GameForm extends React.Component {
       content_type
     } = this.props.game
 
-    const { editMode, errors } = this.props
+    const {
+      editMode,
+      errors,
+      maxFileSize
+    } = this.props
 
     // TODO : make title editable
     return (
@@ -354,6 +358,7 @@ export default class GameForm extends React.Component {
               handleFileUpload={this.props.handleFileUpload }
               handleDeleteFile={this.props.handleDeleteFile }
               handleAddFiles={ files => this.props.handleAddFiles(files) }
+              maxFileSize={maxFileSize}
             />
           </div>
         </div>
