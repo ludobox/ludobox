@@ -95,3 +95,27 @@ class TestLudoboxFilesServer(LudoboxTestCase):
         self.assertEquals(len(result.json["files"]), 2)
         self.assertIn("deleted", result.json["message"])
         self.assertIn(self.files[0][1], result.json["message"])
+
+    def test_api_file_upload_size_limit(self):
+        """API should raise an error when hitting files size limit during upload"""
+
+        slug = self.borgia_info_content["slug"]
+
+        # create large file
+        file_size = self.config["max_file_size"] * 8 * 1024 * 1024
+
+        large_file = open('/tmp/large_file.jpg',"wb")
+        large_file.seek(file_size-1)
+        large_file.write("\0")
+        large_file.close()
+
+
+        result = self.client.post('/api/files',
+                                data={
+                                    'files': [open('/tmp/large_file.jpg',"r")],
+                                    'slug': json.dumps(slug)
+                                },
+                                content_type='multipart/form-data'
+                                )
+
+        self.assertEquals(result.status_code, 413)
