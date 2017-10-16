@@ -29,7 +29,7 @@ export default class GamesFilters extends React.Component {
 
     let {
       games,
-      user,
+      isEditor,
       showErrors,
       filterStr,
       selectedLanguage,
@@ -38,8 +38,6 @@ export default class GamesFilters extends React.Component {
       requirements,
       selectedRequirements
     } = this.props
-
-    const isEditor = user.roles && (user.roles.includes('editor') || user.roles.includes('superuser'))
 
     // get unique language codes
     let lgg = new Set(games.map(g => g.audience.language))
@@ -111,14 +109,13 @@ export default class GamesFilters extends React.Component {
     return (
       <div className="filters">
         <div className="row">
-          <label>What do you have at hand?</label>
+          <h5>What do you have at hand?</h5>
           <div className="reqs">
             {requirementsOptions}
           </div>
         </div>
         <div className="row">
-          <label>How much time do you have?
-          </label>
+          <h5>How much time do you have?</h5>
             {
               timeRange == 120 ?
               "2+ hours"
@@ -139,7 +136,7 @@ export default class GamesFilters extends React.Component {
             <section>
               <div className="row">
                 <div className="six columns">
-                  <label>Search</label>
+                  <label>Search by Title</label>
                   <input
                     type="text"
                     id="filterStrField"

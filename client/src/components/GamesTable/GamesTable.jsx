@@ -96,7 +96,9 @@ export default class GamesTable extends React.Component {
   }
 
   render = () => {
-    const {games, user} = this.props
+    const { games, user } = this.props
+
+    const isEditor = user.roles && (user.roles.includes('editor') || user.roles.includes('superuser'))
 
     const {
       showErrors,
@@ -171,7 +173,7 @@ export default class GamesTable extends React.Component {
       <div>
         <GamesFilters
           games={games}
-          user={user}
+          isEditor={isEditor}
 
           showErrors={showErrors}
           filterStr={filterStr}
@@ -193,6 +195,7 @@ export default class GamesTable extends React.Component {
           />
         <GamesList
           games={selectedGames}
+          isEditor={isEditor}
 
           showErrors={showErrors}
           filterStr={filterStr}
