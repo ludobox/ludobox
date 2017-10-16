@@ -46,11 +46,18 @@ def get_global_config():
         user['username'] =  current_user.username
         user['roles'] =  [role.name for role in current_user.roles]
 
+    # basic security
+    my_config = config.copy()
+    my_config.pop('database_uri', None)
+    my_config.pop('index_path', None)
+    my_config.pop('data_dir', None)
+
+
     return dict(
         name= config["ludobox_name"],
         version =  __version__,
         env = { "python" :  sys.version },
-        config = config,
+        config = my_config,
         user = user
     )
 
