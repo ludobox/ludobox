@@ -2,6 +2,7 @@ import React from 'react'
 import GamesTable from '../GamesTable/GamesTable.jsx'
 
 import APIClient from "../../api.js"
+import PageTitle from "../PageTitle/PageTitle.jsx"
 
 export default class RemoteGames extends React.Component {
 
@@ -59,7 +60,7 @@ export default class RemoteGames extends React.Component {
 
     return (
       <div>
-        <h3>Download games on this box</h3>
+        <PageTitle title="Add games to this box" />
         {
           this.state.remoteGames.length ?
           <p>
