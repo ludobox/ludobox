@@ -11,8 +11,13 @@
   margin-bottom: 2em;
 }
 
-.requirements {
+.requirements, .components {
   list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
 }
 
 .license {

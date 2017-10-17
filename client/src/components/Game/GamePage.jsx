@@ -140,13 +140,24 @@ const GamePage = ({
         <h5>Fabrication time : {fabrication.fab_time} minutes </h5>
 
         {
-          fabrication.requirements ?
+          fabrication.requirements || fabrication.components ?
             <ul className="requirements">
               <li><b>What you need</b></li>
               {
-                fabrication.requirements.map(req =>
-                  <li key={req}>&#10004; {req}</li>
-                )
+                fabrication.requirements ?
+                  fabrication.requirements.map(req =>
+                    <li key={req}>&#10004; {req}</li>
+                  )
+                :
+                null
+              }
+              {
+                fabrication.components ?
+                  fabrication.components.map(req =>
+                    <li key={req}>&#9678; {req}</li>
+                  )
+                :
+                  null
               }
             </ul>
           :

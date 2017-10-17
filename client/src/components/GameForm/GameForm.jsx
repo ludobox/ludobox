@@ -17,6 +17,9 @@ import model from '../../../../model/game.json'
 const requirements = model.properties.fabrication.properties.requirements.items.enum
   .map(d => ({ value : d, name: d }))
 
+const components = model.properties.fabrication.properties.components.items.enum
+  .map(d => ({name : d, value : d}))
+
 const licenses = model.properties.credentials.properties.license.enum
   .map(d => ({name : d, value : d}))
 
@@ -352,6 +355,18 @@ export default class GameForm extends React.Component {
               handleChange={ d => {
                 let game  = this.props.game
                 game.fabrication.requirements = d
+                this.updateGame( game );
+              }}
+            />
+            <h5>Components</h5>
+            <MultiSelect
+              value={fabrication.components}
+              error={errors["fabrication.components"]}
+              options={components}
+              editing={editMode}
+              handleChange={ d => {
+                let game  = this.props.game
+                game.fabrication.components = d
                 this.updateGame( game );
               }}
             />

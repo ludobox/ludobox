@@ -301,28 +301,23 @@
           "type": "array",
           "uniqueItems": true,
           "items": {
-            "type" : "object",
-            "properties": {
-              "componentName": {
-                "type": "string",
-                "enum": [
-                  "Dé classique",
-                  "Dés speciaux",
-                  "Jeu de carte classique",
-                  "Jeu existant",
-                  "Pions",
-                  "Jetons",
-                  "Contenant",
-                  "Chronomètre ",
-                  "Materiel exotique",
-                  "Balloon"
-                ]
-              },
-              "count": {
-                "type" : "number"
-              }
-            }
-          }
+            "type": "string",
+            "enum": [
+              "Dice",
+              "Special Dices",
+              "Standard Card Deck",
+              "Other Existing Game",
+              "Game Pieces",
+              "Tokens",
+              "Receptacle",
+              "Stopwatch ",
+              "Exotic Materials",
+              "Balloon"
+            ]
+          },
+          "id": "components",
+          "title": "Components",
+          "description": "Existing game components (dices, card decks, etc.) "
         }
       }
     },
