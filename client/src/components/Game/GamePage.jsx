@@ -16,6 +16,25 @@ const mapToList = (arr, sep=' - ') =>
     .filter(a => typeof a != 'undefined')
     .map((a,i,x) => i === x.length-1 ? a : a+ sep)
 
+
+const parseHeader = (audience) => {
+  const {duration, language, number_of_players} = audience
+  const {players_min, players_max} = number_of_players
+
+  const header = []
+
+  const players = []
+  if(players_min) players.push(players_min)
+  if(players_max) players.push(players_max)
+  if (players.length) header.push(`${mapToList(players, '-')} players`)
+
+  if(duration) header.push(`${audience.duration} minutes`)
+
+  if(language) header.push(ISO6391.getName(language))
+
+  return mapToList(header, ' | ')
+}
+
 const GamePage = ({
   title,
   description,
@@ -35,7 +54,7 @@ const GamePage = ({
       title={title}
       subtitle={
         <span>
-          {`${audience.number_of_players.players_max}-${audience.number_of_players.players_min} players | ${audience.duration} minutes | ${ISO6391.getName(audience.language)}`}
+          {parseHeader(audience)}
           <br />
           {audience.age ? mapToList(audience.age) : null}
         </span>
