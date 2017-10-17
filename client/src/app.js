@@ -33,7 +33,7 @@ render((
       <Route path="download" component={RemoteGames}/>
       <Route path="games" component={Games} />
       <Route path="games/:gameSlug" component={Game}/>
-      <Route path="games/:gameSlug/edit" component={GameEdit}/>
+      <Route path="games/:gameSlug/edit" component={Contributor(GameEdit)}/>
       <Route path="recent" component={RecentChanges} />
       <Route path="profile" component={UserProfile} />
       <Route path="unauthorized" component={Page403}/>

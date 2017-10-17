@@ -111,7 +111,11 @@ export default class GameEdit extends React.Component {
           filename : f
         }))
 
-        this.setState({editMode : false, files})
+        this.setState({
+          editMode : false,
+          files,
+          newFiles: []
+        })
       },
       error => {
         console.log(error);
@@ -178,6 +182,7 @@ export default class GameEdit extends React.Component {
   }
 
   render() {
+    const {max_file_size} = this.props.config.config
 
     return (
       <div>
@@ -194,6 +199,7 @@ export default class GameEdit extends React.Component {
           handleAddFiles={ files => this.handleAddFiles(files)}
           handleDeleteFile={ file => this.handleDeleteFile(file)}
           handleFileUpload={ files => this.handleFileUpload(files)} // if defined, will add a upload button to push files directly
+          maxFileSize={max_file_size}
         />
         :
         null

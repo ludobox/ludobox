@@ -49,7 +49,6 @@ export default class AddGame extends React.Component {
 
 
   handleAddFiles(files) {
-    console.log(files);
     this.setState({newFiles : files });
   }
 
