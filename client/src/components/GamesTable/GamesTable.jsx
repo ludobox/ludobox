@@ -119,7 +119,6 @@ export default class GamesTable extends React.Component {
           selectedItems.push('Nothing')
       )
 
-
     let selectedGames = games
       .filter(g => g.title.toLowerCase().includes(filterStr))
       .filter(g =>
@@ -158,6 +157,10 @@ export default class GamesTable extends React.Component {
           reqs.forEach( r=>
             selectedItems.includes(r) ? isSelected = true : false
           )
+
+        // show if errors in formatting
+        if (reqs.size!==0 && !isSelected && showErrors) return true
+
         return isSelected
       })
       .filter( g => {
