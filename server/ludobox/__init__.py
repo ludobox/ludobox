@@ -46,6 +46,9 @@ def create_app(debug=False, config_path=DEFAULT_CONFIG_PATH):
 
     # max file size (convert from Mo > Mb > Bytes)
     app.config['MAX_CONTENT_LENGTH'] = config["max_file_size"] * 8 * 1024 * 1024
+    
+    # remove JSON beautify 
+    app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
     # setup DB
     db.init_app(app)
