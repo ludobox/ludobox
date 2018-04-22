@@ -44,7 +44,7 @@ export default class GamesTable extends React.Component {
     this.state = {
       filterStr : '',
       selectedLanguage : 'any',
-      selectedAges : ["Children", "Teenagers", "Adults"],
+      selectedAge : 'any',
       showLookup : false,
       timeRange : 120,
       showErrors : false,
@@ -66,11 +66,8 @@ export default class GamesTable extends React.Component {
     this.setState({ timeRange })
   }
 
-  selectAge(e){
-    const selectedAges = [...e.target.options]
-     .filter(o => o.selected)
-     .map(o => o.value)
-    this.setState({ selectedAges })
+  selectAge(selectedAge){
+    this.setState({ selectedAge })
   }
 
   handleCheckbox(e) {
@@ -104,7 +101,7 @@ export default class GamesTable extends React.Component {
       showErrors,
       filterStr,
       selectedLanguage,
-      selectedAges,
+      selectedAge,
       selectedRequirements,
       timeRange
     } = this.state
@@ -132,16 +129,11 @@ export default class GamesTable extends React.Component {
           :
           true
       )
-      .filter(g => {
-
-        let ages = g.audience.age ?
-         new Set(g.audience.age):
-         new Set([])
-
-        return selectedAges
-          .filter( age => !!ages.size ? ages.has(age) : true )
-          .length
-      })
+      .filter(g =>
+        selectedAge !== 'any' && g.audience.age ?
+          g.audience.age.indexOf(selectedAge) > -1
+        : true // show all games by default
+      )
       .filter(g => {
 
         let reqs = g.fabrication && g.fabrication.requirements ?
@@ -182,7 +174,7 @@ export default class GamesTable extends React.Component {
           filterStr={filterStr}
           selectedLanguage={selectedLanguage}
           selectedRequirements={selectedRequirements}
-          selectedAges={selectedAges}
+          selectedAge={selectedAge}
           timeRange={timeRange}
           requirements={requirements}
           showErrors={showErrors}
@@ -204,7 +196,7 @@ export default class GamesTable extends React.Component {
           filterStr={filterStr}
           selectedLanguage={selectedLanguage}
           selectedRequirements={selectedRequirements}
-          selectedAges={selectedAges}
+          selectedAge={selectedAge}
           timeRange={timeRange}
           requirements={requirements}
 

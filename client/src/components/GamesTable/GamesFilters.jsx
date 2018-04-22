@@ -58,11 +58,14 @@ export default class GamesFilters extends React.Component {
         }
       )
 
-    let ageOptions = ["Children", "Teenagers", "Adults"]
+    let ages = ["Children", "Teenagers", "Adults"]
+      .map(d => ({name : d, value : d}))
+
+    let ageOptions = [{name:"Any", value:"any"}, ...ages]
       .map( age => {
         return (
-          <option key={age} value={age}>
-            {age}
+          <option key={age.value} value={age.value}>
+            {age.name}
           </option>
           )
         }
@@ -161,8 +164,7 @@ export default class GamesFilters extends React.Component {
                   <select
                     id="languageSelector"
                     value={ selectedAges }
-                    onChange={e => this.props.selectAge(e)}
-                    multiple
+                    onChange={e => this.props.selectAge(e.target.value)}
                     >
                       {ageOptions}
                     </select>
