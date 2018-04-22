@@ -11,11 +11,11 @@ import History from "../History/History.jsx"
 
 import './GamePage.scss'
 
-const mapToList = (arr, sep=' - ') =>
-  arr
+export const mapToList = (arr, sep=' - ') =>
+  [...new Set(arr)]
+    .sort()
     .filter(a => typeof a != 'undefined')
-    .map((a,i,x) => i === x.length-1 ? a : a+ sep)
-
+    .join(sep)
 
 const parseHeader = (audience) => {
   const {duration, language, number_of_players} = audience
