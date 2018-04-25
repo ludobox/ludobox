@@ -13,12 +13,13 @@ export default class Games extends React.Component {
     super(props)
     this.api = new APIClient()
     this.state = {
-      games: []
+      games: [],
+      gamesReady: false
     };
   }
 
   fetchGames() {
-    this.api.getGames( games => this.setState({ games }));
+    this.api.getGames( games => this.setState({ games, gamesReady: true }));
   }
 
   componentDidMount() {
@@ -27,19 +28,22 @@ export default class Games extends React.Component {
 
   render() {
 
-    const {games} = this.state
+    const {games, gamesReady} = this.state
 
     return (
       <span>
         <PageTitle />
         {
-          this.state.games.length ?
-          <GamesTable
-            games={games}
-            user={this.props.user}
-          />
+          gamesReady ?
+            this.state.games.length ?
+            <GamesTable
+              games={games}
+              user={this.props.user}
+            />
+            :
+            "No games available."
           :
-          "No games available."
+           "Loading..."
         }
       </span>
     )
