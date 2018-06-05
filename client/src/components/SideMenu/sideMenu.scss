@@ -58,13 +58,16 @@ footer.menuFooter {
   text-transform: none;
   font-weight: normal;
   text-align: center;
-  width: 80%;
+  width: 70%;
 
   ul {
     li {
       display: inline;
     }
     margin: 0 auto;
+    a {
+      padding: 0.2em
+    }
   }
 
   a.version {
