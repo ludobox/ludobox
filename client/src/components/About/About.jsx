@@ -98,6 +98,59 @@ export default class AboutPage extends React.Component {
             <span id="contact-text">Contact us at :</span> <a href="mailto:contact@ludobox.net">contact@ludobox.net</a>
           </h5>
         </section>
+        <hr />
+        <footer className="site-footer">
+          <p className="support">
+            This project is powered by <a className="no-external" href="http://dcalk.org" target="_blank"><b>DCALK</b>.</a>
+            <br />
+            <small>It was made possible with the support of</small>
+          </p>
+          <ul id="logos">
+            <li>
+              <a className="no-external" href="http://www.institutfrancais.com">
+                <img src="/images/logos/250px-Institut-francais.png" />
+              </a>
+            </li>
+            <li>
+              <a className="no-external" href="http://www.culturalfoundation.eu">
+                <img src="/images/logos/European-Culture-Fondation-@-Laculture.info_.png" />
+              </a>
+            </li>
+            <li>
+              <a className="no-external" href="http://www.culturecommunication.gouv.fr">
+                <img src="/images/logos/logo mcc.jpg" />
+              </a>
+            </li>
+            <li>
+              <a className="no-external" href="https://funlab.fr">
+                <img src="/images/logos/la-fabrique-d-usages-numeriques.png" />
+              </a>
+            </li>
+            <li>
+              <a className="no-external" href="http://www.museecarteajouer.com/">
+                <img src="/images/logos/logo-musée-Issy.png" />
+              </a>
+            </li>
+            <li>
+              <a className="no-external" href="http://www.makery.info">
+                <img src="/images/logos/makery_logo_white.png" />
+              </a>
+            </li>
+          </ul>
+
+          <div className="container">
+            <p>
+              <br />
+              <br />
+              <a className="no-external" id="license" target="_blank" rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                <img alt="Licence Creative Commons"
+                  style={{borderWidth:0}} src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
+                  />
+              </a>
+            </p>
+          </div>
+        </footer>
+
         <p style={{textAlign:"right"}}>
           v{version}
         </p>

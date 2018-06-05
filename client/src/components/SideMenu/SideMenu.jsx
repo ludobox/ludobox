@@ -59,7 +59,7 @@ export default class SideMenu extends React.Component {
               }
             </div>
 
-          <footer>
+          <footer className="menuFooter">
             <SocialMedia showNames={false}/>
           </footer>
       </Menu>

@@ -94,3 +94,26 @@
   padding: 4em;
   text-align: center;
 }
+
+footer {
+  padding: 1em;
+  // background:
+  text-align: center;
+  // color: white;
+  font-size: 1.5em;
+
+  a, a:visited {
+    color: #191f39;
+  }
+
+  #logos {
+    text-align: center;
+    li {
+      display: inline-block;
+      padding-right: 2em
+    }
+    img {
+      height: 2.5em
+    }
+  }
+}
