@@ -41,6 +41,7 @@ export default class SideMenu extends React.Component {
               null
             }
 
+            <a className="no-external" href="https://wiki.ludobox.net">Wiki / Help</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
 
@@ -59,7 +60,9 @@ export default class SideMenu extends React.Component {
               }
             </div>
 
-          <a disabled className="version" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a>
+          <footer>
+            <a disabled className="version" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a>
+          </footer>
       </Menu>
     )
   }
