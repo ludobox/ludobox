@@ -8,7 +8,7 @@ import Game from './components/Game/Game.jsx'
 import GameEdit from './components/GameEdit/GameEdit.jsx'
 import Games from './components/Games/Games.jsx'
 import AboutPage from './components/About/About.jsx'
-import Help from './components/Help/Help.jsx'
+import Contact from './components/Contact/Contact.jsx'
 import AddGame from './components/AddGame/AddGame.jsx'
 import RemoteGames from './components/RemoteGames/RemoteGames.jsx'
 import UserProfile from './components/UserProfile/UserProfile.jsx'
@@ -27,7 +27,7 @@ const Admin = Authorization(['editor', 'superuser', 'superuser'])
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <Route path="help" component={Help}/>
+      <Route path="contact" component={Contact}/>
       <Route path="about" component={AboutPage}/>
       <Route path="create" component={Contributor(AddGame)}/>
       <Route path="download" component={RemoteGames}/>
