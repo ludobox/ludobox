@@ -25,3 +25,10 @@ def serve_fonts(path):
 @statics.route('/api/schema/game')
 def serve_schema():
     return send_from_directory('model', "game.json")
+
+# lets encrypt
+@statics.route('/.well-known/acme-challenge/<token_value>')
+def letsencrpyt(tmp):
+    with open('.well-known/acme-challenge/{}'.format(token_value)) as f:
+        answer = f.readline().strip()
+    return answer
