@@ -133,3 +133,103 @@ img {
   margin-left: 1em;
   font-size: 1.1em;
 }
+
+/* HOMEPAGE */
+
+#about #intro {
+  padding: 10em 0 6em 0;
+}
+
+#about .logo {
+  margin: 0 auto;
+
+  /* Hide the text. */
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#about header {
+  text-align: center;
+}
+
+#about h1.ludobox-logo {
+  background: url("/images/ludobox-logo-color2.png") no-repeat center center;
+  background-size: 80%;
+  display:block;
+
+  height:300px;
+  width:300px;
+}
+
+#about #description {
+  color:#191f39;
+  padding: 0 0 4em 0;
+  text-align: center;
+}
+
+#about #description h5 {
+  font-size: 1.7em;
+}
+
+#about #make {
+  padding: 4em 0;
+  text-align: center;
+}
+
+#about #make .links a {
+  font-size: 1em
+}
+
+#about #make img.punchline {
+  width: 200px
+}
+#about #make img.fab {
+  padding: 1em 0;
+  width: 300px
+}
+
+#about #make h5 {
+  padding-top: 1em;
+}
+
+#about #download {
+  margin: 8em 0;
+  text-align: center;
+}
+#about #download p {
+  font-size: 1.5em
+}
+#about #download p.doclink {
+  margin-bottom: 0.3em;
+}
+
+#about #download a.button {
+  margin-right: 1em;
+}
+
+#about #download p.links, #about #download p.links a {
+    font-size: 13pt;
+}
+
+#about #download a {
+  font-size: .6em
+}
+
+#about #map {
+  text-align: center;
+}
+#about #map h3 {
+  margin-top: 1em;
+}
+#about #map img {
+  max-height: 100%
+}
+#about #map a.button {
+  font-size: .8em
+}
+
+#about #contact {
+  padding: 4em;
+  text-align: center;
+}
