@@ -1,0 +1,96 @@
+#intro {
+  padding: 10em 0 6em 0;
+  .logo {
+    margin: 0 auto;
+
+    /* Hide the text. */
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  header {
+    text-align: center;
+  }
+
+  h1.ludobox-logo {
+    background: url("/images/ludobox-logo-color2.png") no-repeat center center;
+    background-size: 80%;
+    display:block;
+
+    height:300px;
+    width:300px;
+  }
+}
+
+
+#description {
+  color:#191f39;
+  padding: 0 0 4em 0;
+  text-align: center;
+  h5 {
+    font-size: 1.7em;
+  }
+}
+
+
+#make {
+  padding: 4em 0;
+  text-align: center;
+  .links a {
+    font-size: 1em
+  }
+
+  img.punchline {
+    width: 200px
+  }
+  img.fab {
+    padding: 1em 0;
+    width: 300px
+  }
+  h5 {
+    padding-top: 1em;
+  }
+}
+
+
+#download {
+  margin: 8em 0;
+  text-align: center;
+  p {
+    font-size: 1.5em
+  }
+  p.doclink {
+    margin-bottom: 0.3em;
+  }
+
+  a.button {
+    margin-right: 1em;
+  }
+
+  p.links, p.links a {
+    font-size: 13pt;
+  }
+
+  a {
+    font-size: .6em
+  }
+}
+
+#map {
+  text-align: center;
+  h3 {
+    margin-top: 1em;
+  }
+  img {
+    max-height: 100%
+  }
+  a.button {
+    font-size: .8em
+  }
+}
+
+#contact {
+  padding: 4em;
+  text-align: center;
+}

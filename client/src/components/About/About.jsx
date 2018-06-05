@@ -1,5 +1,5 @@
 import React from 'react'
-
+import './about.scss'
 import PageTitle from '../PageTitle/PageTitle.jsx'
 
 export default class AboutPage extends React.Component {
