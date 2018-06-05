@@ -51,20 +51,34 @@
   }
 }
 
+footer {
+  font-size: .8em;
+  bottom: 2em;
+  position:absolute;
+  text-transform: none;
+  font-weight: normal;
+  text-align: center;
+  width: 80%;
+
+  ul {
+    li {
+      display: inline;
+    }
+    margin: 0 auto;
+  }
+
+  a.version {
+    font-size: 1.3em;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
 .bm-item-list a {
   padding: 0.8em;
   font-size: 1.4em;
   line-height: .1em;
   text-transform: uppercase;
-
-  &.version {
-    font-size: .8em;
-    bottom: 3px;
-    position:absolute;
-    text-transform: none;
-    font-weight: normal;
-    text-align: right;
-  }
 
   span {
     margin-left: 10px;

@@ -3,6 +3,7 @@ import "./sideMenu.scss";
 import React from 'react'
 import { slide as Menu } from 'react-burger-menu'
 
+import SocialMedia from '../SocialMedia/SocialMedia.jsx'
 
 export default class SideMenu extends React.Component {
 
@@ -22,9 +23,7 @@ export default class SideMenu extends React.Component {
               <img src="/images/ludobox-icon.png"/>
             </a>
 
-            {/* <a href="/">Ludobox</a> */}
-
-            <a href="/games">Games</a>
+            <a style={{marginTop:"3em"}} href="/games">Games</a>
             <a href="/recent">Recent</a>
 
             {
@@ -61,7 +60,7 @@ export default class SideMenu extends React.Component {
             </div>
 
           <footer>
-            <a disabled className="version" href="" style={{color:"#ccc", pointerEvents: "none", cursor: "default"}}>v{this.props.config.version}</a>
+            <SocialMedia showNames={false}/>
           </footer>
       </Menu>
     )
