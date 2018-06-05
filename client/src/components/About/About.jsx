@@ -6,6 +6,8 @@ export default class AboutPage extends React.Component {
 
   render() {
 
+    const { version } = this.props.config
+
     return (
       <main id="about">
         <section id="intro" className="row">
@@ -96,6 +98,9 @@ export default class AboutPage extends React.Component {
             <span id="contact-text">Contact us at :</span> <a href="mailto:contact@ludobox.net">contact@ludobox.net</a>
           </h5>
         </section>
+        <p style={{textAlign:"right"}}>
+          v{version}
+        </p>
       </main>
     )
   }
