@@ -1,10 +1,10 @@
-import "./navBar.scss";
+import "./sideMenu.scss";
 
 import React from 'react'
 import { slide as Menu } from 'react-burger-menu'
 
 
-export default class NavBar extends React.Component {
+export default class SideMenu extends React.Component {
 
   render() {
 

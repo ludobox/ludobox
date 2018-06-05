@@ -7,7 +7,7 @@ const url =
   :
   null;
 
-import NavBar from './NavBar/NavBar.jsx'
+import SideMenu from './SideMenu/SideMenu.jsx'
 import APIClient from "../api.js"
 
 export default class App extends React.Component {
@@ -46,7 +46,7 @@ export default class App extends React.Component {
 
     return (
       <span>
-        <NavBar config={this.state.config}/>
+        <SideMenu config={this.state.config}/>
         <div className="main container">
           {childrenWithProps}
         </div>
