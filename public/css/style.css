@@ -122,3 +122,14 @@ img {
 .action-buttons .button {
   margin-left: 5px;
 }
+
+.icon > svg {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
+.username {
+  margin-left: 1em;
+  font-size: 1.1em;
+}

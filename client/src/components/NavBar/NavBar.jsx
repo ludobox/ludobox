@@ -42,7 +42,7 @@ export default class NavBar extends React.Component {
             }
 
             <a href="/about">About</a>
-            <a href="/help">Help</a>
+            <a href="/contact">Contact</a>
 
             <div className="log-actions">
               {
