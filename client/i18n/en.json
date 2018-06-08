@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "about.description",
+    "defaultMessage": "The Ludobox is an electronic device that distributes printable games into the public space.",
+    "message": ""
+  },
+  {
+    "id": "about.description.small",
+    "defaultMessage": "Each box contains dozens of digital files and instructions to make your own games and turns any place into a game library.",
+    "message": ""
+  }
+]

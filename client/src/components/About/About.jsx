@@ -1,6 +1,18 @@
 import React from 'react'
 import './about.scss'
 import PageTitle from '../PageTitle/PageTitle.jsx'
+import { FormattedMessage, defineMessages } from 'react-intl'
+
+const messages = defineMessages({
+    description: {
+      id: 'about.description',
+      defaultMessage: 'The Ludobox is an electronic device that distributes printable games into the public space.'
+    },
+    descriptionSmall: {
+      id: 'about.description.small',
+      defaultMessage: 'Each box contains dozens of digital files and instructions to make your own games and turns any place into a game library.'
+    }
+  })
 
 export default class AboutPage extends React.Component {
 
@@ -19,11 +31,11 @@ export default class AboutPage extends React.Component {
           <div id="description" className="six columns">
             <div className="container">
               <h5>
-                The <b>Ludobox</b> is an electronic device that distributes printable games into the public space.
+                <FormattedMessage {...messages.description} />
                 <br />
                 <br />
                 <small>
-                  Each box contains dozens of digital files and instructions to make your own games and turns any place into a game library.
+                  <FormattedMessage {...messages.descriptionSmall} />
                 </small>
               </h5>
             </div>

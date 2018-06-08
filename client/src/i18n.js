@@ -7,6 +7,11 @@ import frFRMessages from '../i18n/fr'
 
 addLocaleData([...en, ...fr])
 
+export const appLocales = [
+  'en',
+  'fr',
+]
+
 export const formatTranslationMessages = (messages) => {
   const formattedMessages = {}
   for (const message of messages) {
