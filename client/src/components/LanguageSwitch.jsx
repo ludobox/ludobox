@@ -28,19 +28,29 @@ class LanguageSwitch extends React.Component {
   }
 
   render() {
-    const menuItems = Object.keys(messages).map( l =>
-      ({ name : l, value : l.split( '-')[0] })
+    const menuItems = Object.keys(messages).map( language =>
+      <a href="#"
+        style={{
+          padding:'1em'
+        }}
+        onClick={ (e) => {e.preventDefault(); this.handleChange(language)}}
+        key={language}
+        >
+        {language}
+      </a>
     )
 
     return (
       <div>
-        <Selector
-          value={this.state.locale}
-          handleChange={this.handleChange}
-          style={style}
-          options={menuItems}
-          editing={true}
-        />
+        <div id="language-switch" style={{
+            textAlign:'right',
+            position: 'absolute',
+            right: '.3em',
+            top: '1em',
+            zIndex : '1000'
+          }}>
+           {menuItems}
+        </div>
         <IntlProvider {...this.state}>
           <span>
             {this.props.children}

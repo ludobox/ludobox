@@ -21,6 +21,6 @@ export const formatTranslationMessages = (messages) => {
 }
 
 export const messages = {
-  'en-US' : formatTranslationMessages(enUSMessages),
-  'fr-FR' : formatTranslationMessages(frFRMessages)
+  'en' : formatTranslationMessages(enUSMessages),
+  'fr' : formatTranslationMessages(frFRMessages)
 }
