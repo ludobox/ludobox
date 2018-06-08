@@ -4,7 +4,7 @@ ludobox_name : "My LudoBox"
 port: 8080 # the port to serve the interface (default to 8080)
 
 # The source of your games
-web_server_url : https://box.ludobox.net
+web_server_url : https://ludobox.net
 
 # Directory to store all downloaded data -- default to ./data
 # data_dir : /home/$USER/ludobox/data
