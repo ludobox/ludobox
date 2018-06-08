@@ -18,7 +18,7 @@ class TestLudoboxWebDataUpdate(unittest.TestCase):
     def test_build_url(self):
         url = build_url("index.json")
         print url
-        self.assertEquals(url, "http://box.ludobox.net/api/index.json")
+        self.assertEquals(url, "https://ludobox.net/api/index.json")
 
     def test_handshake(self):
         """Should shake hands with the distant server and get its name."""
