@@ -99,7 +99,6 @@ export default class SideMenu extends React.Component {
 
             <a className="no-external" href="https://wiki.ludobox.net">
               <FormattedMessage {...messages.wiki} />
-              Wiki / Help
             </a>
             <a href="/about">
               <FormattedMessage {...messages.about} />
