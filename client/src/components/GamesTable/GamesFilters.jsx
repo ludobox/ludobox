@@ -188,13 +188,17 @@ export default class GamesFilters extends React.Component {
                   <label>
                     <FormattedMessage {...messages.search} />
                   </label>
-                  <input
-                    type="text"
-                    id="filterStrField"
-                    value={ filterStr }
-                    onChange={ e => this.props.changeFilterStr(e.target.value) }
-                    placeholder={<FormattedMessage {...messages.searchPlaceholder} />}
-                  />
+                  <FormattedMessage {...messages.searchPlaceholder}>
+                    {
+                      (msg) => <input
+                        type="text"
+                        id="filterStrField"
+                        value={ filterStr }
+                        onChange={ e => this.props.changeFilterStr(e.target.value) }
+                        placeholder={msg}
+                      />
+                    }
+                </FormattedMessage>
                 </div>
                 <div className="two columns">
                   <label>
