@@ -123,5 +123,25 @@
     "id": "gamesList.count",
     "defaultMessage": "There is currently {count} games you can fabricate.",
     "message": ""
+  },
+  {
+    "id": "gamesList.header.gameplay",
+    "defaultMessage": "Gameplay",
+    "message": ""
+  },
+  {
+    "id": "gamesList.header.intention",
+    "defaultMessage": "Intention",
+    "message": ""
+  },
+  {
+    "id": "gamesList.header.status",
+    "defaultMessage": "Status",
+    "message": ""
+  },
+  {
+    "id": "gamesList.header.title",
+    "defaultMessage": "Title",
+    "message": ""
   }
 ]

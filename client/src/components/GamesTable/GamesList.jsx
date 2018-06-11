@@ -3,12 +3,26 @@ import { FormattedMessage, defineMessages } from 'react-intl'
 
 import GamesListItem from './GamesListItem.jsx'
 
-
-
 const messages = defineMessages({
   count: {
     id: 'gamesList.count',
     defaultMessage: `There is currently {count} games you can fabricate.`
+  },
+  title: {
+    id: 'gamesList.header.title',
+    defaultMessage: `Title`
+  },
+  gameplay: {
+    id: 'gamesList.header.gameplay',
+    defaultMessage: `Gameplay`
+  },
+  intention: {
+    id: 'gamesList.header.intention',
+    defaultMessage: `Intention`
+  },
+  status: {
+    id: 'gamesList.header.status',
+    defaultMessage: `Status`
   }
 })
 
@@ -26,11 +40,19 @@ const GamesList = ({
     <table className="twelve columns" >
       <thead>
         <tr>
-          <td style={{width:"20%"}}>Title</td>
+          <td style={{width:"20%"}}>
+            <FormattedMessage {...messages.title} />
+          </td>
           {/* <td>Language</td> */}
-          <td>Gameplay</td>
-          <td>Intention</td>
-          <td>Status</td>
+          <td>
+            <FormattedMessage {...messages.gameplay} />
+          </td>
+          <td>
+            <FormattedMessage {...messages.intention} />
+          </td>
+          <td>
+            <FormattedMessage {...messages.status} />
+          </td>
           <td>{/*Fabricate*/}</td>
           {
             remoteApi ?
