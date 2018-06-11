@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl'
 
 import ISO6391 from 'iso-639-1'
 
@@ -11,6 +12,48 @@ const styles = {
   }
 }
 
+const messages = defineMessages({
+    tools: {
+      id: 'gamesFilter.tools',
+      defaultMessage: 'What do you have at hand?'
+    },
+    time: {
+      id: 'gamesFilter.time',
+      defaultMessage: 'How much time do you have?'
+    },
+    search: {
+      id: 'gamesFilter.search',
+      defaultMessage: 'Search by Title'
+    },
+    searchPlaceholder: {
+      id: 'gamesFilter.searchPlaceholder',
+      defaultMessage: 'Lookup a game'
+    },
+    searchPlaceholder: {
+      id: 'gamesFilter.searchPlaceholder',
+      defaultMessage: 'Lookup a game'
+    },
+    language: {
+      id: 'gamesFilter.language',
+      defaultMessage: 'Language'
+    },
+    age: {
+      id: 'gamesFilter.age',
+      defaultMessage: 'Age'
+    },
+    showErros: {
+      id: 'gamesFilter.showErrors',
+      defaultMessage: 'Show records with formatting errors'
+    },
+    showLess: {
+      id: 'gamesFilter.showLess',
+      defaultMessage: 'Hide Options X'
+    },
+    showMore: {
+      id: 'gamesFilter.showMore',
+      defaultMessage: 'More Options'
+    }
+  })
 
 export default class GamesFilters extends React.Component {
 
@@ -112,13 +155,15 @@ export default class GamesFilters extends React.Component {
     return (
       <div className="filters">
         <div className="row">
-          <h5>What do you have at hand?</h5>
+          <h5>
+            <FormattedMessage {...messages.tools} />
+          </h5>
           <div className="reqs">
             {requirementsOptions}
           </div>
         </div>
         <div className="row">
-          <h5>How much time do you have?</h5>
+          <h5><FormattedMessage {...messages.time} /></h5>
             {
               timeRange == 120 ?
               "2+ hours"
@@ -140,17 +185,21 @@ export default class GamesFilters extends React.Component {
             <section>
               <div className="row">
                 <div className="six columns">
-                  <label>Search by Title</label>
+                  <label>
+                    <FormattedMessage {...messages.search} />
+                  </label>
                   <input
                     type="text"
                     id="filterStrField"
                     value={ filterStr }
                     onChange={ e => this.props.changeFilterStr(e.target.value) }
-                    placeholder="Lookup a game"
+                    placeholder={<FormattedMessage {...messages.searchPlaceholder} />}
                   />
                 </div>
                 <div className="two columns">
-                  <label>Language</label>
+                  <label>
+                    <FormattedMessage {...messages.language} />
+                  </label>
                   <select
                     id="languageSelector"
                     value={ selectedLanguage }
@@ -160,7 +209,9 @@ export default class GamesFilters extends React.Component {
                     </select>
                 </div>
                 <div className="four columns">
-                  <label>Age</label>
+                  <label>
+                    <FormattedMessage {...messages.age} />
+                  </label>
                   <select
                     id="languageSelector"
                     value={ selectedAges }
@@ -180,7 +231,7 @@ export default class GamesFilters extends React.Component {
                       onChange={ e => this.props.changeFilterError(e) }
                       />
                       <span className="label-body">
-                        Show records with formatting errors
+                        <FormattedMessage {...messages.showErrors} />
                       </span>
                     </label>
                   </div>
@@ -196,9 +247,9 @@ export default class GamesFilters extends React.Component {
           onClick={e => this.toggleLookup(e)}
           >
             { showLookup ?
-            "Hide Options X"
+            <FormattedMessage {...messages.showLess} />
             :
-            "More Options"
+            <FormattedMessage {...messages.showMore} />
             // <i className="icono-eye"></i>
           }
         </a>

@@ -1,6 +1,16 @@
 import React from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl'
 
 import GamesListItem from './GamesListItem.jsx'
+
+
+
+const messages = defineMessages({
+  count: {
+    id: 'gamesList.count',
+    defaultMessage: `There is currently {count} games you can fabricate.`
+  }
+})
 
 const GamesList = ({
   games,
@@ -10,7 +20,9 @@ const GamesList = ({
   isEditor
 }) => (
   <div className='games-list'>
-    <h5>There is currently {games.length} games you can fabricate.</h5>
+    <h5>
+      <FormattedMessage {...messages.count} values={{count : games.length}}/>
+    </h5>
     <table className="twelve columns" >
       <thead>
         <tr>
