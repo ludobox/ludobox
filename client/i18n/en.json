@@ -1,5 +1,15 @@
 [
   {
+    "id": "about.contact.email",
+    "defaultMessage": "<span id=\"contact-text\">Contact us at :</span> <a href=\"mailto:contact@ludobox.net\">contact@ludobox.net</a>",
+    "message": ""
+  },
+  {
+    "id": "about.contact.wiki",
+    "defaultMessage": "You’d like to contribute to Ludobox platform ? Visit the <a href=\"https://wiki.ludobox.net\">wiki</a>.",
+    "message": ""
+  },
+  {
     "id": "about.description",
     "defaultMessage": "The Ludobox is an electronic device that distributes printable games into the public space.",
     "message": ""
@@ -7,6 +17,61 @@
   {
     "id": "about.description.small",
     "defaultMessage": "Each box contains dozens of digital files and instructions to make your own games and turns any place into a game library.",
+    "message": ""
+  },
+  {
+    "id": "about.footer.credits",
+    "defaultMessage": "This project is powered by <a className=\"no-external\" href=\"http://dcalk.org\" target=\"_blank\"><b>DCALK</b>.</a>",
+    "message": ""
+  },
+  {
+    "id": "about.footer.sponsors",
+    "defaultMessage": "It was made possible with the support of",
+    "message": ""
+  },
+  {
+    "id": "about.make.button",
+    "defaultMessage": "Create your own",
+    "message": ""
+  },
+  {
+    "id": "about.make.line2",
+    "defaultMessage": "You can build your own box from scratch",
+    "message": ""
+  },
+  {
+    "id": "about.make.line3",
+    "defaultMessage": "and directly download games from our online collection.",
+    "message": ""
+  },
+  {
+    "id": "about.make.links",
+    "defaultMessage": "Check <a href=\"https://github.com/ludobox/ludobox\">the code</a> or read <a href=\"https://wiki.ludobox.net\">the docs</a>",
+    "message": ""
+  },
+  {
+    "id": "about.make.title",
+    "defaultMessage": "Make your own Box",
+    "message": ""
+  },
+  {
+    "id": "about.printnplay.line2",
+    "defaultMessage": "to a board game accessing a 3D printer to reproduce tokens,",
+    "message": ""
+  },
+  {
+    "id": "about.printnplay.line3",
+    "defaultMessage": "Ludobox invites to materialize & craft digital files.",
+    "message": ""
+  },
+  {
+    "id": "about.printnplay.main",
+    "defaultMessage": "Print'n play are games that you can make by yourself.",
+    "message": ""
+  },
+  {
+    "id": "about.printnplyt.line1",
+    "defaultMessage": "From a card game in PDF using a printer and scissors",
     "message": ""
   }
 ]
