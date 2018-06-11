@@ -75,6 +75,31 @@
     "message": ""
   },
   {
+    "id": "game.credentials",
+    "defaultMessage": "Credentials",
+    "message": ""
+  },
+  {
+    "id": "game.download",
+    "defaultMessage": "Download Files",
+    "message": ""
+  },
+  {
+    "id": "game.fabTime",
+    "defaultMessage": "Fabrication time : {fabTime} minutes",
+    "message": ""
+  },
+  {
+    "id": "game.requirements",
+    "defaultMessage": "What you need",
+    "message": ""
+  },
+  {
+    "id": "game.tags",
+    "defaultMessage": "Tags",
+    "message": ""
+  },
+  {
     "id": "gamesFilter.age",
     "defaultMessage": "Age",
     "message": ""

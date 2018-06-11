@@ -4,12 +4,37 @@ import FileIcons from 'file-icons-js'
 import 'file-icons-js/css/style.css'
 
 import Markdown from 'react-remarkable'
+import { FormattedMessage, defineMessages } from 'react-intl'
 
 import ActionButtons from "../ActionButtons/ActionButtons.jsx"
 import PageTitle from '../PageTitle/PageTitle.jsx'
 import History from "../History/History.jsx"
 
 import './GamePage.scss'
+
+
+const messages = defineMessages({
+  fabTime: {
+    id : 'game.fabTime',
+    defaultMessage: `Fabrication time : {fabTime} minutes`
+  },
+  requirements: {
+    id : 'game.requirements',
+    defaultMessage: 'What you need'
+  },
+  tags: {
+    id : 'game.tags',
+    defaultMessage: 'Tags'
+  },
+  download: {
+    id : 'game.download',
+    defaultMessage: 'Download Files'
+  },
+  credentials: {
+    id : 'game.credentials',
+    defaultMessage: 'Credentials'
+  }
+})
 
 export const mapToList = (arr, sep=' - ') =>
   [...new Set(arr)]
@@ -49,7 +74,6 @@ const GamePage = ({
   user
 }) => (
   <div className="single-game">
-
     <PageTitle
       title={title}
       subtitle={
@@ -91,7 +115,9 @@ const GamePage = ({
         <ul className="credentials">
           {
             credentials.authors || credentials.illustrators || credentials.publishers ?
-              <li><b>Credentials</b></li>
+              <li>
+                <b><FormattedMessage {...messages.credentials} /></b>
+              </li>
             :
             null
           }
@@ -137,12 +163,18 @@ const GamePage = ({
       </div>
 
       <div className="six columns infobox">
-        <h5>Fabrication time : {fabrication.fab_time} minutes </h5>
+        <h5>
+          <FormattedMessage {...messages.fabTime}
+            values={{ fabTime : fabrication.fab_time}}
+            />
+        </h5>
 
         {
           fabrication.requirements || fabrication.components ?
             <ul className="requirements">
-              <li><b>What you need</b></li>
+              <li><b>
+                <FormattedMessage {...messages.requirements} />
+              </b></li>
               {
                 fabrication.requirements ?
                   fabrication.requirements.map(req =>
@@ -165,7 +197,9 @@ const GamePage = ({
         }
 
         <ul className="files">
-          <li><b>Download Files</b></li>
+          <li><b>
+            <FormattedMessage {...messages.download} />
+          </b></li>
           {
             files.map(f =>
               <li key={f.url}>
@@ -186,7 +220,9 @@ const GamePage = ({
     <hr/>
     {
       description.tags ?
-        <p className="tags-list"><b>Tags</b>  {mapToList(description.tags, ', ')}</p>
+        <p className="tags-list">
+          <b><FormattedMessage {...messages.tags} /></b>  {mapToList(description.tags, ', ')}
+          </p>
         :
         null
     }
