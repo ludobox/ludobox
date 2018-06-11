@@ -143,5 +143,60 @@
     "id": "gamesList.header.title",
     "defaultMessage": "Title",
     "message": ""
+  },
+  {
+    "id": "menu.about",
+    "defaultMessage": "About",
+    "message": ""
+  },
+  {
+    "id": "menu.addGame",
+    "defaultMessage": "Add Game",
+    "message": ""
+  },
+  {
+    "id": "menu.contact",
+    "defaultMessage": "Contact",
+    "message": ""
+  },
+  {
+    "id": "menu.download",
+    "defaultMessage": "Download",
+    "message": ""
+  },
+  {
+    "id": "menu.games",
+    "defaultMessage": "Games",
+    "message": ""
+  },
+  {
+    "id": "menu.login",
+    "defaultMessage": "Login",
+    "message": ""
+  },
+  {
+    "id": "menu.logout",
+    "defaultMessage": "Logout",
+    "message": ""
+  },
+  {
+    "id": "menu.profile",
+    "defaultMessage": "Profile",
+    "message": ""
+  },
+  {
+    "id": "menu.recent",
+    "defaultMessage": "Recent",
+    "message": ""
+  },
+  {
+    "id": "menu.register",
+    "defaultMessage": "Register",
+    "message": ""
+  },
+  {
+    "id": "menu.wiki",
+    "defaultMessage": "Wiki/Help",
+    "message": ""
   }
 ]
