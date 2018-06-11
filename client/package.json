@@ -94,7 +94,7 @@
     "coverage": "nyc npm test",
     "report": "nyc report",
     "deploy": "npm run build && gh-pages -d build",
-    "extract-intl": "babel-node --presets es2015,stage-0 -- ./scripts/collectTranslations.js",
+    "extract-intl": "./node_modules/babel-cli/bin/babel-node.js --presets es2015,stage-0 -- ./scripts/collectTranslations.js",
     "eject": "react-scripts eject"
   }
 }
