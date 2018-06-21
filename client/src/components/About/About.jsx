@@ -6,7 +6,7 @@ import { FormattedMessage, FormattedHTMLMessage, defineMessages } from 'react-in
 const messages = defineMessages({
     description: {
       id: 'about.description',
-      defaultMessage: 'The Ludobox is an electronic device that distributes printable games into the public space.'
+      defaultMessage: 'Ludobox is an open collection of Print’n Play games which are regrouped on an online plateform with many files, instructions and recipes to create and built games yourself.'
     },
     descriptionSmall: {
       id: 'about.description.small',
@@ -55,6 +55,14 @@ const messages = defineMessages({
     contactEmail : {
       id :'about.contact.email',
       defaultMessage : '<span id="contact-text">Contact us at :</span> <a href="mailto:contact@ludobox.net">contact@ludobox.net</a>'
+    },
+    contactCatalogue : {
+      id :'about.contact.catalogue',
+      defaultMessage : 'For more info, you can also consult our '
+    },
+    contactCatalogueLink : {
+      id :'about.contact.catalogueLink',
+      defaultMessage : 'catalogue <small>(French only)</small>.'
     },
     footerCredits : {
       id: 'about.footer.credits',
@@ -163,6 +171,10 @@ export default class AboutPage extends React.Component {
           <h3>Get in Touch</h3>
           <h5>
             <FormattedHTMLMessage {...messages.contactWiki} />
+            <br />
+            <FormattedHTMLMessage {...messages.contactCatalogue} /> <a href="https://wiki.ludobox.net/files/CatalogueLudobox.pdf">
+              <FormattedHTMLMessage {...messages.contactCatalogueLink} />
+            </a>
             <br />
             <br />
             <FormattedHTMLMessage {...messages.contactEmail} />

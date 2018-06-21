@@ -1,5 +1,15 @@
 [
   {
+    "id": "about.contact.catalogue",
+    "defaultMessage": "You will find more info in our",
+    "message": "Intéressé par l'organisation d'un événement ludique ?<br/>par l'expérimentation du game design collaboratif ? <br/> par la création ou l'édition d'un jeu en Print'n Play ? <br/> Téléchargez notre"
+  },
+  {
+    "id": "about.contact.catalogueLink",
+    "defaultMessage": "catalogue <small>(French only)</small>.",
+    "message": "catalogue."
+  },
+  {
     "id": "about.contact.email",
     "defaultMessage": "<span id=\"contact-text\">Contact us at :</span> <a href=\"mailto:contact@ludobox.net\">contact@ludobox.net</a>",
     "message": ""
