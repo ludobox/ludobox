@@ -5,6 +5,9 @@ ludobox.log.*
 config.yml
 backups
 
+public/js/bundle.js
+public/js/bundle.js.map
+
 # Input directory for the ludobox
 oldies
 /data/*
