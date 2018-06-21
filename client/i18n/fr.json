@@ -137,17 +137,17 @@
   {
     "id": "gamesFilter.time",
     "defaultMessage": "How much time do you have?",
-    "message": "Combien de temps as tu?"
+    "message": "Combien de temps as-tu?"
   },
   {
     "id": "gamesFilter.tools",
     "defaultMessage": "What do you have at hand?",
-    "message": "Qu'es ce que tu à sous la main?"
+    "message": "Qu'est-ce que tu as sous la main?"
   },
   {
     "id": "gamesList.count",
     "defaultMessage": "There is currently {count} games you can fabricate.",
-    "message": "Il y a actuellement {count} jeux prêt à être fabriquer"
+    "message": "Il y a actuellement {count} jeux prêts à être fabriqués."
   },
   {
     "id": "gamesList.header.gameplay",
