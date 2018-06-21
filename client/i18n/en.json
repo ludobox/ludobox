@@ -7,221 +7,221 @@
   {
     "id": "about.contact.wiki",
     "defaultMessage": "You’d like to contribute to Ludobox platform ? Visit the <a href=\"https://wiki.ludobox.net\">wiki</a>.",
-    "message": "Vous souhaitez contribuer à la plate-forme Ludobox ? Visitez le wiki."
+    "message": ""
   },
   {
     "id": "about.description",
-    "defaultMessage": "Ludobox is an open collection of Print’n Play games which are regrouped on an online plateform with many files, instructions and recipes to create and built games yourself.",
-    "message": "Ludobox est une plate-forme contributive et une collection de jeux libres et open source en Print’n Play (à fabriquer soi-même)"
+    "defaultMessage": "The Ludobox is an electronic device that distributes printable games into the public space.",
+    "message": "La Ludobox blablabla..."
   },
   {
     "id": "about.description.small",
     "defaultMessage": "Each box contains dozens of digital files and instructions to make your own games and turns any place into a game library.",
-    "message": "Elle rassemble des dizaines de fichiers et ressources pour créer et fabriquer des jeux. "
+    "message": ""
   },
   {
     "id": "about.footer.credits",
     "defaultMessage": "This project is powered by <a className=\"no-external\" href=\"http://dcalk.org\" target=\"_blank\"><b>DCALK</b>.</a>",
-    "message": "Propulsé par <a className=\"no-external\" href=\"http://dcalk.org\" target=\"_blank\"><b>DCALK</b>.</a>"
+    "message": ""
   },
   {
     "id": "about.footer.sponsors",
     "defaultMessage": "It was made possible with the support of",
-    "message": "Rendu possible grace au soutien "
+    "message": ""
   },
   {
     "id": "about.make.button",
     "defaultMessage": "Create your own",
-    "message": "Crée ta propre box"
+    "message": ""
   },
   {
     "id": "about.make.line2",
     "defaultMessage": "You can build your own box from scratch",
-    "message": "Rassemble les composants pour construire la box"
+    "message": ""
   },
   {
     "id": "about.make.line3",
     "defaultMessage": "and directly download games from our online collection.",
-    "message": "et télécharge directement les jeux de ton choix à partir de la collection en ligne"
+    "message": ""
   },
   {
     "id": "about.make.links",
     "defaultMessage": "Check <a href=\"https://github.com/ludobox/ludobox\">the code</a> or read <a href=\"https://wiki.ludobox.net\">the docs</a>",
-    "message": "Par ici le code et la documentation"
+    "message": ""
   },
   {
     "id": "about.make.title",
     "defaultMessage": "Make your own Box",
-    "message": "Fabrique ta Ludobox"
+    "message": ""
   },
   {
     "id": "about.printnplay.line2",
     "defaultMessage": "to a board game accessing a 3D printer to reproduce tokens,",
-    "message": "à la réalisation d'un jeu de plateau 3D en fablab,"
+    "message": ""
   },
   {
     "id": "about.printnplay.line3",
     "defaultMessage": "Ludobox invites to materialize & craft digital files.",
-    "message": "la Ludobox invite à re-matérialiser des fichiers numériques."
+    "message": ""
   },
   {
     "id": "about.printnplay.main",
     "defaultMessage": "Print'n play are games that you can make by yourself.",
-    "message": "Le Print'n Play permet de créer des jeux soi-même :"
+    "message": ""
   },
   {
     "id": "about.printnplyt.line1",
     "defaultMessage": "From a card game in PDF using a printer and scissors",
-    "message": "d'un jeu de cartes au format PDF nécessitant des ciseaux et une imprimante,"
+    "message": ""
   },
   {
     "id": "game.credentials",
     "defaultMessage": "Credentials",
-    "message": "Attributions"
+    "message": ""
   },
   {
     "id": "game.download",
     "defaultMessage": "Download Files",
-    "message": "Télécharger les fichiers"
+    "message": ""
   },
   {
     "id": "game.fabTime",
     "defaultMessage": "Fabrication time : {fabTime} minutes",
-    "message": "Temps de fabrication"
+    "message": ""
   },
   {
     "id": "game.requirements",
     "defaultMessage": "What you need",
-    "message": "J'ai besoin"
+    "message": ""
   },
   {
     "id": "game.tags",
     "defaultMessage": "Tags",
-    "message": "Tags"
+    "message": ""
   },
   {
     "id": "gamesFilter.age",
     "defaultMessage": "Age",
-    "message": "Age"
+    "message": ""
   },
   {
     "id": "gamesFilter.language",
     "defaultMessage": "Language",
-    "message": "Langue"
+    "message": ""
   },
   {
     "id": "gamesFilter.search",
     "defaultMessage": "Search by Title",
-    "message": "Recherche par titre"
+    "message": ""
   },
   {
     "id": "gamesFilter.searchPlaceholder",
     "defaultMessage": "Lookup a game",
-    "message": "Titre du jeu"
+    "message": ""
   },
   {
     "id": "gamesFilter.showErrors",
     "defaultMessage": "Show records with formatting errors",
-    "message": "Montrer le registre des erreurs de format"
+    "message": ""
   },
   {
     "id": "gamesFilter.showLess",
     "defaultMessage": "Hide Options X",
-    "message": "Cacher Options X"
+    "message": ""
   },
   {
     "id": "gamesFilter.showMore",
     "defaultMessage": "More Options",
-    "message": "Plus d'Options"
+    "message": ""
   },
   {
     "id": "gamesFilter.time",
     "defaultMessage": "How much time do you have?",
-    "message": "Combien de temps as tu?"
+    "message": ""
   },
   {
     "id": "gamesFilter.tools",
     "defaultMessage": "What do you have at hand?",
-    "message": "Qu'es ce que tu à sous la main?"
+    "message": ""
   },
   {
     "id": "gamesList.count",
     "defaultMessage": "There is currently {count} games you can fabricate.",
-    "message": "Il y a actuellement {count} jeux prêt à être fabriquer"
+    "message": ""
   },
   {
     "id": "gamesList.header.gameplay",
     "defaultMessage": "Gameplay",
-    "message": "Gameplay"
+    "message": ""
   },
   {
     "id": "gamesList.header.intention",
     "defaultMessage": "Intention",
-    "message": "Intention"
+    "message": ""
   },
   {
     "id": "gamesList.header.status",
     "defaultMessage": "Status",
-    "message": "Statut"
+    "message": ""
   },
   {
     "id": "gamesList.header.title",
     "defaultMessage": "Title",
-    "message": "Titre"
+    "message": ""
   },
   {
     "id": "menu.about",
     "defaultMessage": "About",
-    "message": "A propos"
+    "message": ""
   },
   {
     "id": "menu.addGame",
     "defaultMessage": "Add Game",
-    "message": "Ajouter un jeu"
+    "message": ""
   },
   {
     "id": "menu.contact",
     "defaultMessage": "Contact",
-    "message": "Contact"
+    "message": ""
   },
   {
     "id": "menu.download",
     "defaultMessage": "Download",
-    "message": "Télécharger"
+    "message": ""
   },
   {
     "id": "menu.games",
     "defaultMessage": "Games",
-    "message": "Jeux"
+    "message": ""
   },
   {
     "id": "menu.login",
     "defaultMessage": "Login",
-    "message": "Connection"
+    "message": ""
   },
   {
     "id": "menu.logout",
     "defaultMessage": "Logout",
-    "message": "Déconnection"
+    "message": ""
   },
   {
     "id": "menu.profile",
     "defaultMessage": "Profile",
-    "message": "Profil"
+    "message": ""
   },
   {
     "id": "menu.recent",
     "defaultMessage": "Recent",
-    "message": "Recent"
+    "message": ""
   },
   {
     "id": "menu.register",
     "defaultMessage": "Register",
-    "message": "Participer"
+    "message": ""
   },
   {
     "id": "menu.wiki",
     "defaultMessage": "Wiki/Help",
-    "message": "Wiki/Aide"
+    "message": ""
   }
 ]
