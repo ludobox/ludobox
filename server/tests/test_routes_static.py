@@ -27,9 +27,9 @@ class TestLudoboxWebServerStatic(TestCase):
         result = self.client.get('/css/style.css')
         self.assertEqual(result.status_code, 200)
 
-    def test_js(self):
-        result = self.client.get('/js/bundle.js')
-        self.assertEqual(result.status_code, 200)
+    # def test_js(self):
+    #     result = self.client.get('/js/bundle.js')
+    #     self.assertEqual(result.status_code, 200)
 
     def test_images(self):
         result = self.client.get('/images/favicon.png')

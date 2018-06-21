@@ -96,10 +96,15 @@ fi
 mv tmpfile config.yml
 rm "$tmpfile"
 
-# init the user DB properly 
+# init the user DB properly
 echo -e "Preparing database..."
 python ./bin/migrations/init_db.py
 echo -e "Database ready !"
+
+# build client-side code
+echo -e "Preparing the interface..."
+(cd client; npm run build)
+echo -e "ready !"
 
 echo
 echo -e "${GREEN}Congrats, Installation successful ! ${NC}"

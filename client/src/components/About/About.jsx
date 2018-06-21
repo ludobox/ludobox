@@ -1,6 +1,70 @@
 import React from 'react'
 import './about.scss'
 import PageTitle from '../PageTitle/PageTitle.jsx'
+import { FormattedMessage, FormattedHTMLMessage, defineMessages } from 'react-intl'
+
+const messages = defineMessages({
+    description: {
+      id: 'about.description',
+      defaultMessage: 'The Ludobox is an electronic device that distributes printable games into the public space.'
+    },
+    descriptionSmall: {
+      id: 'about.description.small',
+      defaultMessage: 'Each box contains dozens of digital files and instructions to make your own games and turns any place into a game library.'
+    },
+    printnplayMain : {
+      id : 'about.printnplay.main',
+      defaultMessage: "Print'n play are games that you can make by yourself."
+    },
+    printnplayLine1: {
+      id : 'about.printnplyt.line1',
+      defaultMessage: "From a card game in PDF using a printer and scissors"
+    },
+    printnplayLine2: {
+      id : 'about.printnplay.line2',
+      defaultMessage: "to a board game accessing a 3D printer to reproduce tokens,"
+    },
+    printnplayLine3: {
+      id : 'about.printnplay.line3',
+      defaultMessage: "Ludobox invites to materialize & craft digital files."
+    },
+    makeTitle : {
+      id: 'about.make.title',
+      defaultMessage: 'Make your own Box'
+    },
+    makeLine1: {
+      id : 'about.make.line2',
+      defaultMessage: "You can build your own box from scratch"
+    },
+    makeLine2: {
+      id : 'about.make.line3',
+      defaultMessage: "and directly download games from our online collection."
+    },
+    makeButton : {
+      id : 'about.make.button',
+      defaultMessage: "Create your own"
+    },
+    makeLinks : {
+      id : 'about.make.links',
+      defaultMessage: 'Check <a href="https://github.com/ludobox/ludobox">the code</a> or read <a href="https://wiki.ludobox.net">the docs</a>'
+    },
+    contactWiki : {
+      id :'about.contact.wiki',
+      defaultMessage : 'You’d like to contribute to Ludobox platform ? Visit the <a href="https://wiki.ludobox.net">wiki</a>.'
+    },
+    contactEmail : {
+      id :'about.contact.email',
+      defaultMessage : '<span id="contact-text">Contact us at :</span> <a href="mailto:contact@ludobox.net">contact@ludobox.net</a>'
+    },
+    footerCredits : {
+      id: 'about.footer.credits',
+      defaultMessage: 'This project is powered by <a className="no-external" href="http://dcalk.org" target="_blank"><b>DCALK</b>.</a>'
+    },
+    footerSponsors : {
+      id: 'about.footer.sponsors',
+      defaultMessage: 'It was made possible with the support of'
+    }
+  })
 
 export default class AboutPage extends React.Component {
 
@@ -19,11 +83,11 @@ export default class AboutPage extends React.Component {
           <div id="description" className="six columns">
             <div className="container">
               <h5>
-                The <b>Ludobox</b> is an electronic device that distributes printable games into the public space.
+                <FormattedMessage {...messages.description} />
                 <br />
                 <br />
                 <small>
-                  Each box contains dozens of digital files and instructions to make your own games and turns any place into a game library.
+                  <FormattedMessage {...messages.descriptionSmall} />
                 </small>
               </h5>
             </div>
@@ -33,20 +97,28 @@ export default class AboutPage extends React.Component {
           src="/images/about/ludobox-box-web.jpg"
           alt="Ludobox Box Image"
           />
-        <section id="make">
+        <section id="printnplay">
           <img className="punchline"
             src="/images/ludobox-punchline1.png"
             alt="Punchline"
             />
           <h5>
-            <span className="main">Print'n play are games that you can make by yourself.</span>
+            <span className="main">
+              <FormattedMessage {...messages.printnplayMain} />
+            </span>
             <br />
             <small>
-              <span className="line1">From a card game in PDF using a printer and scissors</span>
+              <span className="line1">
+                <FormattedMessage {...messages.printnplayLine1} />
+              </span>
               <br />
-              <span className="line2">to a board game accessing a 3D printer to reproduce tokens,</span>
+              <span className="line2">
+                <FormattedMessage {...messages.printnplayLine2} />
+              </span>
               <br />
-              <span className="line3">Ludobox invites to materialize & craft digital files.</span>
+              <span className="line3">
+                <FormattedMessage {...messages.printnplayLine3} />
+              </span>
             </small>
           </h5>
           <img className="fab"
@@ -58,25 +130,29 @@ export default class AboutPage extends React.Component {
           src="/images/about/ludobox-event-play-web.jpg"
           alt="Ludobox Box Image"
           />
-        <section id="download">
-          <h3 className="title">Make your own Box</h3>
+        <section id="make">
+          <h3 className="title">
+            <FormattedMessage {...messages.makeTitle} />
+          </h3>
           <div className="container">
             <h5>
               <span className='line1'>
-                You can build your own box from scratch
+                <FormattedMessage {...messages.makeLine1} />
               </span>
               <br />
               <span className="line2">
-                and directly download games from our online collection.
+                <FormattedMessage {...messages.makeLine2} />
               </span>
             </h5>
           </div>
           <p className="doclink">
-            <a href="https://hackmd.io/s/Skje3bygW" className="button" target="_blank">Create your own Box</a>
+            <a href="https://hackmd.io/s/Skje3bygW" className="button" target="_blank">
+              <FormattedMessage {...messages.makeButton} />
+            </a>
             <br />
           </p>
           <p className="links">
-            Check <a href="https://github.com/ludobox/ludobox">the code</a> or read <a href="https://wiki.ludobox.net">the docs</a>
+            <FormattedHTMLMessage {...messages.makeLinks} />
           </p>
         </section>
         <img className="full-width-image"
@@ -86,24 +162,20 @@ export default class AboutPage extends React.Component {
         <section id="contact" className="container" >
           <h3>Get in Touch</h3>
           <h5>
-            <span className="line1">Interested in installing a Ludobox ?</span>
-            <br />
-            <span className="line2">Organizing a game festival ?</span>
-            <br />
-            <span className="line3">Experimenting with collaboration and games?</span>
-            <br />
-            <span className="line4">Inventing or publishing open-source games?</span>
+            <FormattedHTMLMessage {...messages.contactWiki} />
             <br />
             <br />
-            <span id="contact-text">Contact us at :</span> <a href="mailto:contact@ludobox.net">contact@ludobox.net</a>
+            <FormattedHTMLMessage {...messages.contactEmail} />
           </h5>
         </section>
         <hr />
         <footer className="site-footer">
           <p className="support">
-            This project is powered by <a className="no-external" href="http://dcalk.org" target="_blank"><b>DCALK</b>.</a>
+            <FormattedHTMLMessage {...messages.footerCredits} />
             <br />
-            <small>It was made possible with the support of</small>
+            <small>
+              <FormattedMessage {...messages.footerSponsors} />
+            </small>
           </p>
           <ul id="logos">
             <li>

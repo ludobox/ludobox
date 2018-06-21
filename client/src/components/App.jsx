@@ -1,6 +1,8 @@
 import React from 'react'
 import io from 'socket.io-client'
 
+import LanguageSwitch from './LanguageSwitch.jsx'
+
 const url =
   (typeof window !== 'undefined') ? // for testing without a browser
     location.port ? '//' + document.domain + ':' + location.port : '//' + document.domain
@@ -46,10 +48,12 @@ export default class App extends React.Component {
 
     return (
       <span>
-        <SideMenu config={this.state.config}/>
-        <div className="main container">
-          {childrenWithProps}
-        </div>
+        <LanguageSwitch>
+          <SideMenu config={this.state.config}/>
+          <div className="main container">
+            {childrenWithProps}
+          </div>
+        </LanguageSwitch>
       </span>
     )
   }
