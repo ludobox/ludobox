@@ -30,9 +30,6 @@ function are_you_sure() {
 # validate
 are_you_sure
 
-# build client-side code
-(cd client; npm run build)
-
 # add build to commit
 git add public/js
 
