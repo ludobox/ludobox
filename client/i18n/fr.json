@@ -7,7 +7,7 @@
   {
     "id": "about.contact.wiki",
     "defaultMessage": "You’d like to contribute to Ludobox platform ? Visit the <a href=\"https://wiki.ludobox.net\">wiki</a>.",
-    "message": "Vous souhaitez contribuer à la plate-forme Ludobox ? Visitez le wiki."
+    "message": "Vous souhaitez contribuer à la plate-forme Ludobox ? Visitez le <a href=\"https://wiki.ludobox.net\">wiki</a>."
   },
   {
     "id": "about.description",
@@ -47,7 +47,7 @@
   {
     "id": "about.make.links",
     "defaultMessage": "Check <a href=\"https://github.com/ludobox/ludobox\">the code</a> or read <a href=\"https://wiki.ludobox.net\">the docs</a>",
-    "message": "Par ici le code et la documentation"
+    "message": "Par ici <a href=\"https://github.com/ludobox/ludobox\">le code</a> et <a href=\"https://wiki.ludobox.net\">la documentation</a>."
   },
   {
     "id": "about.make.title",
@@ -122,7 +122,7 @@
   {
     "id": "gamesFilter.showErrors",
     "defaultMessage": "Show records with formatting errors",
-    "message": "Montrer le registre des erreurs de format"
+    "message": "Montrer les jeux contenant des erreurs de saisie"
   },
   {
     "id": "gamesFilter.showLess",
