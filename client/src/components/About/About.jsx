@@ -217,7 +217,7 @@ export default class AboutPage extends React.Component {
             </li>
             <li>
               <a className="no-external" href="http://www.makery.info">
-                <img src="/images/logos/makery_logo_white.png" />
+                <img src="/images/logos/makery_logo.png" />
               </a>
             </li>
           </ul>
