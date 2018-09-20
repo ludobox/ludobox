@@ -2,12 +2,8 @@
   {
     "id": "about.contact.catalogue",
     "defaultMessage": "You will find more info in our",
-    "message": "Intéressé par l'organisation d'un événement ludique ?<br/>par l'expérimentation du game design collaboratif ? <br/> par la création ou l'édition d'un jeu en Print'n Play ? <br/> Téléchargez notre"
-  },
-  {
-    "id": "about.contact.catalogueLink",
-    "defaultMessage": "catalogue <small>(French only)</small>.",
-    "message": "catalogue."
+    "message": "Intéressé par l'organisation d'un événement ludique ?<br/>par l'expérimentation du game design collaboratif ? <br/> par la création ou l'édition d'un jeu en Print'n Play ? <br/> Téléchargez notre <a href='https://wiki.ludobox.net/files/CatalogueLudoboxFR.pdf'> catalogue </a>."
+
   },
   {
     "id": "about.contact.email",

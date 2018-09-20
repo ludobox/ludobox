@@ -1,12 +1,7 @@
 [
   {
     "id": "about.contact.catalogue",
-    "defaultMessage": "You will find more info in our",
-    "message": ""
-  },
-  {
-    "id": "about.contact.catalogueLink",
-    "defaultMessage": "catalogue <small>(French only)</small>.",
+    "defaultMessage": "You will find more info in our <a href='https://wiki.ludobox.net/files/CatalogueLudoboxEN.pdf'>catalogue</a>",
     "message": ""
   },
   {

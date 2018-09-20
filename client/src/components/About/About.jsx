@@ -172,9 +172,7 @@ export default class AboutPage extends React.Component {
           <h5>
             <FormattedHTMLMessage {...messages.contactWiki} />
             <br />
-            <FormattedHTMLMessage {...messages.contactCatalogue} /> <a href="https://wiki.ludobox.net/files/CatalogueLudobox.pdf">
-              <FormattedHTMLMessage {...messages.contactCatalogueLink} />
-            </a>
+            <FormattedHTMLMessage {...messages.contactCatalogue} /> 
             <br />
             <br />
             <FormattedHTMLMessage {...messages.contactEmail} />
