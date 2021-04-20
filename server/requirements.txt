@@ -22,7 +22,7 @@ jsonpointer==1.10
 jsonschema==2.5.1
 MarkupSafe==1.0
 passlib==1.7.1
-py==1.4.34
+py==1.10.0
 pycparser==2.18
 pytest==2.9.2
 python-engineio==1.7.0
